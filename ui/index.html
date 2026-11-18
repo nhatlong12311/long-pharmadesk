@@ -873,7 +873,8 @@ th, .rt th { background: var(--surface-container-high); text-transform: none; le
 <main id="adrMain" aria-labelledby="screenTitle" style="display:none">
 <section class="card wide" style="padding:0;background:transparent;box-shadow:none;border:0">
  <div id="adrNoTpl" class="msg er" style="display:none;margin:0 0 12px">Không thấy mẫu ADR\\Mau_bao_cao_ADR.pdf hoặc font ADR\\fonts cạnh phần mềm.</div>
- <div class="adr-bar"><select id="adrDraftSel" aria-label="Bản nháp ADR"></select><button class="ghost" onclick="adrLoad()">Mở</button><button class="ghost" onclick="adrSave()">Lưu bản nháp</button><button class="ghost dng" onclick="adrDel()">Xoá</button><button class="ghost" onclick="adrNew()">Báo cáo mới</button><span class="sp"></span><button class="go" id="adrGo" onclick="adrRun()">Tạo báo cáo ADR (PDF + Word)</button></div>
+ <div id="adrStateError" class="msg er" role="status" hidden></div>
+ <div class="adr-bar"><select id="adrDraftSel" aria-label="Bản nháp ADR"></select><button class="ghost" onclick="adrLoad()">Mở</button><button class="ghost" onclick="adrSave()">Lưu bản nháp</button><button class="ghost dng" onclick="adrDel()">Xoá</button><button class="ghost" onclick="adrNew()">Báo cáo mới</button><span class="sp"></span><button class="go" id="adrGo" onclick="adrRun()" disabled>Tạo báo cáo ADR (PDF + Word)</button></div>
 </section>
 <div id="adrForm" style="display:contents"></div>
 <section class="card wide"><h2>Kết quả</h2><div id="adrOut"><div class="tdm-hint" style="margin:0">Điền các mục cần thiết rồi bấm “Tạo báo cáo ADR”. Chỉ cần điền phần bạn có thông tin; phần mềm in thẳng vào mẫu PDF chính thức, đồng thời xuất bản Word để chỉnh sửa.</div></div></section>
@@ -1641,7 +1642,7 @@ function refHtml(){const T=(t,head,rows)=>`<div class="reft"><h3>${t}</h3><div s
  +'<div class="tdm-hint">Nguồn: sheet “Mục tiêu TDM” trong file Aminoglycosid_BvTN. Vancomycin: AUC24h 400–600 mg·h/L, đáy 5–20 mg/L, đỉnh < 40–50 mg/L.</div>'}
 
 // ================= Bao cao ADR (V2.9) =================
-const ADR={d:null,loaded:false,defaults:{}};
+const ADR={d:null,loaded:false,loading:false,defaults:{}};
 const AOPT={gioi:[['M','Nam'],['F','Nữ']],
  muc_do:[['1','Tử vong'],['2','Đe dọa tính mạng'],['3','Nhập viện/Kéo dài thời gian nằm viện'],['4','Tàn tật vĩnh viễn/nặng nề'],['5','Dị tật thai nhi'],['6','Không nghiêm trọng']],
  ket_qua:[['1','Tử vong do ADR'],['2','Tử vong không liên quan đến thuốc'],['3','Chưa hồi phục'],['4','Đang hồi phục'],['5','Hồi phục có di chứng'],['6','Hồi phục không có di chứng'],['7','Không rõ']],
@@ -1671,15 +1672,37 @@ function adrForm(){const D=ADR.d,sec=(n,t,b)=>`<section class="card wide"><h2><b
  $('adrForm').querySelectorAll('[data-ap]').forEach(e=>e.addEventListener('input',()=>aset(e.dataset.ap,e.value)));
  $('adrForm').querySelectorAll('[data-ac]').forEach(b=>b.addEventListener('click',()=>{const p=b.dataset.ac,v=b.dataset.v;if(b.dataset.m==='1'){const a=aget(p)||[];aset(p,a.includes(v)?a.filter(x=>x!==v):a.concat(v))}else aset(p,String(aget(p))===v?'':v);
   b.parentElement.querySelectorAll('.adr-chip').forEach(c=>{const on=b.dataset.m==='1'?(aget(p)||[]).includes(c.dataset.v):String(aget(p))===c.dataset.v;c.classList.toggle('on',on)})}))}
-async function adrInit(){const s=await api('/api/adr/state');ADR.loaded=true;ADR.defaults=s.defaults||{};ADR.today=s.today;ADR.d=adrBlank();
- $('adrNoTpl').style.display=s.template&&s.font?'none':'block';adrForm();adrDrafts()}
+async function adrInit(){
+ if(ADR.loading)return;
+ ADR.loading=true;
+ const error=$('adrStateError');
+ try{
+  const state=await api('/api/adr/state');
+  ADR.defaults=state.defaults||{};
+  ADR.today=state.today;
+  ADR.d=adrBlank();
+  adrForm();
+  const ready=state.template&&state.font;
+  $('adrNoTpl').style.display=ready?'none':'block';
+  $('adrGo').disabled=!ready;
+  ADR.loaded=true;
+  error.hidden=true;
+  adrDrafts().catch(e=>toast(e.message,'er'));
+ }catch(e){
+  error.textContent=e.message+' Chọn lại mục Báo cáo ADR để thử lại.';
+  error.hidden=false;
+ }finally{
+  ADR.loading=false;
+ }
+}
 async function adrDrafts(){const r=await api('/api/adr/drafts');$('adrDraftSel').innerHTML='<option value="">— Bản nháp đã lưu —</option>'+r.drafts.map(d=>`<option value="${ei(d.name)}">${ei(d.ten_bn||'(chưa đặt tên)')} · ${d.saved}</option>`).join('')}
 async function adrSave(){const r=await post('/api/adr/draft',{data:ADR.d});if(r.ok){toast('Đã lưu bản nháp','ok');adrDrafts()}else toast(r.msg)}
-async function adrLoad(){const n=$('adrDraftSel').value;if(!n)return toast('Chọn một bản nháp để mở.');const r=await api('/api/adr/draft?name='+encodeURIComponent(n));if(!r.ok)return toast(r.msg);ADR.d=Object.assign(adrBlank(),r.data);adrForm();toast('Đã mở bản nháp','ok')}
+async function adrLoad(){const n=$('adrDraftSel').value;if(!n)return toast('Chọn một bản nháp để mở.');const r=await api('/api/adr/draft?name='+encodeURIComponent(n));if(!r.ok)return toast(r.msg);ADR.d=Object.assign(adrBlank(),r.data);adrForm();adrClearReport();toast('Đã mở bản nháp','ok')}
 async function adrDel(){const n=$('adrDraftSel').value;if(!n)return toast('Chọn một bản nháp để xoá.');if(!confirm('Xoá bản nháp này?'))return;await post('/api/adr/draft/delete',{name:n});adrDrafts()}
-function adrNew(){if(!confirm('Làm mới toàn bộ form? (thông tin người báo cáo giữ lại)'))return;ADR.d=adrBlank();adrForm();$('adrOut').innerHTML=''}
+function adrNew(){if(!confirm('Làm mới toàn bộ form? (thông tin người báo cáo giữ lại)'))return;ADR.d=adrBlank();adrForm();adrClearReport()}
 let adrReportObjectUrls=[];
-function adrClearObjectUrls(){
+function adrClearReport(){
+ $('adrOut').replaceChildren();
  for(const url of adrReportObjectUrls) URL.revokeObjectURL(url);
  adrReportObjectUrls=[];
 }
@@ -1695,13 +1718,14 @@ function adrDownloadObject(url,name){
  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
 }
 async function adrRun(){
+ const data=ADR.d;
  $('adrGo').disabled=true;$('adrGo').textContent='Đang tạo báo cáo...';
- $('adrOut').innerHTML='';
- adrClearObjectUrls();
+ adrClearReport();
  let r;
- try{r=await post('/api/adr/generate',ADR.d)}
+ try{r=await post('/api/adr/generate',data)}
  catch(e){r={ok:false,msg:String(e)}}
  $('adrGo').disabled=false;$('adrGo').textContent='Tạo báo cáo ADR (PDF + Word)';
+ if(data!==ADR.d)return;
  if(!r.ok){
   $('adrOut').innerHTML='<div class="tdm-err">'+escapeHtml(r.msg||'Có lỗi khi tạo báo cáo')+'</div>';
   return;
@@ -1718,7 +1742,7 @@ async function adrRun(){
    $('adrDownloadWord').onclick=()=>adrDownloadObject(docURL,r.docx);
    $('adrLocalPreview').src=pdfURL+'#view=FitH';
   }catch(e){
-   adrClearObjectUrls();
+   adrClearReport();
    $('adrOut').innerHTML='<div class="tdm-err">Không đọc được nội dung PDF/Word trả về: '+escapeHtml(String(e))+'</div>';
   }
  }else{

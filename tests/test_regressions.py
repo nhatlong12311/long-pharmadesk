@@ -122,7 +122,7 @@ class Regressions(unittest.TestCase):
         self.assertTrue(response.is_json)
 
     def test_06_session_token_is_in_the_served_page(self):
-        response = self.client.get('/')
+        response = self.client.get('/tools')
         self.assertIn(self.appmod.SESSION_TOKEN.encode(), response.data)
         self.assertNotIn(b'__PHARMADESK_TOKEN__', response.data)
 

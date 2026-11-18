@@ -6,6 +6,7 @@ Dien thong tin vao MAU PDF chinh thuc (115 truong) -> PDF da dien + ban Word chi
 - O tick/nut chon dung chinh hinh o trong mau (chon /AS cua widget).
 """
 import datetime, io, json, os, re, threading, uuid
+from bisect import bisect_right
 from pathlib import Path
 
 from common import save_document, iter_sheets, atomic_write_json, file_routes, guarded, norm, safe
@@ -83,7 +84,7 @@ def _collect(reader):
     return texts, groups
 
 
-def _wrap(text, font, size, width):
+def _wrap(text, font, size, width, line_limit):
     from reportlab.pdfbase.pdfmetrics import stringWidth
     lines = []
     for para in text.replace("\r", "").split("\n"):
@@ -96,15 +97,20 @@ def _wrap(text, font, size, width):
                 continue
             if cur:
                 lines.append(cur)
+                if len(lines) == line_limit:
+                    return lines
             # tu qua dai -> cat theo ky tu
             while stringWidth(w, font, size) > width and len(w) > 1:
-                k = len(w)
-                while k > 1 and stringWidth(w[:k], font, size) > width:
-                    k -= 1
+                k = max(1, bisect_right(range(1, len(w)), width,
+                                        key=lambda end: stringWidth(w[:end], font, size)))
                 lines.append(w[:k])
+                if len(lines) == line_limit:
+                    return lines
                 w = w[k:]
             cur = w
         lines.append(cur)
+        if len(lines) == line_limit:
+            return lines
     return lines
 
 
@@ -114,14 +120,16 @@ def _fit(text, rect, font, smax, smin, multiline):
     w, h = x1 - x0 - 3.0, y1 - y0 - 1.5
     size = smax
     while size >= smin - 1e-6:
-        words_ok = all(stringWidth(t, font, size) <= w for t in re.split(r"\s+", text) if t)
-        lines = _wrap(text, font, size, w)
-        if words_ok and len(lines) * size * 1.12 <= h + 0.01:
+        line_limit = max(1, int((h + 0.01) // (size * 1.12)) + 1)
+        lines = _wrap(text, font, size, w, line_limit)
+        if len(lines) * size * 1.12 <= h + 0.01 and all(
+            stringWidth(word[0], font, size) <= w for word in re.finditer(r"\S+", text)
+        ):
             return size, lines, False
         size -= 0.25
     size = smin
-    lines = _wrap(text, font, size, w)
     cap = max(1, int(h // (size * 1.12)))
+    lines = _wrap(text, font, size, w, cap + 1)
     return size, lines[:cap], len(lines) > cap
 
 

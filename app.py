@@ -79,10 +79,13 @@ def online_access_control():
             secrets.compare_digest(auth.username or "", user) and
             secrets.compare_digest(auth.password or "", password)):
         from flask import Response
-        return Response("Authentication required", 401, {
-            "WWW-Authenticate": 'Basic realm="PharmaDesk Private Tools", charset="UTF-8"',
-            "Cache-Control": "no-store"
-        })
+        if request.path.startswith("/api/"):
+            response = jsonify(ok=False, msg="Mở lại trang công cụ và đăng nhập.")
+        else:
+            response = Response("Authentication required")
+        response.status_code = 401
+        response.headers["WWW-Authenticate"] = 'Basic realm="PharmaDesk Private Tools", charset="UTF-8"'
+        return response
     return None
 
 
