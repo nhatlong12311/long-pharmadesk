@@ -1658,12 +1658,61 @@ async function adrSave(){const r=await post('/api/adr/draft',{data:ADR.d});if(r.
 async function adrLoad(){const n=$('adrDraftSel').value;if(!n)return toast('Chọn một bản nháp để mở.');const r=await api('/api/adr/draft?name='+encodeURIComponent(n));if(!r.ok)return toast(r.msg);ADR.d=Object.assign(adrBlank(),r.data);adrForm();toast('Đã mở bản nháp','ok')}
 async function adrDel(){const n=$('adrDraftSel').value;if(!n)return toast('Chọn một bản nháp để xoá.');if(!confirm('Xoá bản nháp này?'))return;await post('/api/adr/draft/delete',{name:n});adrDrafts()}
 function adrNew(){if(!confirm('Làm mới toàn bộ form? (thông tin người báo cáo giữ lại)'))return;ADR.d=adrBlank();adrForm();$('adrOut').innerHTML=''}
-async function adrRun(){$('adrGo').disabled=true;$('adrGo').textContent='Đang tạo báo cáo...';$('adrOut').innerHTML='';
- const r=await post('/api/adr/generate',ADR.d).catch(e=>({ok:false,msg:String(e)}));$('adrGo').disabled=false;$('adrGo').textContent='Tạo báo cáo ADR (PDF + Word)';
- if(!r.ok){$('adrOut').innerHTML=`<div class="tdm-err">${escapeHtml(r.msg||'Có lỗi khi tạo báo cáo')}</div>`;return}
- let h=`<div class="msg ok">Đã tạo báo cáo: <b>${ei(r.pdf)}</b> và bản Word. Lần sau thông tin đơn vị/người báo cáo được điền sẵn.</div>`+(r.warnings||[]).map(w=>`<div class="tdm-warn">${ei(w)}</div>`).join('');
- h+=`<div class="bar" style="margin:14px 0"><button class="go" onclick="location='/api/adr/download?name='+encodeURIComponent('${r.pdf}')">Tải PDF</button><button class="ghost" onclick="location='/api/adr/download?name='+encodeURIComponent('${r.docx}')">Tải Word (.docx)</button><button class="ghost" onclick="post('/api/adr/open',{name:'${r.pdf}'}).then(x=>{if(!x.ok)toast(x.msg)})">Mở thư mục</button></div><iframe class="adr-prev" src="/api/adr/view?name=${encodeURIComponent(r.pdf)}#view=FitH"></iframe>`;
- $('adrOut').innerHTML=h;$('adrOut').scrollIntoView({behavior:'smooth'})}
+let adrReportObjectUrls=[];
+function adrClearObjectUrls(){
+ for(const url of adrReportObjectUrls) URL.revokeObjectURL(url);
+ adrReportObjectUrls=[];
+}
+function adrDecodeReport(encoded,mime){
+ const raw=atob(encoded),bytes=new Uint8Array(raw.length);
+ for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
+ const url=URL.createObjectURL(new Blob([bytes],{type:mime}));
+ adrReportObjectUrls.push(url);
+ return url;
+}
+function adrDownloadObject(url,name){
+ const a=document.createElement('a');
+ a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+}
+async function adrRun(){
+ $('adrGo').disabled=true;$('adrGo').textContent='Đang tạo báo cáo...';
+ $('adrOut').innerHTML='';
+ adrClearObjectUrls();
+ let r;
+ try{r=await post('/api/adr/generate',ADR.d)}
+ catch(e){r={ok:false,msg:String(e)}}
+ $('adrGo').disabled=false;$('adrGo').textContent='Tạo báo cáo ADR (PDF + Word)';
+ if(!r.ok){
+  $('adrOut').innerHTML='<div class="tdm-err">'+escapeHtml(r.msg||'Có lỗi khi tạo báo cáo')+'</div>';
+  return;
+ }
+ let h='<div class="msg ok">Đã tạo báo cáo PDF và Word. Hãy tải về máy ngay; máy chủ online không lưu báo cáo lâu dài.</div>'
+   +(r.warnings||[]).map(w=>'<div class="tdm-warn">'+ei(w)+'</div>').join('');
+ const isInline=!!(r.inline_files&&r.inline_files.pdf&&r.inline_files.docx);
+ if(isInline){
+  try{
+   const pdfURL=adrDecodeReport(r.inline_files.pdf,'application/pdf');
+   const docURL=adrDecodeReport(r.inline_files.docx,'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+   $('adrOut').innerHTML=h+'<div class="bar" style="margin:14px 0"><button type="button" class="go" id="adrDownloadPdf">Tải PDF</button><button type="button" class="ghost" id="adrDownloadWord">Tải Word (.docx)</button></div><iframe class="adr-prev" id="adrLocalPreview" title="Xem trước báo cáo ADR PDF"></iframe>';
+   $('adrDownloadPdf').onclick=()=>adrDownloadObject(pdfURL,r.pdf);
+   $('adrDownloadWord').onclick=()=>adrDownloadObject(docURL,r.docx);
+   $('adrLocalPreview').src=pdfURL+'#view=FitH';
+  }catch(e){
+   adrClearObjectUrls();
+   $('adrOut').innerHTML='<div class="tdm-err">Không đọc được nội dung PDF/Word trả về: '+escapeHtml(String(e))+'</div>';
+  }
+ }else{
+  // Windows desktop compatibility: keep the original file-backed behavior.
+  const pdf='/api/adr/download?name='+encodeURIComponent(r.pdf);
+  const word='/api/adr/download?name='+encodeURIComponent(r.docx);
+  $('adrOut').innerHTML=h+'<div class="bar" style="margin:14px 0"><button type="button" class="go" id="adrDownloadPdf">Tải PDF</button><button type="button" class="ghost" id="adrDownloadWord">Tải Word (.docx)</button></div><iframe class="adr-prev" id="adrLocalPreview" title="Xem trước báo cáo ADR PDF"></iframe>';
+  $('adrDownloadPdf').onclick=()=>{location.href=pdf};
+  $('adrDownloadWord').onclick=()=>{location.href=word};
+  $('adrLocalPreview').src='/api/adr/view?name='+encodeURIComponent(r.pdf)+'#view=FitH';
+ }
+ $('adrOut').scrollIntoView({behavior:'smooth'});
+}
+
 api('/api/version').then(r=>$('ver').textContent='· '+r.v);
 refresh();load();guideRender();
 // Không tự nạp lại thư mục nguồn khi mở app; người dùng chủ động bấm Chọn thư mục/Làm mới.
