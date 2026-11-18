@@ -254,7 +254,14 @@ class CompletePharmaDeskSmoke(unittest.TestCase):
         self.assertGreaterEqual(res.json["matched"],2,res.json)
         self.assertGreaterEqual(res.json["events"],1,res.json)
 
-    def test_15_original_windows_dependencies_present(self):
+    def test_15_subtract_total_backend_exists(self):
+        # UI calls this endpoint; original ZIP registers rpt_test.py.
+        # Missing endpoint is a functional break, not an expected Linux limitation.
+        routes={rule.rule for rule in self.app.url_map.iter_rules()}
+        self.assertIn("/api/test/compare",routes,
+                      "Trừ tổng UI calls /api/test/compare but rpt_test.py is not registered")
+
+    def test_16_original_windows_dependencies_present(self):
         # The online repository does not bundle Crystal Reports conversion.
         # Report missing Windows files separately; never mark native merge as tested.
         missing=[p for p in ("Gop_va_sort_AZ.py","Xuat_RPT_sang_XLS.vbs","Mau tong.xlsx")
