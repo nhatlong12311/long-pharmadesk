@@ -135,9 +135,10 @@ def too_large():
 
 @app.teardown_request
 def discard_request(_error):
-    if "scratch" in g:
-        request_data.reset(g.scope)
-        g.scratch.cleanup()
+    scratch = g.pop("scratch", None)
+    if scratch is not None:
+        request_data.reset(g.pop("scope"))
+        scratch.cleanup()
 
 
 @app.errorhandler(Exception)
