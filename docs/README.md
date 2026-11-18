@@ -1,13 +1,15 @@
-# PharmaDesk Browser Edition (GitHub Pages)
+# PharmaDesk trên GitHub Pages
 
-Đây là **bản thử nghiệm** dành cho đồng nghiệp; chỉ hiển thị bốn công cụ, không có link portfolio.
+Trang [PharmaDesk trên GitHub Pages](https://nhatlong12311.github.io/long-pharmadesk/) có bốn lối vào bản web. Mỗi công cụ mở trên Render và dùng cùng tài khoản, mã Flask, biểu mẫu và chức năng xuất báo cáo. Có thể chia sẻ đường dẫn thẳng theo công cụ, chẳng hạn [Báo cáo ADR](https://nhatlong12311.github.io/long-pharmadesk/?module=adr).
+
+[Browser Edition](https://nhatlong12311.github.io/long-pharmadesk/browser.html) vẫn có sẵn để thử nghiệm tại chỗ trong trình duyệt. Phần dưới mô tả phạm vi của bản thử nghiệm.
 
 ## Xuất bản
 
 1. Mở https://github.com/nhatlong12311/long-pharmadesk/settings/pages
 2. Trong **Build and deployment**, chọn **Deploy from a branch**.
 3. Branch: **main**; folder: **/docs**; bấm **Save**.
-4. Trang dự kiến sau khi Pages kích hoạt: https://nhatlong12311.github.io/long-pharmadesk/
+4. Mở [trang PharmaDesk](https://nhatlong12311.github.io/long-pharmadesk/) sau khi Pages triển khai thành công.
 5. Kiểm tra thao tác với dữ liệu giả trước khi chia sẻ.
 
 **Không cần Render cho bản Browser Edition.** Không cần đăng nhập vì GitHub Pages là hosting tĩnh. Không nhập dữ liệu nhạy cảm; tài nguyên SheetJS được tải từ CDN. Dữ liệu nhập Excel xử lý trong trình duyệt, kết quả tải về máy.

@@ -106,6 +106,18 @@ class CompletePharmaDeskSmoke(unittest.TestCase):
             with self.subTest(route=route):
                 self.assertEqual(self.post(route,json={}).status_code,404)
 
+    def test_pages_entry_uses_the_authenticated_clinical_workspace(self):
+        path = "/tools?module=adr&view=clinical"
+        with patch.object(self.appmod, "TOOLS_ONLY", False):
+            self.assertEqual(self.client.get(path).status_code, 401)
+            original = self.client.get("/tools", headers=self.headers)
+            self.assertIn(b"Personal Portfolio", original.data)
+            tools = self.client.get(path, headers=self.headers)
+            self.assertEqual(tools.status_code, 200)
+            self.assertNotIn(b"Personal Portfolio", tools.data)
+            self.assertIn(b"#tabGop, #tabTru, .app-exit", tools.data)
+            self.assertIn(b"['abc','ttt','tdm','adr'].includes(module)", tools.data)
+
     def test_03_abc_state_inspect_download_xlsx(self):
         state=self.client.get("/api/abc/state",headers=self.headers)
         self.assertEqual(state.status_code,200)

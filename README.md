@@ -6,7 +6,7 @@ PharmaDesk gồm Tổng hợp phiếu, Trừ tổng, ABC/VEN, Tương tác thu�
 | --- | --- |
 | [PharmaDesk cho Windows](https://github.com/nhatlong12311/long-pharmadesk/releases) | Tổng hợp phiếu, Trừ tổng, ABC/VEN, Tương tác thuốc, TDM và ADR |
 | [PharmaDesk trên Render](https://long-pharmadesk.onrender.com/tools?module=abc) | ABC/VEN, Tương tác thuốc, TDM và ADR PDF/Word. Đăng nhập bằng tài khoản được cấp. |
-| [GitHub Pages](https://nhatlong12311.github.io/long-pharmadesk/) | Bản JavaScript thử nghiệm. Xem phạm vi trong [tài liệu Browser Edition](docs/README.md). |
+| [GitHub Pages](https://nhatlong12311.github.io/long-pharmadesk/) | Mở bốn công cụ của bản web trên Render. Có thêm [bản thử nghiệm trong trình duyệt](https://nhatlong12311.github.io/long-pharmadesk/browser.html). |
 
 ## Chạy trên Windows
 
