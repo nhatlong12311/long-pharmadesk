@@ -1,0 +1,36 @@
+name: ADR online regression
+
+on:
+  pull_request:
+    paths:
+      - "adr.py"
+      - "ui/index.html"
+      - "tests/**"
+      - ".github/workflows/adr-online-regression.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  adr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install PharmaDesk dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Verify Python syntax
+        run: python -m compileall -q app.py abcven.py ttt.py tdm.py adr.py common.py tests
+      - name: Original PharmaDesk regression suite
+        env:
+          PHARMADESK_ONLINE: "0"
+        run: python -m unittest discover -s tests -p test_regressions.py -v
+      - name: Online ADR integration suite
+        run: python -m unittest discover -s tests -p test_adr_online.py -v
