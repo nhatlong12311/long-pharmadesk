@@ -1,49 +1,26 @@
 # PharmaDesk trên GitHub Pages
 
-Trang [PharmaDesk trên GitHub Pages](https://nhatlong12311.github.io/long-pharmadesk/) có bốn lối vào bản web. Mỗi công cụ mở trên Render và dùng cùng tài khoản, mã Flask, biểu mẫu và chức năng xuất báo cáo. Có thể chia sẻ đường dẫn thẳng theo công cụ, chẳng hạn [Báo cáo ADR](https://nhatlong12311.github.io/long-pharmadesk/?module=adr).
+[Mở PharmaDesk](https://nhatlong12311.github.io/long-pharmadesk/) để dùng ABC/VEN, Tương tác thuốc, TDM và Báo cáo ADR. Trang tải Python WebAssembly và mẫu báo cáo từ GitHub Pages, sau đó xử lý Excel, tính toán và tạo báo cáo trong trình duyệt. Lần đầu tải cần Internet. Bạn có thể mở thẳng [Báo cáo ADR](https://nhatlong12311.github.io/long-pharmadesk/?module=adr).
 
-[Browser Edition](https://nhatlong12311.github.io/long-pharmadesk/browser.html) vẫn có sẵn để thử nghiệm tại chỗ trong trình duyệt. Phần dưới mô tả phạm vi của bản thử nghiệm.
+Các phân hệ dùng lại mã Python và mẫu của bản Windows. Tải báo cáo Excel, Word hoặc PDF về thiết bị sau khi tạo. Bản nháp ADR, tùy chọn và lịch sử được lưu theo trình duyệt. Khi trình duyệt chặn lưu trữ thì dữ liệu chỉ tồn tại trong tab. Dùng dữ liệu giả khi thử nghiệm.
 
-## Xuất bản
+[Bản web nhẹ](https://nhatlong12311.github.io/long-pharmadesk/browser.html) mở các công cụ JavaScript thử nghiệm cho thiết bị không chạy được Python WebAssembly. [Bản Windows](https://github.com/nhatlong12311/long-pharmadesk/releases/latest) có thêm Tổng hợp phiếu, Trừ tổng và kết nối Crystal Reports để chuyển RPT.
 
-1. Mở https://github.com/nhatlong12311/long-pharmadesk/settings/pages
-2. Trong **Build and deployment**, chọn **Deploy from a branch**.
-3. Branch: **main**; folder: **/docs**; bấm **Save**.
-4. Mở [trang PharmaDesk](https://nhatlong12311.github.io/long-pharmadesk/) sau khi Pages triển khai thành công.
-5. Kiểm tra thao tác với dữ liệu giả trước khi chia sẻ.
+## Triển khai và kiểm thử
 
-**Không cần Render cho bản Browser Edition.** Không cần đăng nhập vì GitHub Pages là hosting tĩnh. Không nhập dữ liệu nhạy cảm; tài nguyên SheetJS được tải từ CDN. Dữ liệu nhập Excel xử lý trong trình duyệt, kết quả tải về máy.
+Đặt nguồn GitHub Pages là **GitHub Actions** trong Settings → Pages. Workflow **PharmaDesk GitHub Pages** đóng gói Python, mã ứng dụng, thư viện và mẫu báo cáo thành một trang tĩnh. Workflow chỉ triển khai từ `main`. Bản build được kiểm tra trên Chromium với dữ liệu giả trước khi triển khai.
 
-## Chức năng hiện có
+Chạy bản build cục bộ bằng Python 3.12, pip và curl.
 
-| Phân hệ | Đã có trên bản Browser Edition | Chưa có / cần đối chiếu |
-|---|---|---|
-| ABC/VEN | Nhập Excel/CSV, phân loại ngưỡng 80/95, giữ quy cách, xuất Excel/CSV | Logic phân nhóm và giao diện báo cáo chuyên sâu từ Python, so sánh tháng |
-| Tương tác thuốc | Chọn thuốc, kiểm tra cặp trong 252 thuốc / 368 cặp quy tắc gốc | Cơ chế, hậu quả, xử trí từ cơ sở tri thức và báo cáo Word |
-| TDM | Ước tính CrCl, CL, Vd, t½, AUC và Cmax/Cmin mô hình một ngăn vancomycin | Hiệu chỉnh hai mẫu, Aminoglycoside, kiểm thử tương đương và xác thực lâm sàng |
-| ADR | Biểu mẫu mở rộng (diễn biến, mức độ, xét nghiệm, thuốc nghi ngờ, dechallenge/rechallenge), bản in PDF qua Print, **lưu/mở bản nháp JSON cục bộ** | **Mẫu PDF chính thức 115 trường**, file Word .docx chỉnh sửa, xác thực bản tóm tắt theo quy trình báo cáo |
+```sh
+python web/build.py dist-pages
+python -m http.server --directory dist-pages
+```
 
-Không được hiểu kết quả tương tác thuốc không tìm thấy là an toàn, hay kết quả TDM là khuyến cáo liều điều trị. Bản này không dùng cho quyết định điều trị hoặc báo cáo chính thức khi chưa kiểm thử.
+Mở `http://localhost:8000/`. Bộ kiểm thử trình duyệt dùng Playwright Chromium.
 
-## Giới hạn quyền riêng tư
-
-- Repo GitHub hiện **Public**; portfolio vẫn có trong mã nguồn công khai mặc dù **không hiển thị trong giao diện** GitHub Pages.
-- GitHub Pages không có mật khẩu server, phân quyền, dữ liệu lưu trữ riêng hay kiểm soát truy cập.
-- Không chia sẻ link Pages để nhập dữ liệu định danh bệnh nhân.
-- Nếu muốn thật sự giấu mã nguồn portfolio, phải chuyển phần portfolio sang repository riêng Private hoặc loại mã nguồn portfolio khỏi repository công khai. Chế độ chỉ ẩn giao diện chưa đạt yêu cầu giấu mã nguồn.
-
-## Vận hành và tốc độ
-
-- Không có cold start của Flask/Render.
-- Thư viện Excel SheetJS được nạp từ https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js; nếu CDN lỗi, CSV vẫn dùng được.
-- Bộ quy tắc ở `docs/rules.json` được tải cùng website.
-- Tài liệu hướng dẫn sửa lỗi trên Render: `RENDER_TOOLS_ONLY.md`; hệ thống Render vẫn là một sản phẩm khác.
-
-## ADR Browser Edition — cách dùng
-
-1. Mở tab **Báo cáo ADR** trên Pages.
-2. Nhập dữ liệu **giả**; điền tên thuốc nghi ngờ và mô tả phản ứng.
-3. Chọn **Tạo bản tóm tắt**; kiểm tra phần xem trước rồi **In / Lưu PDF** để dùng chức năng in của trình duyệt.
-4. Chọn **Lưu bản nháp .json** để tải file về máy; sau đó có thể dùng **Mở bản nháp .json** để nạp lại dữ liệu. Không gửi JSON có dữ liệu định danh lên GitHub hoặc qua ứng dụng nhắn tin.
-
-**Lưu ý:** Đây chưa phải mẫu ADR chính thức và chưa xuất file Word. Phần tiếp theo cần tái tạo mẫu PDF chuẩn và đối chiếu toàn bộ trường biểu mẫu với bản PharmaDesk Python.
+```sh
+npm install --no-save --no-package-lock playwright@1.58.2
+npx playwright install chromium
+node web/smoke.cjs dist-pages
+```

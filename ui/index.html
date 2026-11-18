@@ -925,6 +925,10 @@ async function api(u,o){
  return data;
 }
 const post=(u,b)=>api(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+function downloadReport(url,name){
+ if(window.pharmaDeskLocal)return window.pharmaDeskLocal.download(url,name).catch(error=>toast(error.message,'er'));
+ location.href=url;
+}
 function toast(m,t){t=t||(/không|lỗi|chưa|cần/i.test(m)?'er':'ok');const e=document.createElement('div');e.className='t '+t;e.textContent=m;$('toast').appendChild(e);setTimeout(()=>e.remove(),t==='er'?6000:3500)}
 function setLog(value){$('log').textContent=value;$('logFull').textContent=value}
 function openLog(){$('logFull').textContent=$('log').textContent;$('logModal').showModal()}
@@ -1366,7 +1370,7 @@ async function abcExportMonth(){
  btn.disabled=false;btn.textContent='Xuất dữ liệu ABC/VEN tháng (.xlsx)';
  if(!r.ok){$('abcExcelOut').innerHTML=`<div class="msg er">${escapeHtml(r.msg||'Lỗi xuất Excel')}</div>`;return;}
  let h=`<div class="msg ok">Đã tạo <b>${escapeHtml(r.name)}</b> · ${f(r.rows)} mặt hàng.</div>`;
- h+=`<div class="bar" style="margin:10px 0"><button class="go" onclick="location='/api/abc/download?name='+encodeURIComponent('${r.name}')">Tải Excel tháng ${m}/${y} (.xlsx)</button></div>`;
+ h+=`<div class="bar" style="margin:10px 0"><button class="go" onclick="downloadReport('/api/abc/download?name='+encodeURIComponent('${r.name}'),'${r.name}')">Tải Excel tháng ${m}/${y} (.xlsx)</button></div>`;
  (r.warnings||[]).forEach(w=>h+=`<div class="abc-warn">${escapeHtml(w)}</div>`);
  if(r.reviews)h+=`<div class="abc-hint">Có ${r.reviews} dòng tự dò/chưa khớp: xem sheet 'Canh_bao_can_kiem_tra' trong Excel.</div>`;
  $('abcExcelOut').innerHTML=h;
@@ -1390,7 +1394,7 @@ async function abcCompareMonth(){
  const s=r.summary,delta=(s.delta>=0?'+':'')+f(s.delta),pct=s.delta_pct==null?'—':s.delta_pct.toFixed(2).replace('.',',')+'%';
  let h=`<div class="msg ok">Đã so sánh tháng trước với tháng ${m}/${y}: <b>${f(s.prev_n)} → ${f(s.cur_n)}</b> mặt hàng · Chênh lệch chi phí <b>${delta} đồng (${pct})</b>.</div>`;
  h+=`<div class="abc-hint">Thuốc mới: <b>${s.new_drugs}</b> · Không còn sử dụng: <b>${s.stopped_drugs}</b> · Chuyển nhóm ABC: <b>${s.abc_changes}</b> · Chưa đối chiếu quy cách: <b>${s.uncertain_pairs||0}</b>. Đối chiếu theo Tên thuốc + Hàm lượng + Quy cách. File tháng cũ thiếu quy cách cần kiểm tra.</div>`;
- h+=`<div class="bar" style="margin:10px 0"><button class="go" onclick="location='/api/abc/download?name='+encodeURIComponent('${r.name}')">Tải bảng so sánh 2 tháng (.xlsx)</button></div>`;
+ h+=`<div class="bar" style="margin:10px 0"><button class="go" onclick="downloadReport('/api/abc/download?name='+encodeURIComponent('${r.name}'),'${r.name}')">Tải bảng so sánh 2 tháng (.xlsx)</button></div>`;
  h+=`<details><summary>Xem 15 thuốc có biến động chi phí lớn nhất</summary><div class="tw"><table><thead><tr><th>Tên thuốc / Hàm lượng / Quy cách</th><th>ABC trước → này</th><th class="n">Chi phí trước</th><th class="n">Chi phí này</th><th class="n">Chênh lệch</th><th>Trạng thái</th></tr></thead><tbody>`;
  h+=r.top.map(x=>`<tr><td>${escapeHtml(x.ten)} ${escapeHtml(x.hl)} · ${escapeHtml(x.qc||"Chưa có quy cách")}</td><td>${escapeHtml(x.prev_abc||'—')} → ${escapeHtml(x.cur_abc||'—')}</td><td class="n">${f(x.prev_tt)}</td><td class="n">${f(x.cur_tt)}</td><td class="n">${f(x.diff)}</td><td>${escapeHtml(x.status)}</td></tr>`).join('')+'</tbody></table></div></details>';
  (r.warnings||[]).forEach(w=>h+=`<div class="abc-warn">${escapeHtml(w)}</div>`);
@@ -1407,7 +1411,7 @@ async function abcRun(){const four=$('abcUseFour').checked;const cur=four?null:$
  const S=r.summary,row=(k,o,u)=>`<tr><td>${k}</td><td class="n">${f(o.n)}</td><td class="n">${o.pv.toFixed(2).replace('.',',')}%</td><td class="n">${f(o.v)}</td></tr>`;
  let h=`<div class="msg ok">Đã tạo <b>${escapeHtml(r.name)}</b> · ${S.method}${S.prev_src?' · so sánh với '+escapeHtml(S.prev_src):' · chưa có dữ liệu tháng trước'}</div>`;
  (r.warnings||[]).forEach(w=>h+=`<div class="abc-warn">${escapeHtml(w)}</div>`);
- h+=`<div class="bar" style="margin:14px 0"><button class="ghost" onclick="location='/api/abc/download?name='+encodeURIComponent('${r.name}')">Tải file Word</button><button class="ghost" onclick="post('/api/abc/open',{name:'${r.name}'}).then(x=>{if(!x.ok)toast(x.msg)})">Mở bằng Word / thư mục</button></div>`;
+ h+=`<div class="bar" style="margin:14px 0"><button class="ghost" onclick="downloadReport('/api/abc/download?name='+encodeURIComponent('${r.name}'),'${r.name}')">Tải file Word</button><button class="ghost" onclick="post('/api/abc/open',{name:'${r.name}'}).then(x=>{if(!x.ok)toast(x.msg)})">Mở bằng Word / thư mục</button></div>`;
  h+=`<div class="stats"><div class="stat"><small>Số loại thuốc</small><div>${f(S.n)}</div></div><div class="stat"><small>Tổng giá trị (đồng)</small><div style="font-size:18px">${f(S.total)}</div></div><div class="stat"><small>Hạng A: AN / AV</small><div>${S.an} / ${S.av}</div></div><div class="stat"><small>Nhóm I (giá trị)</small><div>${S.mat.I.pv.toFixed(2).replace('.',',')}%</div></div></div>`;
  h+=`<div class="tw" style="max-height:none"><table><thead><tr><th>Nhóm</th><th class="n">Chủng loại</th><th class="n">Tỷ lệ giá trị</th><th class="n">Giá trị (VNĐ)</th></tr></thead><tbody>`+['V','E','N'].map(k=>row(k,S.ven[k])).join('')+['A','B','C'].map(k=>row('Hạng '+k+ ' — '+S.abc[k].pn.toFixed(2).replace('.',',')+'% mặt hàng',S.abc[k])).join('')+['I','II','III'].map(k=>row('Nhóm '+k,S.mat[k])).join('')+`</tbody></table></div>`;
  h+=`<div class="abc-hint" style="margin-top:10px">Dữ liệu tháng ${m}/${y} đã được lưu trong lịch sử để so sánh cho tháng sau. Hãy mở file Word, kiểm tra và bổ sung nhận xét của Khoa Dược trước khi trình ký.</div>`;
@@ -1440,7 +1444,7 @@ async function tttRun(){const fl=$('tttFile').files[0];if(!fl)return toast('Chư
  if(!r.ok){$('tttOut').innerHTML=`<div class="msg er">${escapeHtml(r.msg||'Có lỗi khi tạo báo cáo')}</div>`;return}
  const S=r.summary;let h=S.pairs.length?`<div class="msg ok">Đã tạo <b>${escapeHtml(r.name)}</b> · ${S.pairs.length} cặp tương tác · ${S.n_noi} bệnh án nội trú · ${S.n_ngoai} bệnh nhân ngoại trú.</div>`:`<div class="msg ok">Không phát hiện tương tác chống chỉ định trong tháng ${m}/${y}. Đã tạo <b>${escapeHtml(r.name)}</b> (các bảng ghi “Không có”).</div>`;
  (r.warnings||[]).forEach(w=>h+=`<div class="abc-warn">${escapeHtml(w)}</div>`);
- h+=`<div class="bar" style="margin:14px 0"><button class="ghost" onclick="location='/api/ttt/download?name='+encodeURIComponent('${r.name}')">Tải file Word</button><button class="ghost" onclick="post('/api/ttt/open',{name:'${r.name}'}).then(x=>{if(!x.ok)toast(x.msg)})">Mở bằng Word / thư mục</button></div>`;
+ h+=`<div class="bar" style="margin:14px 0"><button class="ghost" onclick="downloadReport('/api/ttt/download?name='+encodeURIComponent('${r.name}'),'${r.name}')">Tải file Word</button><button class="ghost" onclick="post('/api/ttt/open',{name:'${r.name}'}).then(x=>{if(!x.ok)toast(x.msg)})">Mở bằng Word / thư mục</button></div>`;
  if(S.pairs.length)h+=`<div class="tw" style="max-height:none"><table><thead><tr><th>Cặp tương tác</th><th class="n">Số bệnh nhân</th></tr></thead><tbody>`+S.pairs.map(p=>`<tr><td>${escapeHtml(p.pair)}</td><td class="n">${p.n}</td></tr>`).join('')+`</tbody></table></div>`;
  h+=`<div class="abc-hint" style="margin-top:10px">Hãy mở file Word, đối chiếu y lệnh thực tế và bổ sung nhận xét trước khi trình ký. Phụ lục II: ${S.n_noi_rows} dòng · Phụ lục III: ${S.n_ngoai_rows} dòng.</div>`;
  $('tttOut').innerHTML=h}
@@ -1730,7 +1734,7 @@ async function adrRun(){
   $('adrOut').innerHTML='<div class="tdm-err">'+escapeHtml(r.msg||'Có lỗi khi tạo báo cáo')+'</div>';
   return;
  }
- let h='<div class="msg ok">Đã tạo báo cáo PDF và Word. Hãy tải về máy ngay; máy chủ online không lưu báo cáo lâu dài.</div>'
+ let h='<div class="msg ok">Đã tạo báo cáo PDF và Word. Hãy tải về máy.</div>'
    +(r.warnings||[]).map(w=>'<div class="tdm-warn">'+ei(w)+'</div>').join('');
  const isInline=!!(r.inline_files&&r.inline_files.pdf&&r.inline_files.docx);
  if(isInline){

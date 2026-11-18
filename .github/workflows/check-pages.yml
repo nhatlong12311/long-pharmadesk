@@ -1,53 +1,63 @@
-name: Check static clinical tools
+name: PharmaDesk GitHub Pages
 
 on:
   push:
     branches: [main]
-    paths:
+    paths: &pages_paths
+      - "web/**"
+      - "ui/index.html"
       - "docs/**"
+      - "ABC_VEN/**"
+      - "ADR/**"
+      - "TUONG_TAC/**"
+      - "abcven.py"
+      - "adr.py"
+      - "common.py"
+      - "tdm.py"
+      - "ttt.py"
       - ".github/workflows/check-pages.yml"
   pull_request:
-    paths:
-      - "docs/**"
-      - ".github/workflows/check-pages.yml"
+    paths: *pages_paths
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  static-check:
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: web/requirements.txt
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Validate static assets and JS syntax
-        run: |
-          python - <<'PY'
-          import json, re
-          from html import unescape
-          from pathlib import Path
-          from urllib.parse import parse_qs, urlsplit
+      - run: python web/build.py dist-pages
+      - run: npm install --no-save --no-package-lock playwright@1.58.2
+      - run: npx playwright install --with-deps chromium
+      - run: node web/smoke.cjs dist-pages
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          path: dist-pages
 
-          root = Path('docs')
-          landing = (root / 'index.html').read_text(encoding='utf-8')
-          links = re.findall(r'<a id="tool-(\w+)" href="([^"]+)"', landing)
-          assert [module for module, _ in links] == ['abc', 'ttt', 'tdm', 'adr']
-          for module, link in links:
-              url = urlsplit(unescape(link))
-              assert (url.scheme, url.netloc, url.path) == ('https', 'long-pharmadesk.onrender.com', '/tools')
-              assert parse_qs(url.query) == {'module': [module], 'view': ['clinical']}
-          assert 'href="./browser.html"' in landing
-          for name in ('index', 'browser'):
-              html = (root / f'{name}.html').read_text(encoding='utf-8')
-              assert 'Personal Portfolio' not in html
-              scripts = re.findall(r'<script(?:\s[^>]*)?>([\s\S]*?)</script>', html)
-              Path(f'/tmp/pharmadesk-{name}.js').write_text(scripts[-1], encoding='utf-8')
-
-          data = json.loads((root / 'rules.json').read_text(encoding='utf-8'))
-          assert len(data['drugs']) > 200 and len(data['pairs']) > 300
-          PY
-          node --check /tmp/pharmadesk-index.js
-          node --check /tmp/pharmadesk-browser.js
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

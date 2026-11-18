@@ -11,4 +11,6 @@ RPT/
 /.pharmadesk-build-*/
 /build/
 /dist/
+/dist-pages/
+/node_modules/
 /PharmaDesk_V3_0.spec

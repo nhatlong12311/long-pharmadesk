@@ -1,12 +1,12 @@
 # PharmaDesk 3.0
 
-PharmaDesk gồm Tổng hợp phiếu, Trừ tổng, ABC/VEN, Tương tác thuốc, TDM và Báo cáo ADR. Bản Windows có giao diện của cả sáu chức năng. Bản web chạy các công cụ lâm sàng bằng backend Flask.
+PharmaDesk gồm Tổng hợp phiếu, Trừ tổng, ABC/VEN, Tương tác thuốc, TDM và Báo cáo ADR. Bản Windows có giao diện của cả sáu chức năng. Bản GitHub Pages chạy bốn phân hệ lâm sàng ngay trong trình duyệt.
 
 | Nơi chạy | Chức năng |
 | --- | --- |
 | [PharmaDesk cho Windows](https://github.com/nhatlong12311/long-pharmadesk/releases) | Tổng hợp phiếu, Trừ tổng, ABC/VEN, Tương tác thuốc, TDM và ADR |
 | [PharmaDesk trên Render](https://long-pharmadesk.onrender.com/tools?module=abc) | ABC/VEN, Tương tác thuốc, TDM và ADR PDF/Word. Đăng nhập bằng tài khoản được cấp. |
-| [GitHub Pages](https://nhatlong12311.github.io/long-pharmadesk/) | Mở bốn công cụ của bản web trên Render. Có thêm [bản thử nghiệm trong trình duyệt](https://nhatlong12311.github.io/long-pharmadesk/browser.html). |
+| [GitHub Pages](https://nhatlong12311.github.io/long-pharmadesk/) | Chạy ABC/VEN, Tương tác thuốc, TDM và ADR bằng Python ngay trong trình duyệt. [Hướng dẫn GitHub Pages](docs/README.md). |
 
 ## Chạy trên Windows
 
