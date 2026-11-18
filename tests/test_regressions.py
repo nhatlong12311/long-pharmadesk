@@ -29,7 +29,7 @@ class Regressions(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.temp = tempfile.TemporaryDirectory(prefix='pharmadesk_regression_')
-        cls.scratch = Path(cls.temp.name)
+        cls.scratch = Path(cls.temp.name).resolve()
         cls.root = cls.scratch/'application'
         shutil.copytree(ROOT, cls.root, ignore=shutil.ignore_patterns('__pycache__'))
         template = Workbook()
@@ -104,7 +104,7 @@ class Regressions(unittest.TestCase):
             self.assertEqual(self.post('/api/clear-rpt', json={'folder':str(child)}).status_code, 409)
             self.assertTrue(original.exists())
             response = self.post('/api/clear-rpt', json={'folder':str(source)})
-            self.assertTrue(response.json['ok'])
+            self.assertTrue(response.json['ok'], response.json)
             self.assertEqual(response.json['removed_source'], 2)
             self.assertFalse(original.exists())
             self.assertFalse(staged.exists())
