@@ -33,4 +33,5 @@ jobs:
           PHARMADESK_ONLINE: "0"
         run: python -m unittest discover -s tests -p test_regressions.py -v
       - name: Online ADR integration suite
+        if: ${{ always() }}
         run: python -m unittest discover -s tests -p test_adr_online.py -v
