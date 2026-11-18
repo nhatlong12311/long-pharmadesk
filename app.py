@@ -23,7 +23,7 @@ def _proc_age():
 
 
 _AGE0 = _proc_age()
-from flask import Flask, g, jsonify, request, send_file, send_from_directory
+from flask import Flask, g, jsonify, request, send_file, send_from_directory, redirect
 from werkzeug.exceptions import HTTPException
 from common import atomic_write_json
 
@@ -40,6 +40,8 @@ for d in (RPT, XLS):
 app = Flask(__name__)
 # Online deployment is opt-in; the Windows desktop app remains unchanged.
 ONLINE_MODE = os.environ.get("PHARMADESK_ONLINE", "0") == "1"
+# Deploy another Render service with this flag to share clinical tools without showing the portfolio.
+TOOLS_ONLY = ONLINE_MODE and os.environ.get("PHARMADESK_TOOLS_ONLY", "0") == "1"
 if ONLINE_MODE:
     from werkzeug.middleware.proxy_fix import ProxyFix
     # Render forwards the original public HTTPS scheme behind its reverse proxy.
@@ -389,12 +391,29 @@ def preview():
 
 @app.get("/")
 def portfolio_home():
+    if TOOLS_ONLY:
+        # Do not serve the portfolio in the team-facing service, even by a direct / request.
+        return redirect("/tools?module=abc", code=302)
     return (ROOT / "portfolio.html").read_text(encoding="utf-8"), 200, {"Content-Type": "text/html; charset=utf-8"}
 
 
 @app.get("/tools")
 def index():
     html = (ROOT / 'ui' / 'index.html').read_text(encoding='utf-8')
+    if TOOLS_ONLY:
+        # Strip the portfolio link and hide Windows-only inventory pages in the shared UI.
+        html = html.replace(
+            '<div class="portfolio-back"><a href="/">← LONG / Personal Portfolio</a><span class="tag">PHARMADESK 3.0 · LOCAL CLINICAL WORKSPACE</span></div>',
+            '<div class="portfolio-back"><span>PHARMADESK · CLINICAL TOOLS</span><span class="tag">ABC/VEN · TƯƠNG TÁC · TDM · ADR</span></div>'
+        )
+        html = html.replace("</head>", """<style>
+        #tabGop, #tabTru, .app-exit { display:none !important; }
+        </style></head>""")
+        # If no module was specified, open the first clinical tool, not inventory.
+        html = html.replace("const module=new URLSearchParams(location.search).get('module');",
+                            "const module=new URLSearchParams(location.search).get('module') || 'abc';")
+        html = html.replace("if(['abc','ttt','tdm','adr','gop','tru'].includes(module)",
+                            "if(['abc','ttt','tdm','adr'].includes(module)")
     return html.replace('__PHARMADESK_TOKEN__', SESSION_TOKEN), 200, {'Content-Type': 'text/html; charset=utf-8'}
 
 
