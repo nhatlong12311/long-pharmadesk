@@ -2,6 +2,16 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "python3.12 -m pip --version || dnf install -y python3.12 python3.12-pip",
-  "buildCommand": "python3.12 web/build.py dist-vercel",
-  "outputDirectory": "dist-vercel"
+  "buildCommand": "python3.12 web/build.py dist-vercel --server",
+  "outputDirectory": "dist-vercel",
+  "functions": {
+    "api/clinical.py": {
+      "maxDuration": 60,
+      "includeFiles": "{abcven.py,adr.py,common.py,tdm.py,ttt.py,ABC_VEN/**,ADR/**,TUONG_TAC/**}",
+      "excludeFiles": "{dist-vercel/**,tests/**,docs/**}"
+    }
+  },
+  "rewrites": [
+    {"source": "/api/:path*", "destination": "/api/clinical?_clinical_path=:path*"}
+  ]
 }

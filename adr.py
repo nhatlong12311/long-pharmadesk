@@ -9,7 +9,7 @@ import datetime, io, json, os, re, threading, uuid
 from bisect import bisect_right
 from pathlib import Path
 
-from common import save_document, iter_sheets, atomic_write_json, file_routes, guarded, norm, safe
+from common import data_directory, save_document, iter_sheets, atomic_write_json, file_routes, guarded, norm, safe
 
 CFG = {"root": Path("."), "data": Path(".")}
 _LOCK = threading.Lock()
@@ -18,7 +18,7 @@ _LOCK = threading.Lock()
 def init(root, data_dir):
     CFG["root"], CFG["data"] = Path(root), Path(data_dir)
     for sub in ("Bao_cao", "Ban_nhap"):
-        (CFG["data"] / sub).mkdir(parents=True, exist_ok=True)
+        (data_directory(CFG) / sub).mkdir(parents=True, exist_ok=True)
 
 
 # ----------------------------------------------------------------------------- anh xa truong
@@ -508,7 +508,7 @@ DEFAULT_KEYS = ["noi_bc", "ma_donvi", "nguoi_ten", "nghe", "dt", "email", "chu_k
 
 
 def load_defaults():
-    p = CFG["data"] / "adr_defaults.json"
+    p = data_directory(CFG) / "adr_defaults.json"
     try:
         return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
     except Exception:
@@ -519,9 +519,9 @@ def generate(data, *, output_dir=None, persist_defaults=True):
     if not any(_s(data.get(k)) for k in ("ten_bn", "mo_ta", "ngay_pu")):
         raise ValueError("Chưa nhập thông tin phản ứng: hãy nhập ít nhất họ tên bệnh nhân hoặc mô tả biểu hiện ADR.")
     if persist_defaults:
-        atomic_write_json(CFG["data"] / "adr_defaults.json", {k: _s(data.get(k)) for k in DEFAULT_KEYS})
+        atomic_write_json(data_directory(CFG) / "adr_defaults.json", {k: _s(data.get(k)) for k in DEFAULT_KEYS})
     base = f"ADR_{slug(data.get('ten_bn')) or 'chua_dat_ten'}_{datetime.datetime.now():%Y%m%d_%H%M%S_%f}_{uuid.uuid4().hex[:8]}"
-    outdir = Path(output_dir) if output_dir is not None else CFG["data"] / "Bao_cao"
+    outdir = Path(output_dir) if output_dir is not None else data_directory(CFG) / "Bao_cao"
     outdir.mkdir(parents=True, exist_ok=True)
     warnings = fill_pdf(data, outdir / (base + ".pdf"))
     make_docx(data, outdir / (base + ".docx"))
@@ -534,10 +534,10 @@ def generate(data, *, output_dir=None, persist_defaults=True):
     return {"pdf": base + ".pdf", "docx": base + ".docx", "warnings": warnings}
 
 
-def make_blueprint():
+def make_blueprint(*, inline_reports=False):
     from flask import Blueprint, jsonify, request
     bp = Blueprint("adr", __name__)
-    file_routes(bp, "adr", lambda: CFG["data"] / "Bao_cao", (".pdf", ".docx"))
+    file_routes(bp, "adr", lambda: data_directory(CFG) / "Bao_cao", (".pdf", ".docx"))
 
     @bp.get("/api/adr/state")
     def state():
@@ -553,7 +553,7 @@ def make_blueprint():
     @guarded(_LOCK, ("pypdf", "reportlab", "PIL", "docx"), perm="Không ghi được file. Nếu đang mở báo cáo cũ trong PDF/Word thì hãy đóng lại.")
     def gen():
         data = request.get_json(silent=True) or {}
-        if os.environ.get("PHARMADESK_ONLINE") == "1":
+        if inline_reports or os.environ.get("PHARMADESK_ONLINE") == "1":
             # Create both original-format reports in a request-scoped directory.
             # Render files can disappear on redeploy; never depend on a second
             # GET or retain generated reports containing patient information.
@@ -574,12 +574,12 @@ def make_blueprint():
         # Accept legacy ASCII slugs as well as UUIDs without truncating identifiers.
         if not isinstance(name,str) or not re.fullmatch(r'[a-zA-Z0-9_-]{1,96}',name):
             raise ValueError('Mã bản nháp không hợp lệ.')
-        return CFG["data"] / "Ban_nhap" / (name + ".json")
+        return data_directory(CFG) / "Ban_nhap" / (name + ".json")
 
     @bp.get("/api/adr/drafts")
     def drafts():
         out = []
-        for p in sorted((CFG["data"] / "Ban_nhap").glob("*.json"), key=lambda x: -x.stat().st_mtime):
+        for p in sorted((data_directory(CFG) / "Ban_nhap").glob("*.json"), key=lambda x: -x.stat().st_mtime):
             try:
                 d = json.loads(p.read_text(encoding="utf-8"))
             except Exception:

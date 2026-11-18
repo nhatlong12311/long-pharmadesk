@@ -10,7 +10,7 @@ import datetime, functools, hashlib, json, os, re, shutil, threading
 from collections import OrderedDict, defaultdict
 from pathlib import Path
 
-from common import save_document, iter_sheets, atomic_write_json, atomic_write_text, file_routes, fill_rows, find_par, guarded, norm, read_sheets, repl_group, safe, upload
+from common import data_directory, request_data, save_document, iter_sheets, atomic_write_json, atomic_write_text, file_routes, fill_rows, find_par, guarded, norm, read_sheets, repl_group, safe, upload
 
 CFG = {"root": Path("."), "data": Path(".")}
 _LOCK = threading.Lock()
@@ -20,17 +20,19 @@ _BUNDLE_LOCK = threading.RLock()
 def _sync_bundled(filename):
     """Install each shipped data revision once; preserve later local edits and backups."""
     source = CFG["root"] / "TUONG_TAC" / filename
-    target = CFG["data"] / filename
-    marker = CFG["data"] / (filename + ".bundle.sha256")
+    target = data_directory(CFG) / filename
+    if request_data.get() is not None:
+        return source
+    marker = data_directory(CFG) / (filename + ".bundle.sha256")
     with _BUNDLE_LOCK:
         if not source.exists():
             return target
         digest = hashlib.sha256(source.read_bytes()).hexdigest()
         previous = marker.read_text(encoding="ascii").strip() if marker.exists() else ""
         if not target.exists() or previous != digest:
-            CFG["data"].mkdir(parents=True, exist_ok=True)
+            data_directory(CFG).mkdir(parents=True, exist_ok=True)
             if target.exists() and target.read_bytes() != source.read_bytes():
-                backup = CFG["data"] / "Sao_luu_truoc_cap_nhat"
+                backup = data_directory(CFG) / "Sao_luu_truoc_cap_nhat"
                 backup.mkdir(exist_ok=True)
                 stamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f")
                 shutil.copy2(target, backup / (stamp + "_" + filename))
@@ -45,7 +47,7 @@ def _sync_bundled(filename):
 def init(root, data_dir, *, kb_json=None):
     CFG["root"], CFG["data"] = Path(root), Path(data_dir)
     CFG["kb_json"] = kb_json
-    (CFG["data"] / "Bao_cao").mkdir(parents=True, exist_ok=True)
+    (data_directory(CFG) / "Bao_cao").mkdir(parents=True, exist_ok=True)
 
 
 def _code(v):
@@ -109,7 +111,7 @@ def parse_sql(text):
 
 def load_rules():
     _sync_bundled("Quy_tac_tuong_tac.json")
-    for p in (CFG["data"] / "Quy_tac_tuong_tac.json", CFG["root"] / "TUONG_TAC" / "Quy_tac_tuong_tac.json"):
+    for p in (data_directory(CFG) / "Quy_tac_tuong_tac.json", CFG["root"] / "TUONG_TAC" / "Quy_tac_tuong_tac.json"):
         if p.exists():
             try:
                 return json.loads(p.read_text(encoding="utf-8"))
@@ -123,7 +125,7 @@ def save_rules(rules, source):
     rules = dict(rules)
     rules["source"] = source
     rules["updated"] = datetime.datetime.now().isoformat(timespec="seconds")
-    atomic_write_json(CFG["data"] / "Quy_tac_tuong_tac.json", rules)
+    atomic_write_json(data_directory(CFG) / "Quy_tac_tuong_tac.json", rules)
     return rules
 
 
@@ -588,7 +590,7 @@ def generate(path, month, year, by_name=False, dmy=False):
     if not template.exists():
         raise FileNotFoundError(f"Không thấy file mẫu Word: {template}")
     name = f"Tuong_tac_thuoc_thang_{month:02d}_nam_{year}.docx"
-    out = CFG["data"] / "Bao_cao" / name
+    out = data_directory(CFG) / "Bao_cao" / name
     make_report(out, month, year, R, template)
     return {"ok": True, "name": name, "path": str(out), "warnings": warnings,
             "summary": {"rows": info["rows"], "matched": matched, "sheet": info["sheet"], "n_noi": R["n_noi"],
@@ -597,12 +599,12 @@ def generate(path, month, year, by_name=False, dmy=False):
                         "n_noi_rows": len(R["noi"]), "n_ngoai_rows": len(R["ngoai"])}}
 
 
-def make_blueprint():
+def make_blueprint(*, state_post=False):
     from flask import Blueprint, jsonify, request
     bp = Blueprint("ttt", __name__)
-    file_routes(bp, "ttt", lambda: CFG["data"] / "Bao_cao", (".docx",))
+    file_routes(bp, "ttt", lambda: data_directory(CFG) / "Bao_cao", (".docx",))
 
-    @bp.get("/api/ttt/state")
+    @bp.route("/api/ttt/state", methods=["GET", "POST"] if state_post else ["GET"])
     def state():
         today = datetime.date.today()
         m, y = (12, today.year - 1) if today.month == 1 else (today.month - 1, today.year)

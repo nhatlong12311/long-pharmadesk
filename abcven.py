@@ -7,7 +7,7 @@ Chi dung openpyxl/xlrd/python-docx (khong nap pandas) de mo nhanh.
 import bisect, copy, datetime, json, math, re, threading
 from pathlib import Path
 
-from common import save_document, iter_sheets, atomic_write_json, save_data_workbook, fill_rows, file_routes, find_par, guarded, norm, read_sheets, repl_group, safe, set_cell, set_par, upload
+from common import data_directory, save_document, iter_sheets, atomic_write_json, save_data_workbook, fill_rows, file_routes, find_par, guarded, norm, read_sheets, repl_group, safe, set_cell, set_par, upload
 
 CFG = {"root": Path("."), "data": Path(".")}
 _LOCK = threading.Lock()
@@ -68,7 +68,7 @@ def init(root, data_dir):
     CFG["root"] = Path(root)
     CFG["data"] = Path(data_dir)
     for sub in ("Lich_su", "Bao_cao"):
-        (CFG["data"] / sub).mkdir(parents=True, exist_ok=True)
+        (data_directory(CFG) / sub).mkdir(parents=True, exist_ok=True)
 
 
 def _map_header(row):
@@ -465,7 +465,7 @@ def drug_key(r):
 
 # ----------------------------------------------------------------------------- lich su
 def _hist_path(m, y):
-    return CFG["data"] / "Lich_su" / f"{y}-{m:02d}.json"
+    return data_directory(CFG) / "Lich_su" / f"{y}-{m:02d}.json"
 
 
 def save_period(m, y, rows=None, stats=None, method=None):
@@ -580,7 +580,7 @@ DEFAULT_WATCH = [
 
 
 def load_watch():
-    p = CFG["data"] / "hoat_chat_theo_doi.json"
+    p = data_directory(CFG) / "hoat_chat_theo_doi.json"
     if p.exists():
         try:
             w = json.loads(p.read_text(encoding="utf-8"))
@@ -605,7 +605,7 @@ def save_watch(items):
                      "title": (it.get("title") or "").strip() or kw[0].capitalize(),
                      "summary": (it.get("summary") or "").strip() or ("Tình hình sử dụng thuốc hoạt chất " + kw[0].capitalize())})
         clean.append(base)
-    atomic_write_json(CFG["data"] / "hoat_chat_theo_doi.json", clean)
+    atomic_write_json(data_directory(CFG) / "hoat_chat_theo_doi.json", clean)
     return clean
 
 
@@ -985,7 +985,7 @@ def generate(cur_path, month, year, prev_path=None, mode="calc", a_pct=78.0, b_p
     if not template.exists():
         raise FileNotFoundError(f"Không thấy file mẫu Word: {template}")
     name = f"Phan_tich_ABC_VEN_thang_{month}_nam_{year}.docx"
-    out = CFG["data"] / "Bao_cao" / name
+    out = data_directory(CFG) / "Bao_cao" / name
     make_report(out, month, year, A, P, T, template)
     # Commit history only after the report was successfully written.
     if prev_path:
@@ -1062,7 +1062,7 @@ def export_month_xlsx(rows, month, year, warnings=None, reviews=None):
     for col,width in {'A':24,'B':15,'C':20,'D':45,'E':28,'F':36,'G':32,'H':85}.items():rev.column_dimensions[col].width=width
     rev.freeze_panes='D2';rev.auto_filter.ref=f'A1:H{1+len(reviews or [])}'
     name=f'Du_lieu_ABC_VEN_thang_{month:02d}_nam_{year}.xlsx'
-    path=CFG['data']/'Bao_cao'/name
+    path=data_directory(CFG)/'Bao_cao'/name
     path.parent.mkdir(parents=True,exist_ok=True)
     save_data_workbook(wb, path)
     return name
@@ -1154,14 +1154,14 @@ def export_compare_xlsx(cmp, month, year):
     for c in summary[1]:c.font=Font(bold=True,color='17365D')
     summary['B7'].number_format='0.00"%"'
     name=f'So_sanh_ABC_VEN_thang_{month:02d}_nam_{year}.xlsx'
-    out=CFG['data']/'Bao_cao'/name;out.parent.mkdir(parents=True,exist_ok=True);save_data_workbook(wb,out)
+    out=data_directory(CFG)/'Bao_cao'/name;out.parent.mkdir(parents=True,exist_ok=True);save_data_workbook(wb,out)
     return name
 
 # ----------------------------------------------------------------------------- Flask
 def make_blueprint():
     from flask import Blueprint, jsonify, request
     bp = Blueprint("abcven", __name__)
-    file_routes(bp, "abc", lambda: CFG["data"] / "Bao_cao", (".docx", ".xlsx"))
+    file_routes(bp, "abc", lambda: data_directory(CFG) / "Bao_cao", (".docx", ".xlsx"))
 
     @bp.get("/api/abc/state")
     def state():
@@ -1289,7 +1289,7 @@ def make_blueprint():
     def watch():
         d = request.get_json(silent=True) or {}
         if d.get("reset"):
-            (CFG["data"] / "hoat_chat_theo_doi.json").unlink(missing_ok=True)
+            (data_directory(CFG) / "hoat_chat_theo_doi.json").unlink(missing_ok=True)
             return jsonify(ok=True, watch=load_watch())
         return jsonify(ok=True, watch=save_watch(d.get("watch", [])))
 
