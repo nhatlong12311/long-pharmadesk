@@ -38,21 +38,52 @@
 </div><button class="button" id="tdmCalc">Tính giá trị tham khảo</button><div id="tdmMessage"></div><div id="tdmResults" class="grid3" style="margin-top:17px"></div></div>
 </section>
 <section id="adr" class="section">
-<div class="panel"><h2>Biểu mẫu ADR · Bản in thử</h2><div class="notice warning">Bản GitHub Pages này tạo <b>bản tóm tắt ADR để in hoặc lưu PDF bằng chức năng Print</b>, chưa tái tạo đầy đủ mẫu PDF chuẩn 115 trường như PharmaDesk Python. Không dùng để gửi báo cáo chính thức khi chưa đối chiếu mẫu.</div>
-<div class="grid" style="margin-top:17px">
-<div class="field"><label>Đơn vị báo cáo</label><input id="aUnit" placeholder="Tên đơn vị"></div>
-<div class="field"><label>Người báo cáo</label><input id="aReporter" placeholder="Tên người báo cáo"></div>
-<div class="field"><label>Ngày báo cáo</label><input id="aDate" type="date"></div>
-<div class="field"><label>Mã hồ sơ giả lập (không nhập mã người bệnh thật)</label><input id="aCode" placeholder="TEST-001"></div>
-<div class="field"><label>Tuổi giả lập</label><input id="aAge" type="number" min="0" max="120"></div>
-<div class="field"><label>Thuốc nghi ngờ</label><input id="aDrug" placeholder="Tên thuốc thử nghiệm"></div>
-<div class="field"><label>Ngày xuất hiện phản ứng</label><input id="aEventDate" type="date"></div>
-<div class="field"><label>Kết quả theo dõi</label><select id="aOutcome"><option value="">Chọn kết quả</option><option>Đang hồi phục</option><option>Hồi phục không có di chứng</option><option>Hồi phục có di chứng</option><option>Chưa hồi phục</option><option>Không rõ</option></select></div>
+<div class="panel">
+<h2>Báo cáo ADR · Biểu mẫu hỗ trợ</h2>
+<div class="notice warning"><b>Bản thử nghiệm, không phải mẫu ADR chính thức.</b> Thông tin được nhập và xử lý trong trình duyệt, không gửi lên máy chủ PharmaDesk. Chỉ sử dụng dữ liệu giả/đã khử định danh trong giai đoạn thử nghiệm. Bản in cần được đối chiếu với mẫu báo cáo chính thức trước khi sử dụng.</div>
+<div class="grid" style="margin-top:18px">
+  <div class="field"><label for="aUnit">Đơn vị báo cáo</label><input id="aUnit" autocomplete="off" placeholder="Tên đơn vị"></div>
+  <div class="field"><label for="aReporter">Người báo cáo</label><input id="aReporter" autocomplete="off" placeholder="Tên người báo cáo"></div>
+  <div class="field"><label for="aDate">Ngày báo cáo</label><input id="aDate" type="date"></div>
+  <div class="field"><label for="aCode">Mã hồ sơ giả lập</label><input id="aCode" placeholder="TEST-001" autocomplete="off"></div>
+  <div class="field"><label for="aAge">Tuổi giả lập</label><input id="aAge" type="number" min="0" max="120"></div>
+  <div class="field"><label for="aSex">Giới tính</label><select id="aSex"><option value="">Chọn</option><option>Nam</option><option>Nữ</option><option>Không rõ</option></select></div>
+  <div class="field"><label for="aWeight">Cân nặng (kg)</label><input id="aWeight" type="number" min="0" max="400" step=".1"></div>
+  <div class="field"><label for="aEventDate">Ngày xuất hiện phản ứng</label><input id="aEventDate" type="date"></div>
 </div>
-<div class="field"><label>Mô tả phản ứng</label><textarea id="aDesc" placeholder="Mô tả trường hợp giả lập"></textarea></div>
-<div class="field"><label>Xử trí</label><textarea id="aAction" placeholder="Thông tin xử trí thử nghiệm"></textarea></div>
-<div class="row noprint"><button class="button" id="adrMake">Tạo bản tóm tắt</button><button class="button secondary" id="adrPrint" disabled>In / Lưu PDF</button><button class="button ghost" id="adrReset">Làm mới</button></div><p class="hint">Không có nút lưu bản nháp trên máy chủ; dữ liệu biểu mẫu chỉ tồn tại trong tab trình duyệt hiện tại.</p>
-</div><div class="panel printpanel" id="adrPreview" hidden><div class="report" id="adrReport"></div></div>
+<h3>Phản ứng có hại nghi ngờ</h3>
+<div class="field"><label for="aDesc">Mô tả diễn biến và thời gian phản ứng</label><textarea id="aDesc" placeholder="Triệu chứng, thời điểm xuất hiện, diễn biến..."></textarea></div>
+<div class="grid">
+  <div class="field"><label for="aSerious">Mức độ nghiêm trọng / hậu quả</label><select id="aSerious"><option value="">Chưa đánh giá</option><option>Tử vong</option><option>Đe dọa tính mạng</option><option>Nhập viện / kéo dài thời gian nằm viện</option><option>Tàn tật vĩnh viễn hoặc nặng nề</option><option>Dị tật thai nhi</option><option>Không nghiêm trọng</option></select></div>
+  <div class="field"><label for="aOutcome">Kết quả sau phản ứng</label><select id="aOutcome"><option value="">Chưa xác định</option><option>Đang hồi phục</option><option>Hồi phục không có di chứng</option><option>Hồi phục có di chứng</option><option>Chưa hồi phục</option><option>Tử vong do ADR</option><option>Tử vong không liên quan thuốc</option><option>Không rõ</option></select></div>
+</div>
+<div class="field"><label for="aLabs">Xét nghiệm / thăm khám liên quan</label><textarea id="aLabs" placeholder="Kết quả liên quan, đơn vị và thời điểm nếu có..."></textarea></div>
+<div class="field"><label for="aHistory">Tiền sử liên quan / dị ứng</label><textarea id="aHistory" placeholder="Tiền sử dùng thuốc, dị ứng, bệnh lý liên quan..."></textarea></div>
+<div class="field"><label for="aAction">Biện pháp xử trí và diễn biến sau xử trí</label><textarea id="aAction" placeholder="Ngừng thuốc, điều trị hỗ trợ, diễn biến..."></textarea></div>
+<h3>Thuốc nghi ngờ</h3>
+<div class="grid">
+  <div class="field"><label for="aDrug">Tên thuốc nghi ngờ</label><input id="aDrug" placeholder="Tên hoạt chất / biệt dược" autocomplete="off"></div>
+  <div class="field"><label for="aStrength">Hàm lượng, dạng bào chế</label><input id="aStrength" placeholder="500 mg, viên nén..."></div>
+  <div class="field"><label for="aDose">Liều dùng và số lần dùng</label><input id="aDose" placeholder="Ví dụ 500 mg mỗi 8 giờ"></div>
+  <div class="field"><label for="aRoute">Đường dùng</label><input id="aRoute" placeholder="Uống, tĩnh mạch..."></div>
+  <div class="field"><label for="aStart">Ngày bắt đầu dùng</label><input id="aStart" type="date"></div>
+  <div class="field"><label for="aStop">Ngày kết thúc / ngừng thuốc</label><input id="aStop" type="date"></div>
+  <div class="field"><label for="aDechallenge">Phản ứng khi ngừng/giảm thuốc</label><select id="aDechallenge"><option value="">Chưa có thông tin</option><option>Cải thiện</option><option>Không cải thiện</option><option>Không ngừng thuốc</option><option>Không rõ</option></select></div>
+  <div class="field"><label for="aRechallenge">Phản ứng khi dùng lại thuốc</label><select id="aRechallenge"><option value="">Chưa có thông tin</option><option>Tái xuất hiện</option><option>Không tái xuất hiện</option><option>Không dùng lại</option><option>Không rõ</option></select></div>
+</div>
+<div class="field"><label for="aConcomitant">Thuốc dùng đồng thời / thông tin khác</label><textarea id="aConcomitant" placeholder="Tên thuốc, liều, thời gian sử dụng..."></textarea></div>
+<div class="field"><label for="aNotes">Bình luận của người báo cáo</label><textarea id="aNotes" placeholder="Nhận định chuyên môn, mức độ liên quan..."></textarea></div>
+<div class="row noprint">
+<button class="button" id="adrMake">Tạo bản tóm tắt</button>
+<button class="button secondary" id="adrPrint" disabled>In / Lưu PDF</button>
+<button class="button secondary" id="adrExport">Lưu bản nháp .json</button>
+<label class="button ghost" style="cursor:pointer">Mở bản nháp .json<input id="adrImport" type="file" accept=".json,application/json" hidden></label>
+<button class="button ghost" id="adrReset">Làm mới</button>
+</div>
+<div id="adrStatus" role="status"></div>
+<p class="hint">Bản nháp JSON lưu trên máy của bạn, không lưu lên GitHub hoặc máy chủ. Nếu mở trên máy dùng chung, hãy xóa các file nháp khỏi thư mục tải xuống sau khi dùng. Không nhập dữ liệu định danh bệnh nhân vào bản thử nghiệm này.</p>
+</div>
+<div class="panel printpanel" id="adrPreview" hidden><div class="report" id="adrReport"></div></div>
 </section>
 <footer class="hint noprint" style="padding:12px 0 24px">PharmaDesk Browser Edition · Công cụ thử nghiệm · Các dữ liệu đầu vào được xử lý trong trình duyệt, trừ tài nguyên thư viện JavaScript và bộ quy tắc tải từ máy chủ tĩnh.</footer>
 </div></div>
@@ -84,9 +115,23 @@ function renderSelected(){const d=$('drugSelected');d.innerHTML='';if(!selected.
 $('checkPairs').addEventListener('click',()=>{const el=$('pairResult');if(!rules){el.textContent='Chưa tải được bộ quy tắc.';return}if(selected.length<2){el.textContent='Chọn ít nhất hai thuốc.';return}const found=rules.pairs.filter(([a,b])=>selected.includes(a)&&selected.includes(b));el.innerHTML='<div class="notice '+(found.length?'warning':'')+'">'+(found.length?'Có '+found.length+' cặp trong bộ quy tắc — cần thẩm định trên nguồn chuyên môn.':'Không thấy cặp nào trong bộ quy tắc đã nạp. Điều này KHÔNG xác nhận không có tương tác.')+'</div>'+found.map(([a,b])=>'<div class="pair">'+esc(rules.drugs[a]?.ten||a)+' + '+esc(rules.drugs[b]?.ten||b)+'</div>').join('')});
 function tnum(id,lo,hi){const n=Number($(id).value);if(!Number.isFinite(n)||n<lo||n>hi)throw Error('Kiểm tra trường '+id+' (giới hạn '+lo+'–'+hi+').');return n}
 $('tdmCalc').addEventListener('click',()=>{try{const age=tnum('tAge',1,120),w=tnum('tWeight',10,300),h=tnum('tHeight',100,230),scr=tnum('tScr',.1,20),vdkg=tnum('tVd',.2,2),dose=tnum('tDose',1,10000),tau=tnum('tTau',1,168),tinf=tnum('tInf',.1,12);if(tinf>tau)throw Error('Thời gian truyền không được vượt khoảng cách liều.');const male=$('tSex').value==='M',ibw=(male?50:45.5)+2.3*(h-152.4)/2.54,pct=100*w/ibw,wt=pct<=75?1.13*w:pct<100?w:pct>120?ibw+.4*(w-ibw):ibw,crcl=(140-age)*wt/(72*scr)*(male?1:.85),V=vdkg*w,cl=(crcl*.689+3.66)*.06,k=cl/V,t12=Math.LN2/k,auc=dose*24/(tau*cl);const bolus=6*tinf<=t12;const peak=bolus?dose/(V*(1-Math.exp(-k*tau))):dose*(1-Math.exp(-k*tinf))/(cl*tinf*(1-Math.exp(-k*tau)));const trough=peak*Math.exp(-k*(bolus?tau:tau-tinf));if(![ibw,wt,crcl,V,cl,k,t12,auc,peak,trough].every(Number.isFinite))throw Error('Không thể tính với các thông số đã nhập.');const vals=[['CrCl (Cockcroft–Gault)',crcl,'mL/phút'],['CL mô hình',cl,'L/giờ'],['Vd mô hình',V,'L'],['Thời gian bán thải',t12,'giờ'],['AUC24 trạng thái ổn định',auc,'mg·h/L'],['Cmax mô hình',peak,'mg/L'],['Cmin mô hình',trough,'mg/L']];$('tdmResults').innerHTML=vals.map(([n,v,u])=>'<div class="metric"><small>'+esc(n)+'</small><b>'+fmt(v)+'</b><small>'+esc(u)+'</small></div>').join('');notify('tdmMessage','Đã tính theo công thức mô hình một ngăn trong PharmaDesk gốc. Không sử dụng kết quả để chỉ định liều.');}catch(e){$('tdmResults').innerHTML='';notify('tdmMessage',e.message,true)}});
-$('aDate').value=new Date().toISOString().slice(0,10);
-const adrFields={unit:'aUnit',reporter:'aReporter',date:'aDate',code:'aCode',age:'aAge',drug:'aDrug',event:'aEventDate',outcome:'aOutcome',desc:'aDesc',action:'aAction'};
-$('adrMake').addEventListener('click',()=>{const obj=Object.fromEntries(Object.entries(adrFields).map(([k,id])=>[k,$(id).value.trim()]));if(!obj.drug||!obj.desc){alert('Hãy nhập thuốc nghi ngờ và mô tả phản ứng giả lập.');return}const row=(label,val)=>'<p><b>'+esc(label)+':</b> '+esc(val||'—')+'</p>';$('adrReport').innerHTML='<h2>BẢN TÓM TẮT PHẢN ỨNG CÓ HẠI CỦA THUỐC</h2><p style="text-align:center">BẢN THỬ · KHÔNG PHẢI MẪU ADR CHÍNH THỨC</p>'+row('Đơn vị',obj.unit)+row('Người báo cáo',obj.reporter)+row('Ngày báo cáo',obj.date)+row('Mã giả lập',obj.code)+row('Tuổi',obj.age)+row('Thuốc nghi ngờ',obj.drug)+row('Ngày phản ứng',obj.event)+row('Mô tả',obj.desc)+row('Xử trí',obj.action)+row('Kết quả',obj.outcome);$('adrPreview').hidden=false;$('adrPrint').disabled=false;$('adrPreview').scrollIntoView({behavior:'smooth'})});
+// The ADR draft is kept in memory until the user explicitly downloads a JSON file.
+const adrFields={unit:'aUnit',reporter:'aReporter',date:'aDate',code:'aCode',age:'aAge',sex:'aSex',weight:'aWeight',event:'aEventDate',desc:'aDesc',serious:'aSerious',outcome:'aOutcome',labs:'aLabs',history:'aHistory',action:'aAction',drug:'aDrug',strength:'aStrength',dose:'aDose',route:'aRoute',start:'aStart',stop:'aStop',dechallenge:'aDechallenge',rechallenge:'aRechallenge',concomitant:'aConcomitant',notes:'aNotes'};
+$('aDate').value=new Date().toLocaleDateString('en-CA');
+function adrValues(){return Object.fromEntries(Object.entries(adrFields).map(([k,id])=>[k,$(id).value.trim()]));}
+function adrValidate(obj){if(!obj.drug||!obj.desc)throw new Error('Cần nhập thuốc nghi ngờ và mô tả phản ứng (dữ liệu giả).');if(obj.age&&(Number(obj.age)<0||Number(obj.age)>120))throw new Error('Tuổi ngoài phạm vi 0–120.');if(obj.weight&&(Number(obj.weight)<0||Number(obj.weight)>400))throw new Error('Cân nặng ngoài phạm vi 0–400 kg.');}
+function adrShow(obj){
+  const row=(label,val)=>'<p><b>'+esc(label)+':</b> '+(val?esc(val).replace(/\n/g,'<br>'):'—')+'</p>';
+  $('adrReport').innerHTML='<h2>BẢN TÓM TẮT PHẢN ỨNG CÓ HẠI CỦA THUỐC</h2><p style="text-align:center;font-weight:700;color:#945321">BẢN THỬ — KHÔNG THAY THẾ MẪU ADR CHÍNH THỨC</p>'
+    +'<h3>I. THÔNG TIN CHUNG</h3>'+row('Đơn vị báo cáo',obj.unit)+row('Người báo cáo',obj.reporter)+row('Ngày báo cáo',obj.date)+row('Mã giả lập',obj.code)+row('Tuổi giả lập',obj.age)+row('Giới tính',obj.sex)+row('Cân nặng (kg)',obj.weight)
+    +'<h3>II. PHẢN ỨNG CÓ HẠI NGHI NGỜ</h3>'+row('Ngày xuất hiện',obj.event)+row('Diễn biến',obj.desc)+row('Mức độ nghiêm trọng',obj.serious)+row('Kết quả',obj.outcome)+row('Xét nghiệm / thăm khám',obj.labs)+row('Tiền sử liên quan',obj.history)+row('Xử trí',obj.action)
+    +'<h3>III. THUỐC NGHI NGỜ</h3>'+row('Tên thuốc',obj.drug)+row('Hàm lượng / dạng bào chế',obj.strength)+row('Liều dùng',obj.dose)+row('Đường dùng',obj.route)+row('Bắt đầu',obj.start)+row('Ngừng thuốc',obj.stop)+row('Sau ngừng / giảm thuốc',obj.dechallenge)+row('Sau dùng lại',obj.rechallenge)
+    +'<h3>IV. THÔNG TIN BỔ SUNG</h3>'+row('Thuốc dùng đồng thời',obj.concomitant)+row('Bình luận',obj.notes);
+  $('adrPreview').hidden=false;$('adrPrint').disabled=false;
+}
+$('adrMake').addEventListener('click',()=>{try{const obj=adrValues();adrValidate(obj);adrShow(obj);notify('adrStatus','Đã tạo bản tóm tắt. Chọn In / Lưu PDF để lưu bằng hộp thoại in của trình duyệt.');$('adrPreview').scrollIntoView({behavior:'smooth'});}catch(e){notify('adrStatus',e.message,true)}});
 $('adrPrint').addEventListener('click',()=>window.print());
-$('adrReset').addEventListener('click',()=>{Object.values(adrFields).forEach(id=>$(id).value='');$('adrPreview').hidden=true;$('adrPrint').disabled=true});
+$('adrExport').addEventListener('click',()=>{const draft={format:'PharmaDesk-ADR-browser-draft',version:2,savedAt:new Date().toISOString(),data:adrValues()};downloadBlob('PharmaDesk_ADR_ban_nhap.json','application/json;charset=utf-8',JSON.stringify(draft,null,2));notify('adrStatus','Đã tải bản nháp JSON về thiết bị.');});
+$('adrImport').addEventListener('change',async event=>{const f=event.target.files[0];if(!f)return;try{if(f.size>100000)throw new Error('File bản nháp vượt 100 KB.');const d=JSON.parse(await f.text());if(d.format!=='PharmaDesk-ADR-browser-draft'||!d.data||typeof d.data!=='object'||Array.isArray(d.data))throw new Error('Không nhận diện được bản nháp ADR của PharmaDesk Browser Edition.');for(const [key,id] of Object.entries(adrFields))$(id).value=typeof d.data[key]==='string'?d.data[key].slice(0,15000):'';$('adrPreview').hidden=true;$('adrPrint').disabled=true;notify('adrStatus','Đã tải bản nháp từ file. Kiểm tra lại nội dung trước khi in.');}catch(e){notify('adrStatus',e.message,true)}finally{event.target.value=''}});
+$('adrReset').addEventListener('click',()=>{if(!confirm('Xóa toàn bộ dữ liệu trong biểu mẫu hiện tại?'))return;Object.values(adrFields).forEach(id=>$(id).value='');$('aDate').value=new Date().toLocaleDateString('en-CA');$('adrPreview').hidden=true;$('adrPrint').disabled=true;notify('adrStatus','Đã làm mới biểu mẫu.');});
 </script></body></html>
