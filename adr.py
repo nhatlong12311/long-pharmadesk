@@ -507,12 +507,14 @@ def load_defaults():
         return {}
 
 
-def generate(data):
+def generate(data, *, output_dir=None, persist_defaults=True):
     if not any(_s(data.get(k)) for k in ("ten_bn", "mo_ta", "ngay_pu")):
         raise ValueError("Chưa nhập thông tin phản ứng: hãy nhập ít nhất họ tên bệnh nhân hoặc mô tả biểu hiện ADR.")
-    atomic_write_json(CFG["data"] / "adr_defaults.json", {k: _s(data.get(k)) for k in DEFAULT_KEYS})
+    if persist_defaults:
+        atomic_write_json(CFG["data"] / "adr_defaults.json", {k: _s(data.get(k)) for k in DEFAULT_KEYS})
     base = f"ADR_{slug(data.get('ten_bn')) or 'chua_dat_ten'}_{datetime.datetime.now():%Y%m%d_%H%M%S_%f}_{uuid.uuid4().hex[:8]}"
-    outdir = CFG["data"] / "Bao_cao"
+    outdir = Path(output_dir) if output_dir is not None else CFG["data"] / "Bao_cao"
+    outdir.mkdir(parents=True, exist_ok=True)
     warnings = fill_pdf(data, outdir / (base + ".pdf"))
     make_docx(data, outdir / (base + ".docx"))
     if not _s(data.get("ten_bn")):
@@ -542,18 +544,23 @@ def make_blueprint():
     @bp.post("/api/adr/generate")
     @guarded(_LOCK, ("pypdf", "reportlab", "PIL", "docx"), perm="Không ghi được file. Nếu đang mở báo cáo cũ trong PDF/Word thì hãy đóng lại.")
     def gen():
-        result = generate(request.get_json(silent=True) or {})
-        # On ephemeral/cloud hosting, reports can disappear before the next GET.
-        # Return the newly generated files with this response so the browser can
-        # download them without depending on a shared server filesystem.
+        data = request.get_json(silent=True) or {}
         if os.environ.get("PHARMADESK_ONLINE") == "1":
+            # Create both original-format reports in a request-scoped directory.
+            # Render files can disappear on redeploy; never depend on a second
+            # GET or retain generated reports containing patient information.
             import base64
-            report_dir = CFG["data"] / "Bao_cao"
-            result["inline_files"] = {}
-            for key in ("pdf", "docx"):
-                file_path = report_dir / result[key]
-                result["inline_files"][key] = base64.b64encode(file_path.read_bytes()).decode("ascii")
-        return jsonify(ok=True, **result)
+            import tempfile
+            with tempfile.TemporaryDirectory(prefix="pd_adr_") as temporary:
+                report_dir = Path(temporary)
+                result = generate(data, output_dir=report_dir, persist_defaults=False)
+                result["inline_files"] = {
+                    key: base64.b64encode((report_dir / result[key]).read_bytes()).decode("ascii")
+                    for key in ("pdf", "docx")
+                }
+                return jsonify(ok=True, **result)
+        # Preserve Windows desktop generation, default settings and downloads.
+        return jsonify(ok=True, **generate(data))
 
     def draft_path(name):
         # Accept legacy ASCII slugs as well as UUIDs without truncating identifiers.
