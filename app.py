@@ -129,7 +129,10 @@ def no_cache(r):
     r.headers["Cache-Control"] = "no-store"
     if ONLINE_MODE:
         r.headers["X-Content-Type-Options"] = "nosniff"
-        r.headers["X-Frame-Options"] = "DENY"
+        # Allow authenticated ADR PDF previews to render in the same-origin iframe.
+        # External sites remain unable to embed PharmaDesk content.
+        r.headers["X-Frame-Options"] = "SAMEORIGIN"
+        r.headers["Content-Security-Policy"] = "frame-ancestors 'self'"
         r.headers["Referrer-Policy"] = "no-referrer"
         r.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
         r.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
