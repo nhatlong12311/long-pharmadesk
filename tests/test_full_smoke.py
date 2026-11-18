@@ -204,7 +204,37 @@ class CompletePharmaDeskSmoke(unittest.TestCase):
         self.assertEqual(with_token.mimetype,"application/json")
         self.assertFalse(with_token.json["ok"])
 
-    def test_12_original_windows_dependencies_present(self):
+    def test_12_tdm_valid_two_concentration_models(self):
+        vanco={"dose1":1000,"tinf1":1,"tau":12,"weight":70,
+               "t1":1,"t2":6,"c1":25,"c2":10}
+        result=self.post("/api/tdm/vanco/two",json=vanco)
+        self.assertEqual(result.status_code,200,result.data[:350])
+        self.assertTrue(result.json["ok"],result.json)
+        self.assertGreater(result.json["pk"]["cl"],0)
+        amg={"dose":320,"tau":24,"tinf":0.5,"t1":1,"t2":8,"c1":14,"c2":3}
+        result=self.post("/api/tdm/amg/two",json=amg)
+        self.assertEqual(result.status_code,200,result.data[:350])
+        self.assertTrue(result.json["ok"],result.json)
+        self.assertGreater(result.json["pk"]["cl"],0)
+
+    def test_13_abc_month_comparison_and_packaging(self):
+        previous=excel_bytes([
+            ["Mã dược","Tên thuốc","Hoạt chất","Hàm lượng","Quy cách","VEN","ĐVT","Đơn giá","Số lượng","Thành tiền"],
+            ["SYN01","Synthetic A","Substance A","10mg","Hộp 10","V","Viên",100,9,900],
+            ["SYN03","Synthetic A","Substance A","10mg","Hộp 20","V","Viên",150,1,150],
+        ])
+        result=self.post("/api/abc/compare-month",data={
+            "opts":json.dumps({"month":11,"year":2026,"mode":"calc","a":78,"b":95}),
+            "prev":(previous,"synthetic_prev.xlsx"),
+            "cur":(self.drug_xlsx(),"synthetic_current.xlsx"),
+        })
+        self.assertEqual(result.status_code,200,result.data[:300])
+        self.assertTrue(result.json["ok"],result.json)
+        report=self.client.get("/api/abc/download",query_string={"name":result.json["name"]},headers=self.headers)
+        self.assertEqual(report.status_code,200)
+        self.assertTrue(report.data.startswith(b"PK"))
+
+    def test_14_original_windows_dependencies_present(self):
         # The online repository does not bundle Crystal Reports conversion.
         # Report missing Windows files separately; never mark native merge as tested.
         missing=[p for p in ("Gop_va_sort_AZ.py","Xuat_RPT_sang_XLS.vbs","Mau tong.xlsx")
