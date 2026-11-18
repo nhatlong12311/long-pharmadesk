@@ -234,7 +234,27 @@ class CompletePharmaDeskSmoke(unittest.TestCase):
         self.assertEqual(report.status_code,200)
         self.assertTrue(report.data.startswith(b"PK"))
 
-    def test_14_original_windows_dependencies_present(self):
+    def test_14_interaction_detection_from_bundled_original_rules(self):
+        # Use actual rule IDs/codes, but only a synthetic encounter and date.
+        import ttt
+        rules=ttt.load_rules()
+        pair=next((a,b) for a,b in rules["pairs"]
+                  if rules["drugs"][a].get("codes") and rules["drugs"][b].get("codes"))
+        a,b=pair
+        code_a=rules["drugs"][a]["codes"][0]
+        code_b=rules["drugs"][b]["codes"][0]
+        wb=excel_bytes([
+            ["MaBN","NgayChiDinh","MaHoatChat","Tên thuốc","Tên khoa"],
+            ["SYN-NO-PATIENT","18/11/2026",code_a,rules["drugs"][a]["ten"],"Review"],
+            ["SYN-NO-PATIENT","18/11/2026",code_b,rules["drugs"][b]["ten"],"Review"],
+        ])
+        res=self.post("/api/ttt/inspect",data={"dmy":"1","file":(wb,"rule_check.xlsx")})
+        self.assertEqual(res.status_code,200,res.data[:450])
+        self.assertTrue(res.json["ok"],res.json)
+        self.assertGreaterEqual(res.json["matched"],2,res.json)
+        self.assertGreaterEqual(res.json["events"],1,res.json)
+
+    def test_15_original_windows_dependencies_present(self):
         # The online repository does not bundle Crystal Reports conversion.
         # Report missing Windows files separately; never mark native merge as tested.
         missing=[p for p in ("Gop_va_sort_AZ.py","Xuat_RPT_sang_XLS.vbs","Mau tong.xlsx")
