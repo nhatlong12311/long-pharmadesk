@@ -2,52 +2,15 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PharmaDesk · Công cụ dược lâm sàng</title>
-<style>
-  :root { color-scheme: light; font-family: system-ui, sans-serif; color: #17332b; background: #f2f7f4; }
-  * { box-sizing: border-box; }
-  body { margin: 0; min-height: 100vh; }
-  main { max-width: 48rem; margin: 0 auto; padding: clamp(2rem, 9vw, 5rem) 1.25rem; }
-  h1 { margin: 0; font-size: clamp(2rem, 6vw, 3rem); line-height: 1.15; }
-  p { color: #3f5f54; line-height: 1.6; margin: 0.75rem 0 1.5rem; }
-  .tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
-  .tools a { display: grid; gap: 0.4rem; padding: 1.1rem; border: 1px solid #a2bdb0; border-radius: 0.85rem; background: #fff; color: #15573e; font-weight: 700; text-decoration: none; }
-  .tools a:hover { background: #e8f4eb; border-color: #39755c; }
-  .tools span { color: #3f5f54; font-weight: 400; }
-  footer { display: flex; flex-wrap: wrap; gap: 0.8rem 1.5rem; margin-top: 1.6rem; }
-  footer a { color: #15573e; text-underline-offset: 0.2em; }
-  a:focus-visible { outline: 3px solid #24704f; outline-offset: 3px; }
-  @media (max-width: 34rem) { .tools { grid-template-columns: 1fr; } }
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PharmaDesk</title>
 </head>
 <body>
-<main>
-  <h1>PharmaDesk</h1>
-  <p>Chọn công cụ để mở bản web trên Render. Đăng nhập bằng tài khoản được cấp.</p>
-  <nav class="tools" aria-label="Công cụ dược lâm sàng">
-    <a id="tool-abc" href="https://long-pharmadesk.onrender.com/tools?module=abc&amp;view=clinical">
-      ABC/VEN <span>Phân tích, so sánh và xuất báo cáo</span>
-    </a>
-    <a id="tool-ttt" href="https://long-pharmadesk.onrender.com/tools?module=ttt&amp;view=clinical">
-      Tương tác thuốc <span>Rà soát cặp tương tác và xuất Word</span>
-    </a>
-    <a id="tool-tdm" href="https://long-pharmadesk.onrender.com/tools?module=tdm&amp;view=clinical">
-      TDM <span>Vancomycin và aminoglycoside</span>
-    </a>
-    <a id="tool-adr" href="https://long-pharmadesk.onrender.com/tools?module=adr&amp;view=clinical">
-      Báo cáo ADR <span>Xuất PDF theo mẫu và Word</span>
-    </a>
-  </nav>
-  <footer>
-    <a href="./browser.html">Bản thử nghiệm chạy trong trình duyệt</a>
-    <a href="https://github.com/nhatlong12311/long-pharmadesk/releases/latest">Tải bản Windows</a>
-  </footer>
-</main>
+<a href="./browser.html">Mở PharmaDesk trong trình duyệt</a>
 <script>
-  const moduleId = new URLSearchParams(location.search).get('module') || location.hash.slice(1);
-  const tool = document.getElementById('tool-' + moduleId);
-  if (tool instanceof HTMLAnchorElement) location.replace(tool.href);
+  const query = new URLSearchParams(location.search).get("module");
+  const tab = ["abc", "ttt", "tdm", "adr"].includes(query) ? "#" + query : location.hash;
+  location.replace("./browser.html" + tab);
 </script>
 </body>
 </html>
