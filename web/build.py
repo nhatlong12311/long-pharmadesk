@@ -136,7 +136,7 @@ def build(output):
 
 def build_ui(output, script, *, server=False):
     html = (ROOT / "ui" / "index.html").read_text(encoding="utf-8")
-    banner = ('<div class="portfolio-back"><span>PHARMADESK 3.0 · VERCEL</span>'
+    banner = ('<div class="portfolio-back"><a href="/portfolio">← Portfolio Nhật Long</a><span>PHARMADESK 3.0 · VERCEL</span>'
               '<span>Tệp và biểu mẫu dùng để tạo báo cáo được gửi lên máy chủ để xử lý.</span></div>'
               if server else
               '<div class="portfolio-back"><span>PHARMADESK 3.0 · XỬ LÝ TRÊN THIẾT BỊ</span><a href="./browser.html">Bản web nhẹ</a></div>')
@@ -170,6 +170,9 @@ def build_server(output):
     ])
     (output / "server.js").write_text(script, encoding="utf-8")
     build_ui(output, "server.js?v=" + sha256(script.encode()).hexdigest()[:16], server=True)
+    portfolio = (ROOT / "portfolio.html").read_text(encoding="utf-8")
+    portfolio = portfolio.replace('href="/tools?view=clinical&amp;module=', 'href="/?module=')
+    (output / "portfolio.html").write_text(portfolio, encoding="utf-8")
 
 
 if __name__ == "__main__":
