@@ -1,6 +1,6 @@
 # PharmaDesk trên GitHub Pages
 
-[Mở PharmaDesk](https://nhatlong12311.github.io/long-pharmadesk/) để dùng ABC/VEN, Tương tác thuốc, TDM và Báo cáo ADR. Trang tải Python WebAssembly và mẫu báo cáo từ GitHub Pages, sau đó xử lý Excel, tính toán và tạo báo cáo trong trình duyệt. Lần đầu tải cần Internet. Bạn có thể mở thẳng [Báo cáo ADR](https://nhatlong12311.github.io/long-pharmadesk/?module=adr).
+[Mở PharmaDesk](https://nhatlong12311.github.io/long-pharmadesk/) để dùng ABC/VEN, Tương tác thuốc, TDM và Báo cáo ADR. Trang tải Python WebAssembly và mẫu báo cáo từ GitHub Pages, sau đó xử lý Excel, tính toán và tạo báo cáo trong trình duyệt. Trình duyệt lưu bộ chạy để dùng lại trong các lần mở sau. Mỗi tab vẫn khởi tạo Python, và thư viện báo cáo được tải khi cần. Bạn có thể mở thẳng [Báo cáo ADR](https://nhatlong12311.github.io/long-pharmadesk/?module=adr).
 
 Các phân hệ dùng lại mã Python và mẫu của bản Windows. Tải báo cáo Excel, Word hoặc PDF về thiết bị sau khi tạo. Bản nháp ADR, tùy chọn và lịch sử được lưu theo trình duyệt. Khi trình duyệt chặn lưu trữ thì dữ liệu chỉ tồn tại trong tab. Dùng dữ liệu giả khi thử nghiệm.
 

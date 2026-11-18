@@ -67,14 +67,27 @@ async function assertDownload(page, action, filename, signature) {
 }
 
 async function main() {
-  const server = createServer(serve);
+  const requestedAssets = new Set();
+  let blockRuntime = false;
+  const server = createServer((request, response) => {
+    const path = new URL(request.url, "http://localhost").pathname;
+    if (path.startsWith(prefix + "runtime/") || path.startsWith(prefix + "python-")) {
+      requestedAssets.add(path);
+      if (blockRuntime) {
+        response.writeHead(503).end();
+        return;
+      }
+    }
+    response.setHeader("Cache-Control", "no-store");
+    serve(request, response);
+  });
   await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
   const site = origin + prefix;
   let browser;
   try {
     browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH});
-    const context = await browser.newContext({acceptDownloads: true});
+    const context = await browser.newContext({acceptDownloads: true, serviceWorkers: "block"});
     const unexpected = [];
     await context.route("**/*", route => {
       const url = route.request().url();
@@ -87,7 +100,7 @@ async function main() {
     page.on("pageerror", error => errors.push(error.message));
     let allowStartup;
     const pauseStartup = new Promise(resolve => { allowStartup = resolve; });
-    await page.route("**/python.zip", async route => {
+    await page.route("**/python-*.zip", async route => {
       await pauseStartup;
       await route.continue();
     }, {times:1});
@@ -189,7 +202,7 @@ async function main() {
     await second.goto(site + "browser.html");
     await second.waitForFunction(() => window.XLSX && document.querySelector("#ruleInfo").textContent.includes("cặp"));
 
-    await second.route("**/python.zip", route => route.abort(), {times:1});
+    await second.route("**/python-*.zip", route => route.abort(), {times:1});
     await second.goto(site + "?module=adr");
     await second.locator('[data-ap="mo_ta"]').fill("Dữ liệu giả giữ lại khi khởi động lại.");
     await second.locator("#localRetry").waitFor();
@@ -201,6 +214,37 @@ async function main() {
 
     assert.deepEqual(unexpected, [], "The app must send no requests outside the Pages site");
     assert.deepEqual(errors, []);
+    await context.close();
+
+    const cacheContext = await browser.newContext();
+    const adrUrl = site + "?module=adr";
+    const firstVisit = await cacheContext.newPage();
+    requestedAssets.clear();
+    await firstVisit.goto(adrUrl);
+    const formIsReady = () => !document.querySelector("#adrGo").disabled;
+    await firstVisit.waitForFunction(formIsReady);
+    assert.ok([...requestedAssets].some(path => path.endsWith("pyodide.asm.wasm")));
+    assert.ok(![...requestedAssets].some(path => /\/(reportlab-|python_docx-|pypdf-|openpyxl-)/.test(path)),
+      "Ready ADR form should not load report libraries");
+    const reportData = {mo_ta: "Dữ liệu giả kiểm thử bộ nhớ đệm"};
+    const generated = await api(firstVisit, "/api/adr/generate", {data: reportData});
+    assert.ok(generated.inline_files.pdf);
+    await firstVisit.waitForFunction(async paths => {
+      const cache = await caches.open("pharmadesk-runtime:" + new URL(".", location.href).pathname);
+      return (await Promise.all(paths.map(path => cache.match(new URL(path, location.origin))))).every(Boolean);
+    }, [...requestedAssets]);
+    await firstVisit.close();
+
+    blockRuntime = true;
+    requestedAssets.clear();
+    const returnVisit = await cacheContext.newPage();
+    await returnVisit.goto(adrUrl);
+    await returnVisit.waitForFunction(formIsReady);
+    const cached = await api(returnVisit, "/api/adr/generate", {data: reportData});
+    assert.ok(cached.inline_files.pdf);
+    assert.deepEqual([...requestedAssets], [], "Reopening should reuse the cached runtime even without HTTP cache");
+    await cacheContext.close();
+    console.log("ADR: deferred report libraries and reused cached runtime after closing the first tab");
   } finally {
     await browser?.close();
     await new Promise(resolve => server.close(resolve));

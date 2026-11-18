@@ -2,12 +2,13 @@
 
 from concurrent.futures import ThreadPoolExecutor
 from hashlib import sha256
+from io import BytesIO
 import json
 from pathlib import Path
 import shutil
 import subprocess
 import sys
-from zipfile import ZIP_DEFLATED, ZipFile
+from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web"
@@ -54,7 +55,11 @@ def replacements(html, edits):
 
 
 def build(output):
-    runtime = output / "runtime"
+    requirements = WEB / "requirements.txt"
+    runtime_version = sha256(
+        json.dumps([CORE, WASM_PACKAGES], sort_keys=True).encode() + requirements.read_bytes()
+    ).hexdigest()[:16]
+    runtime = output / "runtime" / runtime_version
     pure = runtime / "wheels"
     pure.mkdir(parents=True, exist_ok=True)
     with ThreadPoolExecutor(max_workers=6) as pool:
@@ -66,7 +71,7 @@ def build(output):
             fetch(PYODIDE + name, runtime / name, entry["sha256"])
 
     subprocess.run([
-        sys.executable, "-m", "pip", "download", "-r", str(WEB / "requirements.txt"),
+        sys.executable, "-m", "pip", "download", "-r", str(requirements),
         "--require-hashes", "--no-deps", "--only-binary=:all:", "--platform", "any", "-d", str(pure),
     ], check=True)
     (runtime / "wheels.json").write_text(
@@ -74,10 +79,26 @@ def build(output):
         encoding="utf-8",
     )
 
-    with ZipFile(output / "python.zip", "w", ZIP_DEFLATED) as archive:
-        archive.write(WEB / "browser_backend.py", "browser_backend.py")
-        for name in MODULES + TEMPLATES:
-            archive.write(ROOT / name, name)
+    source = BytesIO()
+    with ZipFile(source, "w") as archive:
+        files = [(WEB / "browser_backend.py", "browser_backend.py")]
+        files.extend((ROOT / name, name) for name in MODULES + TEMPLATES)
+        for path, name in files:
+            archive.writestr(ZipInfo(name), path.read_bytes(), compress_type=ZIP_DEFLATED)
+    data = source.getvalue()
+    source_name = f"python-{sha256(data).hexdigest()[:16]}.zip"
+    (output / source_name).write_bytes(data)
+
+    worker = replacements((WEB / "worker.mjs").read_text(encoding="utf-8"), [
+        ("__RUNTIME_VERSION__", runtime_version), ("__PYTHON_SOURCE__", source_name),
+    ])
+    (output / "worker.mjs").write_text(worker, encoding="utf-8")
+    worker_version = sha256(worker.encode()).hexdigest()[:16]
+    local = replacements((WEB / "local.js").read_text(encoding="utf-8"), [
+        ("__WORKER_VERSION__", worker_version),
+    ])
+    local_version = sha256(local.encode()).hexdigest()[:16]
+    (output / "local.js").write_text(local, encoding="utf-8")
 
     html = (ROOT / "ui" / "index.html").read_text(encoding="utf-8")
     html = replacements(html, [
@@ -85,7 +106,7 @@ def build(output):
         ('<div class="portfolio-back"><a href="/">← LONG / Personal Portfolio</a><span class="tag">PHARMADESK 3.0 · LOCAL CLINICAL WORKSPACE</span></div>',
          '<div class="portfolio-back"><span>PHARMADESK 3.0 · XỬ LÝ TRÊN THIẾT BỊ</span><a href="./browser.html">Bản web nhẹ</a></div>'),
         ('    </div>\n</div>\n\n<main id="truMain"', '    </div>\n  <div id="localStatus"><span id="localStatusMessage" role="status">Đang tải chương trình Python…</span><button type="button" id="localRetry" class="ghost" hidden>Thử lại</button></div>\n</div>\n\n<main id="truMain"'),
-        ('<script>\n// Attach the per-process token', '<script src="./local.js"></script>\n<script>\n// Attach the per-process token'),
+        ('<script>\n// Attach the per-process token', f'<script src="./local.js?v={local_version}"></script>\n<script>\n// Attach the per-process token'),
         ("const module=new URLSearchParams(location.search).get('module');",
          "const requested=new URLSearchParams(location.search).get('module')||location.hash.slice(1);\n const module=['abc','ttt','tdm','adr'].includes(requested)?requested:'abc';"),
         ("refresh();load();guideRender();", ""),
@@ -93,7 +114,7 @@ def build(output):
     ])
     (output / "index.html").write_text(html, encoding="utf-8")
 
-    for name in ("local.js", "worker.mjs", "local.css"):
+    for name in ("local.css", "runtime-cache.js"):
         shutil.copyfile(WEB / name, output / name)
     shutil.copyfile(ROOT / "docs" / "rules.json", output / "rules.json")
     fetch(SHEETJS + "dist/xlsx.full.min.js", output / "xlsx.full.min.js",
