@@ -1,0 +1,35 @@
+name: Check static clinical tools
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - ".github/workflows/check-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate static assets and JS syntax
+        run: |
+          python - <<'PY'
+          import json, re
+          from pathlib import Path
+          html=Path('docs/index.html').read_text(encoding='utf-8')
+          data=json.loads(Path('docs/rules.json').read_text(encoding='utf-8'))
+          assert 'Personal Portfolio' not in html
+          assert len(data['drugs'])>200 and len(data['pairs'])>300
+          scripts=re.findall(r'<script(?:\\s[^>]*)?>([\\s\\S]*?)</script>',html)
+          Path('/tmp/pharmadesk-browser.js').write_text(scripts[-1],encoding='utf-8')
+          print('Found',len(data['drugs']),'drugs and',len(data['pairs']),'pairs')
+          PY
+          node --check /tmp/pharmadesk-browser.js
