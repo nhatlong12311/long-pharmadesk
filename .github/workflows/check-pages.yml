@@ -28,7 +28,7 @@ jobs:
           data=json.loads(Path('docs/rules.json').read_text(encoding='utf-8'))
           assert 'Personal Portfolio' not in html
           assert len(data['drugs'])>200 and len(data['pairs'])>300
-          scripts=re.findall(r'<script(?:\\s[^>]*)?>([\\s\\S]*?)</script>',html)
+          scripts=re.findall(r'<script(?:\s[^>]*)?>([\s\S]*?)</script>',html)
           Path('/tmp/pharmadesk-browser.js').write_text(scripts[-1],encoding='utf-8')
           print('Found',len(data['drugs']),'drugs and',len(data['pairs']),'pairs')
           PY
