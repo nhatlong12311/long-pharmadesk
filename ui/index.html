@@ -527,17 +527,17 @@ th, .rt th { background: var(--surface-container-high); text-transform: none; le
     display: grid;
     grid-template-columns: 72px minmax(0, 1fr);
     align-items: start;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto auto 1fr auto;
     min-height: 100vh;
   }
   body:has(.sidebar-toggle[aria-pressed="true"]) {
     grid-template-columns: 224px minmax(0, 1fr);
   }
   header {
-    width: 224px;
+    width: 100%;
     z-index: 10;
     grid-column: 1;
-    grid-row: 1 / 4;
+    grid-row: 1 / 5;
     position: sticky;
     top: 0;
     height: 100vh;
@@ -570,24 +570,16 @@ th, .rt th { background: var(--surface-container-high); text-transform: none; le
   header .app-brand .logo { display: none; }
   header .app-brand { display: grid; gap: 1px; }
   header .app-version { margin: 0; }
-  header:not(:has(.sidebar-toggle[aria-pressed="true"], :focus-visible)) {
-    width: 72px;
-  }
-  header:not(:has(.sidebar-toggle[aria-pressed="true"], :focus-visible)) .app-brand,
-  header:not(:has(.sidebar-toggle[aria-pressed="true"], :focus-visible)) .tab:not(.on),
-  header:not(:has(.sidebar-toggle[aria-pressed="true"], :focus-visible)) .tab > span {
+  header:has(.sidebar-toggle[aria-pressed="false"]) .app-brand,
+  header:has(.sidebar-toggle[aria-pressed="false"]) .tab > span {
     display: none;
   }
-  @media (hover: hover) {
-    header:hover { width: 224px !important; }
-    header:hover .app-brand { display: grid !important; }
-    header:hover .tab { display: flex !important; }
-    header:hover .tab > span { display: inline !important; }
-  }
-  .screen-heading, main { grid-column: 2; }
-  .screen-heading { grid-row: 1; padding-top: 34px; }
-  main { grid-row: 2; }
-  .feedback-note { grid-column: 2; grid-row: 3; }
+  header:has(.sidebar-toggle[aria-pressed="false"]) .tab { justify-content: center; }
+  .portfolio-back, .screen-heading, main, .feedback-note { grid-column: 2; }
+  .portfolio-back { grid-row: 1; }
+  .screen-heading { grid-row: 2; padding-top: 24px; }
+  main { grid-row: 3; }
+  .feedback-note { grid-row: 4; }
 }
 @media (max-width: 580px) {
   #guideChoices { grid-template-columns: minmax(0, 1fr); }
@@ -873,8 +865,8 @@ th, .rt th { background: var(--surface-container-high); text-transform: none; le
 <main id="adrMain" aria-labelledby="screenTitle" style="display:none">
 <section class="card wide" style="padding:0;background:transparent;box-shadow:none;border:0">
  <div id="adrNoTpl" class="msg er" style="display:none;margin:0 0 12px">Không thấy mẫu ADR\\Mau_bao_cao_ADR.pdf hoặc font ADR\\fonts cạnh phần mềm.</div>
- <div id="adrStateError" class="msg er" role="status" hidden></div>
- <div class="adr-bar"><select id="adrDraftSel" aria-label="Bản nháp ADR"></select><button class="ghost" onclick="adrLoad()">Mở</button><button class="ghost" onclick="adrSave()">Lưu bản nháp</button><button class="ghost dng" onclick="adrDel()">Xoá</button><button class="ghost" onclick="adrNew()">Báo cáo mới</button><span class="sp"></span><button class="go" id="adrGo" onclick="adrRun()" disabled>Tạo báo cáo ADR (PDF + Word)</button></div>
+ <div id="adrStateError" class="msg" role="status" hidden></div>
+ <div class="adr-bar"><select id="adrDraftSel" aria-label="Bản nháp ADR" data-adr-storage disabled><option value="">— Bản nháp đã lưu —</option></select><button class="ghost" onclick="adrLoad()" data-adr-storage disabled>Mở</button><button class="ghost" onclick="adrSave()" data-adr-storage disabled>Lưu bản nháp</button><button class="ghost dng" onclick="adrDel()" data-adr-storage disabled>Xoá</button><button class="ghost" onclick="adrNew()">Báo cáo mới</button><span class="sp"></span><button class="go" id="adrGo" onclick="adrRun()" disabled>Tạo báo cáo ADR (PDF + Word)</button></div>
 </section>
 <div id="adrForm" style="display:contents"></div>
 <section class="card wide"><h2>Kết quả</h2><div id="adrOut"><div class="tdm-hint" style="margin:0">Điền các mục cần thiết rồi bấm “Tạo báo cáo ADR”. Chỉ cần điền phần bạn có thông tin; phần mềm in thẳng vào mẫu PDF chính thức, đồng thời xuất bản Word để chỉnh sửa.</div></div></section>
@@ -901,21 +893,23 @@ $('sidebarToggle').addEventListener('click',event=>{
  const button=event.currentTarget;
  button.setAttribute('aria-pressed',String(button.getAttribute('aria-pressed')!=='true'));
 });
+document.querySelectorAll('.tab[aria-label]').forEach(tab=>{tab.title=tab.getAttribute('aria-label')});
 
 let items=[],PV=[],mode='khoa';
 async function api(u,o){
  let response;
  try{response=await fetch(u,o)}
- catch(e){throw new Error('Không kết nối được máy chủ ('+u+'). Kiểm tra Render có đang Live và mạng Internet. '+String(e))}
+ catch(e){throw new Error(window.pharmaDeskLocal?'Không kết nối được với chương trình trên trình duyệt.':'Không kết nối được máy chủ ('+u+'). Kiểm tra kết nối rồi thử lại. '+String(e))}
  const contentType=(response.headers.get('content-type')||'').toLowerCase();
  if(!contentType.includes('application/json')){
   const status=response.status;
   let detail='';
-  if([502,503,504].includes(status))detail='Render đang khởi động, quá tải hoặc gặp lỗi máy chủ. Kiểm tra Events/Logs trên Render rồi thử lại.';
+  if(window.pharmaDeskLocal)detail='Phản hồi của chương trình trên thiết bị không hợp lệ.';
+  else if([502,503,504].includes(status))detail='Máy chủ đang khởi động hoặc gặp lỗi. Hãy thử lại.';
   else if(status===401||status===403)detail='Phiên đăng nhập không hợp lệ. Mở lại trang Tools và đăng nhập.';
   else if(status===404)detail='Đường dẫn API không tồn tại hoặc chưa triển khai phiên bản mới.';
   else if(status===413)detail='Dữ liệu hoặc báo cáo vượt giới hạn dung lượng.';
-  else detail='Máy chủ trả về HTML thay vì JSON. Kiểm tra trạng thái triển khai và Logs trên Render.';
+  else detail='Máy chủ trả về HTML thay vì JSON. Kiểm tra trạng thái triển khai.';
   throw new Error('Lỗi API '+u+' · HTTP '+status+'. '+detail);
  }
  let data;
@@ -1313,6 +1307,7 @@ const ABC={fields:[],watch:[],loaded:false};
 function showTab(t){
  const panels={gop:'gopMain',tru:'truMain',abc:'abcMain',ttt:'tttMain',tdm:'tdmMain',adr:'adrMain'};
  const tabs={gop:'tabGop',tru:'tabTru',abc:'tabAbc',ttt:'tabTtt',tdm:'tabTdm',adr:'tabAdr'};
+ const changed=!$(tabs[t]).classList.contains('on');
  for(const [key,panel] of Object.entries(panels)){
   const active=key===t;
   const button=$(tabs[key]);
@@ -1323,8 +1318,9 @@ function showTab(t){
  }
  $('screenTitle').textContent=t==='gop'?'Tổng hợp phiếu thuốc':$(tabs[t]).textContent;
  $('headerRestartBtn').style.display=t==='gop'?'':'none';
- if(t==='abc'&&!ABC.loaded)abcInit();
- if(t==='ttt'&&!TTT.loaded)tttInit();
+ if(changed)window.scrollTo({top:0,behavior:'instant'});
+ if(t==='abc'&&!ABC.loaded)abcInit().catch(e=>toast(e.message,'er'));
+ if(t==='ttt'&&!TTT.loaded)tttInit().catch(e=>toast(e.message,'er'));
  if(t==='tdm'&&!TDM.loaded)tdmInit();
  if(t==='adr'&&!ADR.loaded)adrInit();
 }
@@ -1654,7 +1650,7 @@ const AOPT={gioi:[['M','Nam'],['F','Nữ']],
  q15:[['0','Có'],['1','Không'],['2','Không tái sử dụng'],['3','Không có thông tin']],
  q17:[['1','Chắc chắn'],['2','Có khả năng'],['3','Có thể'],['4','Không chắc chắn'],['5','Chưa phân loại'],['6','Không thể phân loại'],['7','Khác']],
  q18:[['1','Thang WHO'],['2','Thang Naranjo'],['3','Thang khác']],dang_bc:[['1','Lần đầu'],['2','Bổ sung']]};
-function adrBlank(){const d={thuoc:[0,1,2,3].map(()=>({})),con:Array.from({length:10},()=>({})),muc_do:[]};Object.assign(d,ADR.defaults||{});d.ngay_bc=ADR.today||'';d.dang_bc=d.dang_bc||'1';return d}
+function adrBlank(){const d={thuoc:[0,1,2,3].map(()=>({})),con:Array.from({length:10},()=>({})),muc_do:[]};Object.assign(d,ADR.defaults||{});if(ADR.today)d.ngay_bc=ADR.today;d.dang_bc=d.dang_bc||'1';return d}
 function aget(p){return p.split('.').reduce((o,k)=>o==null?o:o[k],ADR.d)}
 function aset(p,v){const ks=p.split('.');let o=ADR.d;ks.slice(0,-1).forEach(k=>o=o[k]);o[ks[ks.length-1]]=v}
 const ei=s=>escapeHtml(s==null?'':String(s));
@@ -1680,20 +1676,35 @@ async function adrInit(){
  if(ADR.loading)return;
  ADR.loading=true;
  const error=$('adrStateError');
+ if(!ADR.d){
+  ADR.d=adrBlank();
+  adrForm();
+ }
+ error.classList.remove('er');
+ error.textContent='Bạn có thể nhập biểu mẫu trong lúc chương trình chuẩn bị mẫu PDF và Word.';
+ error.hidden=false;
  try{
   const state=await api('/api/adr/state');
   ADR.defaults=state.defaults||{};
   ADR.today=state.today;
-  ADR.d=adrBlank();
-  adrForm();
+  const defaults={...ADR.defaults,ngay_bc:ADR.today};
+  $('adrForm').querySelectorAll('[data-ap]').forEach(input=>{
+   const field=input.dataset.ap;
+   if(Object.hasOwn(defaults,field)&&!Object.hasOwn(ADR.d,field)){
+    ADR.d[field]=defaults[field];
+    input.value=defaults[field]??'';
+   }
+  });
   const ready=state.template&&state.font;
   $('adrNoTpl').style.display=ready?'none':'block';
   $('adrGo').disabled=!ready;
+  document.querySelectorAll('[data-adr-storage]').forEach(control=>{control.disabled=false});
   ADR.loaded=true;
   error.hidden=true;
   adrDrafts().catch(e=>toast(e.message,'er'));
  }catch(e){
-  error.textContent=e.message+' Chọn lại mục Báo cáo ADR để thử lại.';
+  error.classList.add('er');
+  error.textContent=e.message+' Chọn lại mục Báo cáo ADR để thử lại. Nội dung đã nhập vẫn còn trong biểu mẫu.';
   error.hidden=false;
  }finally{
   ADR.loading=false;
@@ -1761,7 +1772,7 @@ async function adrRun(){
  $('adrOut').scrollIntoView({behavior:'smooth'});
 }
 
-api('/api/version').then(r=>$('ver').textContent='· '+r.v);
+api('/api/version').then(r=>$('ver').textContent='· '+r.v).catch(e=>toast(e.message,'er'));
 refresh();load();guideRender();
 // Không tự nạp lại thư mục nguồn khi mở app; người dùng chủ động bấm Chọn thư mục/Làm mới.
 </script>
