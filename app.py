@@ -405,12 +405,13 @@ def portfolio_home():
 @app.get("/tools")
 def index():
     html = (ROOT / 'ui' / 'index.html').read_text(encoding='utf-8')
-    if TOOLS_ONLY or not ONLINE_MODE:
+    clinical_tools = TOOLS_ONLY or (ONLINE_MODE and request.args.get("view") == "clinical")
+    if clinical_tools or not ONLINE_MODE:
         html = html.replace(
             '<div class="portfolio-back"><a href="/">← LONG / Personal Portfolio</a><span class="tag">PHARMADESK 3.0 · LOCAL CLINICAL WORKSPACE</span></div>',
             '<div class="portfolio-back"><span>PHARMADESK 3.0</span></div>'
         )
-    if TOOLS_ONLY:
+    if clinical_tools:
         # Hide the Windows inventory tabs in the hosted clinical workspace.
         html = html.replace("</head>", """<style>
         #tabGop, #tabTru, .app-exit { display:none !important; }

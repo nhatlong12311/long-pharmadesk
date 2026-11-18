@@ -6,6 +6,10 @@ on:
     paths:
       - "docs/**"
       - ".github/workflows/check-pages.yml"
+  pull_request:
+    paths:
+      - "docs/**"
+      - ".github/workflows/check-pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -23,13 +27,27 @@ jobs:
         run: |
           python - <<'PY'
           import json, re
+          from html import unescape
           from pathlib import Path
-          html=Path('docs/index.html').read_text(encoding='utf-8')
-          data=json.loads(Path('docs/rules.json').read_text(encoding='utf-8'))
-          assert 'Personal Portfolio' not in html
-          assert len(data['drugs'])>200 and len(data['pairs'])>300
-          scripts=re.findall(r'<script(?:\s[^>]*)?>([\s\S]*?)</script>',html)
-          Path('/tmp/pharmadesk-browser.js').write_text(scripts[-1],encoding='utf-8')
-          print('Found',len(data['drugs']),'drugs and',len(data['pairs']),'pairs')
+          from urllib.parse import parse_qs, urlsplit
+
+          root = Path('docs')
+          landing = (root / 'index.html').read_text(encoding='utf-8')
+          links = re.findall(r'<a id="tool-(\w+)" href="([^"]+)"', landing)
+          assert [module for module, _ in links] == ['abc', 'ttt', 'tdm', 'adr']
+          for module, link in links:
+              url = urlsplit(unescape(link))
+              assert (url.scheme, url.netloc, url.path) == ('https', 'long-pharmadesk.onrender.com', '/tools')
+              assert parse_qs(url.query) == {'module': [module], 'view': ['clinical']}
+          assert 'href="./browser.html"' in landing
+          for name in ('index', 'browser'):
+              html = (root / f'{name}.html').read_text(encoding='utf-8')
+              assert 'Personal Portfolio' not in html
+              scripts = re.findall(r'<script(?:\s[^>]*)?>([\s\S]*?)</script>', html)
+              Path(f'/tmp/pharmadesk-{name}.js').write_text(scripts[-1], encoding='utf-8')
+
+          data = json.loads((root / 'rules.json').read_text(encoding='utf-8'))
+          assert len(data['drugs']) > 200 and len(data['pairs']) > 300
           PY
+          node --check /tmp/pharmadesk-index.js
           node --check /tmp/pharmadesk-browser.js
