@@ -1,0 +1,290 @@
+﻿ĐỐI CHIẾU QUY TẮC TXT VỚI EXCEL
+
+252 hoạt chất; 368 cặp quy tắc; 191 dòng Excel; 102 cặp khớp đủ.
+
+CẢNH BÁO MÃ TRONG TXT
+Mã 40.1005 dùng chung cho: kali_clorid_vien_gpkd, kali_clorid_vien_uong - kiểm tra lại mã trong file SQL.
+Mã 40.1009 dùng chung cho: kali_clorid_vien_gpkd, kali_clorid_vien_uong - kiểm tra lại mã trong file SQL.
+Mã 40.1010 dùng chung cho: kali_clorid_vien_gpkd, kali_clorid_vien_uong - kiểm tra lại mã trong file SQL.
+Mã 40.269 dùng chung cho: lopinavir_ritonavir, lopinavir_ritonavir_lopinavir, lopinavir_ritonavir_ritonavir, saquinavir_ritonavir_ritonavir - kiểm tra lại mã trong file SQL.
+Mã 40.274 dùng chung cho: lopinavir_ritonavir_ritonavir, saquinavir_ritonavir_ritonavir - kiểm tra lại mã trong file SQL.
+Mã 40.30.274 dùng chung cho: sofosbuvir, sofosbuvir_ledipasvir_ledipasvir - kiểm tra lại mã trong file SQL.
+Mã 40.30.53 dùng chung cho: esomeprazol, naproxen - kiểm tra lại mã trong file SQL.
+Mã 40.334 dùng chung cho: dihydroergotamin, ergotamin, erythromycin - kiểm tra lại mã trong file SQL.
+Mã 40.451 dùng chung cho: acid_tranexamic, acitretin - kiểm tra lại mã trong file SQL.
+Mã 40.479 dùng chung cho: isosorbid_dinitrat, isosorbid_mononitrat - kiểm tra lại mã trong file SQL.
+Mã 40.56 dùng chung cho: bosentan, tenoxicam - kiểm tra lại mã trong file SQL.
+Mã 40.61 dùng chung cho: colchicin, isotretinoin - kiểm tra lại mã trong file SQL.
+Mã 40.712 dùng chung cho: kali_clorid_vien_gpkd, kali_clorid_vien_uong - kiểm tra lại mã trong file SQL.
+Mã 40.728 dùng chung cho: kali_clorid_vien_gpkd, kali_clorid_vien_uong - kiểm tra lại mã trong file SQL.
+Mã 40.730 dùng chung cho: kali_clorid_vien_gpkd, kali_clorid_vien_uong - kiểm tra lại mã trong file SQL.
+Mã 40.808 dùng chung cho: glibenclamid, metformin - kiểm tra lại mã trong file SQL.
+Mã 40.918 dùng chung cho: ergometrin, methylergometrin - kiểm tra lại mã trong file SQL.
+
+266 CẶP CHƯA CÓ NỘI DUNG KHỚP TRONG EXCEL
+1. Mefenamic + Ketorolac
+2. Agomelatin + Ciprofloxacin
+3. Agomelatin + Fluvoxamin
+4. Alfuzosin + Boceprevir
+5. Alfuzosin + Lopinavir ritonavir
+6. Alfuzosin + Atazanavir ritonavir
+7. Alfuzosin + Darunavir ritonavir
+8. Alfuzosin + Indinavir ritonavir
+9. Alfuzosin + Saquinavir ritonavir
+10. Alprazolam + Indinavir ritonavir
+11. Amiodaron + Lopinavir ritonavir ritonavir
+12. Amiodaron + Darunavir ritonavir
+13. Amiodaron + Atazanavir ritonavir
+14. Amiodaron + Indinavir ritonavir
+15. Amiodaron + Saquinavir ritonavir
+16. Arsenic trioxid + Domperidon
+17. Artemether lumefantrin + Domperidon
+18. Artemether lumefantrin + Rifampicin
+19. Artemether lumefantrin + Enzalutamid
+20. Artemether lumefantrin + Carbamazepin
+21. Artemether lumefantrin + Phenobarbital
+22. Artemether lumefantrin + Phenytoin
+23. Aspirin + Ketorolac
+24. Atazanavir ritonavir + Lovastatin
+25. Atazanavir ritonavir + Simvastatin
+26. Atazanavir ritonavir + Dihydroergotamin
+27. Atazanavir ritonavir + Ergotamin
+28. Atazanavir ritonavir + Ivabradin
+29. Atazanavir ritonavir + Ticagrelor
+30. Atazanavir ritonavir + Ranolazin
+31. Atazanavir ritonavir + Tolvaptan
+32. Atazanavir ritonavir + Felodipin
+33. Atazanavir ritonavir + Lercanidipin
+34. Atazanavir ritonavir + Rifampicin
+35. Atazanavir ritonavir + Grazoprevir elbasvir
+36. Atazanavir ritonavir + Domperidon
+37. Atazanavir ritonavir + Vardenafil
+38. Atazanavir ritonavir + Propafenon
+39. Atazanavir ritonavir + Everolimus
+40. Benazepril + Sacubitril valsartan sacubitril
+41. Bleomycin + Brentuximab
+42. Boceprevir + Lovastatin
+43. Boceprevir + Simvastatin
+44. Boceprevir + Dihydroergotamin
+45. Boceprevir + Ergotamin
+46. Boceprevir + Ergometrin
+47. Boceprevir + Methylergometrin
+48. Boceprevir + Ivabradin
+49. Brivudin + Capecitabin
+50. Brivudin + Fluorouracil
+51. Brivudin + Tegafur
+52. Bromocriptin + Metoclopramid
+53. Bromocriptin + Sulpirid
+54. Captopril + Sacubitril valsartan sacubitril
+55. Carbamazepin + Rilpivirin
+56. Carbamazepin + Voriconazol
+57. Carbamazepin + Delamanid
+58. Carbamazepin + Grazoprevir elbasvir
+59. Carbamazepin + Ranolazin
+60. Ciclosporin + Pitavastatin
+61. Ciclosporin + Grazoprevir elbasvir
+62. Ciprofloxacin + Duloxetin
+63. Citalopram + Domperidon
+64. Clarithromycin + Ergotamin
+65. Clarithromycin + Ergometrin
+66. Clarithromycin + Ranolazin
+67. Clarithromycin + Tolvaptan
+68. Clarithromycin + Everolimus
+69. Clonixin + Ketorolac
+70. Cloroquin + Domperidon
+71. Daclatasvir + Rifampicin
+72. Daclatasvir + Enzalutamid
+73. Daclatasvir + Phenobarbital
+74. Daclatasvir + Phenytoin
+75. Danazol + Simvastatin
+76. Danazol + Lovastatin
+77. Darunavir ritonavir + Lovastatin
+78. Darunavir ritonavir + Simvastatin
+79. Darunavir ritonavir + Dihydroergotamin
+80. Darunavir ritonavir + Ergotamin
+81. Darunavir ritonavir + Ivabradin
+82. Darunavir ritonavir + Ticagrelor
+83. Darunavir ritonavir + Ranolazin
+84. Darunavir ritonavir + Tolvaptan
+85. Darunavir ritonavir + Felodipin
+86. Darunavir ritonavir + Lercanidipin
+87. Darunavir ritonavir + Rifampicin
+88. Darunavir ritonavir + Grazoprevir elbasvir
+89. Darunavir ritonavir + Domperidon
+90. Darunavir ritonavir + Vardenafil
+91. Darunavir ritonavir + Propafenon
+92. Darunavir ritonavir + Everolimus
+93. Delamanid + Rifampicin
+94. Delamanid + Enzalutamid
+95. Delamanid + Phenytoin
+96. Dexamethason + Rilpivirin
+97. Dexketoprofen + Ketorolac
+98. Dexlansoprazol + Rilpivirin
+99. Dextromethorphan + Paroxetin
+100. Dihydroergotamin + Roxithromycin
+101. Dihydroergotamin + Voriconazol
+102. Dihydroergotamin + Posaconazol
+103. Dihydroergotamin + Saquinavir ritonavir
+104. Dihydroergotamin + Lopinavir ritonavir
+105. Dihydroergotamin + Indinavir ritonavir
+106. Domperidon + Sotalol
+107. Domperidon + Escitalopram
+108. Domperidon + Thioridazin
+109. Domperidon + Methadon
+110. Domperidon + Sparfloxacin
+111. Domperidon + Lopinavir ritonavir
+112. Domperidon + Saquinavir ritonavir
+113. Domperidon + Indinavir ritonavir
+114. Domperidon + Posaconazol
+115. Domperidon + Voriconazol
+116. Domperidon + Levomepromazin
+117. Domperidon + Roxithromycin
+118. Doxycyclin + Tretinoin
+119. Duloxetin + Fluvoxamin
+120. Efavirenz + Grazoprevir elbasvir
+121. Eltrombopag + Grazoprevir elbasvir
+122. Enalapril + Sacubitril valsartan sacubitril
+123. Enzalutamid + Grazoprevir elbasvir
+124. Ephedrin + Xanh methylen iv
+125. Ephedrin + Furazolidon
+126. Ergometrin + Sumatriptan
+127. Ergometrin + Roxithromycin
+128. Ergometrin + Erythromycin
+129. Ergometrin + Voriconazol
+130. Ergometrin + Posaconazol
+131. Ergometrin + Itraconazol
+132. Ergotamin + Sumatriptan
+133. Ergotamin + Roxithromycin
+134. Ergotamin + Erythromycin
+135. Ergotamin + Voriconazol
+136. Ergotamin + Posaconazol
+137. Ergotamin + Itraconazol
+138. Ergotamin + Saquinavir ritonavir
+139. Ergotamin + Lopinavir ritonavir
+140. Ergotamin + Indinavir ritonavir
+141. Everolimus + Lopinavir ritonavir ritonavir
+142. Everolimus + Indinavir ritonavir
+143. Everolimus + Saquinavir ritonavir ritonavir
+144. Everolimus + Itraconazol
+145. Felodipin + Lopinavir ritonavir
+146. Felodipin + Indinavir ritonavir
+147. Felodipin + Saquinavir ritonavir
+148. Felodipin + Posaconazol
+149. Felodipin + Voriconazol
+150. Floctafenin + Ketorolac
+151. Furazolidon + Levodopa/Carbidopa
+152. Furazolidon + Methyldopa
+153. Furazolidon + Pseudoephedrin uong
+154. Furazolidon + Phenylephrin uong
+155. Furazolidon + Nefopam
+156. Grazoprevir elbasvir + Phenobarbital
+157. Grazoprevir elbasvir + Phenytoin
+158. Grazoprevir elbasvir + Rifampicin
+159. Grazoprevir elbasvir + Saquinavir ritonavir
+160. Grazoprevir elbasvir + Lopinavir ritonavir lopinavir
+161. Imidapril + Sacubitril valsartan sacubitril
+162. Indinavir ritonavir + Lovastatin
+163. Indinavir ritonavir + Simvastatin
+164. Indinavir ritonavir + Ivabradin
+165. Indinavir ritonavir + Ticagrelor
+166. Indinavir ritonavir + Ranolazin
+167. Indinavir ritonavir + Tolvaptan
+168. Indinavir ritonavir + Lercanidipin
+169. Indinavir ritonavir + Vardenafil
+170. Indinavir ritonavir + Rifampicin
+171. Indinavir ritonavir + Propafenon
+172. Indomethacin + Ketorolac
+173. Isosorbid dinitrat + Sildenafil
+174. Isosorbid dinitrat + Vardenafil
+175. Isosorbid mononitrat + Sildenafil
+176. Isosorbid mononitrat + Vardenafil
+177. Itraconazol + Ranolazin
+178. Itraconazol + Tolvaptan
+179. Itraconazol + Vardenafil
+180. Ivabradin + Lopinavir ritonavir
+181. Ivabradin + Saquinavir ritonavir
+182. Ivabradin + Posaconazol
+183. Ivabradin + Voriconazol
+184. Ivabradin + Verapamil
+185. Ketorolac + Lornoxicam
+186. Ketorolac + Talniflumat
+187. Ketorolac + Zaltoprofen
+188. Lansoprazol + Rilpivirin
+189. Lercanidipin + Lopinavir ritonavir
+190. Lercanidipin + Saquinavir ritonavir
+191. Lercanidipin + Posaconazol
+192. Lercanidipin + Voriconazol
+193. Levodopa/Carbidopa + Xanh methylen iv
+194. Linezolid + Pseudoephedrin uong
+195. Linezolid + Phenylephrin uong
+196. Lisinopril + Sacubitril valsartan sacubitril
+197. Lopinavir ritonavir + Lovastatin
+198. Lopinavir ritonavir + Simvastatin
+199. Lopinavir ritonavir + Ticagrelor
+200. Lopinavir ritonavir + Ranolazin
+201. Lopinavir ritonavir + Tolvaptan
+202. Lopinavir ritonavir ritonavir + Vardenafil
+203. Lopinavir ritonavir ritonavir + Propafenon
+204. Lovastatin + Saquinavir ritonavir
+205. Lovastatin + Posaconazol
+206. Lovastatin + Voriconazol
+207. Methyldopa + Xanh methylen iv
+208. Methylergometrin + Roxithromycin
+209. Methylergometrin + Voriconazol
+210. Methylergometrin + Posaconazol
+211. Metoclopramid + Rotigotin
+212. Metoclopramid + Piribedil
+213. Minocyclin + Tretinoin
+214. Nefopam + Xanh methylen iv
+215. Nicorandil + Sildenafil
+216. Nicorandil + Vardenafil
+217. Nicorandil + Tadalafil
+218. Nifedipin + Rifampicin
+219. Nitroglycerin + Sildenafil
+220. Nitroglycerin + Vardenafil
+221. Esomeprazol + Rilpivirin
+222. Omeprazol + Rilpivirin
+223. Oxcarbazepin + Rilpivirin
+224. Pantoprazol + Rilpivirin
+225. Paroxetin + Thioridazin
+226. Peginterferon alpha + Telbivudin
+227. Perindopril + Sacubitril valsartan sacubitril
+228. Phenobarbital + Rilpivirin
+229. Phenobarbital + Voriconazol
+230. Phenobarbital + Ranolazin
+231. Phenylephrin uong + Xanh methylen iv
+232. Phenytoin + Rilpivirin
+233. Phenytoin + Ranolazin
+234. Piribedil + Sulpirid
+235. Posaconazol + Simvastatin
+236. Posaconazol + Ticagrelor
+237. Posaconazol + Ranolazin
+238. Posaconazol + Tolvaptan
+239. Posaconazol + Quetiapin
+240. Praziquantel + Rifampicin
+241. Propafenon + Saquinavir ritonavir ritonavir
+242. Pseudoephedrin uong + Xanh methylen iv
+243. Quetiapin + Voriconazol
+244. Quinapril + Sacubitril valsartan sacubitril
+245. Rabeprazol + Rilpivirin
+246. Ramipril + Sacubitril valsartan sacubitril
+247. Ranolazin + Saquinavir ritonavir
+248. Ranolazin + Voriconazol
+249. Ranolazin + Rifampicin
+250. Rifampicin + Rilpivirin
+251. Rifampicin + Voriconazol
+252. Rifampicin + Sofosbuvir
+253. Rifampicin + Saquinavir ritonavir
+254. Rosuvastatin + Sofosbuvir ledipasvir ledipasvir
+255. Rotigotin + Sulpirid
+256. Sacubitril valsartan sacubitril + Trandolapril
+257. Sacubitril valsartan sacubitril + Zofenopril
+258. Saquinavir ritonavir + Simvastatin
+259. Saquinavir ritonavir + Ticagrelor
+260. Saquinavir ritonavir + Tolvaptan
+261. Saquinavir ritonavir ritonavir + Vardenafil
+262. Simvastatin + Voriconazol
+263. Tetracyclin + Tretinoin
+264. Ticagrelor + Voriconazol
+265. Tigecyclin + Tretinoin
+266. Tolvaptan + Voriconazol

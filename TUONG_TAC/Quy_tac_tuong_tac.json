@@ -1,0 +1,3487 @@
+{
+  "drugs": {
+    "aceclofenac": {
+      "ten": "Aceclofenac",
+      "codes": [
+        "40.25"
+      ]
+    },
+    "acenocoumarol": {
+      "ten": "Acenocoumarol",
+      "codes": [
+        "40.438"
+      ]
+    },
+    "acid_tranexamic": {
+      "ten": "Acid tranexamic",
+      "codes": [
+        "40.451"
+      ]
+    },
+    "acitretin": {
+      "ten": "Acitretin",
+      "codes": [
+        "40.451"
+      ]
+    },
+    "alfuzosin": {
+      "ten": "Alfuzosin",
+      "codes": [
+        "40.412"
+      ]
+    },
+    "alprazolam": {
+      "ten": "Alprazolam",
+      "codes": [
+        "40.941"
+      ]
+    },
+    "amiodaron": {
+      "ten": "Amiodaron",
+      "codes": [
+        "40.483"
+      ]
+    },
+    "amisulpirid": {
+      "ten": "Amisulpirid",
+      "codes": [
+        "40.942"
+      ]
+    },
+    "amitriptylin": {
+      "ten": "Amitriptylin",
+      "codes": [
+        "40.961"
+      ]
+    },
+    "arsenic_trioxid": {
+      "ten": "Arsenic trioxid",
+      "codes": [
+        "40.338"
+      ]
+    },
+    "aspirin": {
+      "ten": "Aspirin",
+      "codes": [
+        "40.538"
+      ]
+    },
+    "atorvastatin": {
+      "ten": "Atorvastatin",
+      "codes": [
+        "40.549",
+        "40.30.495",
+        "40.30.567"
+      ]
+    },
+    "atropin": {
+      "ten": "Atropin",
+      "codes": [
+        "40.1",
+        "40.695",
+        "40.848"
+      ]
+    },
+    "azithromycin": {
+      "ten": "Azithromycin",
+      "codes": [
+        "40.218",
+        "40.219"
+      ]
+    },
+    "benazepril": {
+      "ten": "Benazepril",
+      "codes": [
+        "40.492"
+      ]
+    },
+    "bleomycin": {
+      "ten": "Bleomycin",
+      "codes": [
+        "40.343"
+      ]
+    },
+    "bosentan": {
+      "ten": "Bosentan",
+      "codes": [
+        "40.56"
+      ]
+    },
+    "calci_clorid": {
+      "ten": "Calci clorid",
+      "codes": [
+        "40.1014"
+      ]
+    },
+    "calci_glubionat": {
+      "ten": "Calci glubionat",
+      "codes": [
+        "40.1035"
+      ]
+    },
+    "calci_gluconat": {
+      "ten": "Calci gluconat",
+      "codes": [
+        "40.98"
+      ]
+    },
+    "candesartan": {
+      "ten": "Candesartan",
+      "codes": [
+        "40.495",
+        "40.30.508"
+      ]
+    },
+    "capecitabin": {
+      "ten": "Capecitabin",
+      "codes": [
+        "40.347"
+      ]
+    },
+    "captopril": {
+      "ten": "Captopril",
+      "codes": [
+        "40.496",
+        "40.40.510"
+      ]
+    },
+    "carbamazepin": {
+      "ten": "Carbamazepin",
+      "codes": [
+        "40.131"
+      ]
+    },
+    "carvedilol": {
+      "ten": "Carvedilol",
+      "codes": [
+        "40.497",
+        "40.531"
+      ]
+    },
+    "ceftriaxon": {
+      "ten": "Ceftriaxon",
+      "codes": [
+        "40.183"
+      ]
+    },
+    "celecoxib": {
+      "ten": "Celecoxib",
+      "codes": [
+        "40.28"
+      ]
+    },
+    "ciclosporin": {
+      "ten": "Ciclosporin",
+      "codes": [
+        "40.405"
+      ]
+    },
+    "cilostazol": {
+      "ten": "Cilostazol",
+      "codes": [
+        "40.441"
+      ]
+    },
+    "ciprofloxacin": {
+      "ten": "Ciprofloxacin",
+      "codes": [
+        "40.227",
+        "40.318"
+      ]
+    },
+    "citalopram": {
+      "ten": "Citalopram",
+      "codes": [
+        "40.962"
+      ]
+    },
+    "clarithromycin": {
+      "ten": "Clarithromycin",
+      "codes": [
+        "40.220"
+      ]
+    },
+    "clonidin": {
+      "ten": "Clonidin",
+      "codes": [
+        "40.499"
+      ]
+    },
+    "clorpromazin": {
+      "ten": "Clorpromazin",
+      "codes": [
+        "40.943"
+      ]
+    },
+    "cloroquin": {
+      "ten": "Cloroquin",
+      "codes": [
+        "40.326"
+      ]
+    },
+    "colchicin": {
+      "ten": "Colchicin",
+      "codes": [
+        "40.61"
+      ]
+    },
+    "dabigatran": {
+      "ten": "Dabigatran",
+      "codes": [
+        "40.442"
+      ]
+    },
+    "danazol": {
+      "ten": "Danazol",
+      "codes": [
+        "40.763"
+      ]
+    },
+    "dexamethason": {
+      "ten": "Dexamethason",
+      "codes": [
+        "40.765",
+        "40.766"
+      ]
+    },
+    "diclofenac": {
+      "ten": "Diclofenac",
+      "codes": [
+        "40.3"
+      ]
+    },
+    "dihydroergotamin": {
+      "ten": "Dihydroergotamin",
+      "codes": [
+        "40.334"
+      ]
+    },
+    "diltiazem": {
+      "ten": "Diltiazem",
+      "codes": [
+        "40.477"
+      ]
+    },
+    "domperidon": {
+      "ten": "Domperidon",
+      "codes": [
+        "40.688"
+      ]
+    },
+    "donepezil": {
+      "ten": "Donepezil",
+      "codes": [
+        "40.946"
+      ]
+    },
+    "doxycyclin": {
+      "ten": "Doxycyclin",
+      "codes": [
+        "40.245"
+      ]
+    },
+    "efavirenz": {
+      "ten": "Efavirenz",
+      "codes": [
+        "40.263",
+        "40.264",
+        "40.30.270"
+      ]
+    },
+    "eltrombopag": {
+      "ten": "Eltrombopag",
+      "codes": [
+        "40.30.477"
+      ]
+    },
+    "enalapril": {
+      "ten": "Enalapril",
+      "codes": [
+        "40.501",
+        "40.30.516"
+      ]
+    },
+    "ephedrin": {
+      "ten": "Ephedrin",
+      "codes": [
+        "40.105"
+      ]
+    },
+    "ergometrin": {
+      "ten": "Ergometrin",
+      "codes": [
+        "40.918"
+      ]
+    },
+    "ergotamin": {
+      "ten": "Ergotamin",
+      "codes": [
+        "40.334"
+      ]
+    },
+    "erythromycin": {
+      "ten": "Erythromycin",
+      "codes": [
+        "40.334"
+      ]
+    },
+    "esomeprazol": {
+      "ten": "Esomeprazol",
+      "codes": [
+        "40.678",
+        "40.30.53"
+      ]
+    },
+    "estriol": {
+      "ten": "Estriol",
+      "codes": [
+        "40.786"
+      ]
+    },
+    "ethinyl_estradiol": {
+      "ten": "Ethinyl estradiol",
+      "codes": [
+        "40.788"
+      ]
+    },
+    "etodolac": {
+      "ten": "Etodolac",
+      "codes": [
+        "40.32"
+      ]
+    },
+    "etoricoxib": {
+      "ten": "Etoricoxib",
+      "codes": [
+        "40.33"
+      ]
+    },
+    "everolimus": {
+      "ten": "Everolimus",
+      "codes": [
+        "40.407"
+      ]
+    },
+    "felodipin": {
+      "ten": "Felodipin",
+      "codes": [
+        "40.502"
+      ]
+    },
+    "fentanyl": {
+      "ten": "Fentanyl",
+      "codes": [
+        "40.6"
+      ]
+    },
+    "floctafenin": {
+      "ten": "Floctafenin",
+      "codes": [
+        "40.35"
+      ]
+    },
+    "fluconazol": {
+      "ten": "Fluconazol",
+      "codes": [
+        "40.288"
+      ]
+    },
+    "fluorouracil": {
+      "ten": "Fluorouracil",
+      "codes": [
+        "40.366"
+      ]
+    },
+    "fluoxetin": {
+      "ten": "Fluoxetin",
+      "codes": [
+        "40.964"
+      ]
+    },
+    "flurbiprofen": {
+      "ten": "Flurbiprofen",
+      "codes": [
+        "40.36"
+      ]
+    },
+    "fluvastatin": {
+      "ten": "Fluvastatin",
+      "codes": [
+        "40.554"
+      ]
+    },
+    "fluvoxamin": {
+      "ten": "Fluvoxamin",
+      "codes": [
+        "40.965"
+      ]
+    },
+    "gemfibrozil": {
+      "ten": "Gemfibrozil",
+      "codes": [
+        "40.555"
+      ]
+    },
+    "glibenclamid": {
+      "ten": "Glibenclamid",
+      "codes": [
+        "40.808"
+      ]
+    },
+    "haloperidol": {
+      "ten": "Haloperidol",
+      "codes": [
+        "40.949"
+      ]
+    },
+    "hydroxycloroquin": {
+      "ten": "Hydroxycloroquin",
+      "codes": [
+        "40.327"
+      ]
+    },
+    "hyoscin_butylbromid": {
+      "ten": "Hyoscin butylbromid",
+      "codes": [
+        "40.698"
+      ]
+    },
+    "ibuprofen": {
+      "ten": "Ibuprofen",
+      "codes": [
+        "40.37",
+        "40.51",
+        "40.30.44"
+      ]
+    },
+    "imidapril": {
+      "ten": "Imidapril",
+      "codes": [
+        "40.504"
+      ]
+    },
+    "indomethacin": {
+      "ten": "Indomethacin",
+      "codes": [
+        "40.568"
+      ]
+    },
+    "iobitridol": {
+      "ten": "Iobitridol",
+      "codes": [
+        "40.642"
+      ]
+    },
+    "iodixanol": {
+      "ten": "Iodixanol",
+      "codes": [
+        "40.30.647"
+      ]
+    },
+    "iohexol": {
+      "ten": "Iohexol",
+      "codes": [
+        "40.644"
+      ]
+    },
+    "iopamidol": {
+      "ten": "Iopamidol",
+      "codes": [
+        "40.645"
+      ]
+    },
+    "iopromid": {
+      "ten": "Iopromid",
+      "codes": [
+        "40.646"
+      ]
+    },
+    "irbesartan": {
+      "ten": "Irbesartan",
+      "codes": [
+        "40.506",
+        "40.507"
+      ]
+    },
+    "irinotecan": {
+      "ten": "Irinotecan",
+      "codes": [
+        "40.374"
+      ]
+    },
+    "isosorbid_dinitrat": {
+      "ten": "Isosorbid dinitrat",
+      "codes": [
+        "40.479"
+      ]
+    },
+    "isosorbid_mononitrat": {
+      "ten": "Isosorbid mononitrat",
+      "codes": [
+        "40.479"
+      ]
+    },
+    "isotretinoin": {
+      "ten": "Isotretinoin",
+      "codes": [
+        "40.61"
+      ]
+    },
+    "itraconazol": {
+      "ten": "Itraconazol",
+      "codes": [
+        "40.292"
+      ]
+    },
+    "mefenamic": {
+      "ten": "Mefenamic",
+      "codes": [
+        "acid mefenamic",
+        "Acid mefenamic",
+        "mefenamic",
+        "mefenamic acid"
+      ]
+    },
+    "adipiodon": {
+      "ten": "Adipiodon",
+      "codes": [
+        "Adipiodon",
+        "adipiodon",
+        "Adipiodone",
+        "adipiodone"
+      ]
+    },
+    "agomelatin": {
+      "ten": "Agomelatin",
+      "codes": [
+        "Agomelatin",
+        "agomelatin",
+        "Agomelatine",
+        "agomelatine"
+      ]
+    },
+    "aliskiren": {
+      "ten": "Aliskiren",
+      "codes": [
+        "Aliskiren",
+        "aliskiren",
+        "Aliskiren hemifumarate",
+        "aliskiren hemifumarate",
+        "Aliskiren hemifumarat",
+        "aliskiren hemifumarat"
+      ]
+    },
+    "artemether_lumefantrin": {
+      "ten": "Artemether lumefantrin",
+      "codes": [
+        "Artemether+lumefantrin",
+        "artemether + lumefantrin",
+        "lumefantrin + artemether",
+        "artemether + lumefantrine",
+        "Artemether + lumefantrine",
+        "artemether+lumefantrine"
+      ]
+    },
+    "atazanavir_ritonavir": {
+      "ten": "Atazanavir ritonavir",
+      "codes": [
+        "Atazanavir + ritonavir",
+        "Atazanavir + Ritonavir",
+        "Ritonavir + Atazanavir",
+        "atazanavir + ritonavir",
+        "atazanavir + Ritonavir",
+        "ritonavir + atazanavir",
+        "Ritonavir +Atazanavir"
+      ]
+    },
+    "boceprevir": {
+      "ten": "Boceprevir",
+      "codes": [
+        "Boceprevir",
+        "boceprevir"
+      ]
+    },
+    "brentuximab": {
+      "ten": "Brentuximab",
+      "codes": [
+        "Brentuximab",
+        "brentuximab",
+        "Brentuximab Vedotin",
+        "brentuximab vedotin",
+        "Brentuximab vedotin"
+      ]
+    },
+    "brivudin": {
+      "ten": "Brivudin",
+      "codes": [
+        "Brivudin",
+        "Brivudine",
+        "brivudin",
+        "brivudine"
+      ]
+    },
+    "bromocriptin": {
+      "ten": "Bromocriptin",
+      "codes": [
+        "Bromocriptin",
+        "bromocriptin",
+        "Bromocriptine",
+        "bromocriptine",
+        "Bromocriptin mesilat",
+        "bromocriptin mesilat"
+      ]
+    },
+    "bupropion": {
+      "ten": "Bupropion",
+      "codes": [
+        "Bupropion",
+        "bupropion",
+        "Bupropion HCl",
+        "bupropion HCl"
+      ]
+    },
+    "clidinium": {
+      "ten": "Clidinium",
+      "codes": [
+        "Clidinium",
+        "Clidinium bromid",
+        "Clidinium Br",
+        "Clidinium bromide",
+        "clidinium",
+        "clidinium bromid",
+        "clidinium Br",
+        "clidinium bromide"
+      ]
+    },
+    "clomipramin": {
+      "ten": "Clomipramin",
+      "codes": [
+        "Clomipramin",
+        "clomipramin",
+        "Clomipramine",
+        "clomipramine"
+      ]
+    },
+    "clormadinon": {
+      "ten": "Clormadinon",
+      "codes": [
+        "Clormadinon",
+        "clormadinon",
+        "Clormadinone",
+        "clormadinone",
+        "Chlormadinone",
+        "clormadinone"
+      ]
+    },
+    "daclatasvir": {
+      "ten": "Daclatasvir",
+      "codes": [
+        "Daclatasvir",
+        "daclatasvir",
+        "Daclatasvir dihydrochlorid",
+        "daclatasvir dihydrochlorid"
+      ]
+    },
+    "darunavir_ritonavir": {
+      "ten": "Darunavir ritonavir",
+      "codes": [
+        "Darunavir + ritonavir",
+        "Darunavir+ Ritonavir",
+        "Ritonavir + Darunavir",
+        "darunavir + ritonavir",
+        "darunavir + Ritonavir",
+        "ritonavir + darunavir",
+        "Ritonavir +Darunavir"
+      ]
+    },
+    "delamanid": {
+      "ten": "Delamanid",
+      "codes": [
+        "Delamanid",
+        "delamanid"
+      ]
+    },
+    "desogestrel": {
+      "ten": "Desogestrel",
+      "codes": [
+        "Desogestrel",
+        "desogestrel",
+        "Desogestrel+ Ethinyl Estradiol",
+        "Desogestrel + Ethinyl estradiol",
+        "Desogestrel + Ethinylestradiol",
+        "Ethinylestradiol + Desogestrel"
+      ]
+    },
+    "dexibuprofen": {
+      "ten": "Dexibuprofen",
+      "codes": [
+        "Dexibuprofen",
+        "dexibuprofen"
+      ]
+    },
+    "dexketoprofen": {
+      "ten": "Dexketoprofen",
+      "codes": [
+        "Dexibuprofen",
+        "dexibuprofen",
+        "Dexketoprofen trometamol",
+        "dexketoprofen trometamol"
+      ]
+    },
+    "dexlansoprazol": {
+      "ten": "Dexlansoprazol",
+      "codes": [
+        "Dexlansoprazol",
+        "dexlansoprazol",
+        "Dexlansoprazole",
+        "dexlansoprazole"
+      ]
+    },
+    "dextromethorphan": {
+      "ten": "Dextromethorphan",
+      "codes": [
+        "Dextromethorphan",
+        "dextromethorphan",
+        "Dextromethorphan hydrobromid",
+        "Dextromethorphan HBr"
+      ]
+    },
+    "dicycloverin": {
+      "ten": "Dicycloverin",
+      "codes": [
+        "Dicycloverin",
+        "dicycloverin",
+        "Dicycloverine",
+        "dicycloverine"
+      ]
+    },
+    "dienogest": {
+      "ten": "Dienogest",
+      "codes": [
+        "Dienogest",
+        "dienogest",
+        "Estradiol valerate + Dienogest",
+        "Dienogest + Estradiol valerate"
+      ]
+    },
+    "doxylamin": {
+      "ten": "Doxylamin",
+      "codes": [
+        "Doxylamin",
+        "Doxylamine",
+        "Doxylamine sucinate",
+        "Doxylamine succinate + Pyridoxine hydrochloride",
+        "Doxylamin succinat + Pyridoxin HCl",
+        "Acetaminophen + Dextromethorphan HBr + Doxylamine succinate",
+        "Acetaminophen + Doxylamine succinate + Dextromethorphan HBr"
+      ]
+    },
+    "drospirenon": {
+      "ten": "Drospirenon",
+      "codes": [
+        "Drospirenon",
+        "Drospirenone",
+        "Drospirenon + Ethinylestradiol",
+        "Drospirenone + Ethinylestradiol",
+        "Drospirenon + Ethinyl estradiol",
+        "Ethinylestradiol + Drospirenone",
+        "Ethinylestradiol + Drospirenone",
+        "Drospirenone + Ethinylestradiol"
+      ]
+    },
+    "duloxetin": {
+      "ten": "Duloxetin",
+      "codes": [
+        "Duloxetin",
+        "Duloxetin HCl",
+        "Duloxetin hydrochlorid",
+        "duloxetin",
+        "duloxetin HCl",
+        "duloxetin hydrochlorid"
+      ]
+    },
+    "enzalutamid": {
+      "ten": "Enzalutamid",
+      "codes": [
+        "Enzalutamid",
+        "Enzalutamide",
+        "enzalutamid",
+        "enzalutamide"
+      ]
+    },
+    "eprosartan": {
+      "ten": "Eprosartan",
+      "codes": [
+        "Eprosartan",
+        "eprosartan",
+        "Eprosartan mesylate",
+        "Eprosartan mesylat",
+        "eprosartan mesylate",
+        "eprosartan mesylat"
+      ]
+    },
+    "escitalopram": {
+      "ten": "Escitalopram",
+      "codes": [
+        "Escitalopram",
+        "escitalopram",
+        "Escitalopram oxalat",
+        "escitalopram oxalat"
+      ]
+    },
+    "estradiol_valerat": {
+      "ten": "Estradiol valerat",
+      "codes": [
+        "Estradiol valerat",
+        "Estradiol valerate",
+        "Estradiol Valerate Norgestrel",
+        "estradiol valerate",
+        "estradiol valerat"
+      ]
+    },
+    "etonogestrel": {
+      "ten": "Etonogestrel",
+      "codes": [
+        "Etonogestrel",
+        "etonogestrel",
+        "Etonogestrel + Ethinylestradiol",
+        "Etonogestrel + Ethinyl estradiol",
+        "Etonogestrel + ethinylestradiol",
+        "Etonogestrel + ethinyl estradiol"
+      ]
+    },
+    "furazolidon": {
+      "ten": "Furazolidon",
+      "codes": [
+        "Furazolidon",
+        "furazolidon",
+        "Furazolidone",
+        "furazolidone"
+      ]
+    },
+    "gestoden": {
+      "ten": "Gestoden",
+      "codes": [
+        "Gestoden",
+        "Gestodene",
+        "Gestodene + Ethinylestradiol",
+        "Gestodene + Ethinyl estradiol",
+        "Ethinylestradiol + Gestodene",
+        "Ethinylestradiol+ Gestoden"
+      ]
+    },
+    "grazoprevir_elbasvir": {
+      "ten": "Grazoprevir elbasvir",
+      "codes": [
+        "Grazoprevir + elbasvir",
+        "Grazoprevir + Elbasvir",
+        "grazoprevir + elbasvir",
+        "Elbasvir + Grazoprevir",
+        "Elbasvir + grazoprevir"
+      ]
+    },
+    "hyoscyamin": {
+      "ten": "Hyoscyamin",
+      "codes": [
+        "Hyoscyamin",
+        "Hyoscyamine",
+        "Hyoscyamine sulfat",
+        "Hyoscyamin sulfat",
+        "Atropin sulfat + Hyoscyamine sulfat + Scopolamine HBr + Phenobarbita"
+      ]
+    },
+    "indinavir_ritonavir": {
+      "ten": "Indinavir ritonavir",
+      "codes": [
+        "Indinavir + ritonavir",
+        "Indinavir + Ritonavir",
+        "Ritonavir + Indinavir",
+        "indinavir + ritonavir",
+        "indinavir + Ritonavir",
+        "ritonavir + indinavir",
+        "Ritonavir +Indinavir"
+      ]
+    },
+    "ioxaglic_natri_ioxaglic_meglumin": {
+      "ten": "Ioxaglic natri ioxaglic meglumin",
+      "codes": [
+        "Ioxaglic",
+        "Ioxaglic natri",
+        "ioxaglic meglumin",
+        "Ioxaglic natri + ioxaglic meglumin",
+        "Ioxitalamat natri + ioxitalamat meglumin",
+        "Natri Ioxaglic"
+      ]
+    },
+    "ioxitalamat_natri_ioxitalamat_meglumin": {
+      "ten": "Ioxitalamat natri ioxitalamat meglumin",
+      "codes": [
+        "Ioxaglic",
+        "Ioxaglic natri",
+        "ioxaglic meglumin",
+        "Ioxaglic natri + ioxaglic meglumin",
+        "Ioxitalamat natri + ioxitalamat meglumin",
+        "Natri Ioxaglic"
+      ]
+    },
+    "ivabradin": {
+      "ten": "Ivabradin",
+      "codes": [
+        "40.485"
+      ]
+    },
+    "kali_clorid_vien_uong": {
+      "ten": "Kali clorid vien uong",
+      "codes": [
+        "40.1005",
+        "40.1009",
+        "40.1010",
+        "40.712",
+        "40.728",
+        "40.730"
+      ]
+    },
+    "kali_clorid_vien_gpkd": {
+      "ten": "Kali clorid vien gpkd",
+      "codes": [
+        "40.1005",
+        "40.1009",
+        "40.1010",
+        "40.712",
+        "40.728",
+        "40.730"
+      ]
+    },
+    "ketoprofen": {
+      "ten": "Ketoprofen",
+      "codes": [
+        "40.38"
+      ]
+    },
+    "ketorolac": {
+      "ten": "Ketorolac",
+      "codes": [
+        "40.39"
+      ]
+    },
+    "lansoprazol": {
+      "ten": "Lansoprazol",
+      "codes": [
+        "40.668"
+      ]
+    },
+    "lercanidipin": {
+      "ten": "Lercanidipin",
+      "codes": [
+        "40.509"
+      ]
+    },
+    "levodopa_carbidopa_entacapon": {
+      "ten": "Levodopa/Carbidopa",
+      "codes": [
+        "40.419",
+        "40.420"
+      ]
+    },
+    "levofloxacin": {
+      "ten": "Levofloxacin",
+      "codes": [
+        "40.228",
+        "40.229",
+        "40.322"
+      ]
+    },
+    "levomepromazin": {
+      "ten": "Levomepromazin",
+      "codes": [
+        "40.950"
+      ]
+    },
+    "levonorgestrel": {
+      "ten": "Levonorgestrel",
+      "codes": [
+        "40.917"
+      ]
+    },
+    "levosulpirid": {
+      "ten": "Levosulpirid",
+      "codes": [
+        "40.951"
+      ]
+    },
+    "linezolid": {
+      "ten": "Linezolid",
+      "codes": [
+        "40.253"
+      ]
+    },
+    "lisinopril": {
+      "ten": "Lisinopril",
+      "codes": [
+        "40.30.497",
+        "40.510",
+        "40.511"
+      ]
+    },
+    "lopinavir_ritonavir": {
+      "ten": "Lopinavir ritonavir",
+      "codes": [
+        "40.269"
+      ]
+    },
+    "lopinavir_ritonavir_lopinavir": {
+      "ten": "Lopinavir ritonavir lopinavir",
+      "codes": [
+        "40.269"
+      ]
+    },
+    "lopinavir_ritonavir_ritonavir": {
+      "ten": "Lopinavir ritonavir ritonavir",
+      "codes": [
+        "40.269",
+        "40.274"
+      ]
+    },
+    "losartan": {
+      "ten": "Losartan",
+      "codes": [
+        "40.30.496",
+        "40.512",
+        "40.513"
+      ]
+    },
+    "lovastatin": {
+      "ten": "Lovastatin",
+      "codes": [
+        "40.556"
+      ]
+    },
+    "loxoprofen": {
+      "ten": "Loxoprofen",
+      "codes": [
+        "40.40"
+      ]
+    },
+    "lynestrenol": {
+      "ten": "Lynestrenol",
+      "codes": [
+        "40.789"
+      ]
+    },
+    "meloxicam": {
+      "ten": "Meloxicam",
+      "codes": [
+        "40.41"
+      ]
+    },
+    "metformin": {
+      "ten": "Metformin",
+      "codes": [
+        "40.30.775",
+        "40.30.777",
+        "40.30.786",
+        "40.30.791",
+        "40.30.793",
+        "40.30.795",
+        "40.807",
+        "40.808"
+      ]
+    },
+    "methyldopa": {
+      "ten": "Methyldopa",
+      "codes": [
+        "40.514"
+      ]
+    },
+    "methylergometrin": {
+      "ten": "Methylergometrin",
+      "codes": [
+        "40.918"
+      ]
+    },
+    "methylphenidat": {
+      "ten": "Methylphenidat",
+      "codes": [
+        "40.30.926"
+      ]
+    },
+    "metoclopramid": {
+      "ten": "Metoclopramid",
+      "codes": [
+        "40.690"
+      ]
+    },
+    "minocyclin": {
+      "ten": "Minocyclin",
+      "codes": [
+        "40.246"
+      ]
+    },
+    "mirtazapin": {
+      "ten": "Mirtazapin",
+      "codes": [
+        "40.966"
+      ]
+    },
+    "moxifloxacin": {
+      "ten": "Moxifloxacin",
+      "codes": [
+        "40.231",
+        "40.232"
+      ]
+    },
+    "nabumeton": {
+      "ten": "Nabumeton",
+      "codes": [
+        "40.45"
+      ]
+    },
+    "naproxen": {
+      "ten": "Naproxen",
+      "codes": [
+        "40.46",
+        "40.30.53"
+      ]
+    },
+    "nefopam": {
+      "ten": "Nefopam",
+      "codes": [
+        "40.47"
+      ]
+    },
+    "nicorandil": {
+      "ten": "Nicorandil",
+      "codes": [
+        "40.480"
+      ]
+    },
+    "nifedipin": {
+      "ten": "Nifedipin",
+      "codes": [
+        "40.519"
+      ]
+    },
+    "nilotinib": {
+      "ten": "Nilotinib",
+      "codes": [
+        "40.384"
+      ]
+    },
+    "nitroglycerin": {
+      "ten": "Nitroglycerin",
+      "codes": [
+        "40.478"
+      ]
+    },
+    "omeprazol": {
+      "ten": "Omeprazol",
+      "codes": [
+        "40.677"
+      ]
+    },
+    "ondansetron": {
+      "ten": "Ondansetron",
+      "codes": [
+        "40.691"
+      ]
+    },
+    "oxaliplatin": {
+      "ten": "Oxaliplatin",
+      "codes": [
+        "40.386"
+      ]
+    },
+    "oxcarbazepin": {
+      "ten": "Oxcarbazepin",
+      "codes": [
+        "40.135"
+      ]
+    },
+    "pantoprazol": {
+      "ten": "Pantoprazol",
+      "codes": [
+        "40.679"
+      ]
+    },
+    "paroxetin": {
+      "ten": "Paroxetin",
+      "codes": [
+        "40.967"
+      ]
+    },
+    "peginterferon_alpha": {
+      "ten": "Peginterferon alpha",
+      "codes": [
+        "40.272"
+      ]
+    },
+    "perindopril": {
+      "ten": "Perindopril",
+      "codes": [
+        "40.30.499",
+        "40.520",
+        "40.521",
+        "40.522"
+      ]
+    },
+    "pethidin": {
+      "ten": "Pethidin",
+      "codes": [
+        "40.18",
+        "40.54"
+      ]
+    },
+    "phenobarbital": {
+      "ten": "Phenobarbital",
+      "codes": [
+        "40.136"
+      ]
+    },
+    "phenylephrin_uong": {
+      "ten": "Phenylephrin uong",
+      "codes": [
+        "40.30.100",
+        "40.30.62",
+        "40.30.66",
+        "40.30.69",
+        "40.30.70"
+      ]
+    },
+    "phenytoin": {
+      "ten": "Phenytoin",
+      "codes": [
+        "40.137"
+      ]
+    },
+    "piperaquin_dihydroartemisinin_piperaquin": {
+      "ten": "Piperaquin dihydroartemisinin piperaquin",
+      "codes": [
+        "40.329"
+      ]
+    },
+    "piribedil": {
+      "ten": "Piribedil",
+      "codes": [
+        "40.422"
+      ]
+    },
+    "piroxicam": {
+      "ten": "Piroxicam",
+      "codes": [
+        "40.55"
+      ]
+    },
+    "posaconazol": {
+      "ten": "Posaconazol",
+      "codes": [
+        "40.30.301"
+      ]
+    },
+    "pramipexol": {
+      "ten": "Pramipexol",
+      "codes": [
+        "40.423"
+      ]
+    },
+    "pravastatin": {
+      "ten": "Pravastatin",
+      "codes": [
+        "40.557"
+      ]
+    },
+    "praziquantel": {
+      "ten": "Praziquantel",
+      "codes": [
+        "40.151"
+      ]
+    },
+    "propofol": {
+      "ten": "Propofol",
+      "codes": [
+        "40.21"
+      ]
+    },
+    "pseudoephedrin_uong": {
+      "ten": "Pseudoephedrin uong",
+      "codes": [
+        "40.52",
+        "40.53",
+        "40.910",
+        "40.92"
+      ]
+    },
+    "quetiapin": {
+      "ten": "Quetiapin",
+      "codes": [
+        "40.954"
+      ]
+    },
+    "quinapril": {
+      "ten": "Quinapril",
+      "codes": [
+        "40.523"
+      ]
+    },
+    "rabeprazol": {
+      "ten": "Rabeprazol",
+      "codes": [
+        "40.680"
+      ]
+    },
+    "ramipril": {
+      "ten": "Ramipril",
+      "codes": [
+        "40.524"
+      ]
+    },
+    "repaglinid": {
+      "ten": "Repaglinid",
+      "codes": [
+        "40.809"
+      ]
+    },
+    "rifampicin": {
+      "ten": "Rifampicin",
+      "codes": [
+        "40.256",
+        "40.311",
+        "40.312",
+        "40.313",
+        "40.314"
+      ]
+    },
+    "ringer_lactat": {
+      "ten": "Ringer lactat",
+      "codes": [
+        "40.1026.1"
+      ]
+    },
+    "rosuvastatin": {
+      "ten": "Rosuvastatin",
+      "codes": [
+        "40.558"
+      ]
+    },
+    "rotigotin": {
+      "ten": "Rotigotin",
+      "codes": [
+        "40.30.434"
+      ]
+    },
+    "roxithromycin": {
+      "ten": "Roxithromycin",
+      "codes": [
+        "40.223"
+      ]
+    },
+    "sertralin": {
+      "ten": "Sertralin",
+      "codes": [
+        "40.968"
+      ]
+    },
+    "simvastatin": {
+      "ten": "Simvastatin",
+      "codes": [
+        "40.559",
+        "40.30.578"
+      ]
+    },
+    "sofosbuvir": {
+      "ten": "Sofosbuvir",
+      "codes": [
+        "40.30.273",
+        "40.30.274",
+        "40.30.275"
+      ]
+    },
+    "sofosbuvir_ledipasvir_ledipasvir": {
+      "ten": "Sofosbuvir ledipasvir ledipasvir",
+      "codes": [
+        "40.30.274"
+      ]
+    },
+    "solifenacin": {
+      "ten": "Solifenacin",
+      "codes": [
+        "40.30.426"
+      ]
+    },
+    "sotalol": {
+      "ten": "Sotalol",
+      "codes": [
+        "40.488"
+      ]
+    },
+    "spiramycin": {
+      "ten": "Spiramycin",
+      "codes": [
+        "40.224",
+        "40.225"
+      ]
+    },
+    "sulpirid": {
+      "ten": "Sulpirid",
+      "codes": [
+        "40.956"
+      ]
+    },
+    "sumatriptan": {
+      "ten": "Sumatriptan",
+      "codes": [
+        "40.337"
+      ]
+    },
+    "tamoxifen": {
+      "ten": "Tamoxifen",
+      "codes": [
+        "40.393"
+      ]
+    },
+    "tegafur": {
+      "ten": "Tegafur",
+      "codes": [
+        "40.394",
+        "40.30.379"
+      ]
+    },
+    "telmisartan": {
+      "ten": "Telmisartan",
+      "codes": [
+        "40.526",
+        "40.527",
+        "40.30.500"
+      ]
+    },
+    "tenoxicam": {
+      "ten": "Tenoxicam",
+      "codes": [
+        "40.56"
+      ]
+    },
+    "tetracyclin": {
+      "ten": "Tetracyclin",
+      "codes": [
+        "40.247"
+      ]
+    },
+    "thioridazin": {
+      "ten": "Thioridazin",
+      "codes": [
+        "40.957"
+      ]
+    },
+    "ticagrelor": {
+      "ten": "Ticagrelor",
+      "codes": [
+        "40.30.564"
+      ]
+    },
+    "tigecyclin": {
+      "ten": "Tigecyclin",
+      "codes": [
+        "40.30.247"
+      ]
+    },
+    "tizanidin": {
+      "ten": "Tizanidin",
+      "codes": [
+        "40.840"
+      ]
+    },
+    "tramadol": {
+      "ten": "Tramadol",
+      "codes": [
+        "40.58",
+        "40.30.64"
+      ]
+    },
+    "tretinoin": {
+      "ten": "Tretinoin",
+      "codes": [
+        "40.398"
+      ]
+    },
+    "trihexyphenidyl": {
+      "ten": "Trihexyphenidyl",
+      "codes": [
+        "40.425"
+      ]
+    },
+    "valsartan": {
+      "ten": "Valsartan",
+      "codes": [
+        "40.528",
+        "40.529",
+        "40.30.501",
+        "40.30.502"
+      ]
+    },
+    "venlafaxin": {
+      "ten": "Venlafaxin",
+      "codes": [
+        "40.970"
+      ]
+    },
+    "verapamil": {
+      "ten": "Verapamil",
+      "codes": [
+        "40.489"
+      ]
+    },
+    "voriconazol": {
+      "ten": "Voriconazol",
+      "codes": [
+        "40.30.303"
+      ]
+    },
+    "warfarin": {
+      "ten": "Warfarin",
+      "codes": [
+        "40.454"
+      ]
+    },
+    "lornoxicam": {
+      "ten": "Lornoxicam",
+      "codes": [
+        "Lornoxicam",
+        "lornoxicam"
+      ]
+    },
+    "medroxyprogesteron": {
+      "ten": "Medroxyprogesteron",
+      "codes": [
+        "Medroxyprogesteron",
+        "medroxyprogesteron",
+        "Medroxyprogesteron Acetat",
+        "Medroxyprogesteron acetat",
+        "medroxyprogesteron acetat",
+        "Medroxyprogesterone",
+        "medroxyprogesterone",
+        "Medroxyprogesterone Acetate",
+        "Medroxyprogesterone acetate",
+        "medroxyprogesterone acetate"
+      ]
+    },
+    "methadon": {
+      "ten": "Methadon",
+      "codes": [
+        "Methadon",
+        "methadon",
+        "Methadon Hydroclorid",
+        "Methadon hydroclorid",
+        "methadon hydroclorid",
+        "Methadon Hydrochlorid",
+        "Methadon hydrochlorid",
+        "methadon hydrochlorid",
+        "Methadon HCl",
+        "methadon HCl",
+        "Methadone",
+        "methadone",
+        "Methadone Hydrochloride",
+        "Methadone hydrochloride",
+        "methadone hydrochloride",
+        "Methadone HCl",
+        "methadone HCl"
+      ]
+    },
+    "mifepriston": {
+      "ten": "Mifepriston",
+      "codes": [
+        "Mifepriston",
+        "mifepriston",
+        "Mifepristone",
+        "mifepristone"
+      ]
+    },
+    "milnacipran": {
+      "ten": "Milnacipran",
+      "codes": [
+        "Milnacipran",
+        "milnacipran",
+        "Milnacipran Hydroclorid",
+        "Milnacipran hydroclorid",
+        "milnacipran hydroclorid",
+        "Milnacipran Hydrochlorid",
+        "Milnacipran hydrochlorid",
+        "milnacipran hydrochlorid",
+        "Milnacipran HCl",
+        "milnacipran HCl",
+        "Milnacipran Hydrochloride",
+        "Milnacipran hydrochloride",
+        "milnacipran hydrochloride"
+      ]
+    },
+    "norelgestromin": {
+      "ten": "Norelgestromin",
+      "codes": [
+        "Norelgestromin",
+        "norelgestromin",
+        "Norelgestromin + Ethinyl Estradiol",
+        "Norelgestromin + Ethinyl estradiol",
+        "Norelgestromin + ethinyl estradiol",
+        "norelgestromin + ethinyl estradiol",
+        "Norelgestromin + Ethinylestradiol",
+        "Norelgestromin + ethinylestradiol",
+        "norelgestromin + ethinylestradiol"
+      ]
+    },
+    "norethindron": {
+      "ten": "Norethindron",
+      "codes": [
+        "40.792"
+      ]
+    },
+    "norgestrel": {
+      "ten": "Norgestrel",
+      "codes": [
+        "Norgestrel",
+        "norgestrel",
+        "Norgestrel + Estradiol Valerate",
+        "Norgestrel + Estradiol valerate",
+        "Norgestrel + estradiol valerate",
+        "norgestrel + estradiol valerate",
+        "Estradiol Valerate + Norgestrel",
+        "Estradiol Valerate + norgestrel",
+        "Estradiol valerate + Norgestrel",
+        "estradiol valerate + norgestrel"
+      ]
+    },
+    "olmesartan": {
+      "ten": "Olmesartan",
+      "codes": [
+        "Olmesartan",
+        "olmesartan",
+        "Olmesartan Medoxomil",
+        "Olmesartan medoxomil",
+        "olmesartan medoxomil",
+        "Olmesartan Medoxomil + Hydroclorothiazid",
+        "Olmesartan Medoxomil + hydroclorothiazid",
+        "Olmesartan Medoxomil + Hydrochlorothiazid",
+        "Olmesartan Medoxomil + hydrochlorothiazid",
+        "Olmesartan Medoxomil + Hydrochlorothiazide",
+        "Olmesartan Medoxomil + hydrochlorothiazide",
+        "Olmesartan medoxomil + Hydroclorothiazid",
+        "Olmesartan medoxomil + hydroclorothiazid",
+        "Olmesartan medoxomil + Hydrochlorothiazid",
+        "Olmesartan medoxomil + hydrochlorothiazid",
+        "Olmesartan medoxomil + Hydrochlorothiazide",
+        "Olmesartan medoxomil + hydrochlorothiazide",
+        "olmesartan medoxomil + hydroclorothiazid",
+        "olmesartan medoxomil + hydrochlorothiazid",
+        "olmesartan medoxomil + hydrochlorothiazide"
+      ]
+    },
+    "oxybutynin": {
+      "ten": "Oxybutynin",
+      "codes": [
+        "Oxybutynin",
+        "oxybutynin",
+        "Oxybutynin Hydroclorid",
+        "Oxybutynin hydroclorid",
+        "oxybutynin hydroclorid",
+        "Oxybutynin Hydrochlorid",
+        "Oxybutynin hydrochlorid",
+        "oxybutynin hydrochlorid",
+        "Oxybutynin HCl",
+        "oxybutynin HCl",
+        "Oxybutynin Hydrochloride",
+        "Oxybutynin hydrochloride",
+        "oxybutynin hydrochloride"
+      ]
+    },
+    "pitavastatin": {
+      "ten": "Pitavastatin",
+      "codes": [
+        "Pitavastatin",
+        "pitavastatin",
+        "Pitavastatin Calcium",
+        "Pitavastatin calcium",
+        "pitavastatin calcium",
+        "Pitavastatin Calci Hydrat",
+        "Pitavastatin calci hydrat",
+        "pitavastatin calci hydrat",
+        "Pitavastatin Calcium Hydrate",
+        "Pitavastatin calcium hydrate",
+        "pitavastatin calcium hydrate"
+      ]
+    },
+    "propafenon": {
+      "ten": "Propafenon",
+      "codes": [
+        "Propafenon",
+        "propafenon",
+        "Propafenon Hydroclorid",
+        "Propafenon hydroclorid",
+        "propafenon hydroclorid",
+        "Propafenon Hydrochlorid",
+        "Propafenon hydrochlorid",
+        "propafenon hydrochlorid",
+        "Propafenon HCl",
+        "propafenon HCl",
+        "Propafenone",
+        "propafenone",
+        "Propafenone Hydrochloride",
+        "Propafenone hydrochloride",
+        "propafenone hydrochloride",
+        "Propafenone HCl",
+        "propafenone HCl"
+      ]
+    },
+    "ranolazin": {
+      "ten": "Ranolazin",
+      "codes": [
+        "Ranolazin",
+        "ranolazin",
+        "Ranolazine",
+        "ranolazine"
+      ]
+    },
+    "rilpivirin": {
+      "ten": "Rilpivirin",
+      "codes": [
+        "Rilpivirin",
+        "rilpivirin",
+        "Rilpivirin Hydroclorid",
+        "Rilpivirin hydroclorid",
+        "rilpivirin hydroclorid",
+        "Rilpivirin Hydrochlorid",
+        "Rilpivirin hydrochlorid",
+        "rilpivirin hydrochlorid",
+        "Rilpivirin HCl",
+        "rilpivirin HCl",
+        "Rilpivirine",
+        "rilpivirine",
+        "Rilpivirine Hydrochloride",
+        "Rilpivirine hydrochloride",
+        "rilpivirine hydrochloride",
+        "Rilpivirine HCl",
+        "rilpivirine HCl"
+      ]
+    },
+    "sacubitril_valsartan_sacubitril": {
+      "ten": "Sacubitril valsartan sacubitril",
+      "codes": [
+        "Sacubitril",
+        "sacubitril",
+        "Sacubitril + Valsartan",
+        "Sacubitril + valsartan",
+        "sacubitril + valsartan",
+        "Valsartan + Sacubitril",
+        "Valsartan + sacubitril",
+        "valsartan + sacubitril"
+      ]
+    },
+    "saquinavir_ritonavir": {
+      "ten": "Saquinavir ritonavir",
+      "codes": [
+        "Saquinavir",
+        "saquinavir",
+        "Saquinavir Mesilat",
+        "Saquinavir mesilat",
+        "saquinavir mesilat",
+        "Saquinavir Mesilate",
+        "Saquinavir mesilate",
+        "saquinavir mesilate",
+        "Saquinavir + Ritonavir",
+        "Saquinavir + ritonavir",
+        "saquinavir + ritonavir",
+        "Ritonavir + Saquinavir",
+        "Ritonavir + saquinavir",
+        "ritonavir + saquinavir"
+      ]
+    },
+    "saquinavir_ritonavir_2": {
+      "ten": "Saquinavir ritonavir 2",
+      "codes": [
+        "Saquinavir + Ritonavir",
+        "Saquinavir + ritonavir",
+        "saquinavir + ritonavir",
+        "Ritonavir + Saquinavir",
+        "Ritonavir + saquinavir",
+        "ritonavir + saquinavir"
+      ]
+    },
+    "sevofluran": {
+      "ten": "Sevofluran",
+      "codes": [
+        "Sevofluran",
+        "sevofluran",
+        "Sevoflurane",
+        "sevoflurane"
+      ]
+    },
+    "sildenafil": {
+      "ten": "Sildenafil",
+      "codes": [
+        "Sildenafil",
+        "sildenafil",
+        "Sildenafil Citrat",
+        "Sildenafil citrat",
+        "sildenafil citrat",
+        "Sildenafil Citrate",
+        "Sildenafil citrate",
+        "sildenafil citrate"
+      ]
+    },
+    "sparfloxacin": {
+      "ten": "Sparfloxacin",
+      "codes": [
+        "Sparfloxacin",
+        "sparfloxacin"
+      ]
+    },
+    "sunitinib": {
+      "ten": "Sunitinib",
+      "codes": [
+        "Sunitinib",
+        "sunitinib",
+        "Sunitinib Maleat",
+        "Sunitinib maleat",
+        "sunitinib maleat",
+        "Sunitinib Maleate",
+        "Sunitinib maleate",
+        "sunitinib maleate"
+      ]
+    },
+    "tadalafil": {
+      "ten": "Tadalafil",
+      "codes": [
+        "Tadalafil",
+        "tadalafil",
+        "Tadalafil Adsorbat",
+        "Tadalafil adsorbat",
+        "tadalafil adsorbat",
+        "Tadalafil Adsorbate",
+        "Tadalafil adsorbate",
+        "tadalafil adsorbate"
+      ]
+    },
+    "talniflumat": {
+      "ten": "Talniflumat",
+      "codes": [
+        "Talniflumat",
+        "talniflumat",
+        "Talniflumate",
+        "talniflumate"
+      ]
+    },
+    "telbivudin": {
+      "ten": "Telbivudin",
+      "codes": [
+        "Telbivudin",
+        "telbivudin",
+        "Telbivudine",
+        "telbivudine"
+      ]
+    },
+    "tolvaptan": {
+      "ten": "Tolvaptan",
+      "codes": [
+        "Tolvaptan",
+        "tolvaptan"
+      ]
+    },
+    "trandolapril": {
+      "ten": "Trandolapril",
+      "codes": [
+        "Trandolapril",
+        "trandolapril",
+        "Trandolapril + Verapamil hydrochloride",
+        "Trandolapril + verapamil hydrochloride",
+        "trandolapril + verapamil hydrochloride",
+        "Verapamil hydrochloride + Trandolapril",
+        "Verapamil hydrochloride + trandolapril",
+        "verapamil hydrochloride + trandolapril"
+      ]
+    },
+    "trazodon": {
+      "ten": "Trazodon",
+      "codes": [
+        "Trazodon",
+        "trazodon",
+        "Trazodon Hydroclorid",
+        "Trazodon hydroclorid",
+        "trazodon hydroclorid",
+        "Trazodon Hydrochlorid",
+        "Trazodon hydrochlorid",
+        "trazodon hydrochlorid",
+        "Trazodon HCl",
+        "trazodon HCl",
+        "Trazodone",
+        "trazodone",
+        "Trazodone Hydrochloride",
+        "Trazodone hydrochloride",
+        "trazodone hydrochloride",
+        "Trazodone HCl",
+        "trazodone HCl"
+      ]
+    },
+    "vardenafil": {
+      "ten": "Vardenafil",
+      "codes": [
+        "Vardenafil",
+        "vardenafil",
+        "Vardenafil Hydroclorid",
+        "Vardenafil hydroclorid",
+        "vardenafil hydroclorid",
+        "Vardenafil Hydrochlorid",
+        "Vardenafil hydrochlorid",
+        "vardenafil hydrochlorid",
+        "Vardenafil HCl",
+        "vardenafil HCl",
+        "Vardenafil Hydrochloride",
+        "Vardenafil hydrochloride",
+        "vardenafil hydrochloride",
+        "Vardenafil monohydroclorid",
+        "Vardenafil monohydrochlorid",
+        "Vardenafil monohydrochloride",
+        "Vardenafil hydrochloride trihydrate"
+      ]
+    },
+    "xanh_methylen_IV": {
+      "ten": "Xanh methylen iv",
+      "codes": [
+        "Xanh methylen",
+        "xanh methylen"
+      ]
+    },
+    "zaltoprofen": {
+      "ten": "Zaltoprofen",
+      "codes": [
+        "Zaltoprofen",
+        "zaltoprofen"
+      ]
+    },
+    "zofenopril": {
+      "ten": "Zofenopril",
+      "codes": [
+        "Zofenopril",
+        "zofenopril",
+        "Zofenopril Calci",
+        "Zofenopril calci",
+        "zofenopril calci"
+      ]
+    },
+    "clonixin": {
+      "ten": "Clonixin",
+      "codes": [
+        "Clonixin",
+        "clonixin",
+        "Clonixin Lysinat",
+        "Clonixin lysinat",
+        "clonixin lysinat",
+        "Clonixine",
+        "clonixine",
+        "Clonixine Lysinate",
+        "Clonixine lysinate",
+        "clonixine lysinate",
+        "Clonixin Lysinate",
+        "Clonixin lysinate",
+        "clonixin lysinate"
+      ]
+    },
+    "saquinavir_ritonavir_ritonavir": {
+      "ten": "Saquinavir ritonavir ritonavir",
+      "codes": [
+        "40.274",
+        "40.269"
+      ]
+    }
+  },
+  "pairs": [
+    [
+      "aceclofenac",
+      "ketorolac"
+    ],
+    [
+      "mefenamic",
+      "ketorolac"
+    ],
+    [
+      "acitretin",
+      "doxycyclin"
+    ],
+    [
+      "acitretin",
+      "minocyclin"
+    ],
+    [
+      "acitretin",
+      "tetracyclin"
+    ],
+    [
+      "acitretin",
+      "tigecyclin"
+    ],
+    [
+      "agomelatin",
+      "ciprofloxacin"
+    ],
+    [
+      "agomelatin",
+      "fluvoxamin"
+    ],
+    [
+      "alfuzosin",
+      "boceprevir"
+    ],
+    [
+      "alfuzosin",
+      "lopinavir_ritonavir"
+    ],
+    [
+      "alfuzosin",
+      "atazanavir_ritonavir"
+    ],
+    [
+      "alfuzosin",
+      "darunavir_ritonavir"
+    ],
+    [
+      "alfuzosin",
+      "indinavir_ritonavir"
+    ],
+    [
+      "alfuzosin",
+      "saquinavir_ritonavir"
+    ],
+    [
+      "alprazolam",
+      "indinavir_ritonavir"
+    ],
+    [
+      "amiodaron",
+      "domperidon"
+    ],
+    [
+      "amiodaron",
+      "lopinavir_ritonavir_ritonavir"
+    ],
+    [
+      "amiodaron",
+      "darunavir_ritonavir"
+    ],
+    [
+      "amiodaron",
+      "atazanavir_ritonavir"
+    ],
+    [
+      "amiodaron",
+      "indinavir_ritonavir"
+    ],
+    [
+      "amiodaron",
+      "saquinavir_ritonavir"
+    ],
+    [
+      "arsenic_trioxid",
+      "domperidon"
+    ],
+    [
+      "artemether_lumefantrin",
+      "domperidon"
+    ],
+    [
+      "artemether_lumefantrin",
+      "rifampicin"
+    ],
+    [
+      "artemether_lumefantrin",
+      "enzalutamid"
+    ],
+    [
+      "artemether_lumefantrin",
+      "carbamazepin"
+    ],
+    [
+      "artemether_lumefantrin",
+      "phenobarbital"
+    ],
+    [
+      "artemether_lumefantrin",
+      "phenytoin"
+    ],
+    [
+      "aspirin",
+      "ketorolac"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "lovastatin"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "simvastatin"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "dihydroergotamin"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "ergotamin"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "ivabradin"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "ticagrelor"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "ranolazin"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "tolvaptan"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "felodipin"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "lercanidipin"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "rifampicin"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "grazoprevir_elbasvir"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "domperidon"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "vardenafil"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "propafenon"
+    ],
+    [
+      "atazanavir_ritonavir",
+      "everolimus"
+    ],
+    [
+      "atorvastatin",
+      "ciclosporin"
+    ],
+    [
+      "atorvastatin",
+      "gemfibrozil"
+    ],
+    [
+      "azithromycin",
+      "domperidon"
+    ],
+    [
+      "benazepril",
+      "sacubitril_valsartan_sacubitril"
+    ],
+    [
+      "bleomycin",
+      "brentuximab"
+    ],
+    [
+      "boceprevir",
+      "lovastatin"
+    ],
+    [
+      "boceprevir",
+      "simvastatin"
+    ],
+    [
+      "boceprevir",
+      "dihydroergotamin"
+    ],
+    [
+      "boceprevir",
+      "ergotamin"
+    ],
+    [
+      "boceprevir",
+      "ergometrin"
+    ],
+    [
+      "boceprevir",
+      "methylergometrin"
+    ],
+    [
+      "boceprevir",
+      "ivabradin"
+    ],
+    [
+      "bosentan",
+      "glibenclamid"
+    ],
+    [
+      "bosentan",
+      "ciclosporin"
+    ],
+    [
+      "brivudin",
+      "capecitabin"
+    ],
+    [
+      "brivudin",
+      "fluorouracil"
+    ],
+    [
+      "brivudin",
+      "tegafur"
+    ],
+    [
+      "bromocriptin",
+      "metoclopramid"
+    ],
+    [
+      "bromocriptin",
+      "sulpirid"
+    ],
+    [
+      "captopril",
+      "sacubitril_valsartan_sacubitril"
+    ],
+    [
+      "carbamazepin",
+      "praziquantel"
+    ],
+    [
+      "carbamazepin",
+      "rilpivirin"
+    ],
+    [
+      "carbamazepin",
+      "voriconazol"
+    ],
+    [
+      "carbamazepin",
+      "daclatasvir"
+    ],
+    [
+      "carbamazepin",
+      "delamanid"
+    ],
+    [
+      "carbamazepin",
+      "grazoprevir_elbasvir"
+    ],
+    [
+      "carbamazepin",
+      "ranolazin"
+    ],
+    [
+      "celecoxib",
+      "ketorolac"
+    ],
+    [
+      "ciclosporin",
+      "pitavastatin"
+    ],
+    [
+      "ciclosporin",
+      "lovastatin"
+    ],
+    [
+      "ciclosporin",
+      "simvastatin"
+    ],
+    [
+      "ciclosporin",
+      "lercanidipin"
+    ],
+    [
+      "ciclosporin",
+      "grazoprevir_elbasvir"
+    ],
+    [
+      "cilostazol",
+      "domperidon"
+    ],
+    [
+      "ciprofloxacin",
+      "tizanidin"
+    ],
+    [
+      "ciprofloxacin",
+      "duloxetin"
+    ],
+    [
+      "ciprofloxacin",
+      "domperidon"
+    ],
+    [
+      "citalopram",
+      "domperidon"
+    ],
+    [
+      "clarithromycin",
+      "lovastatin"
+    ],
+    [
+      "clarithromycin",
+      "simvastatin"
+    ],
+    [
+      "clarithromycin",
+      "dihydroergotamin"
+    ],
+    [
+      "clarithromycin",
+      "ergotamin"
+    ],
+    [
+      "clarithromycin",
+      "ergometrin"
+    ],
+    [
+      "clarithromycin",
+      "methylergometrin"
+    ],
+    [
+      "clarithromycin",
+      "ivabradin"
+    ],
+    [
+      "clarithromycin",
+      "ticagrelor"
+    ],
+    [
+      "clarithromycin",
+      "ranolazin"
+    ],
+    [
+      "clarithromycin",
+      "tolvaptan"
+    ],
+    [
+      "clarithromycin",
+      "felodipin"
+    ],
+    [
+      "clarithromycin",
+      "lercanidipin"
+    ],
+    [
+      "clarithromycin",
+      "quetiapin"
+    ],
+    [
+      "clarithromycin",
+      "everolimus"
+    ],
+    [
+      "clarithromycin",
+      "domperidon"
+    ],
+    [
+      "clonixin",
+      "ketorolac"
+    ],
+    [
+      "cloroquin",
+      "domperidon"
+    ],
+    [
+      "clorpromazin",
+      "domperidon"
+    ],
+    [
+      "dabigatran",
+      "itraconazol"
+    ],
+    [
+      "daclatasvir",
+      "rifampicin"
+    ],
+    [
+      "daclatasvir",
+      "enzalutamid"
+    ],
+    [
+      "daclatasvir",
+      "phenobarbital"
+    ],
+    [
+      "daclatasvir",
+      "phenytoin"
+    ],
+    [
+      "danazol",
+      "simvastatin"
+    ],
+    [
+      "danazol",
+      "lovastatin"
+    ],
+    [
+      "darunavir_ritonavir",
+      "lovastatin"
+    ],
+    [
+      "darunavir_ritonavir",
+      "simvastatin"
+    ],
+    [
+      "darunavir_ritonavir",
+      "dihydroergotamin"
+    ],
+    [
+      "darunavir_ritonavir",
+      "ergotamin"
+    ],
+    [
+      "darunavir_ritonavir",
+      "ivabradin"
+    ],
+    [
+      "darunavir_ritonavir",
+      "ticagrelor"
+    ],
+    [
+      "darunavir_ritonavir",
+      "ranolazin"
+    ],
+    [
+      "darunavir_ritonavir",
+      "tolvaptan"
+    ],
+    [
+      "darunavir_ritonavir",
+      "felodipin"
+    ],
+    [
+      "darunavir_ritonavir",
+      "lercanidipin"
+    ],
+    [
+      "darunavir_ritonavir",
+      "rifampicin"
+    ],
+    [
+      "darunavir_ritonavir",
+      "grazoprevir_elbasvir"
+    ],
+    [
+      "darunavir_ritonavir",
+      "domperidon"
+    ],
+    [
+      "darunavir_ritonavir",
+      "vardenafil"
+    ],
+    [
+      "darunavir_ritonavir",
+      "propafenon"
+    ],
+    [
+      "darunavir_ritonavir",
+      "everolimus"
+    ],
+    [
+      "delamanid",
+      "rifampicin"
+    ],
+    [
+      "delamanid",
+      "enzalutamid"
+    ],
+    [
+      "delamanid",
+      "phenytoin"
+    ],
+    [
+      "dexamethason",
+      "rilpivirin"
+    ],
+    [
+      "dexibuprofen",
+      "ketorolac"
+    ],
+    [
+      "dexketoprofen",
+      "ketorolac"
+    ],
+    [
+      "dexlansoprazol",
+      "rilpivirin"
+    ],
+    [
+      "dextromethorphan",
+      "paroxetin"
+    ],
+    [
+      "dextromethorphan",
+      "fluoxetin"
+    ],
+    [
+      "diclofenac",
+      "ketorolac"
+    ],
+    [
+      "dihydroergotamin",
+      "sumatriptan"
+    ],
+    [
+      "dihydroergotamin",
+      "roxithromycin"
+    ],
+    [
+      "dihydroergotamin",
+      "erythromycin"
+    ],
+    [
+      "dihydroergotamin",
+      "voriconazol"
+    ],
+    [
+      "dihydroergotamin",
+      "posaconazol"
+    ],
+    [
+      "dihydroergotamin",
+      "itraconazol"
+    ],
+    [
+      "dihydroergotamin",
+      "saquinavir_ritonavir"
+    ],
+    [
+      "dihydroergotamin",
+      "lopinavir_ritonavir"
+    ],
+    [
+      "dihydroergotamin",
+      "indinavir_ritonavir"
+    ],
+    [
+      "diltiazem",
+      "ivabradin"
+    ],
+    [
+      "domperidon",
+      "sotalol"
+    ],
+    [
+      "domperidon",
+      "donepezil"
+    ],
+    [
+      "domperidon",
+      "haloperidol"
+    ],
+    [
+      "domperidon",
+      "escitalopram"
+    ],
+    [
+      "domperidon",
+      "spiramycin"
+    ],
+    [
+      "domperidon",
+      "moxifloxacin"
+    ],
+    [
+      "domperidon",
+      "levofloxacin"
+    ],
+    [
+      "domperidon",
+      "thioridazin"
+    ],
+    [
+      "domperidon",
+      "methadon"
+    ],
+    [
+      "domperidon",
+      "sparfloxacin"
+    ],
+    [
+      "domperidon",
+      "lopinavir_ritonavir"
+    ],
+    [
+      "domperidon",
+      "saquinavir_ritonavir"
+    ],
+    [
+      "domperidon",
+      "indinavir_ritonavir"
+    ],
+    [
+      "domperidon",
+      "itraconazol"
+    ],
+    [
+      "domperidon",
+      "fluconazol"
+    ],
+    [
+      "domperidon",
+      "posaconazol"
+    ],
+    [
+      "domperidon",
+      "voriconazol"
+    ],
+    [
+      "domperidon",
+      "erythromycin"
+    ],
+    [
+      "domperidon",
+      "levomepromazin"
+    ],
+    [
+      "domperidon",
+      "levosulpirid"
+    ],
+    [
+      "domperidon",
+      "ondansetron"
+    ],
+    [
+      "domperidon",
+      "oxaliplatin"
+    ],
+    [
+      "domperidon",
+      "propofol"
+    ],
+    [
+      "domperidon",
+      "roxithromycin"
+    ],
+    [
+      "domperidon",
+      "sevofluran"
+    ],
+    [
+      "domperidon",
+      "sulpirid"
+    ],
+    [
+      "doxycyclin",
+      "tretinoin"
+    ],
+    [
+      "doxycyclin",
+      "isotretinoin"
+    ],
+    [
+      "duloxetin",
+      "fluvoxamin"
+    ],
+    [
+      "efavirenz",
+      "grazoprevir_elbasvir"
+    ],
+    [
+      "eltrombopag",
+      "grazoprevir_elbasvir"
+    ],
+    [
+      "enalapril",
+      "sacubitril_valsartan_sacubitril"
+    ],
+    [
+      "enzalutamid",
+      "grazoprevir_elbasvir"
+    ],
+    [
+      "ephedrin",
+      "xanh_methylen_IV"
+    ],
+    [
+      "ephedrin",
+      "furazolidon"
+    ],
+    [
+      "ergometrin",
+      "sumatriptan"
+    ],
+    [
+      "ergometrin",
+      "roxithromycin"
+    ],
+    [
+      "ergometrin",
+      "erythromycin"
+    ],
+    [
+      "ergometrin",
+      "voriconazol"
+    ],
+    [
+      "ergometrin",
+      "posaconazol"
+    ],
+    [
+      "ergometrin",
+      "itraconazol"
+    ],
+    [
+      "ergotamin",
+      "sumatriptan"
+    ],
+    [
+      "ergotamin",
+      "roxithromycin"
+    ],
+    [
+      "ergotamin",
+      "erythromycin"
+    ],
+    [
+      "ergotamin",
+      "voriconazol"
+    ],
+    [
+      "ergotamin",
+      "posaconazol"
+    ],
+    [
+      "ergotamin",
+      "itraconazol"
+    ],
+    [
+      "ergotamin",
+      "saquinavir_ritonavir"
+    ],
+    [
+      "ergotamin",
+      "lopinavir_ritonavir"
+    ],
+    [
+      "ergotamin",
+      "indinavir_ritonavir"
+    ],
+    [
+      "erythromycin",
+      "lovastatin"
+    ],
+    [
+      "erythromycin",
+      "simvastatin"
+    ],
+    [
+      "erythromycin",
+      "methylergometrin"
+    ],
+    [
+      "erythromycin",
+      "ivabradin"
+    ],
+    [
+      "etodolac",
+      "ketorolac"
+    ],
+    [
+      "etoricoxib",
+      "ketorolac"
+    ],
+    [
+      "everolimus",
+      "lopinavir_ritonavir_ritonavir"
+    ],
+    [
+      "everolimus",
+      "indinavir_ritonavir"
+    ],
+    [
+      "everolimus",
+      "saquinavir_ritonavir_ritonavir"
+    ],
+    [
+      "everolimus",
+      "itraconazol"
+    ],
+    [
+      "felodipin",
+      "lopinavir_ritonavir"
+    ],
+    [
+      "felodipin",
+      "indinavir_ritonavir"
+    ],
+    [
+      "felodipin",
+      "saquinavir_ritonavir"
+    ],
+    [
+      "felodipin",
+      "itraconazol"
+    ],
+    [
+      "felodipin",
+      "posaconazol"
+    ],
+    [
+      "felodipin",
+      "voriconazol"
+    ],
+    [
+      "floctafenin",
+      "ketorolac"
+    ],
+    [
+      "flurbiprofen",
+      "ketorolac"
+    ],
+    [
+      "fluvastatin",
+      "gemfibrozil"
+    ],
+    [
+      "fluvoxamin",
+      "tizanidin"
+    ],
+    [
+      "furazolidon",
+      "levodopa_carbidopa_entacapon"
+    ],
+    [
+      "furazolidon",
+      "methyldopa"
+    ],
+    [
+      "furazolidon",
+      "pseudoephedrin_uong"
+    ],
+    [
+      "furazolidon",
+      "phenylephrin_uong"
+    ],
+    [
+      "furazolidon",
+      "nefopam"
+    ],
+    [
+      "gemfibrozil",
+      "repaglinid"
+    ],
+    [
+      "gemfibrozil",
+      "simvastatin"
+    ],
+    [
+      "gemfibrozil",
+      "lovastatin"
+    ],
+    [
+      "gemfibrozil",
+      "pravastatin"
+    ],
+    [
+      "grazoprevir_elbasvir",
+      "phenobarbital"
+    ],
+    [
+      "grazoprevir_elbasvir",
+      "phenytoin"
+    ],
+    [
+      "grazoprevir_elbasvir",
+      "rifampicin"
+    ],
+    [
+      "grazoprevir_elbasvir",
+      "saquinavir_ritonavir"
+    ],
+    [
+      "grazoprevir_elbasvir",
+      "lopinavir_ritonavir_lopinavir"
+    ],
+    [
+      "ibuprofen",
+      "ketorolac"
+    ],
+    [
+      "imidapril",
+      "sacubitril_valsartan_sacubitril"
+    ],
+    [
+      "indinavir_ritonavir",
+      "lovastatin"
+    ],
+    [
+      "indinavir_ritonavir",
+      "simvastatin"
+    ],
+    [
+      "indinavir_ritonavir",
+      "ivabradin"
+    ],
+    [
+      "indinavir_ritonavir",
+      "ticagrelor"
+    ],
+    [
+      "indinavir_ritonavir",
+      "ranolazin"
+    ],
+    [
+      "indinavir_ritonavir",
+      "tolvaptan"
+    ],
+    [
+      "indinavir_ritonavir",
+      "lercanidipin"
+    ],
+    [
+      "indinavir_ritonavir",
+      "vardenafil"
+    ],
+    [
+      "indinavir_ritonavir",
+      "rifampicin"
+    ],
+    [
+      "indinavir_ritonavir",
+      "propafenon"
+    ],
+    [
+      "indomethacin",
+      "ketorolac"
+    ],
+    [
+      "irinotecan",
+      "itraconazol"
+    ],
+    [
+      "isosorbid_dinitrat",
+      "sildenafil"
+    ],
+    [
+      "isosorbid_dinitrat",
+      "vardenafil"
+    ],
+    [
+      "isosorbid_dinitrat",
+      "tadalafil"
+    ],
+    [
+      "isosorbid_mononitrat",
+      "sildenafil"
+    ],
+    [
+      "isosorbid_mononitrat",
+      "vardenafil"
+    ],
+    [
+      "isosorbid_mononitrat",
+      "tadalafil"
+    ],
+    [
+      "isotretinoin",
+      "minocyclin"
+    ],
+    [
+      "isotretinoin",
+      "tetracyclin"
+    ],
+    [
+      "isotretinoin",
+      "tigecyclin"
+    ],
+    [
+      "itraconazol",
+      "lovastatin"
+    ],
+    [
+      "itraconazol",
+      "simvastatin"
+    ],
+    [
+      "itraconazol",
+      "methylergometrin"
+    ],
+    [
+      "itraconazol",
+      "ivabradin"
+    ],
+    [
+      "itraconazol",
+      "ticagrelor"
+    ],
+    [
+      "itraconazol",
+      "ranolazin"
+    ],
+    [
+      "itraconazol",
+      "tolvaptan"
+    ],
+    [
+      "itraconazol",
+      "lercanidipin"
+    ],
+    [
+      "itraconazol",
+      "vardenafil"
+    ],
+    [
+      "itraconazol",
+      "quetiapin"
+    ],
+    [
+      "ivabradin",
+      "lopinavir_ritonavir"
+    ],
+    [
+      "ivabradin",
+      "saquinavir_ritonavir"
+    ],
+    [
+      "ivabradin",
+      "posaconazol"
+    ],
+    [
+      "ivabradin",
+      "voriconazol"
+    ],
+    [
+      "ivabradin",
+      "verapamil"
+    ],
+    [
+      "ketoprofen",
+      "ketorolac"
+    ],
+    [
+      "ketorolac",
+      "lornoxicam"
+    ],
+    [
+      "ketorolac",
+      "loxoprofen"
+    ],
+    [
+      "ketorolac",
+      "meloxicam"
+    ],
+    [
+      "ketorolac",
+      "nabumeton"
+    ],
+    [
+      "ketorolac",
+      "naproxen"
+    ],
+    [
+      "ketorolac",
+      "piroxicam"
+    ],
+    [
+      "ketorolac",
+      "talniflumat"
+    ],
+    [
+      "ketorolac",
+      "tenoxicam"
+    ],
+    [
+      "ketorolac",
+      "zaltoprofen"
+    ],
+    [
+      "lansoprazol",
+      "rilpivirin"
+    ],
+    [
+      "lercanidipin",
+      "lopinavir_ritonavir"
+    ],
+    [
+      "lercanidipin",
+      "saquinavir_ritonavir"
+    ],
+    [
+      "lercanidipin",
+      "posaconazol"
+    ],
+    [
+      "lercanidipin",
+      "voriconazol"
+    ],
+    [
+      "levodopa_carbidopa_entacapon",
+      "metoclopramid"
+    ],
+    [
+      "levodopa_carbidopa_entacapon",
+      "sulpirid"
+    ],
+    [
+      "levodopa_carbidopa_entacapon",
+      "linezolid"
+    ],
+    [
+      "levodopa_carbidopa_entacapon",
+      "xanh_methylen_IV"
+    ],
+    [
+      "linezolid",
+      "methyldopa"
+    ],
+    [
+      "linezolid",
+      "pseudoephedrin_uong"
+    ],
+    [
+      "linezolid",
+      "phenylephrin_uong"
+    ],
+    [
+      "linezolid",
+      "nefopam"
+    ],
+    [
+      "lisinopril",
+      "sacubitril_valsartan_sacubitril"
+    ],
+    [
+      "lopinavir_ritonavir",
+      "lovastatin"
+    ],
+    [
+      "lopinavir_ritonavir",
+      "simvastatin"
+    ],
+    [
+      "lopinavir_ritonavir",
+      "ticagrelor"
+    ],
+    [
+      "lopinavir_ritonavir",
+      "ranolazin"
+    ],
+    [
+      "lopinavir_ritonavir",
+      "tolvaptan"
+    ],
+    [
+      "lopinavir_ritonavir_ritonavir",
+      "vardenafil"
+    ],
+    [
+      "lopinavir_ritonavir_ritonavir",
+      "propafenon"
+    ],
+    [
+      "lovastatin",
+      "saquinavir_ritonavir"
+    ],
+    [
+      "lovastatin",
+      "posaconazol"
+    ],
+    [
+      "lovastatin",
+      "voriconazol"
+    ],
+    [
+      "lovastatin",
+      "mifepriston"
+    ],
+    [
+      "methyldopa",
+      "xanh_methylen_IV"
+    ],
+    [
+      "methylergometrin",
+      "sumatriptan"
+    ],
+    [
+      "methylergometrin",
+      "roxithromycin"
+    ],
+    [
+      "methylergometrin",
+      "voriconazol"
+    ],
+    [
+      "methylergometrin",
+      "posaconazol"
+    ],
+    [
+      "metoclopramid",
+      "rotigotin"
+    ],
+    [
+      "metoclopramid",
+      "pramipexol"
+    ],
+    [
+      "metoclopramid",
+      "piribedil"
+    ],
+    [
+      "mifepriston",
+      "simvastatin"
+    ],
+    [
+      "minocyclin",
+      "tretinoin"
+    ],
+    [
+      "nefopam",
+      "xanh_methylen_IV"
+    ],
+    [
+      "nicorandil",
+      "sildenafil"
+    ],
+    [
+      "nicorandil",
+      "vardenafil"
+    ],
+    [
+      "nicorandil",
+      "tadalafil"
+    ],
+    [
+      "nifedipin",
+      "rifampicin"
+    ],
+    [
+      "nitroglycerin",
+      "sildenafil"
+    ],
+    [
+      "nitroglycerin",
+      "vardenafil"
+    ],
+    [
+      "nitroglycerin",
+      "tadalafil"
+    ],
+    [
+      "esomeprazol",
+      "rilpivirin"
+    ],
+    [
+      "omeprazol",
+      "rilpivirin"
+    ],
+    [
+      "oxcarbazepin",
+      "rilpivirin"
+    ],
+    [
+      "pantoprazol",
+      "rilpivirin"
+    ],
+    [
+      "paroxetin",
+      "thioridazin"
+    ],
+    [
+      "peginterferon_alpha",
+      "telbivudin"
+    ],
+    [
+      "perindopril",
+      "sacubitril_valsartan_sacubitril"
+    ],
+    [
+      "phenobarbital",
+      "praziquantel"
+    ],
+    [
+      "phenobarbital",
+      "rilpivirin"
+    ],
+    [
+      "phenobarbital",
+      "voriconazol"
+    ],
+    [
+      "phenobarbital",
+      "ranolazin"
+    ],
+    [
+      "phenylephrin_uong",
+      "xanh_methylen_IV"
+    ],
+    [
+      "phenytoin",
+      "praziquantel"
+    ],
+    [
+      "phenytoin",
+      "rilpivirin"
+    ],
+    [
+      "phenytoin",
+      "ranolazin"
+    ],
+    [
+      "piribedil",
+      "sulpirid"
+    ],
+    [
+      "posaconazol",
+      "simvastatin"
+    ],
+    [
+      "posaconazol",
+      "ticagrelor"
+    ],
+    [
+      "posaconazol",
+      "ranolazin"
+    ],
+    [
+      "posaconazol",
+      "tolvaptan"
+    ],
+    [
+      "posaconazol",
+      "quetiapin"
+    ],
+    [
+      "pramipexol",
+      "sulpirid"
+    ],
+    [
+      "praziquantel",
+      "rifampicin"
+    ],
+    [
+      "propafenon",
+      "saquinavir_ritonavir_ritonavir"
+    ],
+    [
+      "pseudoephedrin_uong",
+      "xanh_methylen_IV"
+    ],
+    [
+      "quetiapin",
+      "voriconazol"
+    ],
+    [
+      "quinapril",
+      "sacubitril_valsartan_sacubitril"
+    ],
+    [
+      "rabeprazol",
+      "rilpivirin"
+    ],
+    [
+      "ramipril",
+      "sacubitril_valsartan_sacubitril"
+    ],
+    [
+      "ranolazin",
+      "saquinavir_ritonavir"
+    ],
+    [
+      "ranolazin",
+      "voriconazol"
+    ],
+    [
+      "ranolazin",
+      "rifampicin"
+    ],
+    [
+      "rifampicin",
+      "rilpivirin"
+    ],
+    [
+      "rifampicin",
+      "voriconazol"
+    ],
+    [
+      "rifampicin",
+      "sofosbuvir"
+    ],
+    [
+      "rifampicin",
+      "saquinavir_ritonavir"
+    ],
+    [
+      "rosuvastatin",
+      "sofosbuvir_ledipasvir_ledipasvir"
+    ],
+    [
+      "rotigotin",
+      "sulpirid"
+    ],
+    [
+      "sacubitril_valsartan_sacubitril",
+      "trandolapril"
+    ],
+    [
+      "sacubitril_valsartan_sacubitril",
+      "zofenopril"
+    ],
+    [
+      "saquinavir_ritonavir",
+      "simvastatin"
+    ],
+    [
+      "saquinavir_ritonavir",
+      "ticagrelor"
+    ],
+    [
+      "saquinavir_ritonavir",
+      "tolvaptan"
+    ],
+    [
+      "saquinavir_ritonavir_ritonavir",
+      "vardenafil"
+    ],
+    [
+      "simvastatin",
+      "voriconazol"
+    ],
+    [
+      "tetracyclin",
+      "tretinoin"
+    ],
+    [
+      "ticagrelor",
+      "voriconazol"
+    ],
+    [
+      "tigecyclin",
+      "tretinoin"
+    ],
+    [
+      "tolvaptan",
+      "voriconazol"
+    ]
+  ],
+  "warnings": [
+    "Mã 40.1005 dùng chung cho: kali_clorid_vien_gpkd, kali_clorid_vien_uong - kiểm tra lại mã trong file SQL.",
+    "Mã 40.1009 dùng chung cho: kali_clorid_vien_gpkd, kali_clorid_vien_uong - kiểm tra lại mã trong file SQL.",
+    "Mã 40.1010 dùng chung cho: kali_clorid_vien_gpkd, kali_clorid_vien_uong - kiểm tra lại mã trong file SQL.",
+    "Mã 40.269 dùng chung cho: lopinavir_ritonavir, lopinavir_ritonavir_lopinavir, lopinavir_ritonavir_ritonavir, saquinavir_ritonavir_ritonavir - kiểm tra lại mã trong file SQL.",
+    "Mã 40.274 dùng chung cho: lopinavir_ritonavir_ritonavir, saquinavir_ritonavir_ritonavir - kiểm tra lại mã trong file SQL.",
+    "Mã 40.30.274 dùng chung cho: sofosbuvir, sofosbuvir_ledipasvir_ledipasvir - kiểm tra lại mã trong file SQL.",
+    "Mã 40.30.53 dùng chung cho: esomeprazol, naproxen - kiểm tra lại mã trong file SQL.",
+    "Mã 40.334 dùng chung cho: dihydroergotamin, ergotamin, erythromycin - kiểm tra lại mã trong file SQL.",
+    "Mã 40.451 dùng chung cho: acid_tranexamic, acitretin - kiểm tra lại mã trong file SQL.",
+    "Mã 40.479 dùng chung cho: isosorbid_dinitrat, isosorbid_mononitrat - kiểm tra lại mã trong file SQL.",
+    "Mã 40.56 dùng chung cho: bosentan, tenoxicam - kiểm tra lại mã trong file SQL.",
+    "Mã 40.61 dùng chung cho: colchicin, isotretinoin - kiểm tra lại mã trong file SQL.",
+    "Mã 40.712 dùng chung cho: kali_clorid_vien_gpkd, kali_clorid_vien_uong - kiểm tra lại mã trong file SQL.",
+    "Mã 40.728 dùng chung cho: kali_clorid_vien_gpkd, kali_clorid_vien_uong - kiểm tra lại mã trong file SQL.",
+    "Mã 40.730 dùng chung cho: kali_clorid_vien_gpkd, kali_clorid_vien_uong - kiểm tra lại mã trong file SQL.",
+    "Mã 40.808 dùng chung cho: glibenclamid, metformin - kiểm tra lại mã trong file SQL.",
+    "Mã 40.918 dùng chung cho: ergometrin, methylergometrin - kiểm tra lại mã trong file SQL."
+  ],
+  "source": "New Text Document.txt",
+  "updated": "2026-11-11"
+}

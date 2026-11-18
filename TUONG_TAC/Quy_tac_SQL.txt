@@ -1,0 +1,4692 @@
+with aceclofenac as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.25')
+),
+acenocoumarol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.438')
+),
+acid_tranexamic as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.451')
+),
+acitretin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.451')
+),
+alfuzosin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.412')
+),
+alprazolam as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.941')
+),
+amiodaron as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.483')
+),
+amisulpirid as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.942')
+),
+amitriptylin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.961')
+),
+arsenic_trioxid as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.338')
+),
+aspirin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.538')
+),
+atorvastatin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.549', '40.30.495', '40.30.567')
+),
+atropin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.1', '40.695', '40.848')
+),
+azithromycin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.218', '40.219')
+),
+benazepril as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.492')
+),
+bleomycin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.343')
+),
+bosentan as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.56')
+),
+calci_clorid as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.1014')
+),
+calci_glubionat as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.1035')
+),
+calci_gluconat as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.98')
+),
+candesartan as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.495', '40.30.508')
+),
+capecitabin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.347')
+),
+captopril as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.496', '40.40.510')
+),
+carbamazepin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.131')
+),
+carvedilol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.497', '40.531')
+),
+ceftriaxon as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.183')
+),
+celecoxib as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.28')
+),
+ciclosporin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.405')
+),
+cilostazol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.441')
+),
+ciprofloxacin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.227', '40.318')
+),
+citalopram as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.962')
+),
+clarithromycin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.220')
+),
+clonidin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.499')
+),
+clorpromazin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.943')
+),
+cloroquin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.326')
+),
+colchicin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.61')
+),
+dabigatran as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.442')
+),
+danazol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.763')
+),
+dexamethason as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.765', '40.766')
+),
+diclofenac as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.3')
+),
+dihydroergotamin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.334')
+),
+diltiazem as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.477')
+),
+domperidon as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.688')
+),
+donepezil as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.946')
+),
+doxycyclin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.245')
+),
+efavirenz as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.263', '40.264', '40.30.270')
+),
+eltrombopag as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.30.477')
+),
+enalapril as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.501', '40.30.516')
+),
+ephedrin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.105')
+),
+ergometrin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.918')
+),
+ergotamin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.334')
+),
+erythromycin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.334')
+),
+esomeprazol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.678', '40.30.53')
+),
+estriol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.786')
+),
+ethinyl_estradiol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.788')
+),
+etodolac as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.32')
+),
+etoricoxib as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.33')
+),
+everolimus as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.407')
+),
+felodipin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.502')
+),
+fentanyl as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.6')
+),
+floctafenin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.35')
+),
+fluconazol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.288')
+),
+fluorouracil as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.366')
+),
+fluoxetin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.964')
+),
+flurbiprofen as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.36')
+),
+fluvastatin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.554')
+),
+fluvoxamin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.965')
+),
+gemfibrozil as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.555')
+),
+glibenclamid as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.808')
+),
+haloperidol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.949')
+),
+hydroxycloroquin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.327')
+),
+hyoscin_butylbromid as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.698')
+),
+ibuprofen as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.37', '40.51', '40.30.44')
+),
+imidapril as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.504')
+),
+indomethacin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.568')
+),
+iobitridol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.642')
+),
+iodixanol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.30.647')
+),
+iohexol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.644')
+),
+iopamidol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.645')
+),
+iopromid as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.646')
+),
+irbesartan as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.506', '40.507')
+),
+irinotecan as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.374')
+),
+isosorbid_dinitrat as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.479')
+),
+isosorbid_mononitrat as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.479')
+),
+isotretinoin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.61')
+),
+itraconazol as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('40.292')
+),
+mefenamic as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('acid mefenamic', 'Acid mefenamic', 'mefenamic', 'mefenamic acid')
+),
+adipiodon as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Adipiodon', 'adipiodon', 'Adipiodone', 'adipiodone')
+),
+agomelatin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Agomelatin', 'agomelatin', 'Agomelatine', 'agomelatine')
+),
+aliskiren as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Aliskiren', 'aliskiren', 'Aliskiren hemifumarate', 'aliskiren hemifumarate', 'Aliskiren hemifumarat', 'aliskiren hemifumarat')
+),
+artemether_lumefantrin as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('Artemether+lumefantrin', 'artemether + lumefantrin', 'lumefantrin + artemether', 'artemether + lumefantrine', 'Artemether + lumefantrine', 'artemether+lumefantrine')
+),
+atazanavir_ritonavir as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('Atazanavir + ritonavir', 'Atazanavir + Ritonavir', 'Ritonavir + Atazanavir', 'atazanavir + ritonavir', 'atazanavir + Ritonavir', 'ritonavir + atazanavir', 'Ritonavir +Atazanavir')
+),
+boceprevir as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Boceprevir', 'boceprevir')
+),
+brentuximab as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Brentuximab', 'brentuximab', 'Brentuximab Vedotin', 'brentuximab vedotin', 'Brentuximab vedotin')
+),
+brivudin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Brivudin', 'Brivudine', 'brivudin', 'brivudine')
+),
+bromocriptin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Bromocriptin', 'bromocriptin', 'Bromocriptine', 'bromocriptine', 'Bromocriptin mesilat', 'bromocriptin mesilat')
+),
+bupropion as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Bupropion', 'bupropion', 'Bupropion HCl', 'bupropion HCl')
+),
+clidinium as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Clidinium', 'Clidinium bromid', 'Clidinium Br', 'Clidinium bromide', 'clidinium', 'clidinium bromid', 'clidinium Br', 'clidinium bromide')
+),
+clomipramin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Clomipramin', 'clomipramin', 'Clomipramine', 'clomipramine')
+),
+clormadinon as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Clormadinon', 'clormadinon', 'Clormadinone', 'clormadinone', 'Chlormadinone', 'clormadinone')
+),
+daclatasvir as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Daclatasvir', 'daclatasvir', 'Daclatasvir dihydrochlorid', 'daclatasvir dihydrochlorid')
+),
+darunavir_ritonavir as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('Darunavir + ritonavir', 'Darunavir+ Ritonavir', 'Ritonavir + Darunavir', 'darunavir + ritonavir', 'darunavir + Ritonavir', 'ritonavir + darunavir', 'Ritonavir +Darunavir')
+),
+delamanid as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Delamanid', 'delamanid')
+),
+desogestrel as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Desogestrel', 'desogestrel', 'Desogestrel+ Ethinyl Estradiol', 'Desogestrel + Ethinyl estradiol', 'Desogestrel + Ethinylestradiol', 'Ethinylestradiol + Desogestrel')
+),
+dexibuprofen as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Dexibuprofen', 'dexibuprofen')
+),
+dexketoprofen as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Dexibuprofen', 'dexibuprofen', 'Dexketoprofen trometamol', 'dexketoprofen trometamol')
+),
+dexlansoprazol as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Dexlansoprazol', 'dexlansoprazol', 'Dexlansoprazole', 'dexlansoprazole')
+),
+dextromethorphan as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Dextromethorphan', 'dextromethorphan', 'Dextromethorphan hydrobromid', 'Dextromethorphan HBr')
+),
+dicycloverin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Dicycloverin', 'dicycloverin', 'Dicycloverine', 'dicycloverine')
+),
+dienogest as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Dienogest', 'dienogest', 'Estradiol valerate + Dienogest', 'Dienogest + Estradiol valerate')
+),
+doxylamin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Doxylamin', 'Doxylamine', 'Doxylamine sucinate', 'Doxylamine succinate + Pyridoxine hydrochloride', 'Doxylamin succinat + Pyridoxin HCl', 'Acetaminophen + Dextromethorphan HBr + Doxylamine succinate', 'Acetaminophen + Doxylamine succinate + Dextromethorphan HBr')
+),
+drospirenon as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Drospirenon', 'Drospirenone', 'Drospirenon + Ethinylestradiol', 'Drospirenone + Ethinylestradiol', 'Drospirenon + Ethinyl estradiol', 'Ethinylestradiol + Drospirenone', 'Ethinylestradiol + Drospirenone', 'Drospirenone + Ethinylestradiol')
+),
+duloxetin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Duloxetin', 'Duloxetin HCl', 'Duloxetin hydrochlorid', 'duloxetin', 'duloxetin HCl', 'duloxetin hydrochlorid')
+),
+enzalutamid as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Enzalutamid', 'Enzalutamide', 'enzalutamid', 'enzalutamide')
+),
+eprosartan as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Eprosartan', 'eprosartan', 'Eprosartan mesylate', 'Eprosartan mesylat', 'eprosartan mesylate', 'eprosartan mesylat')
+),
+escitalopram as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Escitalopram', 'escitalopram', 'Escitalopram oxalat', 'escitalopram oxalat')
+),
+estradiol_valerat as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Estradiol valerat', 'Estradiol valerate', 'Estradiol Valerate Norgestrel', 'estradiol valerate', 'estradiol valerat')
+),
+etonogestrel as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Etonogestrel', 'etonogestrel', 'Etonogestrel + Ethinylestradiol', 'Etonogestrel + Ethinyl estradiol', 'Etonogestrel + ethinylestradiol', 'Etonogestrel + ethinyl estradiol')
+),
+furazolidon as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Furazolidon', 'furazolidon', 'Furazolidone', 'furazolidone')
+),
+gestoden as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Gestoden', 'Gestodene', 'Gestodene + Ethinylestradiol', 'Gestodene + Ethinyl estradiol', 'Ethinylestradiol + Gestodene', 'Ethinylestradiol+ Gestoden')
+),
+grazoprevir_elbasvir as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Grazoprevir + elbasvir', 'Grazoprevir + Elbasvir', 'grazoprevir + elbasvir', 'Elbasvir + Grazoprevir', 'Elbasvir + grazoprevir')
+),
+hyoscyamin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Hyoscyamin', 'Hyoscyamine', 'Hyoscyamine sulfat', 'Hyoscyamin sulfat', 'Atropin sulfat + Hyoscyamine sulfat + Scopolamine HBr + Phenobarbita')
+),
+indinavir_ritonavir as (
+SELECT * FROM tuongtacthuoc 
+WHERE mahoatchat in ('Indinavir + ritonavir', 'Indinavir + Ritonavir', 'Ritonavir + Indinavir', 'indinavir + ritonavir', 'indinavir + Ritonavir', 'ritonavir + indinavir', 'Ritonavir +Indinavir')
+),
+ioxaglic_natri_ioxaglic_meglumin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Ioxaglic', 'Ioxaglic natri', 'ioxaglic meglumin', 'Ioxaglic natri + ioxaglic meglumin', 'Ioxitalamat natri + ioxitalamat meglumin', 'Natri Ioxaglic')
+),
+ioxitalamat_natri_ioxitalamat_meglumin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Ioxaglic', 'Ioxaglic natri', 'ioxaglic meglumin', 'Ioxaglic natri + ioxaglic meglumin', 'Ioxitalamat natri + ioxitalamat meglumin', 'Natri Ioxaglic')
+),
+ivabradin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.485')
+),
+kali_clorid_vien_uong as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.1005', '40.1009', '40.1010', '40.712', '40.728', '40.730')
+),
+kali_clorid_vien_gpkd as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.1005', '40.1009', '40.1010', '40.712', '40.728', '40.730')
+),
+ketoprofen as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.38')
+),
+ketorolac as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.39')
+),
+lansoprazol as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.668')
+),
+lercanidipin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.509')
+),
+levodopa_carbidopa_entacapon as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.419', '40.420')
+),
+levofloxacin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.228', '40.229', '40.322')
+),
+levomepromazin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.950')
+),
+levonorgestrel as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.917')
+),
+levosulpirid as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.951')
+),
+linezolid as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.253')
+),
+lisinopril as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.497', '40.510', '40.511')
+),
+lopinavir_ritonavir as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.269')
+),
+lopinavir_ritonavir_lopinavir as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.269')
+),
+lopinavir_ritonavir_ritonavir as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.269', '40.274')
+),
+losartan as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.496', '40.512', '40.513')
+),
+lovastatin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.556')
+),
+loxoprofen as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.40')
+),
+lynestrenol as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.789')
+),
+meloxicam as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.41')
+),
+metformin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.775', '40.30.777', '40.30.786', '40.30.791', '40.30.793', '40.30.795', '40.807', '40.808')
+),
+methyldopa as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.514')
+),
+methylergometrin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.918')
+),
+methylphenidat as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.926')
+),
+metoclopramid as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.690')
+),
+minocyclin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.246')
+),
+mirtazapin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.966')
+),
+moxifloxacin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.231', '40.232')
+),
+nabumeton as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.45')
+),
+naproxen as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.46', '40.30.53')
+),
+nefopam as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.47')
+),
+nicorandil as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.480')
+),
+nifedipin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.519')
+),
+nilotinib as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.384')
+),
+nitroglycerin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.478')
+),
+omeprazol as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.677')
+),
+ondansetron as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.691')
+),
+oxaliplatin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.386')
+),
+oxcarbazepin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.135')
+),
+pantoprazol as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.679')
+),
+paroxetin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.967')
+),
+peginterferon_alpha as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.272')
+),
+perindopril as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.499', '40.520', '40.521', '40.522')
+),
+pethidin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.18', '40.54')
+),
+phenobarbital as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.136')
+),
+phenylephrin_uong as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.100', '40.30.62', '40.30.66', '40.30.69', '40.30.70')
+),
+phenytoin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.137')
+),
+piperaquin_dihydroartemisinin_piperaquin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.329')
+),
+piribedil as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.422')
+),
+piroxicam as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.55')
+),
+posaconazol as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.301')
+),
+pramipexol as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.423')
+),
+pravastatin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.557')
+),
+praziquantel as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.151')
+),
+propofol as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.21')
+),
+pseudoephedrin_uong as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.52', '40.53', '40.910', '40.92')
+),
+quetiapin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.954')
+),
+quinapril as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.523')
+),
+rabeprazol as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.680')
+),
+ramipril as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.524')
+),
+repaglinid as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.809')
+),
+rifampicin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.256', '40.311', '40.312', '40.313', '40.314')
+),
+ringer_lactat as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.1026.1')
+),
+rosuvastatin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.558')
+),
+rotigotin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.434')
+),
+roxithromycin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.223')
+),
+sertralin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.968')
+),
+simvastatin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.559', '40.30.578')
+),
+sofosbuvir as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.273', '40.30.274', '40.30.275')
+),
+sofosbuvir_ledipasvir_ledipasvir as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.274')
+),
+solifenacin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.426')
+),
+sotalol as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.488')
+),
+spiramycin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.224', '40.225')
+),
+sulpirid as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.956')
+),
+sumatriptan as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.337')
+),
+tamoxifen as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.393')
+),
+tegafur as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.394', '40.30.379')
+),
+telmisartan as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.526', '40.527', '40.30.500')
+),
+tenoxicam as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.56')
+),
+tetracyclin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.247')
+),
+thioridazin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.957')
+),
+ticagrelor as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.564')
+),
+tigecyclin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.247')
+),
+tizanidin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.840')
+),
+tramadol as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.58', '40.30.64')
+),
+tretinoin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.398')
+),
+trihexyphenidyl as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.425')
+),
+valsartan as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.528', '40.529', '40.30.501', '40.30.502')
+),
+venlafaxin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.970')
+),
+verapamil as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.489')
+),
+voriconazol as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.30.303')
+),
+warfarin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.454')
+),
+lornoxicam as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Lornoxicam', 'lornoxicam')
+),
+medroxyprogesteron as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Medroxyprogesteron', 'medroxyprogesteron', 'Medroxyprogesteron Acetat', 'Medroxyprogesteron acetat', 'medroxyprogesteron acetat', 'Medroxyprogesterone', 'medroxyprogesterone', 'Medroxyprogesterone Acetate', 'Medroxyprogesterone acetate', 'medroxyprogesterone acetate')
+),
+methadon as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Methadon', 'methadon', 'Methadon Hydroclorid', 'Methadon hydroclorid', 'methadon hydroclorid', 'Methadon Hydrochlorid', 'Methadon hydrochlorid', 'methadon hydrochlorid', 'Methadon HCl', 'methadon HCl', 'Methadone', 'methadone', 'Methadone Hydrochloride', 'Methadone hydrochloride', 'methadone hydrochloride', 'Methadone HCl', 'methadone HCl')
+),
+mifepriston as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Mifepriston', 'mifepriston', 'Mifepristone', 'mifepristone')
+),
+milnacipran as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Milnacipran', 'milnacipran', 'Milnacipran Hydroclorid', 'Milnacipran hydroclorid', 'milnacipran hydroclorid', 'Milnacipran Hydrochlorid', 'Milnacipran hydrochlorid', 'milnacipran hydrochlorid', 'Milnacipran HCl', 'milnacipran HCl', 'Milnacipran Hydrochloride', 'Milnacipran hydrochloride', 'milnacipran hydrochloride')
+),
+norelgestromin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Norelgestromin', 'norelgestromin', 'Norelgestromin + Ethinyl Estradiol', 'Norelgestromin + Ethinyl estradiol', 'Norelgestromin + ethinyl estradiol', 'norelgestromin + ethinyl estradiol', 'Norelgestromin + Ethinylestradiol', 'Norelgestromin + ethinylestradiol', 'norelgestromin + ethinylestradiol')
+),
+norethindron as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.792')
+),
+norgestrel as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Norgestrel', 'norgestrel', 'Norgestrel + Estradiol Valerate', 'Norgestrel + Estradiol valerate', 'Norgestrel + estradiol valerate', 'norgestrel + estradiol valerate', 'Estradiol Valerate + Norgestrel', 'Estradiol Valerate + norgestrel', 'Estradiol valerate + Norgestrel', 'estradiol valerate + norgestrel')
+),
+olmesartan as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Olmesartan', 'olmesartan', 'Olmesartan Medoxomil', 'Olmesartan medoxomil', 'olmesartan medoxomil', 'Olmesartan Medoxomil + Hydroclorothiazid', 'Olmesartan Medoxomil + hydroclorothiazid', 'Olmesartan Medoxomil + Hydrochlorothiazid', 'Olmesartan Medoxomil + hydrochlorothiazid', 'Olmesartan Medoxomil + Hydrochlorothiazide', 'Olmesartan Medoxomil + hydrochlorothiazide', 'Olmesartan medoxomil + Hydroclorothiazid', 'Olmesartan medoxomil + hydroclorothiazid', 'Olmesartan medoxomil + Hydrochlorothiazid', 'Olmesartan medoxomil + hydrochlorothiazid', 'Olmesartan medoxomil + Hydrochlorothiazide', 'Olmesartan medoxomil + hydrochlorothiazide', 'olmesartan medoxomil + hydroclorothiazid', 'olmesartan medoxomil + hydrochlorothiazid', 'olmesartan medoxomil + hydrochlorothiazide')
+),
+oxybutynin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Oxybutynin', 'oxybutynin', 'Oxybutynin Hydroclorid', 'Oxybutynin hydroclorid', 'oxybutynin hydroclorid', 'Oxybutynin Hydrochlorid', 'Oxybutynin hydrochlorid', 'oxybutynin hydrochlorid', 'Oxybutynin HCl', 'oxybutynin HCl', 'Oxybutynin Hydrochloride', 'Oxybutynin hydrochloride', 'oxybutynin hydrochloride')
+),
+pitavastatin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Pitavastatin', 'pitavastatin', 'Pitavastatin Calcium', 'Pitavastatin calcium', 'pitavastatin calcium', 'Pitavastatin Calci Hydrat', 'Pitavastatin calci hydrat', 'pitavastatin calci hydrat', 'Pitavastatin Calcium Hydrate', 'Pitavastatin calcium hydrate', 'pitavastatin calcium hydrate')
+),
+propafenon as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Propafenon', 'propafenon', 'Propafenon Hydroclorid', 'Propafenon hydroclorid', 'propafenon hydroclorid', 'Propafenon Hydrochlorid', 'Propafenon hydrochlorid', 'propafenon hydrochlorid', 'Propafenon HCl', 'propafenon HCl', 'Propafenone', 'propafenone', 'Propafenone Hydrochloride', 'Propafenone hydrochloride', 'propafenone hydrochloride', 'Propafenone HCl', 'propafenone HCl')
+),
+ranolazin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Ranolazin', 'ranolazin', 'Ranolazine', 'ranolazine')
+),
+rilpivirin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Rilpivirin', 'rilpivirin', 'Rilpivirin Hydroclorid', 'Rilpivirin hydroclorid', 'rilpivirin hydroclorid', 'Rilpivirin Hydrochlorid', 'Rilpivirin hydrochlorid', 'rilpivirin hydrochlorid', 'Rilpivirin HCl', 'rilpivirin HCl', 'Rilpivirine', 'rilpivirine', 'Rilpivirine Hydrochloride', 'Rilpivirine hydrochloride', 'rilpivirine hydrochloride', 'Rilpivirine HCl', 'rilpivirine HCl')
+),
+sacubitril_valsartan_sacubitril as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Sacubitril', 'sacubitril', 'Sacubitril + Valsartan', 'Sacubitril + valsartan', 'sacubitril + valsartan', 'Valsartan + Sacubitril', 'Valsartan + sacubitril', 'valsartan + sacubitril')
+),
+saquinavir_ritonavir as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Saquinavir', 'saquinavir', 'Saquinavir Mesilat', 'Saquinavir mesilat', 'saquinavir mesilat', 'Saquinavir Mesilate', 'Saquinavir mesilate', 'saquinavir mesilate', 'Saquinavir + Ritonavir', 'Saquinavir + ritonavir', 'saquinavir + ritonavir', 'Ritonavir + Saquinavir', 'Ritonavir + saquinavir', 'ritonavir + saquinavir')
+),
+saquinavir_ritonavir_2 as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Saquinavir + Ritonavir', 'Saquinavir + ritonavir', 'saquinavir + ritonavir', 'Ritonavir + Saquinavir', 'Ritonavir + saquinavir', 'ritonavir + saquinavir')
+),
+sevofluran as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Sevofluran', 'sevofluran', 'Sevoflurane', 'sevoflurane')
+),
+sildenafil as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Sildenafil', 'sildenafil', 'Sildenafil Citrat', 'Sildenafil citrat', 'sildenafil citrat', 'Sildenafil Citrate', 'Sildenafil citrate', 'sildenafil citrate')
+),
+sparfloxacin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Sparfloxacin', 'sparfloxacin')
+),
+sunitinib as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Sunitinib', 'sunitinib', 'Sunitinib Maleat', 'Sunitinib maleat', 'sunitinib maleat', 'Sunitinib Maleate', 'Sunitinib maleate', 'sunitinib maleate')
+),
+tadalafil as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Tadalafil', 'tadalafil', 'Tadalafil Adsorbat', 'Tadalafil adsorbat', 'tadalafil adsorbat', 'Tadalafil Adsorbate', 'Tadalafil adsorbate', 'tadalafil adsorbate')
+),
+talniflumat as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Talniflumat', 'talniflumat', 'Talniflumate', 'talniflumate')
+),
+telbivudin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Telbivudin', 'telbivudin', 'Telbivudine', 'telbivudine')
+),
+tolvaptan as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Tolvaptan', 'tolvaptan')
+),
+trandolapril as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Trandolapril', 'trandolapril', 'Trandolapril + Verapamil hydrochloride', 'Trandolapril + verapamil hydrochloride', 'trandolapril + verapamil hydrochloride', 'Verapamil hydrochloride + Trandolapril', 'Verapamil hydrochloride + trandolapril', 'verapamil hydrochloride + trandolapril')
+),
+trazodon as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Trazodon', 'trazodon', 'Trazodon Hydroclorid', 'Trazodon hydroclorid', 'trazodon hydroclorid', 'Trazodon Hydrochlorid', 'Trazodon hydrochlorid', 'trazodon hydrochlorid', 'Trazodon HCl', 'trazodon HCl', 'Trazodone', 'trazodone', 'Trazodone Hydrochloride', 'Trazodone hydrochloride', 'trazodone hydrochloride', 'Trazodone HCl', 'trazodone HCl')
+),
+vardenafil as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Vardenafil', 'vardenafil', 'Vardenafil Hydroclorid', 'Vardenafil hydroclorid', 'vardenafil hydroclorid', 'Vardenafil Hydrochlorid', 'Vardenafil hydrochlorid', 'vardenafil hydrochlorid', 'Vardenafil HCl', 'vardenafil HCl', 'Vardenafil Hydrochloride', 'Vardenafil hydrochloride', 'vardenafil hydrochloride', 'Vardenafil monohydroclorid', 'Vardenafil monohydrochlorid', 'Vardenafil monohydrochloride', 'Vardenafil hydrochloride trihydrate')
+),
+xanh_methylen_IV as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Xanh methylen', 'xanh methylen')
+),
+zaltoprofen as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Zaltoprofen', 'zaltoprofen')
+),
+zofenopril as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Zofenopril', 'zofenopril', 'Zofenopril Calci', 'Zofenopril calci', 'zofenopril calci')
+),
+clonixin as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('Clonixin', 'clonixin', 'Clonixin Lysinat', 'Clonixin lysinat', 'clonixin lysinat', 'Clonixine', 'clonixine', 'Clonixine Lysinate', 'Clonixine lysinate', 'clonixine lysinate', 'Clonixin Lysinate', 'Clonixin lysinate', 'clonixin lysinate')
+),
+saquinavir_ritonavir_ritonavir as (
+SELECT * FROM tuongtacthuoc
+WHERE mahoatchat in ('40.274', '40.269')
+),
+aceclofenac_ketorolac as (
+SELECT * from aceclofenac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from aceclofenac)
+order by MaBN, ngaychidinh
+),
+mefenamic_ketorolac as (
+SELECT * from mefenamic
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from mefenamic)
+order by MaBN, ngaychidinh
+),
+acitretin_doxycyclin as (
+SELECT * from acitretin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from doxycyclin)
+UNION all
+SELECT * from doxycyclin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from acitretin)
+order by MaBN, ngaychidinh
+),
+acitretin_minocyclin as (
+SELECT * from acitretin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from minocyclin)
+UNION all
+SELECT * from minocyclin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from acitretin)
+order by MaBN, ngaychidinh
+),
+acitretin_tetracyclin as (
+SELECT * from acitretin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tetracyclin)
+UNION all
+SELECT * from tetracyclin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from acitretin)
+order by MaBN, ngaychidinh
+),
+acitretin_tigecyclin as (
+SELECT * from acitretin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tigecyclin)
+UNION all
+SELECT * from tigecyclin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from acitretin)
+order by MaBN, ngaychidinh
+),
+agomelatin_ciprofloxacin as (
+SELECT * from agomelatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ciprofloxacin)
+UNION all
+SELECT * from ciprofloxacin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from agomelatin)
+order by MaBN, ngaychidinh
+),
+agomelatin_fluvoxamin as (
+SELECT * from agomelatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from fluvoxamin)
+UNION all
+SELECT * from fluvoxamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from agomelatin)
+order by MaBN, ngaychidinh
+),
+alfuzosin_boceprevir as (
+SELECT * from alfuzosin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from boceprevir)
+UNION all
+SELECT * from boceprevir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from alfuzosin)
+order by MaBN, ngaychidinh
+),
+alfuzosin_lopinavir_ritonavir as (
+SELECT * from alfuzosin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir)
+UNION all
+SELECT * from lopinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from alfuzosin)
+order by MaBN, ngaychidinh
+),
+alfuzosin_atazanavir_ritonavir as (
+SELECT * from alfuzosin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+UNION all
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from alfuzosin)
+order by MaBN, ngaychidinh
+),
+alfuzosin_darunavir_ritonavir as (
+SELECT * from alfuzosin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+UNION all
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from alfuzosin)
+order by MaBN, ngaychidinh
+),
+alfuzosin_indinavir_ritonavir as (
+SELECT * from alfuzosin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+UNION all
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from alfuzosin)
+order by MaBN, ngaychidinh
+),
+alfuzosin_saquinavir_ritonavir as (
+SELECT * from alfuzosin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from alfuzosin)
+order by MaBN, ngaychidinh
+),
+alprazolam_indinavir_ritonavir as (
+SELECT * from alprazolam
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+UNION all
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from alprazolam)
+order by MaBN, ngaychidinh
+),
+amiodaron_domperidon as (
+SELECT * from amiodaron
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+UNION all
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from amiodaron)
+order by MaBN, ngaychidinh
+),
+amiodaron_lopinavir_ritonavir_ritonavir as (
+SELECT * from amiodaron
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir_ritonavir)
+UNION all
+SELECT * from lopinavir_ritonavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from amiodaron)
+order by MaBN, ngaychidinh
+),
+amiodaron_darunavir_ritonavir as (
+SELECT * from amiodaron
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+UNION all
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from amiodaron)
+order by MaBN, ngaychidinh
+),
+amiodaron_atazanavir_ritonavir as (
+SELECT * from amiodaron
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+UNION all
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from amiodaron)
+order by MaBN, ngaychidinh
+),
+amiodaron_indinavir_ritonavir as (
+SELECT * from amiodaron
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+UNION all
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from amiodaron)
+order by MaBN, ngaychidinh
+),
+amiodaron_saquinavir_ritonavir as (
+SELECT * from amiodaron
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from amiodaron)
+order by MaBN, ngaychidinh
+),
+arsenic_trioxid_domperidon as (
+SELECT * from arsenic_trioxid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+UNION all
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from arsenic_trioxid)
+order by MaBN, ngaychidinh
+),
+artemether_lumefantrin_domperidon as (
+SELECT * from artemether_lumefantrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+UNION all
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from artemether_lumefantrin)
+order by MaBN, ngaychidinh
+),
+artemether_lumefantrin_rifampicin as (
+SELECT * from artemether_lumefantrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+UNION all
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from artemether_lumefantrin)
+order by MaBN, ngaychidinh
+),
+artemether_lumefantrin_enzalutamid as (
+SELECT * from artemether_lumefantrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from enzalutamid)
+UNION all
+SELECT * from enzalutamid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from artemether_lumefantrin)
+order by MaBN, ngaychidinh
+),
+artemether_lumefantrin_carbamazepin as (
+SELECT * from artemether_lumefantrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from carbamazepin)
+UNION all
+SELECT * from carbamazepin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from artemether_lumefantrin)
+order by MaBN, ngaychidinh
+),
+artemether_lumefantrin_phenobarbital as (
+SELECT * from artemether_lumefantrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenobarbital)
+UNION all
+SELECT * from phenobarbital
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from artemether_lumefantrin)
+order by MaBN, ngaychidinh
+),
+artemether_lumefantrin_phenytoin as (
+SELECT * from artemether_lumefantrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenytoin)
+UNION all
+SELECT * from phenytoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from artemether_lumefantrin)
+order by MaBN, ngaychidinh
+),
+aspirin_ketorolac as (
+SELECT * from aspirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from aspirin)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_lovastatin as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+UNION all
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_simvastatin as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_dihydroergotamin as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+UNION all
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_ergotamin as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+UNION all
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_ivabradin as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+UNION all
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_ticagrelor as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ticagrelor)
+UNION all
+SELECT * from ticagrelor
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_ranolazin as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+UNION all
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_tolvaptan as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tolvaptan)
+UNION all
+SELECT * from tolvaptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_felodipin as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from felodipin)
+UNION all
+SELECT * from felodipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_lercanidipin as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lercanidipin)
+UNION all
+SELECT * from lercanidipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_rifampicin as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+UNION all
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_grazoprevir_elbasvir as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from grazoprevir_elbasvir)
+UNION all
+SELECT * from grazoprevir_elbasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_domperidon as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+UNION all
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_vardenafil as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from vardenafil)
+UNION all
+SELECT * from vardenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_propafenon as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from propafenon)
+UNION all
+SELECT * from propafenon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atazanavir_ritonavir_everolimus as (
+SELECT * from atazanavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from everolimus)
+UNION all
+SELECT * from everolimus
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atazanavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+atorvastatin_ciclosporin as (
+SELECT * from atorvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ciclosporin)
+UNION all
+SELECT * from ciclosporin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atorvastatin)
+order by MaBN, ngaychidinh
+),
+atorvastatin_gemfibrozil as (
+SELECT * from atorvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from gemfibrozil)
+UNION all
+SELECT * from gemfibrozil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from atorvastatin)
+order by MaBN, ngaychidinh
+),
+azithromycin_domperidon as (
+SELECT * from azithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+UNION all
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from azithromycin)
+order by MaBN, ngaychidinh
+),
+benazepril_sacubitril_valsartan_sacubitril as (
+SELECT * from benazepril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sacubitril_valsartan_sacubitril)
+UNION all
+SELECT * from sacubitril_valsartan_sacubitril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from benazepril)
+order by MaBN, ngaychidinh
+),
+bleomycin_brentuximab as (
+SELECT * from bleomycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from brentuximab)
+UNION all
+SELECT * from brentuximab
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from bleomycin)
+order by MaBN, ngaychidinh
+),
+boceprevir_lovastatin as (
+SELECT * from boceprevir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+UNION all
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from boceprevir)
+order by MaBN, ngaychidinh
+),
+boceprevir_simvastatin as (
+SELECT * from boceprevir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from boceprevir)
+order by MaBN, ngaychidinh
+),
+boceprevir_dihydroergotamin as (
+SELECT * from boceprevir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+UNION all
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from boceprevir)
+order by MaBN, ngaychidinh
+),
+boceprevir_ergotamin as (
+SELECT * from boceprevir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+UNION all
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from boceprevir)
+order by MaBN, ngaychidinh
+),
+boceprevir_ergometrin as (
+SELECT * from boceprevir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergometrin)
+UNION all
+SELECT * from ergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from boceprevir)
+order by MaBN, ngaychidinh
+),
+boceprevir_methylergometrin as (
+SELECT * from boceprevir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from methylergometrin)
+UNION all
+SELECT * from methylergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from boceprevir)
+order by MaBN, ngaychidinh
+),
+boceprevir_ivabradin as (
+SELECT * from boceprevir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+UNION all
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from boceprevir)
+order by MaBN, ngaychidinh
+),
+bosentan_glibenclamid as (
+SELECT * from bosentan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from glibenclamid)
+UNION all
+SELECT * from glibenclamid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from bosentan)
+order by MaBN, ngaychidinh
+),
+bosentan_ciclosporin as (
+SELECT * from bosentan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ciclosporin)
+UNION all
+SELECT * from ciclosporin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from bosentan)
+order by MaBN, ngaychidinh
+),
+brivudin_capecitabin as (
+SELECT * from brivudin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from capecitabin)
+UNION all
+SELECT * from capecitabin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from brivudin)
+order by MaBN, ngaychidinh
+),
+brivudin_fluorouracil as (
+SELECT * from brivudin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from fluorouracil)
+UNION all
+SELECT * from fluorouracil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from brivudin)
+order by MaBN, ngaychidinh
+),
+brivudin_tegafur as (
+SELECT * from brivudin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tegafur)
+UNION all
+SELECT * from tegafur
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from brivudin)
+order by MaBN, ngaychidinh
+),
+bromocriptin_metoclopramid as (
+SELECT * from bromocriptin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from metoclopramid)
+UNION all
+SELECT * from metoclopramid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from bromocriptin)
+order by MaBN, ngaychidinh
+),
+bromocriptin_sulpirid as (
+SELECT * from bromocriptin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sulpirid)
+UNION all
+SELECT * from sulpirid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from bromocriptin)
+order by MaBN, ngaychidinh
+),
+captopril_sacubitril_valsartan_sacubitril as (
+SELECT * from captopril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sacubitril_valsartan_sacubitril)
+UNION all
+SELECT * from sacubitril_valsartan_sacubitril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from captopril)
+order by MaBN, ngaychidinh
+),
+carbamazepin_praziquantel as (
+SELECT * from carbamazepin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from praziquantel)
+UNION all
+SELECT * from praziquantel
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from carbamazepin)
+order by MaBN, ngaychidinh
+),
+carbamazepin_rilpivirin as (
+SELECT * from carbamazepin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rilpivirin)
+UNION all
+SELECT * from rilpivirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from carbamazepin)
+order by MaBN, ngaychidinh
+),
+carbamazepin_voriconazol as (
+SELECT * from carbamazepin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from carbamazepin)
+order by MaBN, ngaychidinh
+),
+carbamazepin_daclatasvir as (
+SELECT * from carbamazepin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from daclatasvir)
+UNION all
+SELECT * from daclatasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from carbamazepin)
+order by MaBN, ngaychidinh
+),
+carbamazepin_delamanid as (
+SELECT * from carbamazepin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from delamanid)
+UNION all
+SELECT * from delamanid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from carbamazepin)
+order by MaBN, ngaychidinh
+),
+carbamazepin_grazoprevir_elbasvir as (
+SELECT * from carbamazepin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from grazoprevir_elbasvir)
+UNION all
+SELECT * from grazoprevir_elbasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from carbamazepin)
+order by MaBN, ngaychidinh
+),
+carbamazepin_ranolazin as (
+SELECT * from carbamazepin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+UNION all
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from carbamazepin)
+order by MaBN, ngaychidinh
+),
+celecoxib_ketorolac as (
+SELECT * from celecoxib
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from celecoxib)
+order by MaBN, ngaychidinh
+),
+ciclosporin_pitavastatin as (
+SELECT * from ciclosporin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from pitavastatin)
+UNION all
+SELECT * from pitavastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ciclosporin)
+order by MaBN, ngaychidinh
+),
+ciclosporin_lovastatin as (
+SELECT * from ciclosporin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+UNION all
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ciclosporin)
+order by MaBN, ngaychidinh
+),
+ciclosporin_simvastatin as (
+SELECT * from ciclosporin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ciclosporin)
+order by MaBN, ngaychidinh
+),
+ciclosporin_lercanidipin as (
+SELECT * from ciclosporin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lercanidipin)
+UNION all
+SELECT * from lercanidipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ciclosporin)
+order by MaBN, ngaychidinh
+),
+ciclosporin_grazoprevir_elbasvir as (
+SELECT * from ciclosporin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from grazoprevir_elbasvir)
+UNION all
+SELECT * from grazoprevir_elbasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ciclosporin)
+order by MaBN, ngaychidinh
+),
+cilostazol_domperidon as (
+SELECT * from cilostazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+UNION all
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from cilostazol)
+order by MaBN, ngaychidinh
+),
+ciprofloxacin_tizanidin as (
+SELECT * from ciprofloxacin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tizanidin)
+UNION all
+SELECT * from tizanidin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ciprofloxacin)
+order by MaBN, ngaychidinh
+),
+ciprofloxacin_duloxetin as (
+SELECT * from ciprofloxacin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from duloxetin)
+UNION all
+SELECT * from duloxetin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ciprofloxacin)
+order by MaBN, ngaychidinh
+),
+ciprofloxacin_domperidon as (
+SELECT * from ciprofloxacin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+UNION all
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ciprofloxacin)
+order by MaBN, ngaychidinh
+),
+citalopram_domperidon as (
+SELECT * from citalopram
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+UNION all
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from citalopram)
+order by MaBN, ngaychidinh
+),
+clarithromycin_lovastatin as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+UNION all
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_simvastatin as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_dihydroergotamin as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+UNION all
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_ergotamin as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+UNION all
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_ergometrin as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergometrin)
+UNION all
+SELECT * from ergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_methylergometrin as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from methylergometrin)
+UNION all
+SELECT * from methylergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_ivabradin as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+UNION all
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_ticagrelor as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ticagrelor)
+UNION all
+SELECT * from ticagrelor
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_ranolazin as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+UNION all
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_tolvaptan as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tolvaptan)
+UNION all
+SELECT * from tolvaptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_felodipin as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from felodipin)
+UNION all
+SELECT * from felodipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_lercanidipin as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lercanidipin)
+UNION all
+SELECT * from lercanidipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_quetiapin as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from quetiapin)
+UNION all
+SELECT * from quetiapin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_everolimus as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from everolimus)
+UNION all
+SELECT * from everolimus
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clarithromycin_domperidon as (
+SELECT * from clarithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+UNION all
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clarithromycin)
+order by MaBN, ngaychidinh
+),
+clonixin_ketorolac as (
+SELECT * from clonixin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clonixin)
+order by MaBN, ngaychidinh
+),
+cloroquin_domperidon as (
+SELECT * from cloroquin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+UNION all
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from cloroquin)
+order by MaBN, ngaychidinh
+),
+clorpromazin_domperidon as (
+SELECT * from clorpromazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+UNION all
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from clorpromazin)
+order by MaBN, ngaychidinh
+),
+dabigatran_itraconazol as (
+SELECT * from dabigatran
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+UNION all
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dabigatran)
+order by MaBN, ngaychidinh
+),
+daclatasvir_rifampicin as (
+SELECT * from daclatasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+UNION all
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from daclatasvir)
+order by MaBN, ngaychidinh
+),
+daclatasvir_enzalutamid as (
+SELECT * from daclatasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from enzalutamid)
+UNION all
+SELECT * from enzalutamid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from daclatasvir)
+order by MaBN, ngaychidinh
+),
+daclatasvir_phenobarbital as (
+SELECT * from daclatasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenobarbital)
+UNION all
+SELECT * from phenobarbital
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from daclatasvir)
+order by MaBN, ngaychidinh
+),
+daclatasvir_phenytoin as (
+SELECT * from daclatasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenytoin)
+UNION all
+SELECT * from phenytoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from daclatasvir)
+order by MaBN, ngaychidinh
+),
+danazol_simvastatin as (
+SELECT * from danazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from danazol)
+order by MaBN, ngaychidinh
+),
+danazol_lovastatin as (
+SELECT * from danazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+UNION all
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from danazol)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_lovastatin as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+UNION all
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_simvastatin as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_dihydroergotamin as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+UNION all
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_ergotamin as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+UNION all
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_ivabradin as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+UNION all
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_ticagrelor as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ticagrelor)
+UNION all
+SELECT * from ticagrelor
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_ranolazin as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+UNION all
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_tolvaptan as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tolvaptan)
+UNION all
+SELECT * from tolvaptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_felodipin as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from felodipin)
+UNION all
+SELECT * from felodipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_lercanidipin as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lercanidipin)
+UNION all
+SELECT * from lercanidipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_rifampicin as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+UNION all
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_grazoprevir_elbasvir as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from grazoprevir_elbasvir)
+UNION all
+SELECT * from grazoprevir_elbasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_domperidon as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+UNION all
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_vardenafil as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from vardenafil)
+UNION all
+SELECT * from vardenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_propafenon as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from propafenon)
+UNION all
+SELECT * from propafenon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+darunavir_ritonavir_everolimus as (
+SELECT * from darunavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from everolimus)
+UNION all
+SELECT * from everolimus
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from darunavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+delamanid_rifampicin as (
+SELECT * from delamanid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+UNION all
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from delamanid)
+order by MaBN, ngaychidinh
+),
+delamanid_enzalutamid as (
+SELECT * from delamanid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from enzalutamid)
+UNION all
+SELECT * from enzalutamid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from delamanid)
+order by MaBN, ngaychidinh
+),
+delamanid_phenytoin as (
+SELECT * from delamanid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenytoin)
+UNION all
+SELECT * from phenytoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from delamanid)
+order by MaBN, ngaychidinh
+),
+dexamethason_rilpivirin as (
+SELECT * from dexamethason
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rilpivirin)
+UNION all
+SELECT * from rilpivirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dexamethason)
+order by MaBN, ngaychidinh
+),
+dexibuprofen_ketorolac as (
+SELECT * from dexibuprofen
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dexibuprofen)
+order by MaBN, ngaychidinh
+),
+dexketoprofen_ketorolac as (
+SELECT * from dexketoprofen
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dexketoprofen)
+order by MaBN, ngaychidinh
+),
+dexlansoprazol_rilpivirin as (
+SELECT * from dexlansoprazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rilpivirin)
+UNION all
+SELECT * from rilpivirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dexlansoprazol)
+order by MaBN, ngaychidinh
+),
+dextromethorphan_paroxetin as (
+SELECT * from dextromethorphan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from paroxetin)
+UNION all
+SELECT * from paroxetin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dextromethorphan)
+order by MaBN, ngaychidinh
+),
+dextromethorphan_fluoxetin as (
+SELECT * from dextromethorphan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from fluoxetin)
+UNION all
+SELECT * from fluoxetin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dextromethorphan)
+order by MaBN, ngaychidinh
+),
+diclofenac_ketorolac as (
+SELECT * from diclofenac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from diclofenac)
+order by MaBN, ngaychidinh
+),
+dihydroergotamin_sumatriptan as (
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sumatriptan)
+UNION all
+SELECT * from sumatriptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+order by MaBN, ngaychidinh
+),
+dihydroergotamin_roxithromycin as (
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from roxithromycin)
+UNION all
+SELECT * from roxithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+order by MaBN, ngaychidinh
+),
+dihydroergotamin_erythromycin as (
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from erythromycin)
+UNION all
+SELECT * from erythromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+order by MaBN, ngaychidinh
+),
+dihydroergotamin_voriconazol as (
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+order by MaBN, ngaychidinh
+),
+dihydroergotamin_posaconazol as (
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+UNION all
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+order by MaBN, ngaychidinh
+),
+dihydroergotamin_itraconazol as (
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+UNION all
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+order by MaBN, ngaychidinh
+),
+dihydroergotamin_saquinavir_ritonavir as (
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+order by MaBN, ngaychidinh
+),
+dihydroergotamin_lopinavir_ritonavir as (
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir)
+UNION all
+SELECT * from lopinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+order by MaBN, ngaychidinh
+),
+dihydroergotamin_indinavir_ritonavir as (
+SELECT * from dihydroergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+UNION all
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from dihydroergotamin)
+order by MaBN, ngaychidinh
+),
+diltiazem_ivabradin as (
+SELECT * from diltiazem
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+UNION all
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from diltiazem)
+order by MaBN, ngaychidinh
+),
+domperidon_sotalol as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sotalol)
+UNION all
+SELECT * from sotalol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_donepezil as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from donepezil)
+UNION all
+SELECT * from donepezil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_haloperidol as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from haloperidol)
+UNION all
+SELECT * from haloperidol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_escitalopram as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from escitalopram)
+UNION all
+SELECT * from escitalopram
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_spiramycin as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from spiramycin)
+UNION all
+SELECT * from spiramycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_moxifloxacin as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from moxifloxacin)
+UNION all
+SELECT * from moxifloxacin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_levofloxacin as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from levofloxacin)
+UNION all
+SELECT * from levofloxacin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_thioridazin as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from thioridazin)
+UNION all
+SELECT * from thioridazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_methadon as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from methadon)
+UNION all
+SELECT * from methadon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_sparfloxacin as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sparfloxacin)
+UNION all
+SELECT * from sparfloxacin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_lopinavir_ritonavir as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir)
+UNION all
+SELECT * from lopinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_saquinavir_ritonavir as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_indinavir_ritonavir as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+UNION all
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_itraconazol as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+UNION all
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_fluconazol as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from fluconazol)
+UNION all
+SELECT * from fluconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_posaconazol as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+UNION all
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_voriconazol as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_erythromycin as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from erythromycin)
+UNION all
+SELECT * from erythromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_levomepromazin as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from levomepromazin)
+UNION all
+SELECT * from levomepromazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_levosulpirid as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from levosulpirid)
+UNION all
+SELECT * from levosulpirid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_ondansetron as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ondansetron)
+UNION all
+SELECT * from ondansetron
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_oxaliplatin as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from oxaliplatin)
+UNION all
+SELECT * from oxaliplatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_propofol as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from propofol)
+UNION all
+SELECT * from propofol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_roxithromycin as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from roxithromycin)
+UNION all
+SELECT * from roxithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_sevofluran as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sevofluran)
+UNION all
+SELECT * from sevofluran
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+domperidon_sulpirid as (
+SELECT * from domperidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sulpirid)
+UNION all
+SELECT * from sulpirid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from domperidon)
+order by MaBN, ngaychidinh
+),
+doxycyclin_tretinoin as (
+SELECT * from doxycyclin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tretinoin)
+UNION all
+SELECT * from tretinoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from doxycyclin)
+order by MaBN, ngaychidinh
+),
+doxycyclin_isotretinoin as (
+SELECT * from doxycyclin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from isotretinoin)
+UNION all
+SELECT * from isotretinoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from doxycyclin)
+order by MaBN, ngaychidinh
+),
+duloxetin_fluvoxamin as (
+SELECT * from duloxetin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from fluvoxamin)
+UNION all
+SELECT * from fluvoxamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from duloxetin)
+order by MaBN, ngaychidinh
+),
+efavirenz_grazoprevir_elbasvir as (
+SELECT * from efavirenz
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from grazoprevir_elbasvir)
+UNION all
+SELECT * from grazoprevir_elbasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from efavirenz)
+order by MaBN, ngaychidinh
+),
+eltrombopag_grazoprevir_elbasvir as (
+SELECT * from eltrombopag
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from grazoprevir_elbasvir)
+UNION all
+SELECT * from grazoprevir_elbasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from eltrombopag)
+order by MaBN, ngaychidinh
+),
+enalapril_sacubitril_valsartan_sacubitril as (
+SELECT * from enalapril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sacubitril_valsartan_sacubitril)
+UNION all
+SELECT * from sacubitril_valsartan_sacubitril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from enalapril)
+order by MaBN, ngaychidinh
+),
+enzalutamid_grazoprevir_elbasvir as (
+SELECT * from enzalutamid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from grazoprevir_elbasvir)
+UNION all
+SELECT * from grazoprevir_elbasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from enzalutamid)
+order by MaBN, ngaychidinh
+),
+ephedrin_xanh_methylen_IV as (
+SELECT * from ephedrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from xanh_methylen_IV)
+UNION all
+SELECT * from xanh_methylen_IV
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ephedrin)
+order by MaBN, ngaychidinh
+),
+ephedrin_furazolidon as (
+SELECT * from ephedrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from furazolidon)
+UNION all
+SELECT * from furazolidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ephedrin)
+order by MaBN, ngaychidinh
+),
+ergometrin_sumatriptan as (
+SELECT * from ergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sumatriptan)
+UNION all
+SELECT * from sumatriptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergometrin)
+order by MaBN, ngaychidinh
+),
+ergometrin_roxithromycin as (
+SELECT * from ergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from roxithromycin)
+UNION all
+SELECT * from roxithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergometrin)
+order by MaBN, ngaychidinh
+),
+ergometrin_erythromycin as (
+SELECT * from ergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from erythromycin)
+UNION all
+SELECT * from erythromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergometrin)
+order by MaBN, ngaychidinh
+),
+ergometrin_voriconazol as (
+SELECT * from ergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergometrin)
+order by MaBN, ngaychidinh
+),
+ergometrin_posaconazol as (
+SELECT * from ergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+UNION all
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergometrin)
+order by MaBN, ngaychidinh
+),
+ergometrin_itraconazol as (
+SELECT * from ergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+UNION all
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergometrin)
+order by MaBN, ngaychidinh
+),
+ergotamin_sumatriptan as (
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sumatriptan)
+UNION all
+SELECT * from sumatriptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+order by MaBN, ngaychidinh
+),
+ergotamin_roxithromycin as (
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from roxithromycin)
+UNION all
+SELECT * from roxithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+order by MaBN, ngaychidinh
+),
+ergotamin_erythromycin as (
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from erythromycin)
+UNION all
+SELECT * from erythromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+order by MaBN, ngaychidinh
+),
+ergotamin_voriconazol as (
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+order by MaBN, ngaychidinh
+),
+ergotamin_posaconazol as (
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+UNION all
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+order by MaBN, ngaychidinh
+),
+ergotamin_itraconazol as (
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+UNION all
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+order by MaBN, ngaychidinh
+),
+ergotamin_saquinavir_ritonavir as (
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+order by MaBN, ngaychidinh
+),
+ergotamin_lopinavir_ritonavir as (
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir)
+UNION all
+SELECT * from lopinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+order by MaBN, ngaychidinh
+),
+ergotamin_indinavir_ritonavir as (
+SELECT * from ergotamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+UNION all
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ergotamin)
+order by MaBN, ngaychidinh
+),
+erythromycin_lovastatin as (
+SELECT * from erythromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+UNION all
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from erythromycin)
+order by MaBN, ngaychidinh
+),
+erythromycin_simvastatin as (
+SELECT * from erythromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from erythromycin)
+order by MaBN, ngaychidinh
+),
+erythromycin_methylergometrin as (
+SELECT * from erythromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from methylergometrin)
+UNION all
+SELECT * from methylergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from erythromycin)
+order by MaBN, ngaychidinh
+),
+erythromycin_ivabradin as (
+SELECT * from erythromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+UNION all
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from erythromycin)
+order by MaBN, ngaychidinh
+),
+etodolac_ketorolac as (
+SELECT * from etodolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from etodolac)
+order by MaBN, ngaychidinh
+),
+etoricoxib_ketorolac as (
+SELECT * from etoricoxib
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from etoricoxib)
+order by MaBN, ngaychidinh
+),
+everolimus_lopinavir_ritonavir_ritonavir as (
+SELECT * from everolimus
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir_ritonavir)
+UNION all
+SELECT * from lopinavir_ritonavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from everolimus)
+order by MaBN, ngaychidinh
+),
+everolimus_indinavir_ritonavir as (
+SELECT * from everolimus
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+UNION all
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from everolimus)
+order by MaBN, ngaychidinh
+),
+everolimus_saquinavir_ritonavir_ritonavir as (
+SELECT * from everolimus
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from everolimus)
+order by MaBN, ngaychidinh
+),
+everolimus_itraconazol as (
+SELECT * from everolimus
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+UNION all
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from everolimus)
+order by MaBN, ngaychidinh
+),
+felodipin_lopinavir_ritonavir as (
+SELECT * from felodipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir)
+UNION all
+SELECT * from lopinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from felodipin)
+order by MaBN, ngaychidinh
+),
+felodipin_indinavir_ritonavir as (
+SELECT * from felodipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+UNION all
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from felodipin)
+order by MaBN, ngaychidinh
+),
+felodipin_saquinavir_ritonavir as (
+SELECT * from felodipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from felodipin)
+order by MaBN, ngaychidinh
+),
+felodipin_itraconazol as (
+SELECT * from felodipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+UNION all
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from felodipin)
+order by MaBN, ngaychidinh
+),
+felodipin_posaconazol as (
+SELECT * from felodipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+UNION all
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from felodipin)
+order by MaBN, ngaychidinh
+),
+felodipin_voriconazol as (
+SELECT * from felodipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from felodipin)
+order by MaBN, ngaychidinh
+),
+floctafenin_ketorolac as (
+SELECT * from floctafenin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from floctafenin)
+order by MaBN, ngaychidinh
+),
+flurbiprofen_ketorolac as (
+SELECT * from flurbiprofen
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from flurbiprofen)
+order by MaBN, ngaychidinh
+),
+fluvastatin_gemfibrozil as (
+SELECT * from fluvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from gemfibrozil)
+UNION all
+SELECT * from gemfibrozil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from fluvastatin)
+order by MaBN, ngaychidinh
+),
+fluvoxamin_tizanidin as (
+SELECT * from fluvoxamin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tizanidin)
+UNION all
+SELECT * from tizanidin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from fluvoxamin)
+order by MaBN, ngaychidinh
+),
+furazolidon_levodopa_carbidopa_entacapon as (
+SELECT * from furazolidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from levodopa_carbidopa_entacapon)
+UNION all
+SELECT * from levodopa_carbidopa_entacapon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from furazolidon)
+order by MaBN, ngaychidinh
+),
+furazolidon_methyldopa as (
+SELECT * from furazolidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from methyldopa)
+UNION all
+SELECT * from methyldopa
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from furazolidon)
+order by MaBN, ngaychidinh
+),
+furazolidon_pseudoephedrin_uong as (
+SELECT * from furazolidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from pseudoephedrin_uong)
+UNION all
+SELECT * from pseudoephedrin_uong
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from furazolidon)
+order by MaBN, ngaychidinh
+),
+furazolidon_phenylephrin_uong as (
+SELECT * from furazolidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenylephrin_uong)
+UNION all
+SELECT * from phenylephrin_uong
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from furazolidon)
+order by MaBN, ngaychidinh
+),
+furazolidon_nefopam as (
+SELECT * from furazolidon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from nefopam)
+UNION all
+SELECT * from nefopam
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from furazolidon)
+order by MaBN, ngaychidinh
+),
+gemfibrozil_repaglinid as (
+SELECT * from gemfibrozil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from repaglinid)
+UNION all
+SELECT * from repaglinid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from gemfibrozil)
+order by MaBN, ngaychidinh
+),
+gemfibrozil_simvastatin as (
+SELECT * from gemfibrozil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from gemfibrozil)
+order by MaBN, ngaychidinh
+),
+gemfibrozil_lovastatin as (
+SELECT * from gemfibrozil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+UNION all
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from gemfibrozil)
+order by MaBN, ngaychidinh
+),
+gemfibrozil_pravastatin as (
+SELECT * from gemfibrozil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from pravastatin)
+UNION all
+SELECT * from pravastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from gemfibrozil)
+order by MaBN, ngaychidinh
+),
+grazoprevir_elbasvir_phenobarbital as (
+SELECT * from grazoprevir_elbasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenobarbital)
+UNION all
+SELECT * from phenobarbital
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from grazoprevir_elbasvir)
+order by MaBN, ngaychidinh
+),
+grazoprevir_elbasvir_phenytoin as (
+SELECT * from grazoprevir_elbasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenytoin)
+UNION all
+SELECT * from phenytoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from grazoprevir_elbasvir)
+order by MaBN, ngaychidinh
+),
+grazoprevir_elbasvir_rifampicin as (
+SELECT * from grazoprevir_elbasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+UNION all
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from grazoprevir_elbasvir)
+order by MaBN, ngaychidinh
+),
+grazoprevir_elbasvir_saquinavir_ritonavir as (
+SELECT * from grazoprevir_elbasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from grazoprevir_elbasvir)
+order by MaBN, ngaychidinh
+),
+grazoprevir_elbasvir_lopinavir_ritonavir_lopinavir as (
+SELECT * from grazoprevir_elbasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir_lopinavir)
+UNION all
+SELECT * from lopinavir_ritonavir_lopinavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from grazoprevir_elbasvir)
+order by MaBN, ngaychidinh
+),
+ibuprofen_ketorolac as (
+SELECT * from ibuprofen
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ibuprofen)
+order by MaBN, ngaychidinh
+),
+imidapril_sacubitril_valsartan_sacubitril as (
+SELECT * from imidapril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sacubitril_valsartan_sacubitril)
+UNION all
+SELECT * from sacubitril_valsartan_sacubitril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from imidapril)
+order by MaBN, ngaychidinh
+),
+indinavir_ritonavir_lovastatin as (
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+UNION all
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+indinavir_ritonavir_simvastatin as (
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+indinavir_ritonavir_ivabradin as (
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+UNION all
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+indinavir_ritonavir_ticagrelor as (
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ticagrelor)
+UNION all
+SELECT * from ticagrelor
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+indinavir_ritonavir_ranolazin as (
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+UNION all
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+indinavir_ritonavir_tolvaptan as (
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tolvaptan)
+UNION all
+SELECT * from tolvaptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+indinavir_ritonavir_lercanidipin as (
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lercanidipin)
+UNION all
+SELECT * from lercanidipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+indinavir_ritonavir_vardenafil as (
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from vardenafil)
+UNION all
+SELECT * from vardenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+indinavir_ritonavir_rifampicin as (
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+UNION all
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+indinavir_ritonavir_propafenon as (
+SELECT * from indinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from propafenon)
+UNION all
+SELECT * from propafenon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+indomethacin_ketorolac as (
+SELECT * from indomethacin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from indomethacin)
+order by MaBN, ngaychidinh
+),
+irinotecan_itraconazol as (
+SELECT * from irinotecan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+UNION all
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from irinotecan)
+order by MaBN, ngaychidinh
+),
+isosorbid_dinitrat_sildenafil as (
+SELECT * from isosorbid_dinitrat
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sildenafil)
+UNION all
+SELECT * from sildenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from isosorbid_dinitrat)
+order by MaBN, ngaychidinh
+),
+isosorbid_dinitrat_vardenafil as (
+SELECT * from isosorbid_dinitrat
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from vardenafil)
+UNION all
+SELECT * from vardenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from isosorbid_dinitrat)
+order by MaBN, ngaychidinh
+),
+isosorbid_dinitrat_tadalafil as (
+SELECT * from isosorbid_dinitrat
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tadalafil)
+UNION all
+SELECT * from tadalafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from isosorbid_dinitrat)
+order by MaBN, ngaychidinh
+),
+isosorbid_mononitrat_sildenafil as (
+SELECT * from isosorbid_mononitrat
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sildenafil)
+UNION all
+SELECT * from sildenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from isosorbid_mononitrat)
+order by MaBN, ngaychidinh
+),
+isosorbid_mononitrat_vardenafil as (
+SELECT * from isosorbid_mononitrat
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from vardenafil)
+UNION all
+SELECT * from vardenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from isosorbid_mononitrat)
+order by MaBN, ngaychidinh
+),
+isosorbid_mononitrat_tadalafil as (
+SELECT * from isosorbid_mononitrat
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tadalafil)
+UNION all
+SELECT * from tadalafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from isosorbid_mononitrat)
+order by MaBN, ngaychidinh
+),
+isotretinoin_minocyclin as (
+SELECT * from isotretinoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from minocyclin)
+UNION all
+SELECT * from minocyclin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from isotretinoin)
+order by MaBN, ngaychidinh
+),
+isotretinoin_tetracyclin as (
+SELECT * from isotretinoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tetracyclin)
+UNION all
+SELECT * from tetracyclin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from isotretinoin)
+order by MaBN, ngaychidinh
+),
+isotretinoin_tigecyclin as (
+SELECT * from isotretinoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tigecyclin)
+UNION all
+SELECT * from tigecyclin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from isotretinoin)
+order by MaBN, ngaychidinh
+),
+itraconazol_lovastatin as (
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+UNION all
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+order by MaBN, ngaychidinh
+),
+itraconazol_simvastatin as (
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+order by MaBN, ngaychidinh
+),
+itraconazol_methylergometrin as (
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from methylergometrin)
+UNION all
+SELECT * from methylergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+order by MaBN, ngaychidinh
+),
+itraconazol_ivabradin as (
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+UNION all
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+order by MaBN, ngaychidinh
+),
+itraconazol_ticagrelor as (
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ticagrelor)
+UNION all
+SELECT * from ticagrelor
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+order by MaBN, ngaychidinh
+),
+itraconazol_ranolazin as (
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+UNION all
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+order by MaBN, ngaychidinh
+),
+itraconazol_tolvaptan as (
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tolvaptan)
+UNION all
+SELECT * from tolvaptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+order by MaBN, ngaychidinh
+),
+itraconazol_lercanidipin as (
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lercanidipin)
+UNION all
+SELECT * from lercanidipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+order by MaBN, ngaychidinh
+),
+itraconazol_vardenafil as (
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from vardenafil)
+UNION all
+SELECT * from vardenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+order by MaBN, ngaychidinh
+),
+itraconazol_quetiapin as (
+SELECT * from itraconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from quetiapin)
+UNION all
+SELECT * from quetiapin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from itraconazol)
+order by MaBN, ngaychidinh
+),
+ivabradin_lopinavir_ritonavir as (
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir)
+UNION all
+SELECT * from lopinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+order by MaBN, ngaychidinh
+),
+ivabradin_saquinavir_ritonavir as (
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+order by MaBN, ngaychidinh
+),
+ivabradin_posaconazol as (
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+UNION all
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+order by MaBN, ngaychidinh
+),
+ivabradin_voriconazol as (
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+order by MaBN, ngaychidinh
+),
+ivabradin_verapamil as (
+SELECT * from ivabradin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from verapamil)
+UNION all
+SELECT * from verapamil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ivabradin)
+order by MaBN, ngaychidinh
+),
+ketoprofen_ketorolac as (
+SELECT * from ketoprofen
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+UNION all
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketoprofen)
+order by MaBN, ngaychidinh
+),
+ketorolac_lornoxicam as (
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lornoxicam)
+UNION all
+SELECT * from lornoxicam
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+order by MaBN, ngaychidinh
+),
+ketorolac_loxoprofen as (
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from loxoprofen)
+UNION all
+SELECT * from loxoprofen
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+order by MaBN, ngaychidinh
+),
+ketorolac_meloxicam as (
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from meloxicam)
+UNION all
+SELECT * from meloxicam
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+order by MaBN, ngaychidinh
+),
+ketorolac_nabumeton as (
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from nabumeton)
+UNION all
+SELECT * from nabumeton
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+order by MaBN, ngaychidinh
+),
+ketorolac_naproxen as (
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from naproxen)
+UNION all
+SELECT * from naproxen
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+order by MaBN, ngaychidinh
+),
+ketorolac_piroxicam as (
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from piroxicam)
+UNION all
+SELECT * from piroxicam
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+order by MaBN, ngaychidinh
+),
+ketorolac_talniflumat as (
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from talniflumat)
+UNION all
+SELECT * from talniflumat
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+order by MaBN, ngaychidinh
+),
+ketorolac_tenoxicam as (
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tenoxicam)
+UNION all
+SELECT * from tenoxicam
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+order by MaBN, ngaychidinh
+),
+ketorolac_zaltoprofen as (
+SELECT * from ketorolac
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from zaltoprofen)
+UNION all
+SELECT * from zaltoprofen
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ketorolac)
+order by MaBN, ngaychidinh
+),
+lansoprazol_rilpivirin as (
+SELECT * from lansoprazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rilpivirin)
+UNION all
+SELECT * from rilpivirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lansoprazol)
+order by MaBN, ngaychidinh
+),
+lercanidipin_lopinavir_ritonavir as (
+SELECT * from lercanidipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir)
+UNION all
+SELECT * from lopinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lercanidipin)
+order by MaBN, ngaychidinh
+),
+lercanidipin_saquinavir_ritonavir as (
+SELECT * from lercanidipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lercanidipin)
+order by MaBN, ngaychidinh
+),
+lercanidipin_posaconazol as (
+SELECT * from lercanidipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+UNION all
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lercanidipin)
+order by MaBN, ngaychidinh
+),
+lercanidipin_voriconazol as (
+SELECT * from lercanidipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lercanidipin)
+order by MaBN, ngaychidinh
+),
+levodopa_carbidopa_entacapon_metoclopramid as (
+SELECT * from levodopa_carbidopa_entacapon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from metoclopramid)
+UNION all
+SELECT * from metoclopramid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from levodopa_carbidopa_entacapon)
+order by MaBN, ngaychidinh
+),
+levodopa_carbidopa_entacapon_sulpirid as (
+SELECT * from levodopa_carbidopa_entacapon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sulpirid)
+UNION all
+SELECT * from sulpirid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from levodopa_carbidopa_entacapon)
+order by MaBN, ngaychidinh
+),
+levodopa_carbidopa_entacapon_linezolid as (
+SELECT * from levodopa_carbidopa_entacapon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from linezolid)
+UNION all
+SELECT * from linezolid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from levodopa_carbidopa_entacapon)
+order by MaBN, ngaychidinh
+),
+levodopa_carbidopa_entacapon_xanh_methylen_IV as (
+SELECT * from levodopa_carbidopa_entacapon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from xanh_methylen_IV)
+UNION all
+SELECT * from xanh_methylen_IV
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from levodopa_carbidopa_entacapon)
+order by MaBN, ngaychidinh
+),
+linezolid_methyldopa as (
+SELECT * from linezolid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from methyldopa)
+UNION all
+SELECT * from methyldopa
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from linezolid)
+order by MaBN, ngaychidinh
+),
+linezolid_pseudoephedrin_uong as (
+SELECT * from linezolid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from pseudoephedrin_uong)
+UNION all
+SELECT * from pseudoephedrin_uong
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from linezolid)
+order by MaBN, ngaychidinh
+),
+linezolid_phenylephrin_uong as (
+SELECT * from linezolid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenylephrin_uong)
+UNION all
+SELECT * from phenylephrin_uong
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from linezolid)
+order by MaBN, ngaychidinh
+),
+linezolid_nefopam as (
+SELECT * from linezolid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from nefopam)
+UNION all
+SELECT * from nefopam
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from linezolid)
+order by MaBN, ngaychidinh
+),
+lisinopril_sacubitril_valsartan_sacubitril as (
+SELECT * from lisinopril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sacubitril_valsartan_sacubitril)
+UNION all
+SELECT * from sacubitril_valsartan_sacubitril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lisinopril)
+order by MaBN, ngaychidinh
+),
+lopinavir_ritonavir_lovastatin as (
+SELECT * from lopinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+UNION all
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+lopinavir_ritonavir_simvastatin as (
+SELECT * from lopinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+lopinavir_ritonavir_ticagrelor as (
+SELECT * from lopinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ticagrelor)
+UNION all
+SELECT * from ticagrelor
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+lopinavir_ritonavir_ranolazin as (
+SELECT * from lopinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+UNION all
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+lopinavir_ritonavir_tolvaptan as (
+SELECT * from lopinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tolvaptan)
+UNION all
+SELECT * from tolvaptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+lopinavir_ritonavir_ritonavir_vardenafil as (
+SELECT * from lopinavir_ritonavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from vardenafil)
+UNION all
+SELECT * from vardenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+lopinavir_ritonavir_ritonavir_propafenon as (
+SELECT * from lopinavir_ritonavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from propafenon)
+UNION all
+SELECT * from propafenon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lopinavir_ritonavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+lovastatin_saquinavir_ritonavir as (
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+order by MaBN, ngaychidinh
+),
+lovastatin_posaconazol as (
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+UNION all
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+order by MaBN, ngaychidinh
+),
+lovastatin_voriconazol as (
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+order by MaBN, ngaychidinh
+),
+lovastatin_mifepriston as (
+SELECT * from lovastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from mifepriston)
+UNION all
+SELECT * from mifepriston
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from lovastatin)
+order by MaBN, ngaychidinh
+),
+methyldopa_xanh_methylen_IV as (
+SELECT * from methyldopa
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from xanh_methylen_IV)
+UNION all
+SELECT * from xanh_methylen_IV
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from methyldopa)
+order by MaBN, ngaychidinh
+),
+methylergometrin_sumatriptan as (
+SELECT * from methylergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sumatriptan)
+UNION all
+SELECT * from sumatriptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from methylergometrin)
+order by MaBN, ngaychidinh
+),
+methylergometrin_roxithromycin as (
+SELECT * from methylergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from roxithromycin)
+UNION all
+SELECT * from roxithromycin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from methylergometrin)
+order by MaBN, ngaychidinh
+),
+methylergometrin_voriconazol as (
+SELECT * from methylergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from methylergometrin)
+order by MaBN, ngaychidinh
+),
+methylergometrin_posaconazol as (
+SELECT * from methylergometrin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+UNION all
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from methylergometrin)
+order by MaBN, ngaychidinh
+),
+metoclopramid_rotigotin as (
+SELECT * from metoclopramid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rotigotin)
+UNION all
+SELECT * from rotigotin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from metoclopramid)
+order by MaBN, ngaychidinh
+),
+metoclopramid_pramipexol as (
+SELECT * from metoclopramid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from pramipexol)
+UNION all
+SELECT * from pramipexol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from metoclopramid)
+order by MaBN, ngaychidinh
+),
+metoclopramid_piribedil as (
+SELECT * from metoclopramid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from piribedil)
+UNION all
+SELECT * from piribedil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from metoclopramid)
+order by MaBN, ngaychidinh
+),
+mifepriston_simvastatin as (
+SELECT * from mifepriston
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from mifepriston)
+order by MaBN, ngaychidinh
+),
+minocyclin_tretinoin as (
+SELECT * from minocyclin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tretinoin)
+UNION all
+SELECT * from tretinoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from minocyclin)
+order by MaBN, ngaychidinh
+),
+nefopam_xanh_methylen_IV as (
+SELECT * from nefopam
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from xanh_methylen_IV)
+UNION all
+SELECT * from xanh_methylen_IV
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from nefopam)
+order by MaBN, ngaychidinh
+),
+nicorandil_sildenafil as (
+SELECT * from nicorandil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sildenafil)
+UNION all
+SELECT * from sildenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from nicorandil)
+order by MaBN, ngaychidinh
+),
+nicorandil_vardenafil as (
+SELECT * from nicorandil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from vardenafil)
+UNION all
+SELECT * from vardenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from nicorandil)
+order by MaBN, ngaychidinh
+),
+nicorandil_tadalafil as (
+SELECT * from nicorandil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tadalafil)
+UNION all
+SELECT * from tadalafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from nicorandil)
+order by MaBN, ngaychidinh
+),
+nifedipin_rifampicin as (
+SELECT * from nifedipin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+UNION all
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from nifedipin)
+order by MaBN, ngaychidinh
+),
+nitroglycerin_sildenafil as (
+SELECT * from nitroglycerin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sildenafil)
+UNION all
+SELECT * from sildenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from nitroglycerin)
+order by MaBN, ngaychidinh
+),
+nitroglycerin_vardenafil as (
+SELECT * from nitroglycerin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from vardenafil)
+UNION all
+SELECT * from vardenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from nitroglycerin)
+order by MaBN, ngaychidinh
+),
+nitroglycerin_tadalafil as (
+SELECT * from nitroglycerin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tadalafil)
+UNION all
+SELECT * from tadalafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from nitroglycerin)
+order by MaBN, ngaychidinh
+),
+esomeprazol_rilpivirin as (
+SELECT * from esomeprazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rilpivirin)
+UNION all
+SELECT * from rilpivirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from esomeprazol)
+order by MaBN, ngaychidinh
+),
+omeprazol_rilpivirin as (
+SELECT * from omeprazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rilpivirin)
+UNION all
+SELECT * from rilpivirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from omeprazol)
+order by MaBN, ngaychidinh
+),
+oxcarbazepin_rilpivirin as (
+SELECT * from oxcarbazepin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rilpivirin)
+UNION all
+SELECT * from rilpivirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from oxcarbazepin)
+order by MaBN, ngaychidinh
+),
+pantoprazol_rilpivirin as (
+SELECT * from pantoprazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rilpivirin)
+UNION all
+SELECT * from rilpivirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from pantoprazol)
+order by MaBN, ngaychidinh
+),
+paroxetin_thioridazin as (
+SELECT * from paroxetin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from thioridazin)
+UNION all
+SELECT * from thioridazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from paroxetin)
+order by MaBN, ngaychidinh
+),
+peginterferon_alpha_telbivudin as (
+SELECT * from peginterferon_alpha
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from telbivudin)
+UNION all
+SELECT * from telbivudin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from peginterferon_alpha)
+order by MaBN, ngaychidinh
+),
+perindopril_sacubitril_valsartan_sacubitril as (
+SELECT * from perindopril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sacubitril_valsartan_sacubitril)
+UNION all
+SELECT * from sacubitril_valsartan_sacubitril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from perindopril)
+order by MaBN, ngaychidinh
+),
+phenobarbital_praziquantel as (
+SELECT * from phenobarbital
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from praziquantel)
+UNION all
+SELECT * from praziquantel
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenobarbital)
+order by MaBN, ngaychidinh
+),
+phenobarbital_rilpivirin as (
+SELECT * from phenobarbital
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rilpivirin)
+UNION all
+SELECT * from rilpivirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenobarbital)
+order by MaBN, ngaychidinh
+),
+phenobarbital_voriconazol as (
+SELECT * from phenobarbital
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenobarbital)
+order by MaBN, ngaychidinh
+),
+phenobarbital_ranolazin as (
+SELECT * from phenobarbital
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+UNION all
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenobarbital)
+order by MaBN, ngaychidinh
+),
+phenylephrin_uong_xanh_methylen_IV as (
+SELECT * from phenylephrin_uong
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from xanh_methylen_IV)
+UNION all
+SELECT * from xanh_methylen_IV
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenylephrin_uong)
+order by MaBN, ngaychidinh
+),
+phenytoin_praziquantel as (
+SELECT * from phenytoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from praziquantel)
+UNION all
+SELECT * from praziquantel
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenytoin)
+order by MaBN, ngaychidinh
+),
+phenytoin_rilpivirin as (
+SELECT * from phenytoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rilpivirin)
+UNION all
+SELECT * from rilpivirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenytoin)
+order by MaBN, ngaychidinh
+),
+phenytoin_ranolazin as (
+SELECT * from phenytoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+UNION all
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from phenytoin)
+order by MaBN, ngaychidinh
+),
+piribedil_sulpirid as (
+SELECT * from piribedil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sulpirid)
+UNION all
+SELECT * from sulpirid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from piribedil)
+order by MaBN, ngaychidinh
+),
+posaconazol_simvastatin as (
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+order by MaBN, ngaychidinh
+),
+posaconazol_ticagrelor as (
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ticagrelor)
+UNION all
+SELECT * from ticagrelor
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+order by MaBN, ngaychidinh
+),
+posaconazol_ranolazin as (
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+UNION all
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+order by MaBN, ngaychidinh
+),
+posaconazol_tolvaptan as (
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tolvaptan)
+UNION all
+SELECT * from tolvaptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+order by MaBN, ngaychidinh
+),
+posaconazol_quetiapin as (
+SELECT * from posaconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from quetiapin)
+UNION all
+SELECT * from quetiapin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from posaconazol)
+order by MaBN, ngaychidinh
+),
+pramipexol_sulpirid as (
+SELECT * from pramipexol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sulpirid)
+UNION all
+SELECT * from sulpirid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from pramipexol)
+order by MaBN, ngaychidinh
+),
+praziquantel_rifampicin as (
+SELECT * from praziquantel
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+UNION all
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from praziquantel)
+order by MaBN, ngaychidinh
+),
+propafenon_saquinavir_ritonavir_ritonavir as (
+SELECT * from propafenon
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from propafenon)
+order by MaBN, ngaychidinh
+),
+pseudoephedrin_uong_xanh_methylen_IV as (
+SELECT * from pseudoephedrin_uong
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from xanh_methylen_IV)
+UNION all
+SELECT * from xanh_methylen_IV
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from pseudoephedrin_uong)
+order by MaBN, ngaychidinh
+),
+quetiapin_voriconazol as (
+SELECT * from quetiapin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from quetiapin)
+order by MaBN, ngaychidinh
+),
+quinapril_sacubitril_valsartan_sacubitril as (
+SELECT * from quinapril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sacubitril_valsartan_sacubitril)
+UNION all
+SELECT * from sacubitril_valsartan_sacubitril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from quinapril)
+order by MaBN, ngaychidinh
+),
+rabeprazol_rilpivirin as (
+SELECT * from rabeprazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rilpivirin)
+UNION all
+SELECT * from rilpivirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rabeprazol)
+order by MaBN, ngaychidinh
+),
+ramipril_sacubitril_valsartan_sacubitril as (
+SELECT * from ramipril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sacubitril_valsartan_sacubitril)
+UNION all
+SELECT * from sacubitril_valsartan_sacubitril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ramipril)
+order by MaBN, ngaychidinh
+),
+ranolazin_saquinavir_ritonavir as (
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+order by MaBN, ngaychidinh
+),
+ranolazin_voriconazol as (
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+order by MaBN, ngaychidinh
+),
+ranolazin_rifampicin as (
+SELECT * from ranolazin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+UNION all
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ranolazin)
+order by MaBN, ngaychidinh
+),
+rifampicin_rilpivirin as (
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rilpivirin)
+UNION all
+SELECT * from rilpivirin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+order by MaBN, ngaychidinh
+),
+rifampicin_voriconazol as (
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+order by MaBN, ngaychidinh
+),
+rifampicin_sofosbuvir as (
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sofosbuvir)
+UNION all
+SELECT * from sofosbuvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+order by MaBN, ngaychidinh
+),
+rifampicin_saquinavir_ritonavir as (
+SELECT * from rifampicin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+UNION all
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rifampicin)
+order by MaBN, ngaychidinh
+),
+rosuvastatin_sofosbuvir_ledipasvir_ledipasvir as (
+SELECT * from rosuvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sofosbuvir_ledipasvir_ledipasvir)
+UNION all
+SELECT * from sofosbuvir_ledipasvir_ledipasvir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rosuvastatin)
+order by MaBN, ngaychidinh
+),
+rotigotin_sulpirid as (
+SELECT * from rotigotin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sulpirid)
+UNION all
+SELECT * from sulpirid
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from rotigotin)
+order by MaBN, ngaychidinh
+),
+sacubitril_valsartan_sacubitril_trandolapril as (
+SELECT * from sacubitril_valsartan_sacubitril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from trandolapril)
+UNION all
+SELECT * from trandolapril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sacubitril_valsartan_sacubitril)
+order by MaBN, ngaychidinh
+),
+sacubitril_valsartan_sacubitril_zofenopril as (
+SELECT * from sacubitril_valsartan_sacubitril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from zofenopril)
+UNION all
+SELECT * from zofenopril
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from sacubitril_valsartan_sacubitril)
+order by MaBN, ngaychidinh
+),
+saquinavir_ritonavir_simvastatin as (
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+UNION all
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+saquinavir_ritonavir_ticagrelor as (
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ticagrelor)
+UNION all
+SELECT * from ticagrelor
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+saquinavir_ritonavir_tolvaptan as (
+SELECT * from saquinavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tolvaptan)
+UNION all
+SELECT * from tolvaptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+saquinavir_ritonavir_ritonavir_vardenafil as (
+SELECT * from saquinavir_ritonavir_ritonavir
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from vardenafil)
+UNION all
+SELECT * from vardenafil
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from saquinavir_ritonavir_ritonavir)
+order by MaBN, ngaychidinh
+),
+simvastatin_voriconazol as (
+SELECT * from simvastatin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from simvastatin)
+order by MaBN, ngaychidinh
+),
+tetracyclin_tretinoin as (
+SELECT * from tetracyclin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tretinoin)
+UNION all
+SELECT * from tretinoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tetracyclin)
+order by MaBN, ngaychidinh
+),
+ticagrelor_voriconazol as (
+SELECT * from ticagrelor
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from ticagrelor)
+order by MaBN, ngaychidinh
+),
+tigecyclin_tretinoin as (
+SELECT * from tigecyclin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tretinoin)
+UNION all
+SELECT * from tretinoin
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tigecyclin)
+order by MaBN, ngaychidinh
+),
+tolvaptan_voriconazol as (
+SELECT * from tolvaptan
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from voriconazol)
+UNION all
+SELECT * from voriconazol
+where MaBN || SUBSTR(ngaychidinh,1,10) in (select MaBN || SUBSTR(ngaychidinh,1,10) from tolvaptan)
+order by MaBN, ngaychidinh
+),
+data_kiemtra as (
+SELECT * from aceclofenac_ketorolac
+UNION all
+SELECT * from mefenamic_ketorolac
+UNION all
+SELECT * from acitretin_doxycyclin
+UNION all
+SELECT * from acitretin_minocyclin
+UNION all
+SELECT * from acitretin_tetracyclin
+UNION all
+SELECT * from acitretin_tigecyclin
+UNION all
+SELECT * from agomelatin_ciprofloxacin
+UNION all
+SELECT * from agomelatin_fluvoxamin
+UNION all
+SELECT * from alfuzosin_boceprevir
+UNION all
+SELECT * from alfuzosin_lopinavir_ritonavir
+UNION all
+SELECT * from alfuzosin_atazanavir_ritonavir
+UNION all
+SELECT * from alfuzosin_darunavir_ritonavir
+UNION all
+SELECT * from alfuzosin_indinavir_ritonavir
+UNION all
+SELECT * from alfuzosin_saquinavir_ritonavir
+UNION all
+SELECT * from alprazolam_indinavir_ritonavir
+UNION all
+SELECT * from amiodaron_domperidon
+UNION all
+SELECT * from amiodaron_lopinavir_ritonavir_ritonavir
+UNION all
+SELECT * from amiodaron_darunavir_ritonavir
+UNION all
+SELECT * from amiodaron_atazanavir_ritonavir
+UNION all
+SELECT * from amiodaron_indinavir_ritonavir
+UNION all
+SELECT * from amiodaron_saquinavir_ritonavir
+UNION all
+SELECT * from arsenic_trioxid_domperidon
+UNION all
+SELECT * from artemether_lumefantrin_domperidon
+UNION all
+SELECT * from artemether_lumefantrin_rifampicin
+UNION all
+SELECT * from artemether_lumefantrin_enzalutamid
+UNION all
+SELECT * from artemether_lumefantrin_carbamazepin
+UNION all
+SELECT * from artemether_lumefantrin_phenobarbital
+UNION all
+SELECT * from artemether_lumefantrin_phenytoin
+UNION all
+SELECT * from aspirin_ketorolac
+UNION all
+SELECT * from atazanavir_ritonavir_lovastatin
+UNION all
+SELECT * from atazanavir_ritonavir_simvastatin
+UNION all
+SELECT * from atazanavir_ritonavir_dihydroergotamin
+UNION all
+SELECT * from atazanavir_ritonavir_ergotamin
+UNION all
+SELECT * from atazanavir_ritonavir_ivabradin
+UNION all
+SELECT * from atazanavir_ritonavir_ticagrelor
+UNION all
+SELECT * from atazanavir_ritonavir_ranolazin
+UNION all
+SELECT * from atazanavir_ritonavir_tolvaptan
+UNION all
+SELECT * from atazanavir_ritonavir_felodipin
+UNION all
+SELECT * from atazanavir_ritonavir_lercanidipin
+UNION all
+SELECT * from atazanavir_ritonavir_rifampicin
+UNION all
+SELECT * from atazanavir_ritonavir_grazoprevir_elbasvir
+UNION all
+SELECT * from atazanavir_ritonavir_domperidon
+UNION all
+SELECT * from atazanavir_ritonavir_vardenafil
+UNION all
+SELECT * from atazanavir_ritonavir_propafenon
+UNION all
+SELECT * from atazanavir_ritonavir_everolimus
+UNION all
+SELECT * from atorvastatin_ciclosporin
+UNION all
+SELECT * from atorvastatin_gemfibrozil
+UNION all
+SELECT * from azithromycin_domperidon
+UNION all
+SELECT * from benazepril_sacubitril_valsartan_sacubitril
+UNION all
+SELECT * from bleomycin_brentuximab
+UNION all
+SELECT * from boceprevir_lovastatin
+UNION all
+SELECT * from boceprevir_simvastatin
+UNION all
+SELECT * from boceprevir_dihydroergotamin
+UNION all
+SELECT * from boceprevir_ergotamin
+UNION all
+SELECT * from boceprevir_ergometrin
+UNION all
+SELECT * from boceprevir_methylergometrin
+UNION all
+SELECT * from boceprevir_ivabradin
+UNION all
+SELECT * from bosentan_glibenclamid
+UNION all
+SELECT * from bosentan_ciclosporin
+UNION all
+SELECT * from brivudin_capecitabin
+UNION all
+SELECT * from brivudin_fluorouracil
+UNION all
+SELECT * from brivudin_tegafur
+UNION all
+SELECT * from bromocriptin_metoclopramid
+UNION all
+SELECT * from bromocriptin_sulpirid
+UNION all
+SELECT * from captopril_sacubitril_valsartan_sacubitril
+UNION all
+SELECT * from carbamazepin_praziquantel
+UNION all
+SELECT * from carbamazepin_rilpivirin
+UNION all
+SELECT * from carbamazepin_voriconazol
+UNION all
+SELECT * from carbamazepin_daclatasvir
+UNION all
+SELECT * from carbamazepin_delamanid
+UNION all
+SELECT * from carbamazepin_grazoprevir_elbasvir
+UNION all
+SELECT * from carbamazepin_ranolazin
+UNION all
+SELECT * from celecoxib_ketorolac
+UNION all
+SELECT * from ciclosporin_pitavastatin
+UNION all
+SELECT * from ciclosporin_lovastatin
+UNION all
+SELECT * from ciclosporin_simvastatin
+UNION all
+SELECT * from ciclosporin_lercanidipin
+UNION all
+SELECT * from ciclosporin_grazoprevir_elbasvir
+UNION all
+SELECT * from cilostazol_domperidon
+UNION all
+SELECT * from ciprofloxacin_tizanidin
+UNION all
+SELECT * from ciprofloxacin_duloxetin
+UNION all
+SELECT * from ciprofloxacin_domperidon
+UNION all
+SELECT * from citalopram_domperidon
+UNION all
+SELECT * from clarithromycin_lovastatin
+UNION all
+SELECT * from clarithromycin_simvastatin
+UNION all
+SELECT * from clarithromycin_dihydroergotamin
+UNION all
+SELECT * from clarithromycin_ergotamin
+UNION all
+SELECT * from clarithromycin_ergometrin
+UNION all
+SELECT * from clarithromycin_methylergometrin
+UNION all
+SELECT * from clarithromycin_ivabradin
+UNION all
+SELECT * from clarithromycin_ticagrelor
+UNION all
+SELECT * from clarithromycin_ranolazin
+UNION all
+SELECT * from clarithromycin_tolvaptan
+UNION all
+SELECT * from clarithromycin_felodipin
+UNION all
+SELECT * from clarithromycin_lercanidipin
+UNION all
+SELECT * from clarithromycin_quetiapin
+UNION all
+SELECT * from clarithromycin_everolimus
+UNION all
+SELECT * from clarithromycin_domperidon
+UNION all
+SELECT * from clonixin_ketorolac
+UNION all
+SELECT * from cloroquin_domperidon
+UNION all
+SELECT * from clorpromazin_domperidon
+UNION all
+SELECT * from dabigatran_itraconazol
+UNION all
+SELECT * from daclatasvir_rifampicin
+UNION all
+SELECT * from daclatasvir_enzalutamid
+UNION all
+SELECT * from daclatasvir_phenobarbital
+UNION all
+SELECT * from daclatasvir_phenytoin
+UNION all
+SELECT * from danazol_simvastatin
+UNION all
+SELECT * from danazol_lovastatin
+UNION all
+SELECT * from darunavir_ritonavir_lovastatin
+UNION all
+SELECT * from darunavir_ritonavir_simvastatin
+UNION all
+SELECT * from darunavir_ritonavir_dihydroergotamin
+UNION all
+SELECT * from darunavir_ritonavir_ergotamin
+UNION all
+SELECT * from darunavir_ritonavir_ivabradin
+UNION all
+SELECT * from darunavir_ritonavir_ticagrelor
+UNION all
+SELECT * from darunavir_ritonavir_ranolazin
+UNION all
+SELECT * from darunavir_ritonavir_tolvaptan
+UNION all
+SELECT * from darunavir_ritonavir_felodipin
+UNION all
+SELECT * from darunavir_ritonavir_lercanidipin
+UNION all
+SELECT * from darunavir_ritonavir_rifampicin
+UNION all
+SELECT * from darunavir_ritonavir_grazoprevir_elbasvir
+UNION all
+SELECT * from darunavir_ritonavir_domperidon
+UNION all
+SELECT * from darunavir_ritonavir_vardenafil
+UNION all
+SELECT * from darunavir_ritonavir_propafenon
+UNION all
+SELECT * from darunavir_ritonavir_everolimus
+UNION all
+SELECT * from delamanid_rifampicin
+UNION all
+SELECT * from delamanid_enzalutamid
+UNION all
+SELECT * from delamanid_phenytoin
+UNION all
+SELECT * from dexamethason_rilpivirin
+UNION all
+SELECT * from dexibuprofen_ketorolac
+UNION all
+SELECT * from dexketoprofen_ketorolac
+UNION all
+SELECT * from dexlansoprazol_rilpivirin
+UNION all
+SELECT * from dextromethorphan_paroxetin
+UNION all
+SELECT * from dextromethorphan_fluoxetin
+UNION all
+SELECT * from diclofenac_ketorolac
+UNION all
+SELECT * from dihydroergotamin_sumatriptan
+UNION all
+SELECT * from dihydroergotamin_roxithromycin
+UNION all
+SELECT * from dihydroergotamin_erythromycin
+UNION all
+SELECT * from dihydroergotamin_voriconazol
+UNION all
+SELECT * from dihydroergotamin_posaconazol
+UNION all
+SELECT * from dihydroergotamin_itraconazol
+UNION all
+SELECT * from dihydroergotamin_saquinavir_ritonavir
+UNION all
+SELECT * from dihydroergotamin_lopinavir_ritonavir
+UNION all
+SELECT * from dihydroergotamin_indinavir_ritonavir
+UNION all
+SELECT * from diltiazem_ivabradin
+UNION all
+SELECT * from domperidon_sotalol
+UNION all
+SELECT * from domperidon_donepezil
+UNION all
+SELECT * from domperidon_haloperidol
+UNION all
+SELECT * from domperidon_escitalopram
+UNION all
+SELECT * from domperidon_spiramycin
+UNION all
+SELECT * from domperidon_moxifloxacin
+UNION all
+SELECT * from domperidon_levofloxacin
+UNION all
+SELECT * from domperidon_thioridazin
+UNION all
+SELECT * from domperidon_methadon
+UNION all
+SELECT * from domperidon_sparfloxacin
+UNION all
+SELECT * from domperidon_lopinavir_ritonavir
+UNION all
+SELECT * from domperidon_saquinavir_ritonavir
+UNION all
+SELECT * from domperidon_indinavir_ritonavir
+UNION all
+SELECT * from domperidon_itraconazol
+UNION all
+SELECT * from domperidon_fluconazol
+UNION all
+SELECT * from domperidon_posaconazol
+UNION all
+SELECT * from domperidon_voriconazol
+UNION all
+SELECT * from domperidon_erythromycin
+UNION all
+SELECT * from domperidon_levomepromazin
+UNION all
+SELECT * from domperidon_levosulpirid
+UNION all
+SELECT * from domperidon_ondansetron
+UNION all
+SELECT * from domperidon_oxaliplatin
+UNION all
+SELECT * from domperidon_propofol
+UNION all
+SELECT * from domperidon_roxithromycin
+UNION all
+SELECT * from domperidon_sevofluran
+UNION all
+SELECT * from domperidon_sulpirid
+UNION all
+SELECT * from doxycyclin_tretinoin
+UNION all
+SELECT * from doxycyclin_isotretinoin
+UNION all
+SELECT * from duloxetin_fluvoxamin
+UNION all
+SELECT * from efavirenz_grazoprevir_elbasvir
+UNION all
+SELECT * from eltrombopag_grazoprevir_elbasvir
+UNION all
+SELECT * from enalapril_sacubitril_valsartan_sacubitril
+UNION all
+SELECT * from enzalutamid_grazoprevir_elbasvir
+UNION all
+SELECT * from ephedrin_xanh_methylen_IV
+UNION all
+SELECT * from ephedrin_xanh_methylen_IV
+UNION all
+SELECT * from ephedrin_furazolidon
+UNION all
+SELECT * from ergometrin_sumatriptan
+UNION all
+SELECT * from ergometrin_roxithromycin
+UNION all
+SELECT * from ergometrin_erythromycin
+UNION all
+SELECT * from ergometrin_voriconazol
+UNION all
+SELECT * from ergometrin_posaconazol
+UNION all
+SELECT * from ergometrin_itraconazol
+UNION all
+SELECT * from ergotamin_sumatriptan
+UNION all
+SELECT * from ergotamin_roxithromycin
+UNION all
+SELECT * from ergotamin_erythromycin
+UNION all
+SELECT * from ergotamin_voriconazol
+UNION all
+SELECT * from ergotamin_posaconazol
+UNION all
+SELECT * from ergotamin_itraconazol
+UNION all
+SELECT * from ergotamin_saquinavir_ritonavir
+UNION all
+SELECT * from ergotamin_lopinavir_ritonavir
+UNION all
+SELECT * from ergotamin_indinavir_ritonavir
+UNION all
+SELECT * from erythromycin_lovastatin
+UNION all
+SELECT * from erythromycin_simvastatin
+UNION all
+SELECT * from erythromycin_methylergometrin
+UNION all
+SELECT * from erythromycin_ivabradin
+UNION all
+SELECT * from etodolac_ketorolac
+UNION all
+SELECT * from etoricoxib_ketorolac
+UNION all
+SELECT * from everolimus_lopinavir_ritonavir_ritonavir
+UNION all
+SELECT * from everolimus_indinavir_ritonavir
+UNION all
+SELECT * from everolimus_saquinavir_ritonavir_ritonavir
+UNION all
+SELECT * from everolimus_itraconazol
+UNION all
+SELECT * from felodipin_lopinavir_ritonavir
+UNION all
+SELECT * from felodipin_indinavir_ritonavir
+UNION all
+SELECT * from felodipin_saquinavir_ritonavir
+UNION all
+SELECT * from felodipin_itraconazol
+UNION all
+SELECT * from felodipin_posaconazol
+UNION all
+SELECT * from felodipin_voriconazol
+UNION all
+SELECT * from floctafenin_ketorolac
+UNION all
+SELECT * from flurbiprofen_ketorolac
+UNION all
+SELECT * from fluvastatin_gemfibrozil
+UNION all
+SELECT * from fluvoxamin_tizanidin
+UNION all
+SELECT * from furazolidon_levodopa_carbidopa_entacapon
+UNION all
+SELECT * from furazolidon_methyldopa
+UNION all
+SELECT * from furazolidon_pseudoephedrin_uong
+UNION all
+SELECT * from furazolidon_phenylephrin_uong
+UNION all
+SELECT * from furazolidon_nefopam
+UNION all
+SELECT * from gemfibrozil_repaglinid
+UNION all
+SELECT * from gemfibrozil_simvastatin
+UNION all
+SELECT * from gemfibrozil_lovastatin
+UNION all
+SELECT * from gemfibrozil_pravastatin
+UNION all
+SELECT * from grazoprevir_elbasvir_phenobarbital
+UNION all
+SELECT * from grazoprevir_elbasvir_phenytoin
+UNION all
+SELECT * from grazoprevir_elbasvir_rifampicin
+UNION all
+SELECT * from grazoprevir_elbasvir_saquinavir_ritonavir
+UNION all
+SELECT * from grazoprevir_elbasvir_lopinavir_ritonavir_lopinavir
+UNION all
+SELECT * from ibuprofen_ketorolac
+UNION all
+SELECT * from imidapril_sacubitril_valsartan_sacubitril
+UNION all
+SELECT * from indinavir_ritonavir_lovastatin
+UNION all
+SELECT * from indinavir_ritonavir_simvastatin
+UNION all
+SELECT * from indinavir_ritonavir_ivabradin
+UNION all
+SELECT * from indinavir_ritonavir_ticagrelor
+UNION all
+SELECT * from indinavir_ritonavir_ranolazin
+UNION all
+SELECT * from indinavir_ritonavir_tolvaptan
+UNION all
+SELECT * from indinavir_ritonavir_lercanidipin
+UNION all
+SELECT * from indinavir_ritonavir_vardenafil
+UNION all
+SELECT * from indinavir_ritonavir_rifampicin
+UNION all
+SELECT * from indinavir_ritonavir_propafenon
+UNION all
+SELECT * from indomethacin_ketorolac
+UNION all
+SELECT * from irinotecan_itraconazol
+UNION all
+SELECT * from isosorbid_dinitrat_sildenafil
+UNION all
+SELECT * from isosorbid_dinitrat_vardenafil
+UNION all
+SELECT * from isosorbid_dinitrat_tadalafil
+UNION all
+SELECT * from isosorbid_mononitrat_sildenafil
+UNION all
+SELECT * from isosorbid_mononitrat_vardenafil
+UNION all
+SELECT * from isosorbid_mononitrat_tadalafil
+UNION all
+SELECT * from isotretinoin_minocyclin
+UNION all
+SELECT * from isotretinoin_tetracyclin
+UNION all
+SELECT * from isotretinoin_tigecyclin
+UNION all
+SELECT * from itraconazol_lovastatin
+UNION all
+SELECT * from itraconazol_simvastatin
+UNION all
+SELECT * from itraconazol_methylergometrin
+UNION all
+SELECT * from itraconazol_ivabradin
+UNION all
+SELECT * from itraconazol_ticagrelor
+UNION all
+SELECT * from itraconazol_ranolazin
+UNION all
+SELECT * from itraconazol_tolvaptan
+UNION all
+SELECT * from itraconazol_lercanidipin
+UNION all
+SELECT * from itraconazol_vardenafil
+UNION all
+SELECT * from itraconazol_quetiapin
+UNION all
+SELECT * from ivabradin_lopinavir_ritonavir
+UNION all
+SELECT * from ivabradin_saquinavir_ritonavir
+UNION all
+SELECT * from ivabradin_posaconazol
+UNION all
+SELECT * from ivabradin_voriconazol
+UNION all
+SELECT * from ivabradin_verapamil
+UNION all
+SELECT * from ketoprofen_ketorolac
+UNION all
+SELECT * from ketorolac_lornoxicam
+UNION all
+SELECT * from ketorolac_loxoprofen
+UNION all
+SELECT * from ketorolac_meloxicam
+UNION all
+SELECT * from ketorolac_nabumeton
+UNION all
+SELECT * from ketorolac_naproxen
+UNION all
+SELECT * from ketorolac_piroxicam
+UNION all
+SELECT * from ketorolac_talniflumat
+UNION all
+SELECT * from ketorolac_tenoxicam
+UNION all
+SELECT * from ketorolac_zaltoprofen
+UNION all
+SELECT * from lansoprazol_rilpivirin
+UNION all
+SELECT * from lercanidipin_lopinavir_ritonavir
+UNION all
+SELECT * from lercanidipin_saquinavir_ritonavir
+UNION all
+SELECT * from lercanidipin_posaconazol
+UNION all
+SELECT * from lercanidipin_voriconazol
+UNION all
+SELECT * from levodopa_carbidopa_entacapon_metoclopramid
+UNION all
+SELECT * from levodopa_carbidopa_entacapon_sulpirid
+UNION all
+SELECT * from levodopa_carbidopa_entacapon_linezolid
+UNION all
+SELECT * from levodopa_carbidopa_entacapon_xanh_methylen_IV
+UNION all
+SELECT * from linezolid_methyldopa
+UNION all
+SELECT * from linezolid_pseudoephedrin_uong
+UNION all
+SELECT * from linezolid_phenylephrin_uong
+UNION all
+SELECT * from linezolid_nefopam
+UNION all
+SELECT * from lisinopril_sacubitril_valsartan_sacubitril
+UNION all
+SELECT * from lopinavir_ritonavir_lovastatin
+UNION all
+SELECT * from lopinavir_ritonavir_simvastatin
+UNION all
+SELECT * from lopinavir_ritonavir_ticagrelor
+UNION all
+SELECT * from lopinavir_ritonavir_ranolazin
+UNION all
+SELECT * from lopinavir_ritonavir_tolvaptan
+UNION all
+SELECT * from lopinavir_ritonavir_ritonavir_vardenafil
+UNION all
+SELECT * from lopinavir_ritonavir_ritonavir_propafenon
+UNION all
+SELECT * from lovastatin_saquinavir_ritonavir
+UNION all
+SELECT * from lovastatin_posaconazol
+UNION all
+SELECT * from lovastatin_voriconazol
+UNION all
+SELECT * from lovastatin_mifepriston
+UNION all
+SELECT * from methyldopa_xanh_methylen_IV
+UNION all
+SELECT * from methylergometrin_sumatriptan
+UNION all
+SELECT * from methylergometrin_roxithromycin
+UNION all
+SELECT * from methylergometrin_voriconazol
+UNION all
+SELECT * from methylergometrin_posaconazol
+UNION all
+SELECT * from metoclopramid_rotigotin
+UNION all
+SELECT * from metoclopramid_pramipexol
+UNION all
+SELECT * from metoclopramid_piribedil
+UNION all
+SELECT * from mifepriston_simvastatin
+UNION all
+SELECT * from minocyclin_tretinoin
+UNION all
+SELECT * from nefopam_xanh_methylen_IV
+UNION all
+SELECT * from nicorandil_sildenafil
+UNION all
+SELECT * from nicorandil_vardenafil
+UNION all
+SELECT * from nicorandil_tadalafil
+UNION all
+SELECT * from nifedipin_rifampicin
+UNION all
+SELECT * from nitroglycerin_sildenafil
+UNION all
+SELECT * from nitroglycerin_vardenafil
+UNION all
+SELECT * from nitroglycerin_tadalafil
+UNION all
+SELECT * from esomeprazol_rilpivirin
+UNION all
+SELECT * from omeprazol_rilpivirin
+UNION all
+SELECT * from oxcarbazepin_rilpivirin
+UNION all
+SELECT * from pantoprazol_rilpivirin
+UNION all
+SELECT * from paroxetin_thioridazin
+UNION all
+SELECT * from peginterferon_alpha_telbivudin
+UNION all
+SELECT * from perindopril_sacubitril_valsartan_sacubitril
+UNION all
+SELECT * from phenobarbital_praziquantel
+UNION all
+SELECT * from phenobarbital_rilpivirin
+UNION all
+SELECT * from phenobarbital_voriconazol
+UNION all
+SELECT * from phenobarbital_ranolazin
+UNION all
+SELECT * from phenylephrin_uong_xanh_methylen_IV
+UNION all
+SELECT * from phenytoin_praziquantel
+UNION all
+SELECT * from phenytoin_rilpivirin
+UNION all
+SELECT * from phenytoin_ranolazin
+UNION all
+SELECT * from piribedil_sulpirid
+UNION all
+SELECT * from posaconazol_simvastatin
+UNION all
+SELECT * from posaconazol_ticagrelor
+UNION all
+SELECT * from posaconazol_ranolazin
+UNION all
+SELECT * from posaconazol_tolvaptan
+UNION all
+SELECT * from posaconazol_quetiapin
+UNION all
+SELECT * from pramipexol_sulpirid
+UNION all
+SELECT * from praziquantel_rifampicin
+UNION all
+SELECT * from propafenon_saquinavir_ritonavir_ritonavir
+UNION all
+SELECT * from pseudoephedrin_uong_xanh_methylen_IV
+UNION all
+SELECT * from quetiapin_voriconazol
+UNION all
+SELECT * from quinapril_sacubitril_valsartan_sacubitril
+UNION all
+SELECT * from rabeprazol_rilpivirin
+UNION all
+SELECT * from ramipril_sacubitril_valsartan_sacubitril
+UNION all
+SELECT * from ranolazin_saquinavir_ritonavir
+UNION all
+SELECT * from ranolazin_voriconazol
+UNION all
+SELECT * from ranolazin_rifampicin
+UNION all
+SELECT * from rifampicin_rilpivirin
+UNION all
+SELECT * from rifampicin_voriconazol
+UNION all
+SELECT * from rifampicin_sofosbuvir
+UNION all
+SELECT * from rifampicin_saquinavir_ritonavir
+UNION all
+SELECT * from rosuvastatin_sofosbuvir_ledipasvir_ledipasvir
+UNION all
+SELECT * from rotigotin_sulpirid
+UNION all
+SELECT * from sacubitril_valsartan_sacubitril_trandolapril
+UNION all
+SELECT * from sacubitril_valsartan_sacubitril_zofenopril
+UNION all
+SELECT * from saquinavir_ritonavir_simvastatin
+UNION all
+SELECT * from saquinavir_ritonavir_ticagrelor
+UNION all
+SELECT * from saquinavir_ritonavir_tolvaptan
+UNION all
+SELECT * from saquinavir_ritonavir_ritonavir_vardenafil
+UNION all
+SELECT * from simvastatin_voriconazol
+UNION all
+SELECT * from tetracyclin_tretinoin
+UNION all
+SELECT * from ticagrelor_voriconazol
+UNION all
+SELECT * from tigecyclin_tretinoin
+UNION all
+SELECT * from tolvaptan_voriconazol
+)
+SELECT * from data_kiemtra
