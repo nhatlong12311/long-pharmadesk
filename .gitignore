@@ -1,0 +1,34 @@
+# Secrets and local settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+**/secrets.*
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+# Clinical and operational data
+Excel_xuat/
+RPT/
+uploads/
+results/
+drafts/
+*.log
+# Do not publish patient files or sample hospital data
+*.csv
+*.xls
+*.xlsx
+*.xlsm
+*.rpt
+# Binary document templates and fonts must be reviewed for redistribution before public upload
+*.ttf
+*.otf
+*.pdf
+*.docx
+# Operating-system generated
+.DS_Store
+Thumbs.db
