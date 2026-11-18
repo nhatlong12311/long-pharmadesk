@@ -126,6 +126,14 @@ async function main() {
     assert.ok(vancomycin.with_ld.auc0_24 > 0);
     const aminoglycoside = await api(page, "/api/tdm/amg/start", {data:{...sample, scr:100, dose:320, tau:24}});
     assert.ok(aminoglycoside.drugs.gentamicin);
+    const vancoLevels = await api(page, "/api/tdm/vanco/two", {data:{
+      dose1:1000, tinf1:1, tau:12, weight:70, t1:1, t2:6, c1:25, c2:10,
+    }});
+    assert.ok(vancoLevels.pk.cl > 0);
+    const amgLevels = await api(page, "/api/tdm/amg/two", {data:{
+      dose:320, tau:24, tinf:0.5, t1:1, t2:8, c1:14, c2:3,
+    }});
+    assert.ok(amgLevels.pk.cl > 0);
     console.log("TDM: vancomycin and aminoglycoside");
 
     await page.locator("#sidebarToggle").click();
