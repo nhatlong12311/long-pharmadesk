@@ -85,7 +85,38 @@ async function main() {
     const page = await context.newPage();
     const errors = [];
     page.on("pageerror", error => errors.push(error.message));
-    await page.goto(site);
+    let allowStartup;
+    const pauseStartup = new Promise(resolve => { allowStartup = resolve; });
+    await page.route("**/python.zip", async route => {
+      await pauseStartup;
+      await route.continue();
+    }, {times:1});
+    await page.goto(site + "?module=adr");
+    const description = page.locator('[data-ap="mo_ta"]');
+    await description.fill("Nội dung giả nhập trong lúc Python đang tải.");
+    assert.equal(await page.locator("#adrGo").isEnabled(), false);
+    assert.equal(await page.locator("#adrForm .adr-drug").count(), 4);
+    assert.equal(await page.locator("#adrForm .adr-con").count(), 10);
+    const startupBounds = await page.locator("#localStatus").boundingBox();
+    const formBounds = await page.locator("#adrMain").boundingBox();
+    assert.ok(startupBounds.y + startupBounds.height <= formBounds.y);
+
+    const sidebar = page.locator("header");
+    for (const expanded of [false, true, false]) {
+      if ((await page.locator("#sidebarToggle").getAttribute("aria-pressed") === "true") !== expanded) {
+        await page.locator("#sidebarToggle").click();
+      }
+      await page.locator("#tabAdr").hover();
+      const nav = await sidebar.boundingBox();
+      assert.ok((await page.locator("#adrMain").boundingBox()).x >= nav.x + nav.width);
+      assert.ok(await page.locator("#tabAbc").isVisible());
+    }
+    allowStartup();
+    await page.waitForFunction(() => !document.querySelector("#adrGo").disabled);
+    assert.equal(await description.evaluate(input => input.value), "Nội dung giả nhập trong lúc Python đang tải.");
+    console.log("ADR starts before Python is ready and the sidebar stays outside the form");
+
+    await page.locator("#tabAbc").click();
     await page.waitForFunction(() => document.querySelector("#abcM").value && document.querySelector("#localStatus").hidden);
     assert.equal(await page.locator("#tabGop").isVisible(), false);
     assert.equal(await page.locator("#tabTru").isVisible(), false);
@@ -136,7 +167,6 @@ async function main() {
     assert.ok(amgLevels.pk.cl > 0);
     console.log("TDM: vancomycin and aminoglycoside");
 
-    await page.locator("#sidebarToggle").click();
     await page.locator("#tabAdr").click();
     await page.locator('[data-ap="ten_bn"]').fill("MẪU THỬ");
     await page.locator('[data-ap="mo_ta"]').fill("Dữ liệu giả từ kiểm thử GitHub Pages.");
@@ -158,6 +188,17 @@ async function main() {
 
     await second.goto(site + "browser.html");
     await second.waitForFunction(() => window.XLSX && document.querySelector("#ruleInfo").textContent.includes("cặp"));
+
+    await second.route("**/python.zip", route => route.abort(), {times:1});
+    await second.goto(site + "?module=adr");
+    await second.locator('[data-ap="mo_ta"]').fill("Dữ liệu giả giữ lại khi khởi động lại.");
+    await second.locator("#localRetry").waitFor();
+    await second.locator("#localRetry").click();
+    await second.waitForFunction(() => !document.querySelector("#adrGo").disabled);
+    assert.equal(await second.locator('[data-ap="mo_ta"]').evaluate(input => input.value),
+      "Dữ liệu giả giữ lại khi khởi động lại.");
+    console.log("The Python worker can be restarted without losing ADR input");
+
     assert.deepEqual(unexpected, [], "The app must send no requests outside the Pages site");
     assert.deepEqual(errors, []);
   } finally {

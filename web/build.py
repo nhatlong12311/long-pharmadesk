@@ -83,7 +83,8 @@ def build(output):
     html = replacements(html, [
         ('</head>', '<link rel="stylesheet" href="./local.css">\n</head>'),
         ('<div class="portfolio-back"><a href="/">← LONG / Personal Portfolio</a><span class="tag">PHARMADESK 3.0 · LOCAL CLINICAL WORKSPACE</span></div>',
-         '<div class="portfolio-back"><span>PHARMADESK 3.0 · XỬ LÝ TRÊN THIẾT BỊ</span><a href="./browser.html">Bản web nhẹ</a></div><div id="localStatus" role="status">Đang tải chương trình Python…</div>'),
+         '<div class="portfolio-back"><span>PHARMADESK 3.0 · XỬ LÝ TRÊN THIẾT BỊ</span><a href="./browser.html">Bản web nhẹ</a></div>'),
+        ('    </div>\n</div>\n\n<main id="truMain"', '    </div>\n  <div id="localStatus"><span id="localStatusMessage" role="status">Đang tải chương trình Python…</span><button type="button" id="localRetry" class="ghost" hidden>Thử lại</button></div>\n</div>\n\n<main id="truMain"'),
         ('<script>\n// Attach the per-process token', '<script src="./local.js"></script>\n<script>\n// Attach the per-process token'),
         ("const module=new URLSearchParams(location.search).get('module');",
          "const requested=new URLSearchParams(location.search).get('module')||location.hash.slice(1);\n const module=['abc','ttt','tdm','adr'].includes(requested)?requested:'abc';"),

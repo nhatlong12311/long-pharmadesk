@@ -2,19 +2,23 @@
 (() => {
   const pending = new Map();
   const status = document.getElementById("localStatus");
+  const message = document.getElementById("localStatusMessage");
+  const retry = document.getElementById("localRetry");
   const fetchStatic = window.fetch.bind(window);
+  const startupTimeout = 90_000;
   let worker;
+  let startupTimer;
   let nextId = 0;
 
-  function startupError(error) {
+  function startupError(failedWorker, error) {
+    if (worker !== failedWorker) return;
     console.error(error);
+    clearTimeout(startupTimer);
     worker?.terminate();
     worker = undefined;
-    const link = document.createElement("a");
-    link.href = "./browser.html";
-    link.textContent = "Mở bản web nhẹ";
-    status.replaceChildren("Không tải được chương trình. Hãy tải lại trang hoặc ", link, ".");
+    message.textContent = "Chưa khởi động được chương trình. Bấm Thử lại để tiếp tục.";
     status.hidden = false;
+    retry.hidden = false;
     for (const resolve of pending.values()) {
       resolve(Response.json({ok: false, msg: "Chương trình trên trình duyệt chưa sẵn sàng."}, {status: 503}));
     }
@@ -22,19 +26,24 @@
   }
 
   function start() {
-    status.textContent = "Đang tải chương trình Python…";
+    message.textContent = "Đang tải chương trình Python. Lần mở đầu tiên cần tải các thành phần từ GitHub Pages.";
     status.hidden = false;
-    worker = new Worker("./worker.mjs", {type: "module"});
-    worker.addEventListener("error", startupError);
-    worker.addEventListener("messageerror", startupError);
-    worker.addEventListener("message", ({data}) => {
+    retry.hidden = true;
+    const running = new Worker("./worker.mjs", {type: "module"});
+    worker = running;
+    startupTimer = setTimeout(() => startupError(running, new Error("Python startup timed out")), startupTimeout);
+    running.addEventListener("error", error => startupError(running, error));
+    running.addEventListener("messageerror", error => startupError(running, error));
+    running.addEventListener("message", ({data}) => {
+      if (worker !== running) return;
       if (data.startupError) {
-        startupError(data.startupError);
+        startupError(running, data.startupError);
         return;
       }
       if (data.ready) {
+        clearTimeout(startupTimer);
         status.hidden = data.persistent;
-        if (!data.persistent) status.textContent = "Trình duyệt chỉ lưu dữ liệu trong tab này. Hãy tải báo cáo trước khi đóng tab.";
+        if (!data.persistent) message.textContent = "Trình duyệt chỉ lưu dữ liệu trong tab này. Hãy tải báo cáo trước khi đóng tab.";
         return;
       }
       const resolve = pending.get(data.id);
@@ -43,6 +52,12 @@
       resolve(new Response(data.body, {status: data.status, headers: data.headers}));
     });
   }
+
+  retry.addEventListener("click", async () => {
+    document.querySelector('.tab[aria-current="page"]')?.click();
+    const response = await window.fetch("/api/version");
+    if (response.ok) document.getElementById("ver").textContent = "· " + (await response.json()).v;
+  });
 
   window.fetch = async (input, options) => {
     const request = new Request(input, options);
@@ -54,10 +69,17 @@
     if (body.byteLength > 20 * 1024 * 1024) {
       return Response.json({ok: false, msg: "Yêu cầu vượt giới hạn 20 MB."}, {status: 413});
     }
-    if (!worker) start();
     return new Promise(resolve => {
       const id = ++nextId;
       pending.set(id, resolve);
+      if (!worker) {
+        try {
+          start();
+        } catch (error) {
+          startupError(worker, error);
+          return;
+        }
+      }
       worker.postMessage({
         id, method: request.method, path: url.pathname + url.search,
         contentType: request.headers.get("content-type"), body,
