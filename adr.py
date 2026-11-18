@@ -6,6 +6,7 @@ Dien thong tin vao MAU PDF chinh thuc (115 truong) -> PDF da dien + ban Word chi
 - O tick/nut chon dung chinh hinh o trong mau (chon /AS cua widget).
 """
 import datetime, io, json, os, re, threading, uuid
+from bisect import bisect_right
 from pathlib import Path
 
 from common import save_document, iter_sheets, atomic_write_json, file_routes, guarded, norm, safe
@@ -83,7 +84,7 @@ def _collect(reader):
     return texts, groups
 
 
-def _wrap(text, font, size, width):
+def _wrap(text, font, size, width, line_limit):
     from reportlab.pdfbase.pdfmetrics import stringWidth
     lines = []
     for para in text.replace("\r", "").split("\n"):
@@ -96,15 +97,20 @@ def _wrap(text, font, size, width):
                 continue
             if cur:
                 lines.append(cur)
+                if len(lines) == line_limit:
+                    return lines
             # tu qua dai -> cat theo ky tu
             while stringWidth(w, font, size) > width and len(w) > 1:
-                k = len(w)
-                while k > 1 and stringWidth(w[:k], font, size) > width:
-                    k -= 1
+                k = max(1, bisect_right(range(1, len(w)), width,
+                                        key=lambda end: stringWidth(w[:end], font, size)))
                 lines.append(w[:k])
+                if len(lines) == line_limit:
+                    return lines
                 w = w[k:]
             cur = w
         lines.append(cur)
+        if len(lines) == line_limit:
+            return lines
     return lines
 
 
@@ -114,14 +120,16 @@ def _fit(text, rect, font, smax, smin, multiline):
     w, h = x1 - x0 - 3.0, y1 - y0 - 1.5
     size = smax
     while size >= smin - 1e-6:
-        words_ok = all(stringWidth(t, font, size) <= w for t in re.split(r"\s+", text) if t)
-        lines = _wrap(text, font, size, w)
-        if words_ok and len(lines) * size * 1.12 <= h + 0.01:
+        line_limit = max(1, int((h + 0.01) // (size * 1.12)) + 1)
+        lines = _wrap(text, font, size, w, line_limit)
+        if len(lines) * size * 1.12 <= h + 0.01 and all(
+            stringWidth(word[0], font, size) <= w for word in re.finditer(r"\S+", text)
+        ):
             return size, lines, False
         size -= 0.25
     size = smin
-    lines = _wrap(text, font, size, w)
     cap = max(1, int(h // (size * 1.12)))
+    lines = _wrap(text, font, size, w, cap + 1)
     return size, lines[:cap], len(lines) > cap
 
 
@@ -507,12 +515,14 @@ def load_defaults():
         return {}
 
 
-def generate(data):
+def generate(data, *, output_dir=None, persist_defaults=True):
     if not any(_s(data.get(k)) for k in ("ten_bn", "mo_ta", "ngay_pu")):
         raise ValueError("Chưa nhập thông tin phản ứng: hãy nhập ít nhất họ tên bệnh nhân hoặc mô tả biểu hiện ADR.")
-    atomic_write_json(CFG["data"] / "adr_defaults.json", {k: _s(data.get(k)) for k in DEFAULT_KEYS})
+    if persist_defaults:
+        atomic_write_json(CFG["data"] / "adr_defaults.json", {k: _s(data.get(k)) for k in DEFAULT_KEYS})
     base = f"ADR_{slug(data.get('ten_bn')) or 'chua_dat_ten'}_{datetime.datetime.now():%Y%m%d_%H%M%S_%f}_{uuid.uuid4().hex[:8]}"
-    outdir = CFG["data"] / "Bao_cao"
+    outdir = Path(output_dir) if output_dir is not None else CFG["data"] / "Bao_cao"
+    outdir.mkdir(parents=True, exist_ok=True)
     warnings = fill_pdf(data, outdir / (base + ".pdf"))
     make_docx(data, outdir / (base + ".docx"))
     if not _s(data.get("ten_bn")):
@@ -542,18 +552,23 @@ def make_blueprint():
     @bp.post("/api/adr/generate")
     @guarded(_LOCK, ("pypdf", "reportlab", "PIL", "docx"), perm="Không ghi được file. Nếu đang mở báo cáo cũ trong PDF/Word thì hãy đóng lại.")
     def gen():
-        result = generate(request.get_json(silent=True) or {})
-        # On ephemeral/cloud hosting, reports can disappear before the next GET.
-        # Return the newly generated files with this response so the browser can
-        # download them without depending on a shared server filesystem.
+        data = request.get_json(silent=True) or {}
         if os.environ.get("PHARMADESK_ONLINE") == "1":
+            # Create both original-format reports in a request-scoped directory.
+            # Render files can disappear on redeploy; never depend on a second
+            # GET or retain generated reports containing patient information.
             import base64
-            report_dir = CFG["data"] / "Bao_cao"
-            result["inline_files"] = {}
-            for key in ("pdf", "docx"):
-                file_path = report_dir / result[key]
-                result["inline_files"][key] = base64.b64encode(file_path.read_bytes()).decode("ascii")
-        return jsonify(ok=True, **result)
+            import tempfile
+            with tempfile.TemporaryDirectory(prefix="pd_adr_") as temporary:
+                report_dir = Path(temporary)
+                result = generate(data, output_dir=report_dir, persist_defaults=False)
+                result["inline_files"] = {
+                    key: base64.b64encode((report_dir / result[key]).read_bytes()).decode("ascii")
+                    for key in ("pdf", "docx")
+                }
+                return jsonify(ok=True, **result)
+        # Preserve Windows desktop generation, default settings and downloads.
+        return jsonify(ok=True, **generate(data))
 
     def draft_path(name):
         # Accept legacy ASCII slugs as well as UUIDs without truncating identifiers.
