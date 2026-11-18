@@ -902,7 +902,27 @@ $('sidebarToggle').addEventListener('click',event=>{
 });
 
 let items=[],PV=[],mode='khoa';
-const api=(u,o)=>fetch(u,o).then(r=>r.json());
+async function api(u,o){
+ let response;
+ try{response=await fetch(u,o)}
+ catch(e){throw new Error('Không kết nối được máy chủ ('+u+'). Kiểm tra Render có đang Live và mạng Internet. '+String(e))}
+ const contentType=(response.headers.get('content-type')||'').toLowerCase();
+ if(!contentType.includes('application/json')){
+  const status=response.status;
+  let detail='';
+  if([502,503,504].includes(status))detail='Render đang khởi động, quá tải hoặc gặp lỗi máy chủ. Kiểm tra Events/Logs trên Render rồi thử lại.';
+  else if(status===401||status===403)detail='Phiên đăng nhập không hợp lệ. Mở lại trang Tools và đăng nhập.';
+  else if(status===404)detail='Đường dẫn API không tồn tại hoặc chưa triển khai phiên bản mới.';
+  else if(status===413)detail='Dữ liệu hoặc báo cáo vượt giới hạn dung lượng.';
+  else detail='Máy chủ trả về HTML thay vì JSON. Kiểm tra trạng thái triển khai và Logs trên Render.';
+  throw new Error('Lỗi API '+u+' · HTTP '+status+'. '+detail);
+ }
+ let data;
+ try{data=await response.json()}
+ catch(e){throw new Error('Phản hồi JSON không hợp lệ từ '+u+' · HTTP '+response.status+'.')}
+ if(!response.ok)throw new Error('Lỗi API '+u+' · HTTP '+response.status+': '+(data&&data.msg?data.msg:'Không xử lý được yêu cầu.'));
+ return data;
+}
 const post=(u,b)=>api(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
 function toast(m,t){t=t||(/không|lỗi|chưa|cần/i.test(m)?'er':'ok');const e=document.createElement('div');e.className='t '+t;e.textContent=m;$('toast').appendChild(e);setTimeout(()=>e.remove(),t==='er'?6000:3500)}
 function setLog(value){$('log').textContent=value;$('logFull').textContent=value}
