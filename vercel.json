@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "python3.12 -m pip --version || dnf install -y python3.12 python3.12-pip",
+  "buildCommand": "python3.12 web/build.py dist-vercel",
+  "outputDirectory": "dist-vercel"
+}

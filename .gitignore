@@ -12,5 +12,6 @@ RPT/
 /build/
 /dist/
 /dist-pages/
+/dist-vercel/
 /node_modules/
 /PharmaDesk_V3_0.spec
