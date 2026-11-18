@@ -41,8 +41,9 @@ jobs:
           node-version: "22"
       - run: python web/build.py dist-pages
       - run: npm install --no-save --no-package-lock playwright@1.58.2
-      - run: npx playwright install --with-deps chromium
       - run: node web/smoke.cjs dist-pages
+        env:
+          CHROMIUM_PATH: /usr/bin/google-chrome
       - uses: actions/upload-pages-artifact@v3
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         with:
