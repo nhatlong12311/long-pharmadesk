@@ -7,7 +7,7 @@ const { chromium } = require("playwright");
 
 const root = resolve(process.argv[2]);
 const xlsx = require(resolve(root, "xlsx.full.min.js"));
-const prefix = "/long-pharmadesk/";
+const prefix = process.argv[3] ?? "/long-pharmadesk/";
 const mime = {
   ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".mjs": "text/javascript",
   ".css": "text/css", ".json": "application/json", ".wasm": "application/wasm",
