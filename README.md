@@ -1,36 +1,29 @@
-# LONG × PharmaDesk
+# PharmaDesk 3.0
 
-Portfolio cá nhân + bộ công cụ dược lâm sàng ABC/VEN, tương tác thuốc, TDM và ADR.
+PharmaDesk gồm Tổng hợp phiếu, Trừ tổng, ABC/VEN, Tương tác thuốc, TDM và Báo cáo ADR. Bản Windows có giao diện của cả sáu chức năng. Bản web chạy các công cụ lâm sàng bằng backend Flask.
 
-## Trạng thái
+| Nơi chạy | Chức năng |
+| --- | --- |
+| [PharmaDesk cho Windows](https://github.com/nhatlong12311/long-pharmadesk/releases) | Tổng hợp phiếu, Trừ tổng, ABC/VEN, Tương tác thuốc, TDM và ADR |
+| [PharmaDesk trên Render](https://long-pharmadesk.onrender.com/tools?module=abc) | ABC/VEN, Tương tác thuốc, TDM và ADR PDF/Word. Đăng nhập bằng tài khoản được cấp. |
+| [GitHub Pages](https://nhatlong12311.github.io/long-pharmadesk/) | Bản JavaScript thử nghiệm. Xem phạm vi trong [tài liệu Browser Edition](docs/README.md). |
 
-- Repository: **Public** theo lựa chọn của chủ dự án.
-- Đã có cấu hình Render và workflow nhập mã nguồn.
-- **Chưa đưa toàn bộ nguồn vào repository / chưa triển khai Live.**
+## Chạy trên Windows
 
-## Hoàn tất nhập 27 tệp mã nguồn qua trình duyệt GitHub
+1. Tải `PharmaDesk_V3_0_Windows.zip` từ [Releases](https://github.com/nhatlong12311/long-pharmadesk/releases), giải nén vào thư mục bạn có quyền ghi và giữ nguyên các tệp đi kèm.
+2. Mở `PharmaDesk_V3_0.exe`. Ứng dụng chạy trên máy này và mở giao diện trong trình duyệt. Bản phát hành có sẵn mẫu gốc `Mau tong.xlsx` dùng cho Tổng hợp phiếu và Trừ tổng.
+3. Để chuyển phiếu `.rpt` sang `.xls`, Windows cần Crystal Reports 10 RDC 32-bit đã được cài đặt và đăng ký. Tổng hợp phiếu có chế độ **Chỉ gộp** cho file Excel đã xuất. Xem [hướng dẫn Trừ tổng](HUONG_DAN_TRU_TONG.txt) để kiểm tra quy trình trước và sau.
 
-1. Tải file `PHARMADESK_SOURCE_UPLOAD_GITHUB.zip` đã được chuẩn bị riêng trong cuộc trò chuyện ChatGPT (khoảng 1,4 MB).
-2. Vào trang repository → **Add file → Upload files**.
-3. Chọn **nguyên file ZIP** (không cần giải nén), đặt **ngay tại thư mục gốc** của repository, tên phải đúng `PHARMADESK_SOURCE_UPLOAD_GITHUB.zip`.
-4. Nhấn **Commit changes** vào branch `main`.
-5. Workflow [Import PharmaDesk source archive](../../actions/workflows/import-source.yml) sẽ tự kiểm tra đường dẫn tệp, giải nén mã nguồn, biên dịch Python và commit mã vào repository. Theo dõi trong tab Actions; cần cho phép GitHub Actions ghi vào repository nếu bị chặn.
+Nếu chạy từ mã nguồn, tải và giải nén mã, cài Python 3.12, rồi mở `Mo_phan_mem.bat`. Có thể tự đóng gói bằng `Build_exe.bat`. Bản đóng gói nằm trong `dist\PharmaDesk_V3_0`.
 
-⚠️ **Vì repository đang Public, mọi nội dung tệp ZIP tải lên sẽ trở thành công khai ngay cả khi workflow xóa ZIP khỏi nhánh chính.** Chỉ thực hiện khi bạn đồng ý công bố source code, các bộ quy tắc, mẫu báo cáo và tài liệu kèm theo; không được thêm dữ liệu bệnh nhân, thông tin mật hoặc tệp không có quyền phân phối.
+## Triển khai bản web
 
-## Kết nối Render
+Render chạy `app.py` theo [render.yaml](render.yaml). Cấu hình `PHARMADESK_ONLINE=1`, tài khoản và mật khẩu trong môi trường của Render. Đặt `PHARMADESK_TOOLS_ONLY=1` trên dịch vụ dành cho đồng nghiệp để mở thẳng các công cụ. [Hướng dẫn Tools Only](RENDER_TOOLS_ONLY.md)
 
-1. Render → **New → Blueprint**, kết nối GitHub repository `nhatlong12311/long-pharmadesk`.
-2. Render sử dụng `render.yaml` ở root.
-3. Nhập `PHARMADESK_PASSWORD` với mật khẩu đủ mạnh (ít nhất 16 ký tự) trong Environment. **Tuyệt đối không commit mật khẩu**.
-4. Truy cập URL Render được cấp (không tự suy đoán URL):
-   - `/`: Portfolio public.
-   - `/tools?module=abc`: ABC/VEN (Basic Auth).
-   - `/tools?module=ttt`: Tương tác thuốc.
-   - `/tools?module=tdm`: TDM.
-   - `/tools?module=adr`: ADR.
-5. Kiểm tra dữ liệu **giả/đã khử định danh**, xuất file và đối chiếu kết quả.
+Bản web dùng chung tài khoản và vùng lưu trữ. Chỉ dùng dữ liệu giả trong phiên bản thử nghiệm online. Tải báo cáo và bản nháp cần giữ về thiết bị vì Render Free có vùng lưu trữ tạm. [Hướng dẫn triển khai online](HUONG_DAN_TRIEN_KHAI_ONLINE.md)
 
-## Giới hạn và an toàn
+## Kiểm thử và phát hành
 
-Bản demo có HTTP Basic Auth cho công cụ nhưng backend dùng trạng thái/thư mục chung, **chưa an toàn cho dữ liệu bệnh nhân** hoặc sử dụng nhiều tài khoản đồng thời. Render Free có lưu trữ tạm; không được coi là kho dữ liệu lâm sàng. Chức năng Crystal Reports Windows không chạy được trên Linux. Cần kiểm thử đúng đắn lâm sàng và đánh giá bảo mật trước khi vận hành bệnh viện.
+Chạy `python -m unittest discover -s tests -v` sau khi cài `requirements.txt`. Các test dùng Excel và dữ liệu giả. Cần máy Windows có Crystal Reports 10 RDC để kiểm thử chuyển RPT từ đầu đến cuối.
+
+Workflow **Build PharmaDesk for Windows** chạy test, đóng gói ứng dụng và kiểm tra khởi động bản EXE. Chạy workflow từ `main` với `release_tag` để phát hành ZIP trên GitHub Releases.

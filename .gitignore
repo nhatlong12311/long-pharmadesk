@@ -6,4 +6,9 @@ Excel_xuat/
 RPT/
 *.xlsx
 !TUONG_TAC/*.xlsx
+!/Mau tong.xlsx
 *.xls
+/.pharmadesk-build-*/
+/build/
+/dist/
+/PharmaDesk_V3_0.spec

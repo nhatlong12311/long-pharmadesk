@@ -32,13 +32,22 @@ class Regressions(unittest.TestCase):
         cls.scratch = Path(cls.temp.name)
         cls.root = cls.scratch/'application'
         shutil.copytree(ROOT, cls.root, ignore=shutil.ignore_patterns('__pycache__'))
+        template = Workbook()
+        template.active.title = 'In'
+        template.active.append(['STT', 'Mã dược', 'Tên dược', 'Thực xuất', 'ĐVT', 'Đơn giá'])
+        template.create_sheet('Sheet2')
+        template.create_sheet('Dulieu')
+        template.create_sheet('Pivot')
+        template.save(cls.root / 'Mau tong.xlsx')
+        template.close()
         (cls.root/'Excel_xuat').mkdir(exist_ok=True)
         staged = cls.root/'Excel_xuat'/'prior_session.xlsx'
         staged.write_bytes(b'prior session fixture')
         sys.path.insert(0, str(cls.root))
         with patch.dict(os.environ, {'LOCALAPPDATA': str(cls.scratch/'user_data')}):
-            import app, abcven, adr, tdm, ttt, common
+            import app, abcven, adr, tdm, ttt, common, rpt_test
         cls.appmod, cls.abc, cls.adr, cls.tdm, cls.ttt, cls.common = app, abcven, adr, tdm, ttt, common
+        cls.rpt = rpt_test
         cls.staging_survived_import = staged.exists()
         app.app.config['TESTING'] = True
         cls.client = app.app.test_client()
@@ -122,9 +131,11 @@ class Regressions(unittest.TestCase):
         self.assertTrue(response.is_json)
 
     def test_06_session_token_is_in_the_served_page(self):
-        response = self.client.get('/tools')
-        self.assertIn(self.appmod.SESSION_TOKEN.encode(), response.data)
-        self.assertNotIn(b'__PHARMADESK_TOKEN__', response.data)
+        for url in ('/', '/tools'):
+            with self.subTest(url=url):
+                response = self.client.get(url)
+                self.assertIn(self.appmod.SESSION_TOKEN.encode(), response.data)
+                self.assertNotIn(b'__PHARMADESK_TOKEN__', response.data)
 
     def test_07_number_formats(self):
         for text, value in [('0,5',.5),('1.234,56',1234.56),('1,234.56',1234.56),('12.5',12.5),(None,0)]:
@@ -298,6 +309,56 @@ class Regressions(unittest.TestCase):
             response=self.post('/api/run',json={'export':False,'mode':'boi'})
         self.assertTrue(response.json['ok'],response.json.get('log'))
         wb=load_workbook(out,read_only=True);self.assertIn('In',wb.sheetnames);wb.close()
+
+    def test_24_rpt_subtraction_uses_quantity_and_retains_latest_unit_price(self):
+        import pandas as pd
+
+        before = [
+            [1, 'SYN-A', 'Synthetic A', 'Viên', 7, 100, 700],
+            [2, 'SYN-B', 'Synthetic B', 'Viên', 2, 200, 400],
+        ]
+        after = [
+            [1, 'SYN-A', 'Synthetic A', 'Viên', 4, 110, 440],
+            [2, 'SYN-B', 'Synthetic B', 'Viên', 2, 210, 420],
+        ]
+
+        def convert_fixture(files, folder):
+            excel = folder / 'Excel_xuat'
+            excel.mkdir()
+            paths = {key: excel / (key + '.xls') for key in files}
+            header = ['STT', 'Mã', 'Tên thuốc', 'ĐVT', 'Thực xuất', 'Đơn giá', 'Thành tiền']
+            workbook(paths['before'], [header, *before])
+            workbook(paths['after'], [header, *after])
+            return paths
+
+        originals = pd.read_excel
+
+        def read_fixture(path, **kwargs):
+            # The fixture contains OOXML data under the original Crystal export filenames.
+            with path.open('rb') as stream:
+                return originals(stream, **{**kwargs, 'engine': 'openpyxl'})
+
+        with patch.object(self.rpt, 'convert_rpt', side_effect=convert_fixture), \
+             patch.object(pd, 'read_excel', side_effect=read_fixture), \
+             contextlib.redirect_stdout(io.StringIO()):
+            response = self.post('/api/test/compare', data={
+                'before': (io.BytesIO(b'synthetic'), 'before.rpt'),
+                'after': (io.BytesIO(b'synthetic'), 'after.rpt'),
+                'khoa': 'Kiểm thử',
+            })
+        result = response.json
+        self.assertTrue(result['ok'], result)
+        self.assertEqual([(r['code'], r['qty'], r['price']) for r in result['rows']],
+                         [('SYN-A', -3.0, 110.0)])
+        base = f"/api/test/{result['token']}"
+        with self.client.get(base + '/excel') as download:
+            self.assertEqual(download.status_code, 200)
+            self.assertIn('Tru_tong.xlsx', download.headers['Content-Disposition'])
+            with contextlib.closing(load_workbook(io.BytesIO(download.data), read_only=True)) as check:
+                self.assertEqual(check['In']['A1'].value, 'TỔNG HỢP PHIẾU LĨNH KHOA KIỂM THỬ')
+        with self.client.get(base + '/print') as preview:
+            self.assertEqual(preview.status_code, 200)
+            self.assertIn(b'SYN-A', preview.data)
 
 
 if __name__=='__main__':

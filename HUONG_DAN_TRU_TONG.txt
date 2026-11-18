@@ -1,0 +1,14 @@
+﻿CHỨC NĂNG TRỪ TỔNG — QUY TRÌNH TỔNG HỢP PHIẾU LĨNH
+1. Nhập file RPT trước.
+2. Nhập file RPT sau.
+3. Bấm Tổng hợp: chương trình chuyển cả hai RPT sang XLS.
+4. Dùng cùng bộ đọc dữ liệu của Gop_va_sort_AZ.py. Cột I – Thực xuất nguồn là số lượng. Nhân số lượng phiếu trước với -1; giữ nguyên phiếu sau.
+5. Chạy cùng quy trình tổng hợp phiếu lĩnh: gộp theo mã, tra nhóm/ĐVT từ Mau tong.xlsx, tạo các sheet In, Dulieu, Pivot theo mẫu hiện tại. Kết quả tên Tru_tong.xlsx.
+6. Giữ số lượng âm, bỏ dòng tổng số lượng bằng 0. Chỉ đổi dấu cột Thực xuất nguồn. Cột J – Đơn giá giữ đúng đơn giá, ưu tiên giá phiếu sau; không cộng hai đơn giá.
+7. Tải Excel để in theo mẫu hoặc mở bản in trên trình duyệt.
+File gốc và dữ liệu tổng hợp thường không bị thay đổi. Chỉ xử lý bản sao trong thư mục tạm.
+Nếu chưa đọc đủ hai phiếu, không xuất kết quả; có nút tải XLS trung gian.
+
+Chạy Mo_phan_mem.bat từ mã nguồn hoặc Build_exe.bat để tạo EXE mới. Chuyển RPT cần Windows có Crystal Reports 10.
+
+Trừ tổng là tab riêng. Tiêu đề in lấy tên khoa từ Kho nhập / Kho nhận; có thể nhập tên khoa để thay thế. Không in tên file trước/sau.

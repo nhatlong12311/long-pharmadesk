@@ -394,6 +394,8 @@ def preview():
 
 @app.get("/")
 def portfolio_home():
+    if not ONLINE_MODE:
+        return index()
     if TOOLS_ONLY:
         # Do not serve the portfolio in the team-facing service, even by a direct / request.
         return redirect("/tools?module=abc", code=302)
@@ -403,12 +405,13 @@ def portfolio_home():
 @app.get("/tools")
 def index():
     html = (ROOT / 'ui' / 'index.html').read_text(encoding='utf-8')
-    if TOOLS_ONLY:
-        # Strip the portfolio link and hide Windows-only inventory pages in the shared UI.
+    if TOOLS_ONLY or not ONLINE_MODE:
         html = html.replace(
             '<div class="portfolio-back"><a href="/">← LONG / Personal Portfolio</a><span class="tag">PHARMADESK 3.0 · LOCAL CLINICAL WORKSPACE</span></div>',
-            '<div class="portfolio-back"><span>PHARMADESK · CLINICAL TOOLS</span><span class="tag">ABC/VEN · TƯƠNG TÁC · TDM · ADR</span></div>'
+            '<div class="portfolio-back"><span>PHARMADESK 3.0</span></div>'
         )
+    if TOOLS_ONLY:
+        # Hide the Windows inventory tabs in the hosted clinical workspace.
         html = html.replace("</head>", """<style>
         #tabGop, #tabTru, .app-exit { display:none !important; }
         </style></head>""")
@@ -443,7 +446,10 @@ FOLDER_CONFIG = CONFIG_DIR / "SelectedFolder.json"
 
 # Các module báo cáo (ABC/VEN, tương tác thuốc, ADR, TDM): module nào lỗi thì bỏ qua, không ảnh hưởng phần Gộp phiếu.
 import importlib
-for _name, _sub in (("abcven", "ABCVEN"), ("ttt", "TuongTac"), ("adr", "ADR"), ("tdm", None)):
+_modules = [("abcven", "ABCVEN"), ("ttt", "TuongTac"), ("adr", "ADR"), ("tdm", None)]
+if not ONLINE_MODE:
+    _modules.insert(0, ("rpt_test", "TestPhieuLinh"))
+for _name, _sub in _modules:
     try:
         _m = importlib.import_module(_name)
         if _sub:
