@@ -12,6 +12,7 @@
     }
   },
   "rewrites": [
+    {"source": "/portfolio", "destination": "/portfolio.html"},
     {"source": "/api/:path*", "destination": "/api/clinical?_clinical_path=:path*"}
   ]
 }
