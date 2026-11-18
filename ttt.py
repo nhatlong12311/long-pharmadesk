@@ -42,8 +42,9 @@ def _sync_bundled(filename):
     return target
 
 
-def init(root, data_dir):
+def init(root, data_dir, *, kb_json=None):
     CFG["root"], CFG["data"] = Path(root), Path(data_dir)
+    CFG["kb_json"] = kb_json
     (CFG["data"] / "Bao_cao").mkdir(parents=True, exist_ok=True)
 
 
@@ -150,10 +151,17 @@ def _cached(path, build):
 
 
 def load_kb():
-    return list(_cached(ensure_kb(), _read_kb))
+    prepared = CFG.get("kb_json")
+    if prepared is not None:
+        return list(_cached(prepared, _read_kb_json))
+    return list(_cached(ensure_kb(), read_kb_workbook))
 
 
-def _read_kb(path):
+def _read_kb_json(path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def read_kb_workbook(path):
     import openpyxl
     wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
     out = []

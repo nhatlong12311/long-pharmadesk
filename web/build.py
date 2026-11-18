@@ -29,7 +29,6 @@ TEMPLATES = [
     "ADR/Mau_bao_cao_ADR.pdf",
     "ADR/fonts/LiberationSans-Regular.ttf",
     "ADR/fonts/LiberationSans-Bold.ttf",
-    "TUONG_TAC/Co_che_tuong_tac.xlsx",
     "TUONG_TAC/Mau_tuong_tac_thuoc.docx",
     "TUONG_TAC/Quy_tac_tuong_tac.json",
     "TUONG_TAC/mahoatchat.xlsx",
@@ -52,6 +51,24 @@ def replacements(html, edits):
             raise ValueError(f"Could not find the UI element to replace: {before}")
         html = html.replace(before, after)
     return html
+
+
+def prepare_browser_data(pure):
+    # Reuse the locked pure-Python wheels already downloaded for the browser.
+    paths = [str(ROOT)]
+    for package in ("openpyxl", "et_xmlfile"):
+        (wheel,) = pure.glob(package + "-*.whl")
+        paths.append(str(wheel))
+    sys.path[:0] = paths
+    try:
+        from abcven import STAT_FIELDS
+        from ttt import read_kb_workbook
+
+        fields = [{"key": key, "label": label} for key, label in STAT_FIELDS]
+        kb = read_kb_workbook(ROOT / "TUONG_TAC" / "Co_che_tuong_tac.xlsx")
+        return fields, kb
+    finally:
+        del sys.path[:len(paths)]
 
 
 def build(output):
@@ -79,12 +96,15 @@ def build(output):
         encoding="utf-8",
     )
 
+    fields, kb = prepare_browser_data(pure)
     source = BytesIO()
     with ZipFile(source, "w") as archive:
         files = [(WEB / "browser_backend.py", "browser_backend.py")]
         files.extend((ROOT / name, name) for name in MODULES + TEMPLATES)
         for path, name in files:
             archive.writestr(ZipInfo(name), path.read_bytes(), compress_type=ZIP_DEFLATED)
+        archive.writestr(ZipInfo("TUONG_TAC/Co_che_tuong_tac.json"),
+                         json.dumps(kb, ensure_ascii=False).encode("utf-8"), compress_type=ZIP_DEFLATED)
     data = source.getvalue()
     source_name = f"python-{sha256(data).hexdigest()[:16]}.zip"
     (output / source_name).write_bytes(data)
@@ -96,6 +116,7 @@ def build(output):
     worker_version = sha256(worker.encode()).hexdigest()[:16]
     local = replacements((WEB / "local.js").read_text(encoding="utf-8"), [
         ("__WORKER_VERSION__", worker_version),
+        ("__ABC_FIELDS__", json.dumps(fields, ensure_ascii=False)),
     ])
     local_version = sha256(local.encode()).hexdigest()[:16]
     (output / "local.js").write_text(local, encoding="utf-8")
@@ -105,7 +126,7 @@ def build(output):
         ('</head>', '<link rel="stylesheet" href="./local.css">\n</head>'),
         ('<div class="portfolio-back"><a href="/">← LONG / Personal Portfolio</a><span class="tag">PHARMADESK 3.0 · LOCAL CLINICAL WORKSPACE</span></div>',
          '<div class="portfolio-back"><span>PHARMADESK 3.0 · XỬ LÝ TRÊN THIẾT BỊ</span><a href="./browser.html">Bản web nhẹ</a></div>'),
-        ('    </div>\n</div>\n\n<main id="truMain"', '    </div>\n  <div id="localStatus"><span id="localStatusMessage" role="status">Đang tải chương trình Python…</span><button type="button" id="localRetry" class="ghost" hidden>Thử lại</button></div>\n</div>\n\n<main id="truMain"'),
+        ('    </div>\n</div>\n\n<main id="truMain"', '    </div>\n  <div id="localStatus" hidden><span id="localStatusMessage" role="status"></span><button type="button" id="localRetry" class="ghost" hidden>Thử lại</button></div>\n</div>\n\n<main id="truMain"'),
         ('<script>\n// Attach the per-process token', f'<script src="./local.js?v={local_version}"></script>\n<script>\n// Attach the per-process token'),
         ("const module=new URLSearchParams(location.search).get('module');",
          "const requested=new URLSearchParams(location.search).get('module')||location.hash.slice(1);\n const module=['abc','ttt','tdm','adr'].includes(requested)?requested:'abc';"),

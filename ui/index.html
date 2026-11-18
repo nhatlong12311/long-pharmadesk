@@ -796,7 +796,7 @@ th, .rt th { background: var(--surface-container-high); text-transform: none; le
 <section class="card wide">
   <h2><b>3</b>Hoạt chất theo dõi <span style="color:var(--mute);font-weight:400;font-size:14px">· mỗi dòng thành một mục đánh số trong phần Kết luận</span></h2>
   <div class="tw" style="max-height:none"><table id="abcWatch"><thead><tr><th style="width:44px">Bật</th><th>Tiêu đề mục</th><th>Từ khóa hoạt chất (cách nhau dấu phẩy)</th><th style="width:170px">Kiểu</th><th>Câu tổng kết</th><th style="width:44px"></th></tr></thead><tbody></tbody></table></div>
-  <div class="bar" style="margin:12px 0 0"><button class="ghost" onclick="watchAdd()">+ Thêm hoạt chất</button><button class="ghost" onclick="watchSave()">Lưu danh sách</button><button class="ghost dng" onclick="watchReset()">Khôi phục mặc định</button></div>
+  <div class="bar" style="margin:12px 0 0"><button class="ghost" data-abc-state onclick="watchAdd()">+ Thêm hoạt chất</button><button class="ghost" data-abc-state onclick="watchSave()">Lưu danh sách</button><button class="ghost dng" data-abc-state onclick="watchReset()">Khôi phục mặc định</button></div>
 </section>
 
 <section class="card wide res abc-res">
@@ -804,7 +804,7 @@ th, .rt th { background: var(--surface-container-high); text-transform: none; le
   <div class="bar" style="margin:10px 0">
     <button class="go" id="abcExcelGo" onclick="abcExportMonth()">Xuất dữ liệu ABC/VEN tháng (.xlsx)</button>
     <button class="ghost" id="abcCompareGo" onclick="abcCompareMonth()">So sánh với tháng trước (.xlsx)</button>
-      <button class="go" id="abcGo" onclick="abcRun()">Tạo báo cáo ABC/VEN (.docx)</button>
+      <button class="go" id="abcGo" data-abc-state onclick="abcRun()">Tạo báo cáo ABC/VEN (.docx)</button>
   </div>
   <div id="abcCompareOut"></div>
   <div id="abcExcelOut"></div>
@@ -1303,7 +1303,7 @@ async function abcInspectFour(){const fd=abcFourFD();if(!fd)return;$('abcFourRes
  $('abcFourResult').innerHTML=abcReviewHtml(r);document.querySelector('input[name=abcMode][value=calc]').checked=true;
 }
 // ================= Bao cao ABC/VEN (V2.6) =================
-const ABC={fields:[],watch:[],loaded:false};
+const ABC={fields:[],watch:[],loaded:false,loading:false,historySeq:0};
 function showTab(t){
  const panels={gop:'gopMain',tru:'truMain',abc:'abcMain',ttt:'tttMain',tdm:'tdmMain',adr:'adrMain'};
  const tabs={gop:'tabGop',tru:'tabTru',abc:'tabAbc',ttt:'tabTtt',tdm:'tabTdm',adr:'tabAdr'};
@@ -1325,11 +1325,57 @@ function showTab(t){
  if(t==='adr'&&!ADR.loaded)adrInit();
 }
 function pnum(v){v=String(v==null?'':v).trim().replace(/\s/g,'');if(!v)return null;if(/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(v))v=v.replace(/\./g,'').replace(',','.');else v=v.replace(',','.');const n=parseFloat(v);return isNaN(n)?null:n}
-async function abcInit(){const s=await api('/api/abc/state');ABC.fields=s.fields;ABC.watch=s.watch;ABC.loaded=true;$('abcM').value=s.month;$('abcY').value=s.year;$('abcNoTpl').style.display=s.template?'none':'block';renderStats();renderWatch();abcHist()}
+function setPreviousMonth(prefix){
+ const now=new Date();
+ const period=new Date(now.getFullYear(),now.getMonth()-1,1);
+ $(prefix+'M').value=period.getMonth()+1;
+ $(prefix+'Y').value=period.getFullYear();
+}
+async function abcInit(){
+ if(ABC.loading)return;
+ ABC.loading=true;
+ const local=window.pharmaDeskLocal;
+ const stateControls=document.querySelectorAll('[data-abc-state]');
+ try{
+  if(local){
+   stateControls.forEach(control=>{control.disabled=true});
+   if(!ABC.fields.length){
+    ABC.fields=local.abcFields;
+    setPreviousMonth('abc');
+    renderStats();
+   }
+   $('abcPrevHint').textContent='Đang mở lịch sử báo cáo…';
+  }
+  const s=await api('/api/abc/state');
+  if(!local){
+   ABC.fields=s.fields;
+   $('abcM').value=s.month;
+   $('abcY').value=s.year;
+   renderStats();
+  }
+  $('abcNoTpl').style.display=s.template?'none':'block';
+  await abcHist();
+  ABC.watch=s.watch;
+  renderWatch();
+  ABC.loaded=true;
+ }catch(e){
+  if(local)$('abcPrevHint').textContent='Chưa mở được lịch sử. Chọn lại mục Báo cáo ABC/VEN để thử lại.';
+  throw e;
+ }finally{
+  ABC.loading=false;
+  if(local&&ABC.loaded)stateControls.forEach(control=>{control.disabled=false});
+ }
+}
 function renderStats(){$('abcStats').querySelector('tbody').innerHTML=ABC.fields.map(f=>`<tr><td>${escapeHtml(f.label)}</td><td><input class="abc-in" id="sp_${f.key}" inputmode="decimal"></td><td><input class="abc-in" id="sc_${f.key}" inputmode="decimal"></td></tr>`).join('')}
 function fillStats(prefix,obj,force){ABC.fields.forEach(f=>{const e=$(prefix+f.key);if(!e)return;if(obj&&obj[f.key]!=null&&(force||!e.value))e.value=Math.round(obj[f.key]).toLocaleString('vi-VN')})}
 function readStats(prefix){const o={};ABC.fields.forEach(f=>{const n=pnum($(prefix+f.key).value);if(n!=null)o[f.key]=n});return o}
-async function abcHist(){const m=+$('abcM').value,y=+$('abcY').value;if(!m||!y)return;const r=await api(`/api/abc/history?month=${m}&year=${y}`);$('abcPrevH').textContent=`Tháng ${r.pm}/${r.py}`;$('abcCurH').textContent=`Tháng ${m}/${y}`;
+async function abcHist(){const m=+$('abcM').value,y=+$('abcY').value,id=++ABC.historySeq;if(!m||!y)return;
+ const current=()=>id===ABC.historySeq&&m===+$('abcM').value&&y===+$('abcY').value;
+ let r;
+ try{r=await api(`/api/abc/history?month=${m}&year=${y}`)}
+ catch(e){if(current())$('abcPrevHint').textContent='Không đọc được lịch sử kỳ này. '+e.message;return}
+ if(!current())return;
+ $('abcPrevH').textContent=`Tháng ${r.pm}/${r.py}`;$('abcCurH').textContent=`Tháng ${m}/${y}`;
  $('abcPrevHint').innerHTML=r.prev_has_rows?`<span style="color:var(--ok)">✓ Đã có dữ liệu tháng ${r.pm}/${r.py} trong lịch sử, không cần chọn lại.</span>`:`Chưa có dữ liệu tháng ${r.pm}/${r.py}. Hãy chọn file ABC/VEN tháng ${r.pm} để có câu so sánh.`;
  fillStats('sp_',r.prev_stats,false);fillStats('sc_',r.cur_stats,false)}
 async function abcInspect(){const fl=$('abcCur').files[0];$('abcInfo').innerHTML='';if(!fl)return;const fd=new FormData();fd.append('file',fl);$('abcInfo').innerHTML='<div class="abc-hint">Đang đọc file...</div>';
@@ -1414,8 +1460,32 @@ async function abcRun(){const four=$('abcUseFour').checked;const cur=four?null:$
  $('abcOut').innerHTML=h;abcHist()}
 
 // ================= Tuong tac thuoc (V2.7) =================
-const TTT={loaded:false};
-async function tttInit(){const s=await api('/api/ttt/state');TTT.loaded=true;$('tttM').value=s.month;$('tttY').value=s.year;$('tttNoTpl').style.display=s.template?'none':'block';tttShowRules(s)}
+const TTT={loaded:false,loading:false,entered:false};
+async function tttInit(){
+ if(TTT.loading)return;
+ TTT.loading=true;
+ const local=window.pharmaDeskLocal;
+ try{
+  if(local){
+   if(!TTT.entered)setPreviousMonth('ttt');
+   TTT.entered=true;
+   $('tttRules').textContent='Đang mở bộ quy tắc tương tác…';
+  }
+  const s=await api('/api/ttt/state');
+  if(!local){
+   $('tttM').value=s.month;
+   $('tttY').value=s.year;
+  }
+  $('tttNoTpl').style.display=s.template?'none':'block';
+  tttShowRules(s);
+  TTT.loaded=true;
+ }catch(e){
+  if(local)$('tttRules').textContent='Chưa mở được bộ quy tắc. Chọn lại mục Tương tác thuốc để thử lại.';
+  throw e;
+ }finally{
+  TTT.loading=false;
+ }
+}
 function tttShowRules(s){const r=s.rules||{};if(r.error){$('tttRules').innerHTML=`<span style="color:var(--err)">${escapeHtml(r.error)}</span>`;return}
  $('tttRules').innerHTML=`Quy tắc đang dùng: <b>${f(r.drugs)}</b> hoạt chất · <b>${f(r.pairs)}</b> cặp tương tác · nguồn <b>${escapeHtml(r.source||'')}</b>${r.updated?' ('+escapeHtml(r.updated.slice(0,10))+')':''} · bảng cơ chế/hậu quả/xử trí: <b>${f(s.kb)}</b> dòng. Khớp đủ nội dung: <b>${f(s.kb_covered||0)}</b> cặp quy tắc.`+(r.warnings&&r.warnings.length?`<details style="margin-top:8px"><summary style="cursor:pointer;color:#b45309">${r.warnings.length} cảnh báo mã hoạt chất cần kiểm tra</summary>${r.warnings.map(w=>'<div class="abc-hint">'+escapeHtml(w)+'</div>').join('')}</details>`:'')
  if(s.kb_error)$('tttRules').innerHTML+=`<div class="abc-warn">${escapeHtml(s.kb_error)}</div>`;
@@ -1431,7 +1501,7 @@ async function tttInspect(){const fl=$('tttFile').files[0];$('tttInfo').innerHTM
 async function tttRulesUpload(){const fl=$('tttSql').files[0];if(!fl)return;const fd=new FormData();fd.append('file',fl);
  const r=await fetch('/api/ttt/rules',{method:'POST',body:fd}).then(x=>x.json()).catch(e=>({ok:false,msg:String(e)}));
  if(!r.ok){$('tttRulesMsg').innerHTML=`<div class="msg er">${escapeHtml(r.msg)}</div>`;return}
- $('tttRulesMsg').innerHTML=`<div class="msg ok">Đã nạp quy tắc: ${f(r.drugs)} hoạt chất, ${f(r.pairs)} cặp.</div>`+(r.warnings||[]).slice(0,8).map(w=>`<div class="abc-warn">${escapeHtml(w)}</div>`).join('');TTT.loaded=false;tttInit()}
+ $('tttRulesMsg').innerHTML=`<div class="msg ok">Đã nạp quy tắc: ${f(r.drugs)} hoạt chất, ${f(r.pairs)} cặp.</div>`+(r.warnings||[]).slice(0,8).map(w=>`<div class="abc-warn">${escapeHtml(w)}</div>`).join('');TTT.loaded=false;await tttInit().catch(e=>toast(e.message,'er'))}
 async function tttRun(){const fl=$('tttFile').files[0];if(!fl)return toast('Chưa chọn file xls/xlsx.');const m=+$('tttM').value,y=+$('tttY').value;if(!(m>=1&&m<=12)||!y)return toast('Nhập tháng (1-12) và năm báo cáo.');
  const fd=new FormData();fd.append('file',fl);fd.append('opts',JSON.stringify({month:m,year:y,by_name:$('tttByName').checked,dmy:$('tttDmy').checked}));
  $('tttGo').disabled=true;$('tttGo').textContent='Đang chạy...';$('tttOut').innerHTML='';
@@ -1560,7 +1630,8 @@ function tdmForm(){const m=TM[TDM.mode];if(m.ref){$('tdmForm').innerHTML='';retu
  const hint=`<div class="tdm-hint">${m.hint||''}</div>`;
  $('tdmForm').innerHTML=m.two?(parts[2]?`<div class="tdm-grid tdm-top">${parts[2]}</div>`:'')+`<div class="tdm-2col">${[0,1].map(i=>`<div class="tdm-colbox c${i}"><div class="tdm-coltitle">${m.two[i]}</div><div class="tdm-grid">${parts[i]}</div><div class="tdm-colres" id="v2r${i+1}"></div></div>`).join('')}</div>`+hint:`<div class="tdm-grid">${parts[0]}</div>`+hint;
  $('tdmForm').querySelectorAll('[data-k]').forEach(e=>{e.addEventListener('input',()=>{v[e.dataset.k]=e.value;if(e.tagName==='SELECT'&&(m.re||[]).includes(e.dataset.k)){tdmForm()}clearTimeout(TDM.timer);TDM.timer=setTimeout(tdmCalc,320)})})}
-async function tdmCalc(){const m=TM[TDM.mode],out=$('tdmOut');if(m.ref){out.innerHTML=refHtml();return}const v={...TDM.vals[TDM.mode]};if(m.mode)v.mode=m.mode;const my=++TDM.seq;
+async function tdmCalc(){const m=TM[TDM.mode],out=$('tdmOut'),my=++TDM.seq;if(m.ref){out.innerHTML=refHtml();return}const v={...TDM.vals[TDM.mode]};if(m.mode)v.mode=m.mode;
+ if(window.pharmaDeskLocal&&!out.childElementCount)out.innerHTML='<div class="tdm-hint" role="status">Đang tính kết quả trên thiết bị…</div>';
  const r=await post(m.url,v).catch(e=>({ok:false,msg:String(e)}));if(my!==TDM.seq)return;
  if(!r.ok){['v2r1','v2r2'].forEach(id=>{const e=$(id);if(e)e.innerHTML=''});out.innerHTML=`<div class="tdm-err">${escapeHtml(r.msg||'Không tính được')}</div>`;return}
  out.innerHTML=(r.warnings||[]).map(w=>`<div class="tdm-warn">${escapeHtml(w)}</div>`).join('')+m.render(r,v);r._after&&r._after()}
@@ -1772,7 +1843,8 @@ async function adrRun(){
  $('adrOut').scrollIntoView({behavior:'smooth'});
 }
 
-api('/api/version').then(r=>$('ver').textContent='· '+r.v).catch(e=>toast(e.message,'er'));
+if(window.pharmaDeskLocal)$('ver').textContent='· V3.0';
+else api('/api/version').then(r=>$('ver').textContent='· '+r.v).catch(e=>toast(e.message,'er'));
 refresh();load();guideRender();
 // Không tự nạp lại thư mục nguồn khi mở app; người dùng chủ động bấm Chọn thư mục/Làm mới.
 </script>

@@ -110,6 +110,22 @@ async function main() {
     assert.equal(await page.locator("#adrGo").isEnabled(), false);
     assert.equal(await page.locator("#adrForm .adr-drug").count(), 4);
     assert.equal(await page.locator("#adrForm .adr-con").count(), 10);
+
+    await page.locator("#tabAbc").click();
+    const stats = page.locator("#abcStats tbody input").first();
+    assert.ok(await page.locator("#abcM").inputValue(), "ABC/VEN must suggest a period before Python is ready");
+    await stats.fill("123");
+    assert.equal(await page.locator("#abcGo").isEnabled(), false);
+
+    await page.locator("#tabTtt").click();
+    const interactionMonth = page.locator("#tttM");
+    assert.ok(await interactionMonth.inputValue(), "Interactions must suggest a period before Python is ready");
+    await interactionMonth.fill("6");
+    assert.ok(await page.locator("#tttFile").isEnabled());
+
+    await page.locator("#tabTdm").click();
+    await page.locator('#tdmForm [data-k="weight"]').fill("72");
+    await page.locator("#tabAdr").click();
     const startupBounds = await page.locator("#localStatus").boundingBox();
     const formBounds = await page.locator("#adrMain").boundingBox();
     assert.ok(startupBounds.y + startupBounds.height <= formBounds.y);
@@ -127,10 +143,15 @@ async function main() {
     allowStartup();
     await page.waitForFunction(() => !document.querySelector("#adrGo").disabled);
     assert.equal(await description.evaluate(input => input.value), "Nội dung giả nhập trong lúc Python đang tải.");
-    console.log("ADR starts before Python is ready and the sidebar stays outside the form");
+    await page.waitForFunction(() => document.querySelector("#tttRules").textContent.includes("Quy tắc đang dùng"));
+    assert.equal(await interactionMonth.inputValue(), "6");
+    assert.ok(![...requestedAssets].some(path => /\/(openpyxl-|lxml-|xlrd-)/.test(path)),
+      "Opening interactions must not load Excel packages");
+    console.log("All four tool forms accept input while Python is held back");
 
     await page.locator("#tabAbc").click();
-    await page.waitForFunction(() => document.querySelector("#abcM").value && document.querySelector("#localStatus").hidden);
+    await page.waitForFunction(() => !document.querySelector("#abcGo").disabled && document.querySelector("#localStatus").hidden);
+    assert.equal(await stats.inputValue(), "123");
     assert.equal(await page.locator("#tabGop").isVisible(), false);
     assert.equal(await page.locator("#tabTru").isVisible(), false);
     assert.equal(await page.locator('a[href*="onrender.com"]').count(), 0);
@@ -156,6 +177,7 @@ async function main() {
 
     const rules = await api(page, "/api/ttt/state");
     assert.ok(rules.rules.pairs > 300);
+    assert.ok(rules.kb > 0 && rules.kb_covered > 0);
     const prescription = workbook([
       ["MaBN","NgayChiDinh","MaHoatChat","Tên thuốc","Tên khoa"],
       ["SYN-PATIENT","18/11/2026","SYN01","Thuốc A","Kiểm thử"],

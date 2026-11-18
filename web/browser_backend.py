@@ -18,9 +18,11 @@ MAX_UPLOAD = 20 * 1024 * 1024
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD
 
-for module, directory in ((abcven, "ABCVEN"), (ttt, "TuongTac"), (adr, "ADR")):
+for module, directory in ((abcven, "ABCVEN"), (adr, "ADR")):
     module.init(ROOT, DATA / directory)
     app.register_blueprint(module.make_blueprint())
+ttt.init(ROOT, DATA / "TuongTac", kb_json=ROOT / "TUONG_TAC" / "Co_che_tuong_tac.json")
+app.register_blueprint(ttt.make_blueprint())
 app.register_blueprint(tdm.make_blueprint())
 
 # The original inline PDF preview is used so generated reports travel back to
