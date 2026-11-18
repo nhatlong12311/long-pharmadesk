@@ -1,0 +1,59 @@
+name: Import PharmaDesk source archive
+
+on:
+  push:
+    paths:
+      - PHARMADESK_SOURCE_UPLOAD_GITHUB.zip
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Check uploaded source archive
+        run: |
+          test -f PHARMADESK_SOURCE_UPLOAD_GITHUB.zip
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          from pathlib import PurePosixPath
+          import re
+          archive=Path('PHARMADESK_SOURCE_UPLOAD_GITHUB.zip')
+          with ZipFile(archive) as z:
+              names=z.namelist()
+              assert len(names) <= 100, 'Unexpected number of source files'
+              assert 'app.py' in names and 'portfolio.html' in names
+              assert 'ui/index.html' in names and 'render.yaml' in names
+              assert sum(x.file_size for x in z.infolist()) < 20_000_000, 'Archive too large'
+              for member in z.infolist():
+                  p=PurePosixPath(member.filename)
+                  assert not p.is_absolute() and '..' not in p.parts, 'Unsafe archive path'
+                  assert not re.search(r'(^|/)(\.env|secrets|__pycache__)(/|$)',member.filename,re.I), 'Secret path'
+                  assert not (member.external_attr >> 16) & 0o170000 == 0o120000, 'Symlinks blocked'
+                  if member.is_dir(): continue
+                  dest=Path(member.filename)
+                  dest.parent.mkdir(parents=True,exist_ok=True)
+                  dest.write_bytes(z.read(member))
+          print(f'Imported {len(names)} archive entries')
+          PY
+      - name: Verify syntax
+        run: |
+          python -m compileall -q app.py abcven.py adr.py tdm.py ttt.py common.py
+      - name: Commit source
+        run: |
+          git config user.name github-actions
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add app.py abcven.py adr.py tdm.py ttt.py common.py portfolio.html ui/ ABC_VEN/ ADR/ TUONG_TAC/ tests/ render.yaml requirements.txt .python-version .gitignore README_WEBSITE.txt HUONG_DAN_TRIEN_KHAI_ONLINE.md PharmaDesk_GopPhieu.ico
+          git rm --cached --ignore-unmatch PHARMADESK_SOURCE_UPLOAD_GITHUB.zip
+          rm -f PHARMADESK_SOURCE_UPLOAD_GITHUB.zip
+          if git diff --cached --quiet; then
+            echo "No changes"; exit 0
+          fi
+          git commit -m "Import full PharmaDesk clinical tools and portfolio"
+          git push
