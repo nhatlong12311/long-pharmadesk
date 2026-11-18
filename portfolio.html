@@ -509,6 +509,50 @@ a:focus-visible,button:focus-visible{outline:3px solid #27814d;outline-offset:4p
  .profile-hero .profile-metrics{gap:15px 24px}
  .top .nav a{font-size:11px}
 }
+@media (prefers-reduced-motion: no-preference) {
+ .profile-name{position:relative;display:inline-block}
+ .profile-name-text{
+  display:inline-block;
+  animation:profile-name-reveal 560ms steps(9,end) 140ms backwards;
+ }
+ .profile-name::after{
+  content:"";
+  position:absolute;
+  top:.16em;
+  left:0;
+  width:.035em;
+  height:.74em;
+  border-radius:.02em;
+  background:currentColor;
+  pointer-events:none;
+  animation:profile-caret-move 560ms steps(9,end) 140ms both,
+            profile-caret-fade 860ms ease both;
+ }
+ .profile-copy .profile-intro{animation:profile-rise 380ms ease-out 175ms backwards}
+ .profile-copy .hero-actions{animation:profile-rise 380ms ease-out 245ms backwards}
+ .portfolio-page-enter{animation:portfolio-appear 260ms ease-out}
+ .portfolio-heading-enter{animation:profile-rise 320ms ease-out}
+ @keyframes profile-name-reveal {
+  from{clip-path:inset(-.25em 100% -.3em -.08em)}
+  to{clip-path:inset(-.25em -.08em -.3em -.08em)}
+ }
+ @keyframes profile-caret-move {
+  to{left:calc(100% + .035em)}
+ }
+ @keyframes profile-caret-fade {
+  0%{opacity:0}
+  18%,80%{opacity:.85}
+  100%{opacity:0}
+ }
+ @keyframes profile-rise {
+  from{opacity:.72;transform:translateY(7px)}
+  to{opacity:1;transform:none}
+ }
+ @keyframes portfolio-appear {
+  from{opacity:.84;transform:translateY(5px)}
+  to{opacity:1;transform:none}
+ }
+}
 </style>
 </head><body><a class="skip-link" href="#portfolio-content">Đến nội dung</a><div class="app" id="top"><aside aria-label="Điều hướng nhanh" class="rail"><a aria-label="Trang chủ" class="logo" data-view="home" href="#home"><i></i><i></i><i></i><i></i></a><nav class="rail-links"><a aria-label="Trang chủ" data-view="home" href="#home" title="Trang chủ">⌂</a><a aria-label="Hồ sơ" data-view="about" href="#about" title="Hồ sơ">♙</a><a aria-label="Workspace" data-view="workspace" href="#workspace" title="Workspace">▦</a><a aria-label="Công cụ dược" href="#clinical-tools" title="Công cụ dược">✚</a></nav><span class="rail-caption">LONG / 2026</span></aside><div class="main"><header class="top"><a class="brand" data-view="home" href="#home"><span class="brand-badge">L.</span><span>NHAT LONG<span class="brand-light"> / PORTFOLIO</span></span></a><nav aria-label="Điều hướng chính" class="nav"><a data-view="home" href="#home">Trang chủ</a><a data-view="about" href="#about">Hồ sơ</a><a data-view="case-study" href="#case-study">PharmaDesk</a><a data-view="workspace" href="#workspace">Workspace</a><a href="#clinical-tools">Công cụ</a></nav><a class="top-contact" href="mailto:nhatlong.nguyendang@gmail.com">Liên hệ</a></header><main class="content" id="portfolio-content" tabindex="-1">
 <section class="new-page home-page immersive-home" id="home">
@@ -516,7 +560,7 @@ a:focus-visible,button:focus-visible{outline:3px solid #27814d;outline-offset:4p
   <div class="profile-grid">
     <div class="profile-copy">
       <p class="profile-kicker">Dược sĩ lâm sàng · Hồi sức tích cực</p>
-      <h1 id="profile-title">Nguyễn Đăng<br/><em>Nhật Long</em></h1>
+      <h1 id="profile-title">Nguyễn Đăng<br/><em class="profile-name"><span class="profile-name-text">Nhật Long</span></em></h1>
       <p class="profile-intro">Tôi làm việc trong lĩnh vực dược lâm sàng tại ICU và phát triển <strong>PharmaDesk</strong> để hỗ trợ phân tích dữ liệu thuốc và các quy trình dược bệnh viện.</p>
       <div class="hero-actions">
         <a class="btn primary" data-view="case-study" href="#case-study">Khám phá PharmaDesk</a>
@@ -737,7 +781,13 @@ calendar();renderLogs();renderProjects();
   const hash=location.hash.slice(1);
   if(hash==='portfolio-content')return;
   const page=anchors.get(hash)||(pages.has(hash)?hash:'home');
-  for(const id of pages)document.getElementById(id).hidden=id!==page;
+  const previousPage=document.body.dataset.page;
+  const animatePage=previousPage && previousPage!==page && page!=='home' && !anchors.has(hash);
+  for(const id of pages){
+   const section=document.getElementById(id);
+   section.hidden=id!==page;
+   section.classList.toggle('portfolio-page-enter',Boolean(animatePage && id===page));
+  }
   for(const link of pageLinks){
    const active=hash==='clinical-tools'?link.hash==='#clinical-tools':link.dataset.view===page;
    link.classList.toggle('active',active);
@@ -750,6 +800,18 @@ calendar();renderLogs();renderProjects();
  }
  window.addEventListener('hashchange',navigate);
  navigate();
+
+ if(window.matchMedia('(prefers-reduced-motion: no-preference)').matches && 'IntersectionObserver' in window){
+  const headings=document.querySelectorAll('#clinical-tools-title,#contrib-title');
+  const observer=new IntersectionObserver(entries=>{
+   for(const entry of entries){
+    if(!entry.isIntersecting)continue;
+    entry.target.classList.add('portfolio-heading-enter');
+    observer.unobserve(entry.target);
+   }
+  },{threshold:.25});
+  headings.forEach(heading=>observer.observe(heading));
+ }
 })();
 </script>
 <script>
