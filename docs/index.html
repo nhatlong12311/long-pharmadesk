@@ -11,7 +11,8 @@
 <aside><div class="logo">✚ PharmaDesk<small>CLINICAL TOOLS · WEB EDITION</small></div>
 <nav class="nav" aria-label="Công cụ"><button data-tab="abc" class="active">▥ ABC / VEN</button><button data-tab="ttt">⇄ Tương tác thuốc</button><button data-tab="tdm">∿ TDM</button><button data-tab="adr">▤ Báo cáo ADR</button></nav>
 <div class="asidefoot">Bản xử lý trên trình duyệt. Không sử dụng dữ liệu bệnh nhân định danh. Công thức TDM cần đối chiếu trước khi áp dụng.</div></aside>
-<div class="main"><header class="noprint"><div class="eyebrow">PHARMADESK · BROWSER FIRST</div><h1 id="pageTitle">Báo cáo ABC / VEN</h1><p class="headsub" id="pageSub">Đọc và phân tích Excel ngay trên thiết bị. Không gửi dữ liệu lên máy chủ PharmaDesk.</p><span class="badge">Không cần Render · Phiên bản thử nghiệm</span></header>
+<div class="main"><header class="noprint"><div class="eyebrow">PHARMADESK · BROWSER FIRST</div><h1 id="pageTitle">Báo cáo ABC / VEN</h1><p class="headsub" id="pageSub">Đọc và phân tích Excel ngay trên thiết bị. Không gửi dữ liệu lên máy chủ PharmaDesk.</p><span class="badge">Không cần Render · Phiên bản thử nghiệm</span>
+<div class="notice warning noprint" style="margin-top:14px"><b>Muốn dùng đúng PharmaDesk 3.0 trong ZIP gốc?</b> Bản này là công cụ JavaScript thử nghiệm và chưa chạy nguyên mã Python; đặc biệt báo cáo ADR chưa xuất PDF/Word đúng mẫu chính thức. <a href="https://long-pharmadesk.onrender.com/tools?module=adr" target="_blank" rel="noopener noreferrer" style="font-weight:800;color:#185b37;text-decoration:underline">Mở ADR gốc trên máy chủ Python (PDF + Word) ↗</a></div></header>
 <section id="abc" class="section active">
 <div class="panel"><h2>Nhập dữ liệu ABC/VEN</h2><div class="notice">Chấp nhận file .xlsx, .xls (cần thư viện SheetJS tải qua Internet) hoặc CSV. Việc phân nhóm dựa vào giá trị tiền và ngưỡng chi phí tích lũy 80% / 95%. Bộ phân tích mới cần đối chiếu với bản Python trước khi dùng nghiệp vụ.</div>
 <div class="grid" style="margin-top:18px"><div class="field"><label for="abcFile">File danh mục thuốc</label><input id="abcFile" type="file" accept=".xlsx,.xls,.csv"></div><div class="field"><label for="abcSheet">Sheet dữ liệu</label><select id="abcSheet" disabled><option>Sheet đầu tiên</option></select></div></div>
@@ -39,7 +40,7 @@
 </section>
 <section id="adr" class="section">
 <div class="panel">
-<h2>Báo cáo ADR · Biểu mẫu hỗ trợ</h2>
+<h2>Báo cáo ADR · Biểu mẫu hỗ trợ</h2><div class="row noprint" style="margin-bottom:15px"><a class="button" style="text-decoration:none;display:inline-block" href="https://long-pharmadesk.onrender.com/tools?module=adr" target="_blank" rel="noopener noreferrer">Mở đúng báo cáo ADR gốc (PDF + Word) ↗</a></div>
 <div class="notice warning"><b>Bản thử nghiệm, không phải mẫu ADR chính thức.</b> Thông tin được nhập và xử lý trong trình duyệt, không gửi lên máy chủ PharmaDesk. Chỉ sử dụng dữ liệu giả/đã khử định danh trong giai đoạn thử nghiệm. Bản in cần được đối chiếu với mẫu báo cáo chính thức trước khi sử dụng.</div>
 <div class="grid" style="margin-top:18px">
   <div class="field"><label for="aUnit">Đơn vị báo cáo</label><input id="aUnit" autocomplete="off" placeholder="Tên đơn vị"></div>
