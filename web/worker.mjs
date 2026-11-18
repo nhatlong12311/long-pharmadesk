@@ -10,7 +10,6 @@ const adrReports = [...word, "charset_normalizer", "pillow", "pypdf", "reportlab
 
 function reportPackages(method, path) {
   if (method === "POST" && path === "/api/adr/generate") return adrReports;
-  if (path === "/api/ttt/state") return excel;
   if (method !== "POST") return [];
   if (["/api/abc/generate", "/api/abc/generate-four", "/api/ttt/generate"].includes(path)) {
     return [...new Set([...excel, ...word])];

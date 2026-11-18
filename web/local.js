@@ -46,7 +46,7 @@
   }
 
   function start() {
-    message.textContent = "Đang khởi tạo Python trên thiết bị…";
+    message.textContent = "Đang chuẩn bị xử lý trên thiết bị…";
     status.hidden = false;
     retry.hidden = true;
     const running = new Worker("./worker.mjs?v=__WORKER_VERSION__", {type: "module"});
@@ -74,7 +74,9 @@
   }
 
   retry.addEventListener("click", async () => {
-    document.querySelector('.tab[aria-current="page"]')?.click();
+    const active = document.querySelector('.tab[aria-current="page"]');
+    if (active?.id === "tabTdm") tdmCalc();
+    else active?.click();
     const response = await window.fetch("/api/version");
     if (response.ok) document.getElementById("ver").textContent = "· " + (await response.json()).v;
   });
@@ -109,6 +111,7 @@
   };
 
   window.pharmaDeskLocal = {
+    abcFields: __ABC_FIELDS__,
     async download(url, name) {
       const response = await window.fetch(url);
       if (!response.ok) throw new Error((await response.json()).msg);
