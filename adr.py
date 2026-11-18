@@ -542,7 +542,18 @@ def make_blueprint():
     @bp.post("/api/adr/generate")
     @guarded(_LOCK, ("pypdf", "reportlab", "PIL", "docx"), perm="Không ghi được file. Nếu đang mở báo cáo cũ trong PDF/Word thì hãy đóng lại.")
     def gen():
-        return jsonify(ok=True, **generate(request.get_json(silent=True) or {}))
+        result = generate(request.get_json(silent=True) or {})
+        # On ephemeral/cloud hosting, reports can disappear before the next GET.
+        # Return the newly generated files with this response so the browser can
+        # download them without depending on a shared server filesystem.
+        if os.environ.get("PHARMADESK_ONLINE") == "1":
+            import base64
+            report_dir = CFG["data"] / "Bao_cao"
+            result["inline_files"] = {}
+            for key in ("pdf", "docx"):
+                file_path = report_dir / result[key]
+                result["inline_files"][key] = base64.b64encode(file_path.read_bytes()).decode("ascii")
+        return jsonify(ok=True, **result)
 
     def draft_path(name):
         # Accept legacy ASCII slugs as well as UUIDs without truncating identifiers.
