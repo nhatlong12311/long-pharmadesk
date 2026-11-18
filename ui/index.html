@@ -889,6 +889,7 @@ window.fetch=(input,options={})=>{
  return nativeFetch(input,options);
 };
 const $=id=>document.getElementById(id),f=n=>(+n||0).toLocaleString('vi-VN');
+const webVersion=window.pharmaDeskServer||window.pharmaDeskLocal;
 $('sidebarToggle').addEventListener('click',event=>{
  const button=event.currentTarget;
  button.setAttribute('aria-pressed',String(button.getAttribute('aria-pressed')!=='true'));
@@ -920,7 +921,7 @@ async function api(u,o){
 }
 const post=(u,b)=>api(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
 function downloadReport(url,name){
- if(window.pharmaDeskLocal)return window.pharmaDeskLocal.download(url,name).catch(error=>toast(error.message,'er'));
+ if(webVersion)return webVersion.download(url,name).catch(error=>toast(error.message,'er'));
  location.href=url;
 }
 function toast(m,t){t=t||(/không|lỗi|chưa|cần/i.test(m)?'er':'ok');const e=document.createElement('div');e.className='t '+t;e.textContent=m;$('toast').appendChild(e);setTimeout(()=>e.remove(),t==='er'?6000:3500)}
@@ -1334,7 +1335,7 @@ function setPreviousMonth(prefix){
 async function abcInit(){
  if(ABC.loading)return;
  ABC.loading=true;
- const local=window.pharmaDeskLocal;
+ const local=webVersion;
  const stateControls=document.querySelectorAll('[data-abc-state]');
  try{
   if(local){
@@ -1464,7 +1465,7 @@ const TTT={loaded:false,loading:false,entered:false};
 async function tttInit(){
  if(TTT.loading)return;
  TTT.loading=true;
- const local=window.pharmaDeskLocal;
+ const local=webVersion;
  try{
   if(local){
    if(!TTT.entered)setPreviousMonth('ttt');
@@ -1631,7 +1632,7 @@ function tdmForm(){const m=TM[TDM.mode];if(m.ref){$('tdmForm').innerHTML='';retu
  $('tdmForm').innerHTML=m.two?(parts[2]?`<div class="tdm-grid tdm-top">${parts[2]}</div>`:'')+`<div class="tdm-2col">${[0,1].map(i=>`<div class="tdm-colbox c${i}"><div class="tdm-coltitle">${m.two[i]}</div><div class="tdm-grid">${parts[i]}</div><div class="tdm-colres" id="v2r${i+1}"></div></div>`).join('')}</div>`+hint:`<div class="tdm-grid">${parts[0]}</div>`+hint;
  $('tdmForm').querySelectorAll('[data-k]').forEach(e=>{e.addEventListener('input',()=>{v[e.dataset.k]=e.value;if(e.tagName==='SELECT'&&(m.re||[]).includes(e.dataset.k)){tdmForm()}clearTimeout(TDM.timer);TDM.timer=setTimeout(tdmCalc,320)})})}
 async function tdmCalc(){const m=TM[TDM.mode],out=$('tdmOut'),my=++TDM.seq;if(m.ref){out.innerHTML=refHtml();return}const v={...TDM.vals[TDM.mode]};if(m.mode)v.mode=m.mode;
- if(window.pharmaDeskLocal&&!out.childElementCount)out.innerHTML='<div class="tdm-hint" role="status">Đang tính kết quả trên thiết bị…</div>';
+ if(webVersion&&!out.childElementCount)out.innerHTML='<div class="tdm-hint" role="status">'+(window.pharmaDeskServer?'Đang tính kết quả trên máy chủ…':'Đang tính kết quả trên thiết bị…')+'</div>';
  const r=await post(m.url,v).catch(e=>({ok:false,msg:String(e)}));if(my!==TDM.seq)return;
  if(!r.ok){['v2r1','v2r2'].forEach(id=>{const e=$(id);if(e)e.innerHTML=''});out.innerHTML=`<div class="tdm-err">${escapeHtml(r.msg||'Không tính được')}</div>`;return}
  out.innerHTML=(r.warnings||[]).map(w=>`<div class="tdm-warn">${escapeHtml(w)}</div>`).join('')+m.render(r,v);r._after&&r._after()}
@@ -1752,7 +1753,7 @@ async function adrInit(){
   adrForm();
  }
  error.classList.remove('er');
- error.textContent='Bạn có thể nhập biểu mẫu trong lúc chương trình chuẩn bị mẫu PDF và Word.';
+ error.textContent=window.pharmaDeskServer?'Đang mở bản nháp trong trình duyệt…':'Bạn có thể nhập biểu mẫu trong lúc chương trình chuẩn bị mẫu PDF và Word.';
  error.hidden=false;
  try{
   const state=await api('/api/adr/state');
@@ -1771,7 +1772,8 @@ async function adrInit(){
   $('adrGo').disabled=!ready;
   document.querySelectorAll('[data-adr-storage]').forEach(control=>{control.disabled=false});
   ADR.loaded=true;
-  error.hidden=true;
+  error.hidden=state.persistent!==false;
+  if(!error.hidden)error.textContent='Trình duyệt chỉ lưu bản nháp trong tab này.';
   adrDrafts().catch(e=>toast(e.message,'er'));
  }catch(e){
   error.classList.add('er');
@@ -1843,7 +1845,7 @@ async function adrRun(){
  $('adrOut').scrollIntoView({behavior:'smooth'});
 }
 
-if(window.pharmaDeskLocal)$('ver').textContent='· V3.0';
+if(webVersion)$('ver').textContent='· V3.0';
 else api('/api/version').then(r=>$('ver').textContent='· '+r.v).catch(e=>toast(e.message,'er'));
 refresh();load();guideRender();
 // Không tự nạp lại thư mục nguồn khi mở app; người dùng chủ động bấm Chọn thư mục/Làm mới.

@@ -1,7 +1,15 @@
 # -*- coding: utf-8 -*-
 """Tien ich dung chung cho cac module bao cao (ABC/VEN, tuong tac thuoc, TDM, ADR)."""
 import contextlib, copy, functools, importlib.util, json, os, re, tempfile, unicodedata
+from contextvars import ContextVar
 from pathlib import Path
+
+request_data = ContextVar("pharmadesk_request_data", default=None)
+
+
+def data_directory(config):
+    root = request_data.get()
+    return config["data"] if root is None else root / config["data"].name
 
 
 def norm(s):
@@ -136,7 +144,8 @@ def upload(field, exts=(".xlsx", ".xlsm", ".xls")):
 def err_json(e):
     import traceback
     from flask import jsonify
-    traceback.print_exc()
+    if request_data.get() is None:
+        traceback.print_exc()
     if isinstance(e, (ValueError, TypeError, KeyError)):
         return jsonify(ok=False, msg=str(e)), 400
     if isinstance(e, FileNotFoundError):

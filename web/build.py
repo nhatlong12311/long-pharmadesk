@@ -1,4 +1,4 @@
-"""Build the GitHub Pages site with all Python dependencies served locally."""
+"""Build PharmaDesk for GitHub Pages or for the Vercel server API."""
 
 from concurrent.futures import ThreadPoolExecutor
 from hashlib import sha256
@@ -120,20 +120,7 @@ def build(output):
     ])
     local_version = sha256(local.encode()).hexdigest()[:16]
     (output / "local.js").write_text(local, encoding="utf-8")
-
-    html = (ROOT / "ui" / "index.html").read_text(encoding="utf-8")
-    html = replacements(html, [
-        ('</head>', '<link rel="stylesheet" href="./local.css">\n</head>'),
-        ('<div class="portfolio-back"><a href="/">← LONG / Personal Portfolio</a><span class="tag">PHARMADESK 3.0 · LOCAL CLINICAL WORKSPACE</span></div>',
-         '<div class="portfolio-back"><span>PHARMADESK 3.0 · XỬ LÝ TRÊN THIẾT BỊ</span><a href="./browser.html">Bản web nhẹ</a></div>'),
-        ('    </div>\n</div>\n\n<main id="truMain"', '    </div>\n  <div id="localStatus" hidden><span id="localStatusMessage" role="status"></span><button type="button" id="localRetry" class="ghost" hidden>Thử lại</button></div>\n</div>\n\n<main id="truMain"'),
-        ('<script>\n// Attach the per-process token', f'<script src="./local.js?v={local_version}"></script>\n<script>\n// Attach the per-process token'),
-        ("const module=new URLSearchParams(location.search).get('module');",
-         "const requested=new URLSearchParams(location.search).get('module')||location.hash.slice(1);\n const module=['abc','ttt','tdm','adr'].includes(requested)?requested:'abc';"),
-        ("refresh();load();guideRender();", ""),
-        ("__PHARMADESK_TOKEN__", ""),
-    ])
-    (output / "index.html").write_text(html, encoding="utf-8")
+    build_ui(output, f"local.js?v={local_version}")
 
     for name in ("local.css", "runtime-cache.js"):
         shutil.copyfile(WEB / name, output / name)
@@ -147,5 +134,47 @@ def build(output):
     (output / ".nojekyll").touch()
 
 
+def build_ui(output, script, *, server=False):
+    html = (ROOT / "ui" / "index.html").read_text(encoding="utf-8")
+    banner = ('<div class="portfolio-back"><span>PHARMADESK 3.0 · VERCEL</span>'
+              '<span>Tệp và biểu mẫu dùng để tạo báo cáo được gửi lên máy chủ để xử lý.</span></div>'
+              if server else
+              '<div class="portfolio-back"><span>PHARMADESK 3.0 · XỬ LÝ TRÊN THIẾT BỊ</span><a href="./browser.html">Bản web nhẹ</a></div>')
+    edits = [
+        ('</head>', '<link rel="stylesheet" href="./local.css">\n</head>'),
+        ('<div class="portfolio-back"><a href="/">← LONG / Personal Portfolio</a><span class="tag">PHARMADESK 3.0 · LOCAL CLINICAL WORKSPACE</span></div>', banner),
+        ('<script>\n// Attach the per-process token', f'<script src="./{script}"></script>\n<script>\n// Attach the per-process token'),
+        ("const module=new URLSearchParams(location.search).get('module');",
+         "const requested=new URLSearchParams(location.search).get('module')||location.hash.slice(1);\n const module=['abc','ttt','tdm','adr'].includes(requested)?requested:'abc';"),
+        ("refresh();load();guideRender();", ""),
+        ("__PHARMADESK_TOKEN__", ""),
+    ]
+    if not server:
+        edits.append(('    </div>\n</div>\n\n<main id="truMain"',
+                      '    </div>\n  <div id="localStatus" hidden><span id="localStatusMessage" role="status"></span><button type="button" id="localRetry" class="ghost" hidden>Thử lại</button></div>\n</div>\n\n<main id="truMain"'))
+    (output / "index.html").write_text(replacements(html, edits), encoding="utf-8")
+
+
+def build_server(output):
+    sys.path.insert(0, str(ROOT))
+    from abcven import STAT_FIELDS
+
+    output.mkdir(parents=True, exist_ok=True)
+    for name in ("local.css", "adr-storage.mjs"):
+        shutil.copyfile(WEB / name, output / name)
+    storage_version = sha256((output / "adr-storage.mjs").read_bytes()).hexdigest()[:16]
+    fields = [{"key": key, "label": label} for key, label in STAT_FIELDS]
+    script = replacements((WEB / "server.js").read_text(encoding="utf-8"), [
+        ("__ABC_FIELDS__", json.dumps(fields, ensure_ascii=False)),
+        ("__STORAGE_VERSION__", storage_version),
+    ])
+    (output / "server.js").write_text(script, encoding="utf-8")
+    build_ui(output, "server.js?v=" + sha256(script.encode()).hexdigest()[:16], server=True)
+
+
 if __name__ == "__main__":
-    build(Path(sys.argv[1]).resolve())
+    output = Path(sys.argv[1]).resolve()
+    if "--server" in sys.argv[2:]:
+        build_server(output)
+    else:
+        build(output)
