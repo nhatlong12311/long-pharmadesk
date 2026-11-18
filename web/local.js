@@ -9,6 +9,26 @@
   let worker;
   let startupTimer;
   let nextId = 0;
+  const cacheReady = prepareCache();
+
+  async function prepareCache() {
+    const serviceWorkers = navigator.serviceWorker;
+    if (!serviceWorkers) return;
+    const registration = serviceWorkers.register("./runtime-cache.js").catch(() => null);
+    if (serviceWorkers.controller) return;
+    await new Promise(resolve => {
+      const finish = () => {
+        clearTimeout(timer);
+        serviceWorkers.removeEventListener("controllerchange", finish);
+        resolve();
+      };
+      const timer = setTimeout(finish, 1800);
+      serviceWorkers.addEventListener("controllerchange", finish);
+      registration.then(result => {
+        if (!result || serviceWorkers.controller) finish();
+      });
+    });
+  }
 
   function startupError(failedWorker, error) {
     if (worker !== failedWorker) return;
@@ -26,10 +46,10 @@
   }
 
   function start() {
-    message.textContent = "Đang tải chương trình Python. Lần mở đầu tiên cần tải các thành phần từ GitHub Pages.";
+    message.textContent = "Đang khởi tạo Python trên thiết bị…";
     status.hidden = false;
     retry.hidden = true;
-    const running = new Worker("./worker.mjs", {type: "module"});
+    const running = new Worker("./worker.mjs?v=__WORKER_VERSION__", {type: "module"});
     worker = running;
     startupTimer = setTimeout(() => startupError(running, new Error("Python startup timed out")), startupTimeout);
     running.addEventListener("error", error => startupError(running, error));
@@ -69,6 +89,7 @@
     if (body.byteLength > 20 * 1024 * 1024) {
       return Response.json({ok: false, msg: "Yêu cầu vượt giới hạn 20 MB."}, {status: 413});
     }
+    if (!worker) await cacheReady;
     return new Promise(resolve => {
       const id = ++nextId;
       pending.set(id, resolve);
