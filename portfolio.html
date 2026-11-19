@@ -386,7 +386,7 @@ body{overflow-x:clip}
 html{scroll-behavior:auto!important}
 #home .hero-gridora,#home .immersive-hero,#home .hero-copy,#home .hero-tagline,
 #home .hero-bottomline,#home .hero-side-card,#home .scene-card,
-#home .normal-project-section :not(.practice-ring),
+#home .normal-project-section :not(.practice-ring,[data-portfolio-reveal],[data-portfolio-cards] > *),
 #about [data-reveal],.reveal,.motion-ready [data-reveal],
 .motion-ready [data-reveal].visible{
   animation:none!important;transition:none!important;filter:none!important;
@@ -415,7 +415,7 @@ html{scroll-behavior:auto!important}
 #home .normal-project-section .scene-grid{display:grid!important;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)!important;gap:26px!important;align-items:start!important;height:auto!important}
 #home .normal-project-section .scene-copy,#home .normal-project-section .scene-visual{
   overflow:visible!important;height:auto!important;max-height:none!important;
-  transform:none!important;opacity:1!important;filter:none!important;
+  transform:none!important;filter:none!important;
 }
 #home .normal-project-section .scene-visual{min-width:0!important}
 #home .normal-project-section .scene-card:before{pointer-events:none}
@@ -525,19 +525,35 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
  .real-input b{text-align:start}
 }
 @media (prefers-reduced-motion: no-preference) {
- .portfolio-page-enter :is(.profile-grid,.case-hero,.about-hero,.ws-head){
-  animation:portfolio-page-in 280ms cubic-bezier(.2,.65,.3,1);
+ .portfolio-pending,.portfolio-appearing,[data-portfolio-intro] > *{
+  --reveal-opacity:.79;
+  --reveal-distance:10px;
+  --reveal-duration:430ms;
  }
- [data-portfolio-reveal="section"].portfolio-revealed{
-  animation:portfolio-appear 360ms cubic-bezier(.2,.65,.3,1);
+ [data-portfolio-reveal="heading"],
+ [data-portfolio-intro] > h1,
+ [data-portfolio-cards] > .portfolio-pending,
+ [data-portfolio-cards] > .portfolio-appearing{
+  --reveal-opacity:.72;
+  --reveal-distance:13px;
+  --reveal-duration:480ms;
  }
- [data-portfolio-reveal="portrait"].portfolio-revealed{
-  animation:portfolio-appear 420ms cubic-bezier(.2,.65,.3,1);
+ [data-portfolio-reveal="copy"]{
+  --reveal-opacity:.84;
+  --reveal-distance:8px;
  }
- [data-portfolio-cards] > .portfolio-revealed{
-  animation:portfolio-card-in 360ms cubic-bezier(.2,.65,.3,1) var(--portfolio-card-delay,0ms) backwards;
+ [data-portfolio-intro] > :nth-child(2){--reveal-delay:45ms}
+ [data-portfolio-intro] > :nth-child(3){--reveal-delay:95ms}
+ [data-portfolio-intro] > :nth-child(4){--reveal-delay:140ms}
+ [data-portfolio-intro] > :nth-child(5){--reveal-delay:180ms}
+ .portfolio-pending:not(:focus-within){
+  opacity:var(--reveal-opacity);
+  translate:0 var(--reveal-distance);
  }
- [data-portfolio-cards] > .portfolio-revealed:focus-within{animation:none}
+ .portfolio-appearing:not(:focus-within),
+ .portfolio-page-enter [data-portfolio-intro] > *{
+  animation:portfolio-reveal var(--reveal-duration) cubic-bezier(.22,.7,.3,1) var(--reveal-delay,0ms) backwards;
+ }
  .top .nav.has-indicator{position:relative;isolation:isolate}
  .top .nav a{transition:background-color .2s,color .2s}
  .top .nav.has-indicator::before{
@@ -556,16 +572,8 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
  }
  .practice-orbit.portfolio-revealed .practice-ring.b{--ring-delay:120ms}
  .practice-orbit.portfolio-revealed .practice-ring.a{--ring-delay:240ms}
- @keyframes portfolio-page-in {
-  from{opacity:.88;translate:0 4px}
-  to{opacity:1;translate:none}
- }
- @keyframes portfolio-appear {
-  from{opacity:.87;translate:0 6px}
-  to{opacity:1;translate:none}
- }
- @keyframes portfolio-card-in {
-  from{opacity:.8;translate:0 8px}
+ @keyframes portfolio-reveal {
+  from{opacity:var(--reveal-opacity);translate:0 var(--reveal-distance)}
   to{opacity:1;translate:none}
  }
  @keyframes practice-ring-pulse {
@@ -578,7 +586,7 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
 <section class="new-page home-page immersive-home" id="home">
 <section class="immersive-hero profile-hero" aria-labelledby="profile-title">
   <div class="profile-grid">
-    <div class="profile-copy">
+    <div class="profile-copy" data-portfolio-intro>
       <p class="profile-kicker">Dược sĩ lâm sàng · Hồi sức tích cực</p>
       <h1 id="profile-title">Nguyễn Đăng<br/><em>Nhật Long</em></h1>
       <p class="profile-intro">Tôi là dược sĩ lâm sàng tại khoa Hồi sức tích cực, Bệnh viện Đa khoa Đồng Nai. Tôi phát triển <strong>PharmaDesk</strong> để hỗ trợ xử lý dữ liệu thuốc và lập báo cáo cho khoa Dược.</p>
@@ -598,25 +606,25 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
   </div>
 </section>
 <section aria-label="Khám phá PharmaDesk và Clinical Pharmacist" class="normal-project-list" id="work">
-<article class="normal-project-section normal-pharmadesk" data-portfolio-reveal="section"><div class="scene-card"><div class="scene-grid">
-<div class="scene-copy">
+<article class="normal-project-section normal-pharmadesk"><div class="scene-card"><div class="scene-grid">
+<div class="scene-copy" data-portfolio-sequence>
 <div>
 <div class="scene-topline"><span>Dự án · PharmaDesk 3.0</span><span>Dược bệnh viện</span></div>
-<h2>Pharma<em>Desk.</em></h2>
-<p class="lead">PharmaDesk tập hợp các công cụ xử lý phiếu thuốc, phân tích sử dụng thuốc và hỗ trợ dược lâm sàng trong một giao diện.</p>
-<div class="scene-meta">
+<h2 data-portfolio-reveal="heading">Pharma<em>Desk.</em></h2>
+<p class="lead" data-portfolio-reveal="copy">PharmaDesk tập hợp các công cụ xử lý phiếu thuốc, phân tích sử dụng thuốc và hỗ trợ dược lâm sàng trong một giao diện.</p>
+<div class="scene-meta" data-portfolio-cards>
 <div class="meta"><small>Dữ liệu đầu vào</small><strong>RPT và Excel</strong><span>Xử lý tệp theo từng nghiệp vụ.</span></div>
 <div class="meta"><small>Bản web</small><strong>Bốn công cụ</strong><span>ABC/VEN, tương tác thuốc, TDM và báo cáo ADR.</span></div>
 <div class="meta"><small>Bản Windows</small><strong>Sáu phân hệ</strong><span>Có thêm Tổng hợp phiếu và Trừ tổng.</span></div>
 </div>
 </div>
-<div class="scene-notes">
+<div class="scene-notes" data-portfolio-reveal="copy">
 <div class="scene-note"><b>01</b><span>Gộp các phiếu Excel đã xuất để đối chiếu số liệu.</span></div>
 <div class="scene-note"><b>02</b><span>So sánh cơ cấu sử dụng thuốc với kỳ trước trong báo cáo ABC/VEN.</span></div>
 <div class="scene-note"><b>03</b><span>Xem trước báo cáo ADR và xuất bản PDF hoặc Word theo mẫu.</span></div>
 </div>
 </div>
-<div class="scene-visual">
+<div class="scene-visual" data-portfolio-reveal="section">
 <div class="scene-float"><span class="scene-badge"><i>●</i> Minh họa giao diện</span></div>
 <div aria-label="Minh họa giao diện PharmaDesk" class="display-window">
 <div class="display-head"><div class="display-brand"><b>✳</b> PharmaDesk <small>3.0 Preview</small></div><div class="display-controls"><i></i><i></i><i></i></div></div>
@@ -627,25 +635,25 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
 </div>
 </div>
 </div></div></article>
-<article class="normal-project-section normal-clinical" data-portfolio-reveal="section"><div class="scene-card"><div class="scene-grid">
-<div class="scene-copy">
+<article class="normal-project-section normal-clinical"><div class="scene-card"><div class="scene-grid">
+<div class="scene-copy" data-portfolio-sequence>
 <div>
 <div class="scene-topline"><span>Thực hành chuyên môn</span><span>Hồi sức tích cực</span></div>
-<h2>Clinical<br/><em>Pharmacist.</em></h2>
-<p class="lead">Tại ICU, tôi rà soát y lệnh, theo dõi nồng độ thuốc và trao đổi với nhóm điều trị về các vấn đề liên quan đến sử dụng thuốc.</p>
-<div class="scene-meta">
+<h2 data-portfolio-reveal="heading">Clinical<br/><em>Pharmacist.</em></h2>
+<p class="lead" data-portfolio-reveal="copy">Tại ICU, tôi rà soát y lệnh, theo dõi nồng độ thuốc và trao đổi với nhóm điều trị về các vấn đề liên quan đến sử dụng thuốc.</p>
+<div class="scene-meta" data-portfolio-cards>
 <div class="meta"><small>Vị trí hiện tại</small><strong>Dược sĩ lâm sàng ICU</strong><span>Bệnh viện Đa khoa Đồng Nai.</span></div>
 <div class="meta"><small>Trọng tâm</small><strong>Rà soát y lệnh</strong><span>Kháng sinh, thuốc chống đông và theo dõi nồng độ thuốc.</span></div>
 <div class="meta"><small>Cách tiếp cận</small><strong>Dựa trên bằng chứng</strong><span>Đánh giá tài liệu và tham gia cải tiến chất lượng.</span></div>
 </div>
 </div>
-<div class="scene-notes">
+<div class="scene-notes" data-portfolio-reveal="copy">
 <div class="scene-note"><b>01</b><span>Phát triển và triển khai quy trình <b>TDM Vancomycin</b> trong ICU.</span></div>
 <div class="scene-note"><b>02</b><span>Tham gia nghiên cứu về dự phòng thuyên tắc huyết khối tĩnh mạch và nhu cầu theo dõi vancomycin tại ICU.</span></div>
 <div class="scene-note"><b>03</b><span>Đào tạo nhân viên y tế và sinh viên dược, đồng thời tham gia các hoạt động cải tiến chất lượng.</span></div>
 </div>
 </div>
-<div class="scene-visual practice-board">
+<div class="scene-visual practice-board" data-portfolio-reveal="section">
 <div class="scene-float"><span class="scene-badge"><i>●</i> Critical care</span><span class="scene-badge"><i>●</i> Patient safety</span></div>
 <div class="practice-portrait"><div class="practice-orbit" data-portfolio-reveal="rings"><span class="practice-ring a"></span><span class="practice-ring b"></span><span class="practice-ring c"></span><span class="practice-plus">+</span></div><div class="practice-persona"><div><h3>An toàn sử dụng thuốc</h3><p>Tôi chú trọng nhận diện vấn đề liên quan đến thuốc và trao đổi với nhóm điều trị về các điểm cần rà soát hoặc theo dõi thêm.</p></div><div class="skill-pills"><span>ICU</span><span>TDM</span><span>AMS</span><span>Anticoagulants</span><span>Drug Information</span><span>Quality Improvement</span></div></div></div>
 <div class="care-columns"><div class="care-box"><small>Trong điều trị</small><strong>Rà soát thuốc</strong><p>Kiểm tra y lệnh và xem xét các vấn đề về liều dùng, tương tác và theo dõi.</p></div><div class="care-box"><small>Trong đào tạo</small><strong>Chia sẻ chuyên môn</strong><p>Tham gia đào tạo nhân viên y tế và hướng dẫn sinh viên dược.</p></div></div>
@@ -656,7 +664,7 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
 </section>
 <section aria-label="Khám phá các module PharmaDesk" class="showcase">
 <div class="showcase-kicker">PHARMADESK 3.0 / INSIDE THE PRODUCT</div>
-<div class="showcase-head"><h2>One workspace.<br/><em>Many workflows.</em></h2><p>Chọn một trong sáu phân hệ để xem dữ liệu đầu vào, các bước xử lý và kết quả có thể xuất.</p></div>
+<div class="showcase-head" data-portfolio-sequence><h2 data-portfolio-reveal="heading">One workspace.<br/><em>Many workflows.</em></h2><p data-portfolio-reveal="copy">Chọn một trong sáu phân hệ để xem dữ liệu đầu vào, các bước xử lý và kết quả có thể xuất.</p></div>
 <div aria-label="Module PharmaDesk" class="showcase-tabs" role="tablist">
 <button aria-controls="showcase-content" aria-selected="true" data-module="abc" id="showcase-tab-abc" role="tab" type="button">ABC–VEN</button>
 <button aria-controls="showcase-content" aria-selected="false" data-module="aggregation" id="showcase-tab-aggregation" role="tab" type="button">Tổng hợp phiếu</button>
@@ -692,10 +700,10 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
 </div>
 </section>
 <div class="project-connector"><span>Dùng PharmaDesk trên web</span></div>
-<section aria-labelledby="clinical-tools-title" class="clinical-suite" id="clinical-tools">
+<section aria-labelledby="clinical-tools-title" class="clinical-suite" id="clinical-tools" data-portfolio-sequence>
 
-<h2 id="clinical-tools-title">Công cụ dược lâm sàng</h2>
-<p class="suite-intro">Mở từng công cụ PharmaDesk để nhập tệp hoặc điền biểu mẫu, xem kết quả và tải báo cáo ở các phân hệ có hỗ trợ.</p>
+<h2 id="clinical-tools-title" data-portfolio-reveal="heading">Công cụ dược lâm sàng</h2>
+<p class="suite-intro" data-portfolio-reveal="copy">Mở từng công cụ PharmaDesk để nhập tệp hoặc điền biểu mẫu, xem kết quả và tải báo cáo ở các phân hệ có hỗ trợ.</p>
 <div class="suite-grid" data-portfolio-cards>
 <a class="suite-tile" href="/tools?view=clinical&amp;module=abc"><span class="suite-icon">A/V</span><h3>Báo cáo ABC/VEN</h3><p>Nhập Excel, phân tích danh mục thuốc, đối chiếu kỳ trước và xuất báo cáo Word/Excel.</p><b>Mở ABC/VEN ↗</b></a>
 <a class="suite-tile" href="/tools?view=clinical&amp;module=ttt"><span class="suite-icon">↗↖</span><h3>Tương tác thuốc</h3><p>Nhập dữ liệu đơn thuốc, đối chiếu hoạt chất và quy tắc tương tác của PharmaDesk; xuất báo cáo.</p><b>Mở tương tác thuốc ↗</b></a>
@@ -703,32 +711,32 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
 <a class="suite-tile" href="/tools?view=clinical&amp;module=adr"><span class="suite-icon">ADR</span><h3>Báo cáo ADR</h3><p>Điền biểu mẫu, quản lý bản nháp và xuất PDF/Word theo mẫu có trong phần mềm.</p><b>Mở ADR ↗</b></a>
 </div>
 <p class="suite-local">Kiểm tra kết quả và quy tắc theo chuyên môn trước khi sử dụng trong thực hành.</p>
-</section><section class="scene-bridge" data-portfolio-reveal="section"><div class="scene-bridge-grid"><div><div class="eyebrow">THỰC HÀNH VÀ CÔNG NGHỆ</div><h2>Từ thực hành<br/><em>đến phần mềm.</em></h2></div><div><p>Khi phát triển PharmaDesk, tôi bắt đầu từ câu hỏi của người làm nghiệp vụ: cần dữ liệu gì, cần kiểm tra gì, và cần giữ lại kết quả nào để đối chiếu?</p><div class="bridge-points"><div>Phân hệ xử lý dữ liệu giúp chuẩn bị báo cáo theo mẫu.</div><div>Phân hệ lâm sàng đưa thông tin cần rà soát về cùng một nơi.</div></div></div></div></section>
+</section><section class="scene-bridge"><div class="scene-bridge-grid" data-portfolio-sequence><div><div class="eyebrow">THỰC HÀNH VÀ CÔNG NGHỆ</div><h2 data-portfolio-reveal="heading">Từ thực hành<br/><em>đến phần mềm.</em></h2></div><div><p data-portfolio-reveal="copy">Khi phát triển PharmaDesk, tôi bắt đầu từ câu hỏi của người làm nghiệp vụ: cần dữ liệu gì, cần kiểm tra gì, và cần giữ lại kết quả nào để đối chiếu?</p><div class="bridge-points"><div>Phân hệ xử lý dữ liệu giúp chuẩn bị báo cáo theo mẫu.</div><div>Phân hệ lâm sàng đưa thông tin cần rà soát về cùng một nơi.</div></div></div></div></section>
 <div class="scene-end"><span>Kinh nghiệm, học vấn và đóng góp chuyên môn</span><a class="end-link" data-view="about" href="#about">Xem hồ sơ ↗</a></div>
 </section>
 <section class="new-page case-page" hidden="" id="case-study">
 <div style="margin:20px 0 24px;padding:22px 24px;border-radius:24px;background:#e6f0e5;border:1px solid #d6e4d4;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap"><div><strong style="font-size:17px;color:#163b25">Mở PharmaDesk 3.0</strong><div style="font-size:13px;color:#5d705f;margin-top:5px">Mở ABC/VEN, Tương tác thuốc, TDM và ADR trên web. Tổng hợp phiếu và Trừ tổng có trong bản Windows.</div></div><a href="#clinical-tools" style="padding:12px 19px;border-radius:14px;background:#163b25;color:#fff;font-weight:700;font-size:13px">Chọn công cụ ↗</a></div><a class="case-back" data-view="home" href="#home">← Về trang chủ</a>
-<div class="case-hero">
+<div class="case-hero" data-portfolio-intro>
 <div class="case-kicker">DỰ ÁN · PHARMADESK 3.0</div>
 <h1>Pharma<em>Desk.</em></h1>
 <p>Tôi phát triển PharmaDesk từ những công việc lặp lại ở khoa Dược: tổng hợp phiếu thuốc, đối chiếu số liệu Excel và chuẩn bị báo cáo theo mẫu.</p>
 <div class="case-actions"><a class="case-action" href="#case-modules">Xem các phân hệ ↓</a><a class="case-action ghost" href="https://github.com/nhatlong12311/long-pharmadesk/releases/latest">Tải bản Windows</a><a class="case-action ghost" href="mailto:nhatlong.nguyendang@gmail.com?subject=PharmaDesk%203.0">Trao đổi về PharmaDesk ↗</a></div>
 <div class="case-meta"><span>Dược bệnh viện</span><span>Python / Flask</span><span>RPT và Excel</span><span>Sáu phân hệ</span></div>
 </div>
-<div class="case-head"><h2>Từ nghiệp vụ<br/>đến thiết kế.</h2><p>Mỗi phân hệ theo một trình tự quen thuộc với dược sĩ: chọn nguồn, xử lý, rà soát kết quả và xuất tệp khi cần.</p></div>
+<div class="case-head" data-portfolio-sequence><h2 data-portfolio-reveal="heading">Từ nghiệp vụ<br/>đến thiết kế.</h2><p data-portfolio-reveal="copy">Mỗi phân hệ theo một trình tự quen thuộc với dược sĩ: chọn nguồn, xử lý, rà soát kết quả và xuất tệp khi cần.</p></div>
 <div class="case-cols" data-portfolio-cards>
 <div class="case-mini"><small>Bối cảnh</small><h3>Dữ liệu ở nhiều nguồn</h3><p>Phiếu thuốc và danh mục Excel cần được đối chiếu trước khi có thể tổng hợp số liệu.</p></div>
 <div class="case-mini"><small>Cách làm</small><h3>Tách theo nghiệp vụ</h3><p>Tổng hợp phiếu, phân tích ABC/VEN và báo cáo ADR dùng các biểu mẫu và bước kiểm tra riêng.</p></div>
 <div class="case-mini"><small>Đầu ra</small><h3>Rà soát rồi xuất tệp</h3><p>Dược sĩ có thể kiểm tra bảng tổng hợp hoặc xem trước báo cáo, sau đó lưu theo định dạng mà phân hệ hỗ trợ.</p></div>
 </div>
-<div class="case-head" id="case-modules"><h2>Các phân hệ<br/>PharmaDesk.</h2><p>Chọn một phân hệ để xem nguồn dữ liệu, bước rà soát và kết quả đầu ra.</p></div>
+<div class="case-head" id="case-modules" data-portfolio-sequence><h2 data-portfolio-reveal="heading">Các phân hệ<br/>PharmaDesk.</h2><p data-portfolio-reveal="copy">Chọn một phân hệ để xem nguồn dữ liệu, bước rà soát và kết quả đầu ra.</p></div>
 <div class="case-mock" data-portfolio-reveal="section"><div class="case-app">
 <aside class="case-sidebar"><div class="case-logo">✳ PharmaDesk</div><div class="case-menu" id="caseMenu">
 <button class="selected" data-case="aggregate" type="button">Tổng hợp phiếu</button><button data-case="subtract" type="button">Trừ tổng</button><button data-case="abc" type="button">ABC–VEN</button><button data-case="interaction" type="button">Tương tác thuốc</button><button data-case="tdm" type="button">TDM</button><button data-case="adr" type="button">Báo cáo ADR</button>
 </div></aside>
 <div class="case-stage"><div class="case-stage-top"><span>MINH HỌA QUY TRÌNH</span><span id="caseIndex">01 / 06</span></div><h3 id="caseTitle">Tổng hợp phiếu</h3><p id="caseDescription">Tổng hợp và chuẩn hóa dữ liệu phiếu thuốc từ nguồn RPT/Excel.</p><div class="case-interface"><div class="case-interface-head" id="casePanelHeading">QUY TRÌNH TỔNG HỢP PHIẾU</div><div class="case-interface-body" id="caseFields"></div><div class="case-interface-foot" id="caseOutputs"></div></div></div>
 </div><p class="case-disclaimer">Giao diện mô phỏng luồng thao tác của từng phân hệ.</p></div>
-<div class="case-head"><h2>Báo cáo ABC/VEN<br/>theo tháng.</h2><p>Ví dụ một quy trình tại khoa Dược, từ tệp sử dụng thuốc đến bản báo cáo để rà soát.</p></div>
+<div class="case-head" data-portfolio-sequence><h2 data-portfolio-reveal="heading">Báo cáo ABC/VEN<br/>theo tháng.</h2><p data-portfolio-reveal="copy">Ví dụ một quy trình tại khoa Dược, từ tệp sử dụng thuốc đến bản báo cáo để rà soát.</p></div>
 <div class="case-flow" data-portfolio-cards>
 <div><small>01</small><h3>Chọn dữ liệu</h3><p>Chọn tháng báo cáo và chế độ một tệp Excel. Nhập bảng sử dụng thuốc của kỳ này.</p></div>
 <div><small>02</small><h3>Phân tích cơ cấu</h3><p>Chọn cách phân hạng ABC. Rà soát số mặt hàng và giá trị sử dụng theo nhóm ABC/VEN.</p></div>
@@ -738,24 +746,24 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
 <div class="case-close"><div><h2>Người phát triển<br/>PharmaDesk.</h2><p>Những công việc tôi làm tại ICU và khoa Dược là bối cảnh để lựa chọn phân hệ và xây dựng luồng thao tác.</p></div><a class="case-action" data-view="about" href="#about">Xem hồ sơ Nhật Long ↗</a></div>
 </section>
 <section class="new-page about-page" hidden="" id="about">
-<div class="about-hero"><div><span class="section-eyebrow">DƯỢC LÂM SÀNG · HỒI SỨC TÍCH CỰC</span><h1>Hồ sơ <em>chuyên môn</em></h1><p>Tôi làm dược lâm sàng trong bệnh viện từ năm 2020 và làm việc tại khoa Hồi sức tích cực từ năm 2022. Chuyên môn của tôi tập trung vào rà soát y lệnh, sử dụng kháng sinh, thuốc chống đông và theo dõi nồng độ thuốc.</p><div class="about-actions"><a class="about-contact" href="mailto:nhatlong.nguyendang@gmail.com">Liên hệ ↗</a><button class="copy-mail" id="copyEmail" type="button">Sao chép email</button></div></div><div class="about-photo-wrap"><img alt="Chân dung Nguyễn Đăng Nhật Long" loading="lazy" src="data:image/webp;base64,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"/><span>NGUYEN DANG NHAT LONG / CLINICAL PHARMACIST</span></div></div>
+<div class="about-hero"><div data-portfolio-intro><span class="section-eyebrow">DƯỢC LÂM SÀNG · HỒI SỨC TÍCH CỰC</span><h1>Hồ sơ <em>chuyên môn</em></h1><p>Tôi làm dược lâm sàng trong bệnh viện từ năm 2020 và làm việc tại khoa Hồi sức tích cực từ năm 2022. Chuyên môn của tôi tập trung vào rà soát y lệnh, sử dụng kháng sinh, thuốc chống đông và theo dõi nồng độ thuốc.</p><div class="about-actions"><a class="about-contact" href="mailto:nhatlong.nguyendang@gmail.com">Liên hệ ↗</a><button class="copy-mail" id="copyEmail" type="button">Sao chép email</button></div></div><div class="about-photo-wrap"><img alt="Chân dung Nguyễn Đăng Nhật Long" loading="lazy" src="data:image/webp;base64,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"/><span>NGUYEN DANG NHAT LONG / CLINICAL PHARMACIST</span></div></div>
 <div class="about-metrics" data-portfolio-cards><div><strong>06<span>+</span></strong><p>Năm kinh nghiệm dược bệnh viện (CV 2026)</p></div><div><strong>04<span>+</span></strong><p>Năm kinh nghiệm ICU (CV 2026)</p></div><div><strong>2020</strong><p>Bắt đầu thực hành dược lâm sàng</p></div></div>
-<section class="about-details" data-portfolio-reveal="section"><div><span class="section-eyebrow">THỰC HÀNH DƯỢC LÂM SÀNG</span><h2>Kinh nghiệm.</h2></div><div class="about-timeline"><article><span>2022 — HIỆN TẠI</span><div><h3>Dược sĩ lâm sàng ICU</h3><b>Bệnh viện Đa khoa Đồng Nai</b><p>Rà soát y lệnh tại ICU và hỗ trợ tối ưu hóa điều trị bằng kháng sinh, thuốc chống đông. Phát triển và triển khai quy trình theo dõi nồng độ vancomycin, tham gia nghiên cứu lâm sàng và đào tạo.</p></div></article><article><span>2020 — 2022</span><div><h3>Dược sĩ lâm sàng</h3><b>Bệnh viện Hoàn Mỹ ITO</b><p>Rà soát đơn thuốc, quản lý danh mục thuốc và báo cáo phản ứng có hại của thuốc (ADR). Tham gia cải tiến quy trình duyệt y lệnh.</p></div></article></div></section>
-<section class="about-details" data-portfolio-reveal="section"><div><span class="section-eyebrow">LĨNH VỰC CHUYÊN MÔN</span><h2>Chuyên môn.</h2></div><div><div class="about-chips"><span>Dược lâm sàng hồi sức</span><span>Theo dõi nồng độ thuốc (TDM)</span><span>Quản lý sử dụng kháng sinh</span><span>Thuốc chống đông</span><span>Rà soát y lệnh</span><span>Nghiên cứu lâm sàng</span><span>Thông tin thuốc</span><span>Cải tiến chất lượng</span></div><div class="education"><span class="section-eyebrow">HỌC VẤN</span><h3>Dược sĩ đại học</h3><p>Trường Đại học Y Dược, Đại học Huế · 2015–2020</p></div></div></section>
+<section class="about-details" data-portfolio-sequence><div><span class="section-eyebrow">THỰC HÀNH DƯỢC LÂM SÀNG</span><h2 data-portfolio-reveal="heading">Kinh nghiệm.</h2></div><div class="about-timeline" data-portfolio-reveal="copy"><article><span>2022 — HIỆN TẠI</span><div><h3>Dược sĩ lâm sàng ICU</h3><b>Bệnh viện Đa khoa Đồng Nai</b><p>Rà soát y lệnh tại ICU và hỗ trợ tối ưu hóa điều trị bằng kháng sinh, thuốc chống đông. Phát triển và triển khai quy trình theo dõi nồng độ vancomycin, tham gia nghiên cứu lâm sàng và đào tạo.</p></div></article><article><span>2020 — 2022</span><div><h3>Dược sĩ lâm sàng</h3><b>Bệnh viện Hoàn Mỹ ITO</b><p>Rà soát đơn thuốc, quản lý danh mục thuốc và báo cáo phản ứng có hại của thuốc (ADR). Tham gia cải tiến quy trình duyệt y lệnh.</p></div></article></div></section>
+<section class="about-details" data-portfolio-sequence><div><span class="section-eyebrow">LĨNH VỰC CHUYÊN MÔN</span><h2 data-portfolio-reveal="heading">Chuyên môn.</h2></div><div data-portfolio-reveal="copy"><div class="about-chips"><span>Dược lâm sàng hồi sức</span><span>Theo dõi nồng độ thuốc (TDM)</span><span>Quản lý sử dụng kháng sinh</span><span>Thuốc chống đông</span><span>Rà soát y lệnh</span><span>Nghiên cứu lâm sàng</span><span>Thông tin thuốc</span><span>Cải tiến chất lượng</span></div><div class="education"><span class="section-eyebrow">HỌC VẤN</span><h3>Dược sĩ đại học</h3><p>Trường Đại học Y Dược, Đại học Huế · 2015–2020</p></div></div></section>
 <section aria-labelledby="contrib-title" class="about-contributions">
-<div class="contrib-intro" data-reveal="">
-<div><h2 id="contrib-title">Đóng góp <em>tiêu biểu.</em></h2></div>
-<p>Các công việc tôi tham gia về theo dõi thuốc, cải tiến quy trình, nghiên cứu và đào tạo.</p>
+<div class="contrib-intro" data-portfolio-sequence>
+<div><h2 id="contrib-title" data-portfolio-reveal="heading">Đóng góp <em>tiêu biểu.</em></h2></div>
+<p data-portfolio-reveal="copy">Các công việc tôi tham gia về theo dõi thuốc, cải tiến quy trình, nghiên cứu và đào tạo.</p>
 </div>
 <div class="contrib-cards" data-portfolio-cards>
 <article class="contrib-card" data-index="01"><div class="number">THEO DÕI NỒNG ĐỘ THUỐC</div><div><h3>Quy trình TDM vancomycin</h3><p>Phát triển và triển khai quy trình theo dõi nồng độ Vancomycin trong thực hành ICU.</p></div><div class="foot">Bệnh viện Đa khoa Đồng Nai · ICU</div></article>
 <article class="contrib-card" data-index="02"><div class="number">CẢI TIẾN CHẤT LƯỢNG</div><div><h3>Quy trình duyệt y lệnh</h3><p>Tham gia cải tiến quy trình duyệt y lệnh thuốc tại Bệnh viện Hoàn Mỹ ITO. Dự án vào Top 2 dự án cải tiến chất lượng của hệ thống Hoàn Mỹ năm 2022.</p></div><div class="foot">Bệnh viện Hoàn Mỹ ITO · 2022</div></article>
 <article class="contrib-card" data-index="03"><div class="number">NGHIÊN CỨU VÀ ĐÀO TẠO</div><div><h3>Nghiên cứu tại ICU</h3><p>Tham gia nghiên cứu về dự phòng thuyên tắc huyết khối tĩnh mạch (VTE) và nhu cầu theo dõi nồng độ vancomycin tại ICU. Tham gia đào tạo nhân viên y tế và sinh viên dược.</p></div><div class="foot">Hồi sức tích cực</div></article>
 </div>
-</section><div class="about-bridge" data-reveal=""><div><div class="contrib-kicker" style="color:#398154">DỰ ÁN PHARMADESK</div><h3>Từ công việc<br/>đến <em>công cụ.</em></h3></div><div><p>PharmaDesk là dự án tôi phát triển song song với công việc dược lâm sàng. Các phân hệ hỗ trợ xử lý phiếu, phân tích sử dụng thuốc và lập báo cáo.</p><a data-view="case-study" href="#case-study">Xem dự án PharmaDesk ↗</a></div></div><div class="about-last"><div><h2>Trao đổi <em>chuyên môn.</em></h2></div><a href="mailto:nhatlong.nguyendang@gmail.com">Gửi email ↗</a></div>
+</section><div class="about-bridge" data-portfolio-sequence><div><div class="contrib-kicker" style="color:#398154">DỰ ÁN PHARMADESK</div><h3 data-portfolio-reveal="heading">Từ công việc<br/>đến <em>công cụ.</em></h3></div><div><p data-portfolio-reveal="copy">PharmaDesk là dự án tôi phát triển song song với công việc dược lâm sàng. Các phân hệ hỗ trợ xử lý phiếu, phân tích sử dụng thuốc và lập báo cáo.</p><a data-view="case-study" href="#case-study">Xem dự án PharmaDesk ↗</a></div></div><div class="about-last"><div><h2>Trao đổi <em>chuyên môn.</em></h2></div><a href="mailto:nhatlong.nguyendang@gmail.com">Gửi email ↗</a></div>
 </section>
 <section aria-labelledby="wsTitle" class="ws new-page" hidden="" id="workspace">
-<div class="ws-head"><div><div class="ws-eyebrow">WORKSPACE CÁ NHÂN</div><h1 id="wsTitle">Không gian làm việc của Long</h1><p class="ws-desc">Quản lý lịch trực, nhật ký công việc và tiến độ dự án.</p></div><div class="ws-actions"><button class="ws-btn" id="wsExport" type="button">↓ Sao lưu JSON</button><button class="ws-btn" id="wsImport" type="button">↑ Khôi phục</button><input accept="application/json,.json" class="ws-file" id="wsImportFile" type="file"/><button class="ws-btn" id="wsICS" type="button">Xuất lịch .ics</button></div></div>
+<div class="ws-head"><div data-portfolio-intro><div class="ws-eyebrow">WORKSPACE CÁ NHÂN</div><h1 id="wsTitle">Không gian làm việc của Long</h1><p class="ws-desc">Quản lý lịch trực, nhật ký công việc và tiến độ dự án.</p></div><div class="ws-actions"><button class="ws-btn" id="wsExport" type="button">↓ Sao lưu JSON</button><button class="ws-btn" id="wsImport" type="button">↑ Khôi phục</button><input accept="application/json,.json" class="ws-file" id="wsImportFile" type="file"/><button class="ws-btn" id="wsICS" type="button">Xuất lịch .ics</button></div></div>
 <div class="ws-private">Workspace lưu dữ liệu trong trình duyệt trên thiết bị này. Dùng <strong>Sao lưu JSON</strong> để chuyển dữ liệu sang trình duyệt hoặc địa chỉ khác.</div>
 <div class="ws-shell" data-portfolio-cards><div class="ws-panel"><div class="ws-toolbar"><div><h3>Lịch công việc</h3><span class="ws-muted">Chọn một ngày để thêm hoặc sửa ca làm</span></div><button class="ws-btn primary" id="wsNewShift" type="button">+ Thêm lịch</button></div><div class="ws-toolbar"><button aria-label="Tháng trước" class="ws-btn" id="wsPrev">←</button><span class="ws-month" id="wsMonth"></span><div class="ws-actions"><button class="ws-btn" id="wsToday">Hôm nay</button><button aria-label="Tháng sau" class="ws-btn" id="wsNext">→</button></div></div><div class="ws-week"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div><div class="ws-grid" id="wsCalendar"></div><div class="ws-legend"><span><i style="background:#65b57d"></i>Nội trú</span><span><i style="background:#7da1dc"></i>Ngoại trú</span><span><i style="background:#e9b95a"></i>Khác</span></div></div><aside class="ws-panel"><div class="ws-toolbar"><h3>Tổng quan tháng</h3><span class="ws-pill" id="wsCountLabel">2026</span></div><div class="ws-mini"><div class="ws-stat"><b id="wsInCount">0</b><small>Ca nội trú</small></div><div class="ws-stat"><b id="wsOutCount">0</b><small>Ca ngoại trú</small></div></div><div class="ws-toolbar"><h3>Ca làm trong tháng</h3></div><div class="ws-tasks" id="wsShiftList"></div></aside></div>
 <div class="ws-section-row" data-portfolio-cards><div class="ws-panel"><div class="ws-toolbar"><div><h3>Nhật ký công việc</h3><span class="ws-muted">Ghi lại thành quả, nghiên cứu, ghi chú chuyên môn</span></div><button class="ws-btn primary" id="wsAddLog">+ Ghi nhật ký</button></div><div class="ws-log-list" id="wsLogList"></div></div><div class="ws-panel"><div class="ws-toolbar"><div><h3>Danh sách dự án</h3><span class="ws-muted">Theo dõi tiến độ cá nhân</span></div><button class="ws-btn primary" id="wsAddProject">+ Dự án</button></div><div class="ws-project-list" id="wsProjectList"></div></div></div>
@@ -827,14 +835,16 @@ calendar();renderLogs();renderProjects();
   if(hash==='portfolio-content' && previousPage)return;
   const page=anchors.get(hash)||(pages.has(hash)?hash:'home');
   const pageChanged=previousPage!==page;
-  const animatePage=motion.matches && previousPage && pageChanged && !anchors.has(hash);
+  const animatePage=motion.matches && pageChanged && !anchors.has(hash);
   for(const id of pages){
    const section=document.getElementById(id);
    if(pageChanged){
     section.hidden=id!==page;
     section.classList.toggle('portfolio-page-enter',Boolean(animatePage && id===page));
     if(section.hidden && id===previousPage){
-     section.querySelectorAll('.portfolio-revealed').forEach(block=>block.classList.remove('portfolio-revealed'));
+     section.querySelectorAll('.portfolio-revealed,.portfolio-appearing').forEach(block=>{
+      block.classList.remove('portfolio-revealed','portfolio-appearing');
+     });
     }
    }
   }
@@ -870,7 +880,12 @@ calendar();renderLogs();renderProjects();
  motion.addEventListener?.('change',updateNavigationGeometry);
  for(const type of ['animationend','animationcancel']){
   document.addEventListener(type,event=>{
-   if(event.animationName==='portfolio-page-in')event.target.closest('.new-page')?.classList.remove('portfolio-page-enter');
+   if(event.animationName!=='portfolio-reveal')return;
+   const block=event.target;
+   block.classList.remove('portfolio-appearing');
+   if(block.parentElement?.hasAttribute('data-portfolio-intro') && !block.nextElementSibling){
+    block.closest('.new-page')?.classList.remove('portfolio-page-enter');
+   }
   });
  }
  document.addEventListener('click',event=>{
@@ -898,18 +913,22 @@ calendar();renderLogs();renderProjects();
      block.classList.toggle('portfolio-revealed',entry.isIntersecting);
     }else if(entry.isIntersecting){
      observer.unobserve(block);
-     if(block.closest('.portfolio-page-enter'))continue;
-     const group=block.parentElement;
-     if(group.hasAttribute('data-portfolio-cards')){
+     block.classList.remove('portfolio-pending');
+     if(block.matches(':focus-within'))continue;
+     const group=block.closest('[data-portfolio-cards],[data-portfolio-sequence]');
+     if(group){
       const delay=delays.get(group)??0;
-      block.style.setProperty('--portfolio-card-delay',delay+'ms');
-      delays.set(group,Math.min(delay+40,120));
+      block.style.setProperty('--reveal-delay',delay+'ms');
+      delays.set(group,Math.min(delay+55,165));
      }
-     block.classList.add('portfolio-revealed');
+     block.classList.add('portfolio-appearing');
     }
    }
   });
-  targets.forEach(target=>observer.observe(target));
+  targets.forEach(target=>{
+   if(target.dataset.portfolioReveal!=='rings')target.classList.add('portfolio-pending');
+   observer.observe(target);
+  });
  }
 })();
 </script>
