@@ -229,15 +229,53 @@
 .clinical-suite h2{margin:16px 0 14px;font-size:clamp(38px,5vw,68px);line-height:1.08;letter-spacing:-.065em}
 .clinical-suite .suite-intro{max-width:710px;color:#617565;line-height:1.75;font-size:15px;margin:0 0 24px}
 .suite-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.suite-tile{background:#fff;border:1px solid #dce8db;border-radius:24px;padding:26px;display:flex;flex-direction:column;align-items:flex-start;min-height:220px;box-shadow:0 10px 32px rgba(17,56,31,.04);transition:transform .2s,box-shadow .2s}
-.suite-tile:hover{transform:translateY(-3px);box-shadow:0 20px 38px rgba(17,56,31,.1)}
+.suite-tile{
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  align-items:start;
+  gap:10px;
+  padding:clamp(15px,1.8vw,24px);
+  border:1px solid #dce8db;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 10px 32px rgba(17,56,31,.04);
+}
 .suite-tile:focus-visible{outline:3px solid #2b8651;outline-offset:4px}
-.suite-icon{background:#e9f3e9;border-radius:14px;color:#1c7a48;font-weight:800;display:grid;place-items:center;width:48px;height:48px;font-size:18px}
-.suite-tile h3{font-size:23px;letter-spacing:-.04em;margin:15px 0 7px;color:#173523}
-.suite-tile p{font-size:14px;color:#68786b;line-height:1.7;margin:0 0 20px}
-.suite-tile b{font-size:13px;color:#197345;margin-top:auto}
+.suite-card-heading{display:grid;justify-items:start;gap:10px}
+.suite-icon{background:#e9f3e9;border-radius:11px;color:#1c7a48;font-weight:800;display:grid;place-items:center;width:40px;height:40px;font-size:14px}
+.suite-tile h3{font-size:clamp(18px,1.6vw,22px);letter-spacing:-.04em;line-height:1.23;margin:0;color:#173523}
+.suite-copy{display:grid;gap:4px}
+.suite-copy p{line-height:1.58;font-size:14px;color:#506658;margin:0}
+.suite-copy .suite-detail{color:#24583a}
+.suite-action{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border-radius:9px;background:#edf5ed;color:#195538;font-size:13px;font-weight:750}
+.suite-action::after{
+  content:"";
+  flex:none;
+  width:13px;
+  height:13px;
+  background:currentColor;
+  clip-path:polygon(36% 8%,92% 8%,92% 64%,80% 64%,80% 29%,20% 89%,11% 80%,71% 20%,36% 20%);
+}
+.suite-tile:focus-visible .suite-action{background:#dceede}
+/* Shift Card interaction adapted for the portfolio's plain HTML links. */
+@media(hover:hover) and (pointer:fine){
+  .suite-copy p{grid-area:1/1}
+  .suite-copy .suite-detail,.suite-tile:is(:hover,:focus-visible) .suite-summary{opacity:0}
+  .suite-tile:is(:hover,:focus-visible) .suite-detail{opacity:1}
+  .suite-tile:is(:hover,:focus-visible){border-color:#b7d4bb;box-shadow:0 15px 28px #193f2614}
+  .suite-tile:is(:hover,:focus-visible) .suite-action{background:#dceede}
+  @media(prefers-reduced-motion:no-preference){
+    .suite-tile{transition:border-color .24s ease,box-shadow .24s ease}
+    .suite-copy p{transition:opacity .24s ease,translate .24s ease}
+    .suite-action{transition:background-color .24s ease,translate .24s ease}
+    .suite-copy .suite-detail{translate:0 7px}
+    .suite-tile:is(:hover,:focus-visible) .suite-summary{translate:0 -6px}
+    .suite-tile:is(:hover,:focus-visible) .suite-detail{translate:none}
+    .suite-tile:is(:hover,:focus-visible) .suite-action{translate:0 -2px}
+  }
+}
 .suite-local{display:flex;align-items:flex-start;gap:10px;color:#526a57;font-size:13px;line-height:1.65;margin-top:22px}
-@media(max-width:720px){.clinical-suite{margin:14px 14px 26px;padding:22px 16px}.suite-grid{grid-template-columns:1fr}.suite-tile{min-height:195px;padding:21px}}
+@media(max-width:720px){.clinical-suite{margin:14px 14px 26px;padding:22px 16px}.suite-grid{grid-template-columns:1fr}}
 </style><style>
 /* Gridora-inspired editorial portfolio, original design */
 body{background:#122c20;color:#112c20;font-family:Inter,"Segoe UI",Arial,sans-serif}
@@ -519,10 +557,6 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
 .clinical-suite{margin-top:0}
 .clinical-suite h2{margin-top:0;font-size:clamp(33px,4.5vw,62px)}
 .suite-grid{gap:12px}
-.suite-tile{min-height:0;padding:clamp(15px,1.8vw,24px);border-radius:18px}
-.suite-tile h3{font-size:clamp(18px,1.6vw,22px);line-height:1.23}
-.suite-tile p{line-height:1.58;color:#506658;margin-bottom:15px}
-.suite-icon{width:40px;height:40px;border-radius:11px;font-size:14px}
 .suite-local{margin:16px 0 0}
 .scene-bridge h2 em,
 .about-hero h1 em,
@@ -580,10 +614,10 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
  .showcase-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible;padding:0;gap:6px}
  .showcase-tabs button{padding:6px;line-height:1.25}
  .showcase-info,.showcase-display{border-radius:16px}
- .suite-tile{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;gap:5px 12px}
- .suite-tile h3,.suite-tile p,.suite-tile b{grid-column:2;margin:0}
+ .suite-tile{grid-template-columns:auto minmax(0,1fr);gap:7px 12px}
+ .suite-card-heading{display:contents}
+ .suite-tile h3,.suite-copy,.suite-action{grid-column:2}
  .suite-tile h3{align-self:center}
- .suite-tile b{margin-top:4px}
  .suite-icon{grid-row:1/4}
  .scene-end{align-items:start}
  .case-hero h1{margin-block:12px}
@@ -788,10 +822,38 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
 <h2 id="clinical-tools-title" data-portfolio-reveal="heading">Công cụ dược lâm sàng</h2>
 <p class="suite-intro" data-portfolio-reveal="copy">Mở từng công cụ PharmaDesk để nhập tệp hoặc điền biểu mẫu, xem kết quả và tải báo cáo ở các phân hệ có hỗ trợ.</p>
 <div class="suite-grid" data-portfolio-cards>
-<a class="suite-tile" href="/tools?view=clinical&amp;module=abc"><span class="suite-icon">A/V</span><h3>Báo cáo ABC/VEN</h3><p>Nhập Excel, phân tích danh mục thuốc, đối chiếu kỳ trước và xuất báo cáo Word/Excel.</p><b>Mở ABC/VEN ↗</b></a>
-<a class="suite-tile" href="/tools?view=clinical&amp;module=ttt"><span class="suite-icon">↗↖</span><h3>Tương tác thuốc</h3><p>Nhập dữ liệu đơn thuốc, đối chiếu hoạt chất và quy tắc tương tác của PharmaDesk; xuất báo cáo.</p><b>Mở tương tác thuốc ↗</b></a>
-<a class="suite-tile" href="/tools?view=clinical&amp;module=tdm"><span class="suite-icon">TDM</span><h3>Theo dõi nồng độ thuốc</h3><p>Nhập thông số điều trị để xem kết quả tính toán TDM cho vancomycin hoặc aminoglycoside.</p><b>Mở TDM ↗</b></a>
-<a class="suite-tile" href="/tools?view=clinical&amp;module=adr"><span class="suite-icon">ADR</span><h3>Báo cáo ADR</h3><p>Điền biểu mẫu, quản lý bản nháp và xuất PDF/Word theo mẫu có trong phần mềm.</p><b>Mở ADR ↗</b></a>
+<a class="suite-tile" href="/tools?view=clinical&amp;module=abc" aria-labelledby="suite-abc-title" aria-describedby="suite-abc-summary suite-abc-detail">
+  <div class="suite-card-heading"><span class="suite-icon" aria-hidden="true">A/V</span><h3 id="suite-abc-title">Báo cáo ABC/VEN</h3></div>
+  <div class="suite-copy">
+    <p class="suite-summary" id="suite-abc-summary">Phân tích danh mục thuốc từ tệp Excel.</p>
+    <p class="suite-detail" id="suite-abc-detail">Đối chiếu kỳ trước và xuất báo cáo Word hoặc Excel.</p>
+  </div>
+  <span class="suite-action">Mở ABC/VEN</span>
+</a>
+<a class="suite-tile" href="/tools?view=clinical&amp;module=ttt" aria-labelledby="suite-ttt-title" aria-describedby="suite-ttt-summary suite-ttt-detail">
+  <div class="suite-card-heading"><span class="suite-icon" aria-hidden="true">TT</span><h3 id="suite-ttt-title">Tương tác thuốc</h3></div>
+  <div class="suite-copy">
+    <p class="suite-summary" id="suite-ttt-summary">Rà soát tương tác thuốc từ dữ liệu đơn thuốc.</p>
+    <p class="suite-detail" id="suite-ttt-detail">Đối chiếu hoạt chất theo quy tắc của PharmaDesk và xuất báo cáo.</p>
+  </div>
+  <span class="suite-action">Mở tương tác thuốc</span>
+</a>
+<a class="suite-tile" href="/tools?view=clinical&amp;module=tdm" aria-labelledby="suite-tdm-title" aria-describedby="suite-tdm-summary suite-tdm-detail">
+  <div class="suite-card-heading"><span class="suite-icon" aria-hidden="true">TDM</span><h3 id="suite-tdm-title">Theo dõi nồng độ thuốc</h3></div>
+  <div class="suite-copy">
+    <p class="suite-summary" id="suite-tdm-summary">Tính toán TDM từ các thông số điều trị.</p>
+    <p class="suite-detail" id="suite-tdm-detail">Hỗ trợ vancomycin và aminoglycoside.</p>
+  </div>
+  <span class="suite-action">Mở TDM</span>
+</a>
+<a class="suite-tile" href="/tools?view=clinical&amp;module=adr" aria-labelledby="suite-adr-title" aria-describedby="suite-adr-summary suite-adr-detail">
+  <div class="suite-card-heading"><span class="suite-icon" aria-hidden="true">ADR</span><h3 id="suite-adr-title">Báo cáo ADR</h3></div>
+  <div class="suite-copy">
+    <p class="suite-summary" id="suite-adr-summary">Điền biểu mẫu và quản lý bản nháp.</p>
+    <p class="suite-detail" id="suite-adr-detail">Xuất báo cáo PDF hoặc Word theo mẫu có trong PharmaDesk.</p>
+  </div>
+  <span class="suite-action">Mở ADR</span>
+</a>
 </div>
 <p class="suite-local">Kiểm tra kết quả và quy tắc theo chuyên môn trước khi sử dụng trong thực hành.</p>
 </section><section class="scene-bridge"><div class="scene-bridge-grid" data-portfolio-sequence><div><div class="eyebrow">THỰC HÀNH VÀ CÔNG NGHỆ</div><h2 data-portfolio-reveal="heading">Từ thực hành<br/><em>đến phần mềm.</em></h2></div><div><p data-portfolio-reveal="copy">Khi phát triển PharmaDesk, tôi bắt đầu từ câu hỏi của người làm nghiệp vụ: cần dữ liệu gì, cần kiểm tra gì, và cần giữ lại kết quả nào để đối chiếu?</p><div class="bridge-points"><div>Phân hệ xử lý dữ liệu giúp chuẩn bị báo cáo theo mẫu.</div><div>Phân hệ lâm sàng đưa thông tin cần rà soát về cùng một nơi.</div></div></div></div></section>
