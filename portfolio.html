@@ -518,17 +518,17 @@ a:focus-visible,button:focus-visible{outline:3px solid #27814d;outline-offset:4p
   animation:portfolio-appear 520ms cubic-bezier(.2,.65,.3,1);
  }
  .practice-orbit.portfolio-revealed .practice-ring{
-  animation:practice-ring-expand 640ms cubic-bezier(.2,.65,.3,1) var(--ring-delay,0ms) backwards;
+  animation:practice-ring-pulse 3.2s ease-in-out var(--ring-delay,0ms) infinite;
  }
- .practice-orbit.portfolio-revealed .practice-ring.b{--ring-delay:80ms}
- .practice-orbit.portfolio-revealed .practice-ring.a{--ring-delay:160ms}
+ .practice-orbit.portfolio-revealed .practice-ring.b{--ring-delay:120ms}
+ .practice-orbit.portfolio-revealed .practice-ring.a{--ring-delay:240ms}
  @keyframes portfolio-appear {
   from{opacity:.86;transform:translateY(7px)}
   to{opacity:1;transform:none}
  }
- @keyframes practice-ring-expand {
-  from{scale:.84;border-color:transparent}
-  to{scale:1}
+ @keyframes practice-ring-pulse {
+  0%,42%,100%{scale:1;border-color:rgba(48,114,65,.18)}
+  18%{scale:1.065;border-color:rgba(48,114,65,.34)}
  }
 }
 </style>
@@ -786,9 +786,13 @@ calendar();renderLogs();renderProjects();
   const sections=document.querySelectorAll('[data-portfolio-reveal]');
   const observer=new IntersectionObserver(entries=>{
    for(const entry of entries){
-    if(!entry.isIntersecting)continue;
-    entry.target.classList.add('portfolio-revealed');
-    observer.unobserve(entry.target);
+    const block=entry.target;
+    if(block.dataset.portfolioReveal==='rings'){
+     block.classList.toggle('portfolio-revealed',entry.isIntersecting);
+    }else if(entry.isIntersecting){
+     block.classList.add('portfolio-revealed');
+     observer.unobserve(block);
+    }
    }
   },{rootMargin:'0px 0px -36px'});
   sections.forEach(section=>observer.observe(section));
