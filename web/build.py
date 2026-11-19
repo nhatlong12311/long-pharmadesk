@@ -147,14 +147,7 @@ def build_ui(output, script, *, server=False):
         ("refresh();load();guideRender();", ""),
         ("__PHARMADESK_TOKEN__", ""),
     ]
-    if server:
-        edits.append((
-            '<footer class="feedback-note">',
-            '<footer class="feedback-note">\n'
-            '  <p>Tệp và biểu mẫu dùng để tạo báo cáo được gửi lên máy chủ để xử lý.</p>\n'
-            '  <p><a href="/portfolio">← Portfolio Nhật Long</a></p>\n  ',
-        ))
-    else:
+    if not server:
         edits.append(('    </div>\n</div>\n\n<main id="truMain"',
                       '    </div>\n  <div id="localStatus" hidden><span id="localStatusMessage" role="status"></span><button type="button" id="localRetry" class="ghost" hidden>Thử lại</button></div>\n</div>\n\n<main id="truMain"'))
     (output / "index.html").write_text(replacements(html, edits), encoding="utf-8")
