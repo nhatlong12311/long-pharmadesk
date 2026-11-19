@@ -616,17 +616,17 @@ a:focus-visible,button:focus-visible{outline:3px solid #27814d;outline-offset:4p
 <div class="showcase-kicker">PHARMADESK 3.0 / INSIDE THE PRODUCT</div>
 <div class="showcase-head"><h2>One workspace.<br/><em>Many workflows.</em></h2><p>Từ tổng hợp phiếu thuốc đến phân tích danh mục và các tác vụ dược lâm sàng — mỗi module tập trung vào một công việc cụ thể của khoa Dược.</p></div>
 <div aria-label="Module PharmaDesk" class="showcase-tabs" role="tablist">
-<button aria-controls="showcase-content" aria-selected="true" data-module="abc" role="tab" type="button">ABC–VEN</button>
-<button aria-controls="showcase-content" aria-selected="false" data-module="aggregation" role="tab" type="button">Tổng hợp phiếu</button>
-<button aria-controls="showcase-content" aria-selected="false" data-module="subtraction" role="tab" type="button">Trừ tổng</button>
-<button aria-controls="showcase-content" aria-selected="false" data-module="interactions" role="tab" type="button">Tương tác thuốc</button>
-<button aria-controls="showcase-content" aria-selected="false" data-module="tdm" role="tab" type="button">TDM</button>
-<button aria-controls="showcase-content" aria-selected="false" data-module="adr" role="tab" type="button">Báo cáo ADR</button>
+<button aria-controls="showcase-content" aria-selected="true" data-module="abc" id="showcase-tab-abc" role="tab" type="button">ABC–VEN</button>
+<button aria-controls="showcase-content" aria-selected="false" data-module="aggregation" id="showcase-tab-aggregation" role="tab" type="button">Tổng hợp phiếu</button>
+<button aria-controls="showcase-content" aria-selected="false" data-module="subtraction" id="showcase-tab-subtraction" role="tab" type="button">Trừ tổng</button>
+<button aria-controls="showcase-content" aria-selected="false" data-module="interactions" id="showcase-tab-interactions" role="tab" type="button">Tương tác thuốc</button>
+<button aria-controls="showcase-content" aria-selected="false" data-module="tdm" id="showcase-tab-tdm" role="tab" type="button">TDM</button>
+<button aria-controls="showcase-content" aria-selected="false" data-module="adr" id="showcase-tab-adr" role="tab" type="button">Báo cáo ADR</button>
 </div>
-<div class="showcase-stage" id="showcase-content">
+<div class="showcase-stage" id="showcase-content" role="tabpanel" aria-labelledby="showcase-tab-abc" tabindex="0">
 <div aria-live="polite" class="showcase-info">
 <div><div class="showcase-index"><span id="moduleNumber">01 / SIX CORE MODULES</span><span>PharmaDesk</span></div><h3 id="moduleTitle">ABC–VEN</h3><p id="moduleDescription">Phân tích danh mục thuốc và cơ cấu sử dụng; hỗ trợ đối chiếu dữ liệu, so sánh theo tháng và tạo báo cáo.</p><div class="showcase-facts" id="moduleFacts"><div class="showcase-fact">Nhập và xử lý dữ liệu Excel</div><div class="showcase-fact">So sánh với tháng trước</div><div class="showcase-fact">Xuất báo cáo Word và dữ liệu Excel</div></div></div>
-<div class="showcase-small">Các module và khả năng trình bày được đối chiếu với mã nguồn PharmaDesk 3.0 bạn đã cung cấp. Biểu đồ bên phải chỉ minh họa về mặt thiết kế, không phải dữ liệu sử dụng thuốc thực tế.</div>
+<div class="showcase-small">Bên phải minh họa luồng thao tác của từng phân hệ trong PharmaDesk 3.0.</div>
 </div>
 <div class="showcase-display">
 <div class="showcase-ui-top"><strong id="moduleGraphicTitle">ABC–VEN / ANALYTICS</strong><span>PHARMADESK · UI CONCEPT</span></div>
@@ -796,58 +796,159 @@ calendar();renderLogs();renderProjects();
 })();
 </script>
 <script>
-(()=>{
-const modules={
- abc:{title:'ABC–VEN',graphic:'ABC–VEN / ANALYTICS',caption:'Hình minh họa phân bổ dữ liệu',desc:'Phân tích danh mục thuốc và cơ cấu sử dụng; hỗ trợ đối chiếu dữ liệu, so sánh theo tháng và tạo báo cáo.',facts:['Nhập và xử lý dữ liệu Excel','So sánh với tháng trước','Xuất báo cáo Word và dữ liệu Excel'],labels:['Danh mục thuốc','Cơ cấu','So sánh tháng'],bars:[87,75,46,67,55,90,42,73,61]},
- aggregation:{title:'Tổng hợp phiếu',graphic:'RPT / EXCEL WORKFLOW',caption:'Hình minh họa tiến trình tổng hợp',desc:'Tổng hợp phiếu thuốc từ dữ liệu RPT hoặc Excel theo luồng xử lý phục vụ công việc khoa Dược.',facts:['Chọn nguồn dữ liệu phiếu','Gộp phiếu theo các quy trình có sẵn','Xuất và mở kết quả bằng Excel'],labels:['Nguồn phiếu','Tổng hợp','Kết quả'],bars:[40,51,58,68,77,83,88,92,96]},
- subtraction:{title:'Trừ tổng',graphic:'RECONCILIATION WORKFLOW',caption:'Hình minh họa đối chiếu dữ liệu',desc:'Công cụ hỗ trợ các thao tác trừ tổng, đối chiếu dữ liệu và hoàn thiện kết quả xử lý.',facts:['Thao tác trên nguồn số liệu','Đối chiếu kết quả','Kết nối quy trình tổng hợp phiếu'],labels:['Đầu vào','Đối chiếu','Đầu ra'],bars:[91,82,79,65,60,52,48,36,29]},
- interactions:{title:'Tương tác thuốc',graphic:'DRUG INTERACTION REVIEW',caption:'Hình minh họa quy trình rà soát',desc:'Đối chiếu dữ liệu kê thuốc với bộ quy tắc tương tác tích hợp và tạo báo cáo để hỗ trợ rà soát chuyên môn.',facts:['Nhập file kê thuốc','Kiểm tra theo mã hoạt chất và quy tắc','Xuất báo cáo Word'],labels:['Nhập dữ liệu','Đối chiếu quy tắc','Báo cáo'],bars:[30,47,66,75,84,76,86,90,92]},
- tdm:{title:'TDM',graphic:'THERAPEUTIC DRUG MONITORING',caption:'Hình minh họa theo dõi nồng độ',desc:'Hỗ trợ các tác vụ tính toán và theo dõi nồng độ thuốc, trong đó có Vancomycin và Aminoglycoside.',facts:['Nhập dữ liệu cần thiết','Xem kết quả tính toán và biểu đồ','Hỗ trợ quy trình theo dõi điều trị'],labels:['Input','Model','Result'],bars:[38,58,77,89,81,68,52,49,56]},
- adr:{title:'Báo cáo ADR',graphic:'ADVERSE DRUG REACTION REPORT',caption:'Hình minh họa xử lý báo cáo',desc:'Tạo, lưu nháp và xuất báo cáo phản ứng có hại của thuốc với quy trình nhập thông tin được tổ chức theo biểu mẫu.',facts:['Nhập thông tin báo cáo','Lưu bản nháp và chỉnh sửa','Xuất PDF và Word'],labels:['Draft','Review','Export'],bars:[28,39,48,62,72,82,84,91,96]}
-};
-const tabs=[...document.querySelectorAll('.showcase-tabs [data-module]')];
-const ids=['moduleNumber','moduleTitle','moduleDescription','moduleGraphicTitle','moduleGraphCaption','moduleFooter'];
-if(!tabs.length||ids.some(id=>!document.getElementById(id)))return;
-function select(key,focus=false){const x=modules[key];if(!x)return;
- tabs.forEach((t,i)=>{const active=t.dataset.module===key;t.setAttribute('aria-selected',String(active));t.tabIndex=active?0:-1;if(active&&focus)t.focus()});
- const index=Object.keys(modules).indexOf(key)+1;
- document.getElementById('moduleNumber').textContent=String(index).padStart(2,'0')+' / SIX CORE MODULES';
- document.getElementById('moduleTitle').textContent=x.title;
- document.getElementById('moduleDescription').textContent=x.desc;
- document.getElementById('moduleGraphicTitle').textContent=x.graphic;
- document.getElementById('moduleGraphCaption').textContent=x.caption;
- document.getElementById('moduleFooter').textContent='PharmaDesk · '+x.title;
- const facts=document.getElementById('moduleFacts');facts.replaceChildren();x.facts.forEach(v=>{const div=document.createElement('div');div.className='showcase-fact';div.textContent=v;facts.appendChild(div)});
- const labels=document.getElementById('moduleLabels');labels.replaceChildren();x.labels.forEach(v=>{const span=document.createElement('span');span.textContent=v;labels.appendChild(span)});
- const bars=document.getElementById('moduleBars');bars.replaceChildren();x.bars.forEach(v=>{const bar=document.createElement('i');bar.style.setProperty('--h',v+'%');bars.appendChild(bar)});
- const info=document.querySelector('.showcase-info');info.classList.remove('animate');void info.offsetWidth;info.classList.add('animate');
-}
-tabs.forEach(t=>{t.onclick=()=>select(t.dataset.module);t.onkeydown=e=>{if(!['ArrowRight','ArrowLeft','Home','End'].includes(e.key))return;e.preventDefault();const current=tabs.indexOf(t);const next=e.key==='Home'?0:e.key==='End'?tabs.length-1:(current+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;select(tabs[next].dataset.module,true)}});
-})();
-</script>
-<script>
-(()=>{
-const schemas={
- abc:{title:'Báo cáo ABC/VEN',subtitle:'Từ nguồn Excel đến báo cáo phân tích',fields:[['01 · Nguồn dữ liệu','Excel · báo cáo ABC/VEN'],['02 · Kinh phí','Nội trú / Ngoại trú'],['03 · Hoạt chất theo dõi','Danh sách theo dõi'],['04 · Xuất dữ liệu','So sánh tháng trước']],steps:['Excel đầu vào','Phân tích','So sánh','Word / Excel'],action:'Tạo báo cáo ABC/VEN (.docx)'},
- aggregation:{title:'Tổng hợp phiếu thuốc',subtitle:'Dữ liệu RPT / Excel · tổng hợp theo quy trình',fields:[['01 · Nguồn dữ liệu','Chọn thư mục phiếu'],['02 · Chế độ gộp','Theo khoa nhận / Bồi hoàn tủ trực'],['03 · Xử lý','Bắt đầu tổng hợp'],['04 · Kết quả','Xem trước Excel đã xuất']],steps:['Chọn thư mục','Xử lý','Xem trước','Tải Excel'],action:'Bắt đầu tổng hợp'},
- subtraction:{title:'Trừ tổng',subtitle:'Nhập số liệu và xem kết quả tự cập nhật',fields:[['01 · Dữ liệu','Nhập số liệu'],['02 · Kết quả','Tự cập nhật khi chỉnh sửa'],['03 · Đồ thị','Theo dõi kết quả tính']],steps:['Nhập số liệu','Tính toán','Kết quả'],action:'Xem kết quả'},
- interactions:{title:'Tương tác thuốc',subtitle:'Rà soát dựa trên file kê thuốc và quy tắc tích hợp',fields:[['01 · Nguồn dữ liệu','File kê thuốc .xls / .xlsx'],['02 · Quy tắc','Mã hoạt chất và bảng cơ chế'],['03 · Báo cáo','Word · tương tác thuốc']],steps:['Kê thuốc','Đối chiếu quy tắc','Báo cáo'],action:'Chạy tương tác thuốc & tạo báo cáo'},
- tdm:{title:'TDM',subtitle:'Các biểu mẫu hỗ trợ theo dõi nồng độ thuốc',fields:[['01 · Hoạt chất','Vancomycin / Aminoglycoside'],['02 · Thông tin','Thông số lâm sàng cần thiết'],['03 · Kết quả','Tính toán · biểu đồ']],steps:['Chọn thuốc','Nhập thông số','Đánh giá'],action:'Xem kết quả TDM'},
- adr:{title:'Báo cáo ADR',subtitle:'Nhập báo cáo, lưu nháp và xuất tài liệu',fields:[['01 · Phiếu báo cáo','Thông tin phản ứng có hại'],['02 · Lưu trữ','Lưu bản nháp / Báo cáo mới'],['03 · Xuất','PDF + Word']],steps:['Thông tin ADR','Rà soát','Lưu / Xuất'],action:'Tạo báo cáo ADR (PDF + Word)'}
-};
-const menu=[['aggregation','Tổng hợp phiếu'],['subtraction','Trừ tổng'],['abc','Báo cáo ABC/VEN'],['interactions','Tương tác thuốc'],['tdm','TDM'],['adr','Báo cáo ADR']];
-const ids=['realNav','realHeading','realSubtitle','realForm','realSteps','realAction','realEyebrow'];if(ids.some(id=>!document.getElementById(id)))return;
-const by=id=>document.getElementById(id);const make=(tag,cls,value)=>{const e=document.createElement(tag);e.className=cls;e.textContent=value;return e};
-function render(key){const item=schemas[key];if(!item)return;
- by('realNav').replaceChildren(...menu.map(([name,label])=>make('span',name===key?'active':'',label)));
- by('realHeading').textContent=item.title;by('realSubtitle').textContent=item.subtitle;by('realEyebrow').textContent='PHARMADESK / '+item.title.toUpperCase();by('realAction').textContent=item.action;
- by('realForm').replaceChildren(...item.fields.map(([heading,value])=>{const e=make('div','real-input','');e.append(make('span','',heading),make('b','',value));return e}));
- by('realSteps').replaceChildren(...item.steps.map((x,i)=>make('span','',String(i+1).padStart(2,'0')+' · '+x)));
-}
-render('abc');document.querySelectorAll('.showcase-tabs [data-module]').forEach(btn=>btn.addEventListener('click',()=>render(btn.dataset.module)));
-const tablist=document.querySelector('.showcase-tabs');tablist?.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key))requestAnimationFrame(()=>render(tablist.querySelector('[aria-selected="true"]')?.dataset.module||'abc'))});
-let ticking=false;function progress(){ticking=false;const max=document.documentElement.scrollHeight-innerHeight;const pct=max>0?Math.min(100,Math.max(0,scrollY/max*100)):0;document.documentElement.style.setProperty('--site-scroll',pct.toFixed(2)+'%')}
-addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(progress)}},{passive:true});addEventListener('resize',progress,{passive:true});progress();
+(() => {
+ const modules = {
+  abc: {
+   graphic: 'ABC–VEN / ANALYTICS',
+   description: 'Phân tích danh mục thuốc và cơ cấu sử dụng; hỗ trợ đối chiếu dữ liệu, so sánh theo tháng và tạo báo cáo.',
+   facts: ['Nhập và xử lý dữ liệu Excel', 'So sánh với tháng trước', 'Xuất báo cáo Word và dữ liệu Excel'],
+   previewTitle: 'Báo cáo ABC/VEN',
+   subtitle: 'Từ nguồn Excel đến báo cáo phân tích',
+   fields: [
+    ['Nguồn dữ liệu', 'Excel · báo cáo ABC/VEN'],
+    ['Kinh phí', 'Nội trú / Ngoại trú'],
+    ['Hoạt chất theo dõi', 'Danh sách theo dõi'],
+    ['Xuất dữ liệu', 'So sánh tháng trước']
+   ],
+   steps: ['Excel đầu vào', 'Phân tích', 'So sánh', 'Word / Excel'],
+   action: 'Tạo báo cáo ABC/VEN (.docx)'
+  },
+  aggregation: {
+   graphic: 'RPT / EXCEL WORKFLOW',
+   description: 'Tổng hợp phiếu thuốc từ dữ liệu RPT hoặc Excel theo luồng xử lý phục vụ công việc khoa Dược.',
+   facts: ['Chọn nguồn dữ liệu phiếu', 'Gộp phiếu theo các quy trình có sẵn', 'Xuất và mở kết quả bằng Excel'],
+   previewTitle: 'Tổng hợp phiếu thuốc',
+   subtitle: 'Dữ liệu RPT / Excel · tổng hợp theo quy trình',
+   fields: [
+    ['Nguồn dữ liệu', 'Chọn thư mục phiếu'],
+    ['Chế độ gộp', 'Theo khoa nhận / Bồi hoàn tủ trực'],
+    ['Xử lý', 'Bắt đầu tổng hợp'],
+    ['Kết quả', 'Xem trước Excel đã xuất']
+   ],
+   steps: ['Chọn thư mục', 'Xử lý', 'Xem trước', 'Tải Excel'],
+   action: 'Bắt đầu tổng hợp'
+  },
+  subtraction: {
+   graphic: 'RECONCILIATION WORKFLOW',
+   description: 'Công cụ hỗ trợ các thao tác trừ tổng, đối chiếu dữ liệu và hoàn thiện kết quả xử lý.',
+   facts: ['Thao tác trên nguồn số liệu', 'Đối chiếu kết quả', 'Kết nối quy trình tổng hợp phiếu'],
+   previewTitle: 'Trừ tổng',
+   subtitle: 'Nhập số liệu và xem kết quả tự cập nhật',
+   fields: [
+    ['Dữ liệu', 'Nhập số liệu'],
+    ['Kết quả', 'Tự cập nhật khi chỉnh sửa'],
+    ['Đồ thị', 'Theo dõi kết quả tính']
+   ],
+   steps: ['Nhập số liệu', 'Tính toán', 'Kết quả'],
+   action: 'Xem kết quả'
+  },
+  interactions: {
+   graphic: 'DRUG INTERACTION REVIEW',
+   description: 'Đối chiếu dữ liệu kê thuốc với bộ quy tắc tương tác tích hợp và tạo báo cáo để hỗ trợ rà soát chuyên môn.',
+   facts: ['Nhập file kê thuốc', 'Kiểm tra theo mã hoạt chất và quy tắc', 'Xuất báo cáo Word'],
+   previewTitle: 'Tương tác thuốc',
+   subtitle: 'Rà soát dựa trên file kê thuốc và quy tắc tích hợp',
+   fields: [
+    ['Nguồn dữ liệu', 'File kê thuốc .xls / .xlsx'],
+    ['Quy tắc', 'Mã hoạt chất và bảng cơ chế'],
+    ['Báo cáo', 'Word · tương tác thuốc']
+   ],
+   steps: ['Kê thuốc', 'Đối chiếu quy tắc', 'Báo cáo'],
+   action: 'Chạy tương tác thuốc & tạo báo cáo'
+  },
+  tdm: {
+   graphic: 'THERAPEUTIC DRUG MONITORING',
+   description: 'Hỗ trợ các tác vụ tính toán và theo dõi nồng độ thuốc, trong đó có Vancomycin và Aminoglycoside.',
+   facts: ['Nhập dữ liệu cần thiết', 'Xem kết quả tính toán và biểu đồ', 'Hỗ trợ quy trình theo dõi điều trị'],
+   previewTitle: 'TDM',
+   subtitle: 'Các biểu mẫu hỗ trợ theo dõi nồng độ thuốc',
+   fields: [
+    ['Hoạt chất', 'Vancomycin / Aminoglycoside'],
+    ['Thông tin', 'Thông số lâm sàng cần thiết'],
+    ['Kết quả', 'Tính toán · biểu đồ']
+   ],
+   steps: ['Chọn thuốc', 'Nhập thông số', 'Đánh giá'],
+   action: 'Xem kết quả TDM'
+  },
+  adr: {
+   graphic: 'ADVERSE DRUG REACTION REPORT',
+   description: 'Tạo, lưu nháp và xuất báo cáo phản ứng có hại của thuốc với quy trình nhập thông tin được tổ chức theo biểu mẫu.',
+   facts: ['Nhập thông tin báo cáo', 'Lưu bản nháp và chỉnh sửa', 'Xuất PDF và Word'],
+   previewTitle: 'Báo cáo ADR',
+   subtitle: 'Nhập báo cáo, lưu nháp và xuất tài liệu',
+   fields: [
+    ['Phiếu báo cáo', 'Thông tin phản ứng có hại'],
+    ['Lưu trữ', 'Lưu bản nháp / Báo cáo mới'],
+    ['Xuất', 'PDF + Word']
+   ],
+   steps: ['Thông tin ADR', 'Rà soát', 'Lưu / Xuất'],
+   action: 'Tạo báo cáo ADR (PDF + Word)'
+  }
+ };
+ const menu = ['aggregation', 'subtraction', 'abc', 'interactions', 'tdm', 'adr'];
+ const tabs = [...document.querySelectorAll('.showcase-tabs [data-module]')];
+ const byId = id => document.getElementById(id);
+
+ function element(tag, text, className = '') {
+  const node = document.createElement(tag);
+  node.textContent = text;
+  node.className = className;
+  return node;
+ }
+
+ function select(tab) {
+  const key = tab.dataset.module;
+  const item = modules[key];
+  const title = tab.textContent.trim();
+
+  for (const option of tabs) {
+   const active = option === tab;
+   option.setAttribute('aria-selected', String(active));
+   option.tabIndex = active ? 0 : -1;
+  }
+  byId('showcase-content').setAttribute('aria-labelledby', tab.id);
+  byId('moduleNumber').textContent = String(tabs.indexOf(tab) + 1).padStart(2, '0') + ' / SIX CORE MODULES';
+  byId('moduleTitle').textContent = title;
+  byId('moduleDescription').textContent = item.description;
+  byId('moduleFacts').replaceChildren(...item.facts.map(fact => element('div', fact, 'showcase-fact')));
+  byId('moduleGraphicTitle').textContent = item.graphic;
+  byId('moduleFooter').textContent = 'PharmaDesk · ' + title;
+
+  byId('realNav').replaceChildren(...menu.map(name => element(
+   'span', name === 'aggregation' ? 'Tổng hợp phiếu' : modules[name].previewTitle, name === key ? 'active' : ''
+  )));
+  byId('realHeading').textContent = item.previewTitle;
+  byId('realEyebrow').textContent = 'PHARMADESK / ' + item.previewTitle.toUpperCase();
+  byId('realSubtitle').textContent = item.subtitle;
+  byId('realAction').textContent = item.action;
+  byId('realForm').replaceChildren(...item.fields.map(([label, value], index) => {
+   const field = element('div', '', 'real-input');
+   field.append(element('span', '0' + (index + 1) + ' · ' + label), element('b', value));
+   return field;
+  }));
+  byId('realSteps').replaceChildren(...item.steps.map(
+   (step, index) => element('span', '0' + (index + 1) + ' · ' + step)
+  ));
+ }
+
+ tabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => select(tab));
+  tab.addEventListener('keydown', event => {
+   const nextIndex = {
+    ArrowLeft: (index + tabs.length - 1) % tabs.length,
+    ArrowRight: (index + 1) % tabs.length,
+    Home: 0,
+    End: tabs.length - 1
+   }[event.key];
+   if (!Number.isInteger(nextIndex)) return;
+   event.preventDefault();
+   const next = tabs[nextIndex];
+   select(next);
+   next.focus();
+  });
+ });
+
+ select(tabs[0]);
 })();
 </script><script>
 (()=>{
