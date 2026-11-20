@@ -515,6 +515,7 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
 #home .profile-copy h1{margin:0 0 22px;color:#f4faf3;font-size:clamp(56px,6.5vw,103px);font-weight:720;line-height:1.01;letter-spacing:-.055em}
 #home .profile-copy h1 em{color:#c1e2c1;font-weight:500}
 .profile-intro{max-width:510px;margin:0;color:#e0ebe0;font-size:clamp(16px,1.5vw,20px);line-height:1.65}
+.profile-intro a{color:#d1edcf;font-weight:750;text-decoration:underline;text-underline-offset:.2em}
 .profile-copy .hero-actions{margin-top:26px}
 .profile-copy .hero-actions .btn{gap:9px;min-height:45px}
 .profile-metrics{display:flex;align-items:start;flex-wrap:wrap;gap:14px clamp(24px,4vw,65px);margin:28px 0 0;padding-top:17px;border-top:1px solid #d0ebd13d}
@@ -540,6 +541,27 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
 .practice-orbit,.display-window{border-radius:20px}
 .practice-persona p,.care-box p{line-height:1.6;color:#506658}
 .scene-footer{margin-top:12px;padding-top:12px}
+#home .schedule-project .scene-copy h2{font-size:clamp(36px,4.1vw,64px);letter-spacing:-.055em;line-height:1.045}
+#home .schedule-project h2 em{font-family:inherit;letter-spacing:-.04em;white-space:nowrap}
+.schedule-preview{
+  align-self:center;
+  min-width:0;
+  margin:0;
+  padding:clamp(12px,2.2vw,26px);
+  border-radius:20px;
+  background:#163a29;
+  color:#edf7ee;
+}
+.schedule-preview figcaption{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 12px;margin-bottom:13px}
+.schedule-preview figcaption strong{font-size:clamp(17px,1.6vw,21px)}
+.schedule-preview figcaption span{color:#c2ddc5;font-size:12px}
+.schedule-preview table{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;border-radius:12px;overflow:hidden;background:#f5faf5;color:#254836;font-size:clamp(12px,1.2vw,14px);line-height:1.4}
+.schedule-preview :is(th,td){padding:clamp(7px,1.15vw,14px) 5px;text-align:center;border-bottom:1px solid #d9e6db;overflow-wrap:break-word}
+.schedule-preview th:first-child{width:31%;padding-left:9px;text-align:left}
+.schedule-preview thead th{background:#dfeee1}
+.schedule-preview tbody tr:last-child :is(th,td){border-bottom:0}
+.schedule-preview tbody tr:nth-child(2){background:#edf5ee}
+.schedule-preview td.schedule-mark{color:#1d6040;font-weight:750}
 .showcase,.clinical-suite,.scene-bridge{margin:var(--portfolio-gap) 0;padding:var(--panel-padding);border-radius:var(--panel-radius)}
 .showcase-head{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:18px 32px;margin:13px 0 24px}
 .showcase-head h2{font-size:clamp(39px,5.6vw,84px);line-height:1}
@@ -707,7 +729,7 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
     <div class="profile-copy" data-portfolio-intro>
       <p class="profile-kicker">Dược sĩ lâm sàng · Hồi sức tích cực</p>
       <h1 id="profile-title">Nguyễn Đăng<br/><em>Nhật Long</em></h1>
-      <p class="profile-intro">Tôi là dược sĩ lâm sàng tại khoa Hồi sức tích cực, Bệnh viện Đa khoa Đồng Nai. Tôi phát triển <strong>PharmaDesk</strong> để hỗ trợ xử lý dữ liệu thuốc và lập báo cáo cho khoa Dược.</p>
+      <p class="profile-intro">Tôi là dược sĩ lâm sàng tại khoa Hồi sức tích cực, Bệnh viện Đa khoa Đồng Nai. Tôi phát triển <strong>PharmaDesk</strong> để hỗ trợ xử lý dữ liệu thuốc và lập báo cáo, cùng <a href="#pharmacy-schedule">Lịch công tác Khoa Dược</a> để tra cứu ca trực và phân công.</p>
       <div class="hero-actions">
         <a class="btn primary" data-view="case-study" href="#case-study">Khám phá PharmaDesk</a>
         <a class="btn" data-view="about" href="#about">Xem hồ sơ</a>
@@ -723,7 +745,7 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
     </figure>
   </div>
 </section>
-<section aria-label="Khám phá PharmaDesk và Clinical Pharmacist" class="normal-project-list" id="work">
+<section aria-label="Dự án và thực hành dược lâm sàng" class="normal-project-list" id="work">
 <article class="normal-project-section normal-pharmadesk"><div class="scene-card"><div class="scene-grid">
 <div class="scene-copy" data-portfolio-sequence>
 <div>
@@ -753,6 +775,33 @@ main :is(h1,h2)[tabindex="-1"]:focus{outline:none}
 </div>
 </div>
 </div></div></article>
+<article class="normal-project-section schedule-project" id="pharmacy-schedule" aria-labelledby="schedule-project-title">
+  <div class="scene-card">
+    <div class="scene-grid">
+      <div class="scene-copy" data-portfolio-sequence>
+        <div class="scene-topline"><span>Dự án web</span><span>Điều phối công việc</span></div>
+        <h2 id="schedule-project-title" data-portfolio-reveal="heading">Lịch công tác <em>Khoa Dược</em></h2>
+        <p class="lead" data-portfolio-reveal="copy">Tôi phát triển dashboard để nhân viên Khoa Dược xem công việc hôm nay, tra cứu ca trực, kiểm tra phân công giao thuốc và theo dõi số giờ làm thêm.</p>
+        <div class="scene-meta" data-portfolio-cards>
+          <div class="meta"><strong>Bảng trực</strong><span>Xem ca trực và phân công nhân viên theo tháng.</span></div>
+          <div class="meta"><strong>Giao thuốc</strong><span>Xem phân công theo khoa và rà soát ca cần người thay khi có người nghỉ hoặc ra trực.</span></div>
+          <div class="meta"><strong>Làm ngoài giờ</strong><span>Theo dõi số giờ đã làm và số giờ còn lại trong tháng.</span></div>
+        </div>
+      </div>
+      <figure class="schedule-preview" data-portfolio-reveal="section">
+        <figcaption id="schedule-preview-title"><strong>Lịch công tác tuần</strong><span>Dữ liệu minh họa</span></figcaption>
+        <table aria-labelledby="schedule-preview-title">
+          <thead><tr><th scope="col">Công việc</th><th scope="col">Thứ 2</th><th scope="col">Thứ 3</th><th scope="col">Thứ 4</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Bảng trực</th><td class="schedule-mark">Ca A</td><td>Ca B</td><td>Ca C</td></tr>
+            <tr><th scope="row">Giao thuốc</th><td>Khoa 1</td><td class="schedule-mark">Khoa 2</td><td>Khoa 3</td></tr>
+            <tr><th scope="row">Ngoài giờ</th><td>0 giờ</td><td>0 giờ</td><td class="schedule-mark">2 giờ</td></tr>
+          </tbody>
+        </table>
+      </figure>
+    </div>
+  </div>
+</article>
 <article class="normal-project-section normal-clinical"><div class="scene-card"><div class="scene-grid">
 <div class="scene-copy" data-portfolio-sequence>
 <div>
@@ -952,7 +1001,7 @@ calendar();renderLogs();renderProjects();
 </script><script>
 (()=>{
  const pages=new Set(['home','case-study','about','workspace']);
- const anchors=new Map([['work','home'],['clinical-tools','home'],['case-modules','case-study']]);
+ const anchors=new Map([['work','home'],['pharmacy-schedule','home'],['clinical-tools','home'],['case-modules','case-study']]);
  const pageLinks=document.querySelectorAll('.nav a,.rail-links a');
  const header=document.querySelector('.top');
  const nav=header.querySelector('.nav');
