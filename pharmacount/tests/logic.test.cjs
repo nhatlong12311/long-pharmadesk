@@ -112,7 +112,7 @@ test('revoking team access clears locally visible cloud inventory',()=>{
    state:{source:'cloud',items:[{id:'A',name:'Drug'}],counts:{A:{values:[3]}}},
    selected:3,draft:{0:'3'},draftVersion:'5',pendingCountOperation:{id:'op'},
    newData:()=>({source:'local',items:[],counts:{},sessionId:null}),
-   stopCloudSync:()=>{},save:()=>{},renderCount:()=>{},show:()=>{},
+   stopCloudSync:()=>{},save:()=>{},renderCount:()=>{},showFinalizeControls:()=>{},show:()=>{},
    $:()=>({textContent:''})
  };
  vm.createContext(ctx);
