@@ -1,5 +1,37 @@
 # PharmaCount – kiểm kê kho Dược (bản MVP)
 
+## Bản phát triển chung nhiều thiết bị (23/11/2026)
+
+**Nhánh:** `feature/pharmacount-inventory`. Ứng dụng vẫn là MVP, **chưa được kiểm thử toàn trình với nhiều tài khoản thực**.
+
+### Kiến trúc
+- **Frontend:** ứng dụng tĩnh HTML/JavaScript trong `pharmacount/index.html`, có thể triển khai trên GitHub Pages sau khi duyệt Pull Request.
+- **Backend:** dự án Supabase *PharmaCount* (PostgreSQL + Supabase Auth + Row Level Security + Realtime).
+- **Dữ liệu gốc:** nhập `.xlsx` danh mục kiểm kê. Có thể ghép `.xlsx` danh mục quy cách trong luồng Web Worker (`pack-worker.js`), xác minh mã thuốc và không tự chọn một hệ số nếu có nhiều quy cách.
+- **Một đợt chung:** trưởng nhóm tạo đợt cloud; thành viên đã mời đăng nhập và mở qua UUID đợt. Danh mục thuốc được lưu trên máy chủ; mỗi lần đếm lưu sự kiện mới và người kiểm.
+- **Chống xung đột:** dùng Supabase RPC `pc_submit_count` với phiên bản trước đó và operation ID; nếu người khác đã lưu, trả `conflict`, không tự ghi đè.
+- **Đồng bộ:** Supabase Realtime nhận sự kiện mới; định kỳ kiểm tra lại sau 20 giây khi không chỉnh sửa phiếu, nhằm giảm nguy cơ mất cập nhật khi websocket gián đoạn.
+- **Phân biệt tồn:** mẫu tháng 10 thiếu tồn máy độc lập nên được ghi `stock=null`, **không được kết luận chênh lệch** cho các dòng này.
+
+### Cách thiết lập và vận hành thử
+1. Trong Supabase, dùng dự án *PharmaCount* đã có. Nếu tạo dự án mới, áp dụng `pharmacount/supabase.sql`, **sau đó** `pharmacount/supabase-count-rpc.sql`. Không đưa `service_role` hoặc Supabase secret key vào website. Chỉ dùng publishable/anon key và bật email OTP.
+2. Cấu hình Supabase Auth → URL Configuration, Site URL / Redirect URLs theo URL trang web triển khai thực tế (ví dụ trang GitHub Pages sau khi PR được merge). Đăng nhập thử bằng email của người tạo đợt và một nhân viên khác.
+3. Trưởng nhóm: nhập mẫu `.xlsx` kiểm kê (tất cả sheet), ghép danh mục quy cách `.xlsx`, xử lý các trường hợp hệ số chưa rõ, sau đó vào **Xuất / Đồng bộ** để kết nối Supabase và **Tạo đợt trên đám mây**.
+4. Trưởng nhóm dùng email mời từng người. Mỗi nhân viên mở cùng URL web, đăng nhập OTP bằng email được mời, dán mã UUID đợt, chọn **Mở đợt được phân quyền**. Có thể nhập trên máy tính, điện thoại, máy tính bảng.
+5. Nhập **số hộp** và **số lẻ**, bấm xác nhận. Chỉ xem là đã lưu khi máy chủ trả thành công. Nếu người khác đã đếm trước, đối chiếu bản ghi mới rồi chọn kiểm lại. Kiểm tra cột người kiểm và thời gian trong Excel xuất.
+6. Thử bằng **dữ liệu giả** với ít nhất 2 tài khoản và 2 thiết bị trước khi dùng dữ liệu kho thật. Không xóa hoặc đổi quy cách của mặt hàng đã được kiểm. Sao lưu Excel thường xuyên.
+
+### Các giới hạn phải xử lý trước vận hành chính thức
+- Chưa có chế độ làm việc hoàn toàn ngoại tuyến: khi mất mạng, **không** coi số đếm đã được lưu lên Supabase.
+- Quyền mời người dựa trên email đăng nhập; cần xác nhận cấu hình OTP, RLS, quyền dữ liệu và xem xét danh sách thành viên.
+- Chưa có khóa giữ thuốc trong lúc một người đang đếm, nhưng có **kiểm tra xung đột tại thời điểm lưu**.
+- Màn hình và luồng dữ liệu chưa được kiểm thử end-to-end trên thiết bị thật với Excel thực; cần test CSV/Excel đa sheet, số lô, nhiều quy cách, hơn 1.000 mặt hàng, thu hồi quyền, xem sửa lịch sử và đánh giá chi phí.
+- Supabase Security Advisor có thể cảnh báo các hàm `SECURITY DEFINER` dùng để kiểm quyền. Các hàm này cần được rà soát độc lập trước khi đưa vào môi trường bệnh viện.
+- Không đưa dữ liệu bệnh nhân, thông tin nhạy cảm, thông tin đăng nhập hoặc khóa bí mật vào GitHub và bản demo. Dữ liệu kho phải được đơn vị cho phép xử lý trên nền tảng bên ngoài.
+
+---
+
+
 Ứng dụng web độc lập ở \`pharmacount/index.html\`, **không sửa** các module PharmaDesk hiện có. Mở bằng trình duyệt trên điện thoại hoặc máy tính bảng.
 
 ## Tính năng đã lập trình
