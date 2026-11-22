@@ -7,7 +7,7 @@ create or replace function public.pc_latest_counts(
   p_session uuid, p_offset integer default 0, p_limit integer default 500
 )
 returns table (
- id bigint, item_id text, values jsonb, note text, actual numeric,
+ id bigint, item_id text, count_values jsonb, note text, actual numeric,
  created_at timestamptz, users_email text
 )
 language plpgsql stable security invoker set search_path = ''
@@ -21,10 +21,10 @@ begin
    raise exception 'Invalid inventory snapshot pagination';
  end if;
  return query
- select l.id,l.item_id,l.values,l.note,l.actual,l.created_at,l.users_email
+ select l.id,l.item_id,l.count_values,l.note,l.actual,l.created_at,l.users_email
  from (
    select distinct on (c.item_id)
-     c.id,c.item_id,c.values,c.note,c.actual,c.created_at,c.users_email
+     c.id,c.item_id,c.values as count_values,c.note,c.actual,c.created_at,c.users_email
    from public.inventory_counts as c
    where c.session_id=p_session
    order by c.item_id,c.id desc
