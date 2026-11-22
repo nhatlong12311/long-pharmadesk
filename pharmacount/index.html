@@ -13,16 +13,16 @@
 <div class="card" id="editor"><h2 id="drugTitle">Chưa có danh mục</h2><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div><button id="setPackFactor" class="secondary" style="margin-top:10px">Thiết lập số viên/lọ trong 1 hộp</button><div class="stat" style="margin-top:14px"><span class="muted">TỔNG THỰC KIỂM</span><div class="big" id="actual">0</div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label>Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea><div class="row" style="margin-top:12px"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp →</button></div><p class="muted" id="saveState"></p></div></section>
 <section id="review" class="tab"><div class="card"><h2>Danh sách kiểm lại</h2><p class="muted">Chỉ hiển thị các dòng đã đếm có chênh lệch. Không tự động điều chỉnh số tồn trên phần mềm bệnh viện.</p><div id="reviewList"></div></div></section>
 <section id="export" class="tab"><div class="card"><h2>Xuất Excel kết quả</h2><p class="muted">Tạo 3 sheet: Tổng hợp, Chi tiết số đếm, Cần kiểm lại. Giữ các cột gốc trong dữ liệu nhập khi có thể.</p><button id="exportBtn">⬇ Xuất Excel</button><button class="secondary" id="backupBtn">⬇ Sao lưu JSON</button><label>Phục hồi bản sao lưu</label><input type="file" id="restore" accept=".json"><p class="note">Sao lưu thường xuyên. Chế độ cục bộ chỉ lưu trên trình duyệt của thiết bị hiện tại; xóa dữ liệu trang web có thể làm mất kết quả.</p></div>
-<div class="card"><h2>Đồng bộ nhiều thành viên</h2><p class="muted">Dùng chung một đợt kiểm qua Supabase. Mỗi nhân viên cần email đăng nhập và được trưởng nhóm mời. Tự nhận thay đổi từ máy khác; kiểm tra phiên bản trước khi lưu để tránh ghi đè. Cần Internet để xác nhận lưu.</p><label>Supabase URL</label><input id="sbUrl" value="https://jpsywcjmcmvgjswkrnzo.supabase.co" readonly><label>Supabase publishable/anon key</label><input id="sbKey" value="sb_publishable_4iy9k4S074-klLeUt-jVNA_AvI0Oswi" readonly><div class="row" style="margin-top:9px"><button id="connect">Kết nối</button><button class="secondary" id="disconnect">Về chế độ cục bộ</button></div><div id="cloudUi" class="hidden"><label>Email thành viên</label><input id="email" type="email" placeholder="ten@benhvien.vn"><button id="login" style="margin-top:8px">Gửi liên kết đăng nhập</button><p id="authState" class="muted"></p><div id="cloudActions" class="hidden"><button id="createCloud">Tạo đợt trên đám mây từ danh mục hiện tại</button><label>Mã đợt (UUID) được chia sẻ</label><input id="cloudId" placeholder="Dán mã đợt kiểm kê"><button id="joinCloud" class="secondary" style="margin-top:8px">Mở đợt được phân quyền</button><button id="copyJoinLink" class="secondary" style="margin-top:8px">Sao chép liên kết cho thành viên</button><p class="muted">Đã có liên kết vẫn cần được trưởng nhóm cấp quyền qua email mới xem hoặc nhập được.</p><label>Mời thành viên bằng email (chủ đợt)</label><input id="inviteEmail" type="email" placeholder="nhanvien@benhvien.vn"><button id="invite" class="secondary" style="margin-top:8px">Cấp quyền nhập liệu</button><button id="viewMembers" class="secondary" style="margin-top:8px">Xem thành viên đã được mời</button><div id="membersList" class="muted" aria-live="polite"></div><p class="muted" id="cloudState"></p></div></div></div></section>
+<div class="card"><h2>Đồng bộ nhiều thành viên</h2><p class="muted">Dùng chung một đợt kiểm qua Supabase. Mỗi nhân viên cần email đăng nhập và được trưởng nhóm mời. Tự nhận thay đổi từ máy khác; kiểm tra phiên bản trước khi lưu để tránh ghi đè. Cần Internet để xác nhận lưu.</p><label>Supabase URL</label><input id="sbUrl" value="https://jpsywcjmcmvgjswkrnzo.supabase.co" readonly><label>Supabase publishable/anon key</label><input id="sbKey" value="sb_publishable_4iy9k4S074-klLeUt-jVNA_AvI0Oswi" readonly><div class="row" style="margin-top:9px"><button id="connect">Kết nối</button><button class="secondary" id="disconnect">Về chế độ cục bộ</button></div><div id="cloudUi" class="hidden"><label>Email thành viên</label><input id="email" type="email" placeholder="ten@benhvien.vn"><button id="login" style="margin-top:8px">Gửi liên kết đăng nhập</button><p id="authState" class="muted"></p><div id="cloudActions" class="hidden"><button id="createCloud">Tạo đợt trên đám mây từ danh mục hiện tại</button><label>Mã đợt (UUID) được chia sẻ</label><input id="cloudId" placeholder="Dán mã đợt kiểm kê"><button id="joinCloud" class="secondary" style="margin-top:8px">Mở đợt được phân quyền</button><button id="copyJoinLink" class="secondary" style="margin-top:8px">Sao chép liên kết cho thành viên</button><p class="muted">Đã có liên kết vẫn cần được trưởng nhóm cấp quyền qua email mới xem hoặc nhập được.</p><label>Mời thành viên bằng email (chủ đợt)</label><input id="inviteEmail" type="email" placeholder="nhanvien@benhvien.vn"><button id="invite" class="secondary" style="margin-top:8px">Cấp quyền nhập liệu</button><button id="viewMembers" class="secondary" style="margin-top:8px">Xem thành viên đã được mời</button><div id="finalizeControls" class="hidden" style="margin-top:12px"><div class="note">Chỉ chốt khi đã kiểm đủ toàn bộ thuốc. Sau khi chốt, không ai được sửa số đếm trong đợt này.</div><button id="finalizeRun" class="danger" style="margin-top:8px">Chốt và khóa đợt kiểm kê</button></div><div id="membersList" class="muted" aria-live="polite"></div><p class="muted" id="cloudState"></p></div></div></div></section>
 </main><nav class="nav"><button data-tab="dashboard" class="active">⌂ Tổng quan</button><button data-tab="count">▣ Kiểm thuốc</button><button data-tab="review">⚠ Kiểm lại</button><button data-tab="export">⇩ Xuất / Đồng bộ</button></nav>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='pharmacount-v1',CONFIG='pharmacount-cloud-config';
-const newData=()=>({name:'Kiểm kê kho Dược',items:[],counts:{},sessionId:null,source:'local'});
+const newData=()=>({name:'Kiểm kê kho Dược',items:[],counts:{},sessionId:null,source:'local',ownerId:null,closedAt:null});
 let state;try{state=JSON.parse(localStorage.getItem(KEY))||newData();if(state.source==='cloud'){state.items=[];state.counts={}}}catch{state=newData()}
 let selected=0, draft={}, draftVersion=null, revealed=false, client=null,user=null,lock=false, joiningCloud=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshBusy=false, lastCloudCountId=0, pendingCountOperation=null, packIssues=[];
-const save=()=>{const persisted=state.source==='cloud'?{name:state.name,items:[],counts:{},sessionId:state.sessionId,source:'cloud'}:state;try{localStorage.setItem(KEY,JSON.stringify(persisted))}catch(e){alert('Bộ nhớ trình duyệt đầy. Hãy sao lưu Excel và kiểm tra dữ liệu trước khi tiếp tục.')}renderStats()};
+const save=()=>{const persisted=state.source==='cloud'?{name:state.name,items:[],counts:{},sessionId:state.sessionId,source:'cloud',ownerId:state.ownerId||null,closedAt:state.closedAt||null}:state;try{localStorage.setItem(KEY,JSON.stringify(persisted))}catch(e){alert('Bộ nhớ trình duyệt đầy. Hãy sao lưu Excel và kiểm tra dữ liệu trước khi tiếp tục.')}renderStats()};
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Do not silently turn malformed Excel stock values into zero.
 const num=v=>{if(typeof v==='number')return Number.isFinite(v)?v:NaN;const raw=String(v??'').trim().replace(/\s/g,'');if(!raw)return NaN;let t=raw;if(/^\d{1,3}([.,]\d{3})+$/.test(t))t=t.replace(/[.,]/g,'');else if(t.includes(',')&&t.includes('.')){const lastComma=t.lastIndexOf(',')>t.lastIndexOf('.');t=lastComma?t.replace(/\./g,'').replace(',','.'):t.replace(/,/g,'')}else t=t.replace(',','.');const x=Number(t);return Number.isFinite(x)?x:NaN};
@@ -32,7 +32,7 @@ const sum=(item,c)=>item.pack.reduce((s,p,k)=>s+integer(c?.[k]||0)*p.factor,0);
 const latest=i=>state.counts[state.items[i]?.id];
 const show=(id)=>{document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.id===id));document.querySelectorAll('[data-tab]').forEach(el=>el.classList.toggle('active',el.dataset.tab===id));if(id==='count')renderCount();if(id==='review')renderReview();if(id==='dashboard')renderStats()};
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>show(b.dataset.tab));
-function renderStats(){const done=state.items.filter(x=>state.counts[x.id]);const diff=done.filter(x=>x.stock!==null&&sum(x,state.counts[x.id].values)!==x.stock);$('sAll').textContent=state.items.length;$('sDone').textContent=done.length;$('sDiff').textContent=diff.length;$('sLeft').textContent=state.items.length-done.length;$('sessionName').value=state.name;$('sessionId').textContent=state.sessionId?'Mã đợt: '+state.sessionId:'Dữ liệu trên thiết bị này';$('mode').textContent=state.source==='cloud'?'☁ Đồng bộ đám mây':'◉ Chỉ lưu cục bộ'}
+function renderStats(){const done=state.items.filter(x=>state.counts[x.id]);const diff=done.filter(x=>x.stock!==null&&sum(x,state.counts[x.id].values)!==x.stock);$('sAll').textContent=state.items.length;$('sDone').textContent=done.length;$('sDiff').textContent=diff.length;$('sLeft').textContent=state.items.length-done.length;$('sessionName').value=state.name;$('sessionId').textContent=state.sessionId?'Mã đợt: '+state.sessionId:'Dữ liệu trên thiết bị này';$('mode').textContent=state.source==='cloud'?(state.closedAt?'🔒 Đã chốt đợt':'☁ Đồng bộ đám mây'):'◉ Chỉ lưu cục bộ'}
 $('saveName').onclick=()=>{if(state.source==='cloud')return alert('Tên đợt chung chỉ được đổi bởi trưởng nhóm trên máy chủ.');state.name=$('sessionName').value.trim()||'Kiểm kê kho Dược';save();alert('Đã lưu tên đợt')};
 $('newLocal').onclick=()=>{if(!confirm('Tạo đợt mới? Danh mục và kết quả cục bộ hiện tại sẽ được thay thế. Hãy xuất bản sao lưu trước.'))return;stopCloudSync();pendingCountOperation=null;state=newData();selected=0;save();renderCount()};
 function normalize(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9]+/g,' ')}
@@ -138,7 +138,7 @@ function selectItem(i){selected=i;const item=state.items[i];const saved=latest(i
 function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].sort();const old=$('shelfFilter').value;$('shelfFilter').innerHTML='<option value="">Tất cả kệ</option>'+shelves.map(s=>'<option value="'+safe(s)+'">'+safe(s)+'</option>').join('');$('shelfFilter').value=shelves.includes(old)?old:'';renderResults();if(state.items.length)selectItem(Math.min(selected,state.items.length-1));else{$('drugTitle').textContent='Chưa có danh mục';$('drugMeta').textContent='Hãy nhập Excel ở Tổng quan';$('quantityInputs').innerHTML='';$('confirm').disabled=true}}
 function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFilter').value,shelf=$('shelfFilter').value;let ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return(!q||normalize([x.name,x.code,x.lot,x.shelf].join(' ')).includes(q))&&(!shelf||x.shelf===shelf)&&(!f||f==='pending'&&!c||f==='diff'&&diff||f==='ok'&&c&&x.stock!==null&&!diff)});$('results').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return '<div class="item" tabindex="0" data-i="'+i+'"><b>'+safe(x.name)+'</b> <span class="pill '+(c?(x.stock===null?'warning':diff?'bad':'ok'):'')+'">'+(c?(x.stock===null?'Đã kiểm':diff?'Lệch':'Khớp'):'Chưa kiểm')+'</span><div class="muted">'+safe(x.code)+' · '+safe(x.shelf)+' · '+safe(x.lot)+'</div></div>'}).join(''):'<p class="muted">Không có dòng phù hợp.</p>';$('results').querySelectorAll('[data-i]').forEach(el=>{el.onclick=()=>selectItem(Number(el.dataset.i));el.onkeydown=e=>{if(e.key==='Enter')el.click()}})}
 $('quickSearch').oninput=renderResults;$('shelfFilter').onchange=renderResults;$('statusFilter').onchange=renderResults;
-function renderEditor(){const x=state.items[selected];if(!x)return;$('confirm').disabled=false;$('position').textContent='Kệ '+x.shelf+' · '+(selected+1)+'/'+state.items.length;$('drugTitle').textContent=x.name;$('drugMeta').textContent='Mã '+x.code+' · Lô '+(x.lot||'—')+' · HSD '+(x.expiry||'—')+' · '+x.unit+(x.packText?' · '+x.packText:'');$('quantityInputs').innerHTML=x.pack.map((p,k)=>'<div><label>'+safe(p.name)+' (×'+p.factor+')</label><input type="number" inputmode="numeric" min="0" step="1" data-n="'+k+'" value="'+safe(draft[k])+'"></div>').join('');$('quantityInputs').querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{draft[Number(el.dataset.n)]=el.value;revealed=false;renderCompare()});$('note').value=latest(selected)?.note||'';renderCompare()}
+function renderEditor(){const x=state.items[selected];if(!x)return;$('confirm').disabled=!!(state.source==='cloud'&&state.closedAt);$('position').textContent='Kệ '+x.shelf+' · '+(selected+1)+'/'+state.items.length;$('drugTitle').textContent=x.name;$('drugMeta').textContent='Mã '+x.code+' · Lô '+(x.lot||'—')+' · HSD '+(x.expiry||'—')+' · '+x.unit+(x.packText?' · '+x.packText:'');$('quantityInputs').innerHTML=x.pack.map((p,k)=>'<div><label>'+safe(p.name)+' (×'+p.factor+')</label><input type="number" inputmode="numeric" min="0" step="1" data-n="'+k+'" value="'+safe(draft[k])+'"></div>').join('');$('quantityInputs').querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{draft[Number(el.dataset.n)]=el.value;revealed=false;renderCompare()});$('note').value=latest(selected)?.note||'';renderCompare()}
 function renderCompare(){const x=state.items[selected];if(!x)return;const values=x.pack.map((_,k)=>integer(draft[k]));const actual=sum(x,values),delta=x.stock===null?null:actual-x.stock;$('actual').textContent=actual.toLocaleString('vi-VN')+' '+x.unit;$('comparison').innerHTML=revealed?(x.stock===null?'Tồn máy: chưa có dữ liệu đối chiếu':'<div>Tồn trên máy: <b>'+x.stock.toLocaleString('vi-VN')+'</b></div><span class="pill '+(delta?'bad':'ok')+'">'+(delta?'Chênh lệch: '+(delta>0?'+':'')+delta:'Đã khớp')+'</span>'):'Tồn máy được ẩn đến khi xác nhận để hạn chế đếm theo số dự kiến'}
 async function cloudWrite(x,record,expectedDraftVersion){
  if(state.source!=='cloud')return null;
@@ -154,7 +154,7 @@ async function cloudWrite(x,record,expectedDraftVersion){
    p_session:state.sessionId,p_item:x.id,p_expected:expected,
    p_operation:operationId,p_values:record.values,p_note:record.note
  });
- if(error){handleCloudAccessError(error);throw error;}
+ if(error){handleCloudAccessError(error);if(/finalized|chốt|closed/i.test(error.message||''))await loadCloudSessionStatus();throw error;}
  if(data?.status==='conflict'){
    pendingCountOperation=null;
    const result=await client.from('inventory_counts')
@@ -213,7 +213,7 @@ async function refreshCloudCounts(force=false){
    fresh[r.item_id]={values:r.count_values,note:r.note,actual:r.actual,
      checkedAt:r.created_at,by:r.users_email||'Thành viên',version:String(r.id)};
   }
-  state.counts=fresh;save();renderResults();renderStats();
+  state.counts=fresh;await loadCloudSessionStatus();save();renderResults();renderStats();
   if(document.getElementById('review').classList.contains('active'))renderReview();
   if(rows.length) $('cloudState').textContent='Đã cập nhật '+rows.length+' thuốc từ máy chủ lúc '+new Date().toLocaleTimeString('vi-VN');
   return true;
@@ -243,7 +243,7 @@ function startCloudSync(){
    .subscribe();
  cloudRefreshTimer=setInterval(()=>refreshCloudCounts(),20000);
 }
-$('confirm').onclick=async()=>{if(lock||!state.items.length)return;const x=state.items[selected],values=x.pack.map((_,k)=>integer(draft[k]));if(Object.values(draft).some(v=>String(v).trim()===''||!Number.isFinite(num(v))||num(v)<0||!Number.isInteger(num(v))))return alert('Các số đếm phải là số nguyên không âm.');lock=true;$('confirm').disabled=true;const record={values,actual:sum(x,values),note:$('note').value,checkedAt:new Date().toISOString(),by:user?.email||'Người dùng cục bộ'};if(!Number.isSafeInteger(record.actual)||record.actual<0){lock=false;$('confirm').disabled=false;return alert('Tổng thực kiểm quá lớn hoặc không hợp lệ. Vui lòng kiểm tra hệ số và số nhập.')}try{const version=await cloudWrite(x,record,draftVersion);state.counts[x.id]={...record,...(version?{version}: {})};draftVersion=version||null;save();revealed=true;renderCompare();renderResults();$('saveState').textContent='Đã ghi nhận lúc '+new Date().toLocaleTimeString('vi-VN')+(state.source==='cloud'?' và đồng bộ':' trên thiết bị')}catch(e){alert('Chưa lưu được lên máy chủ: '+e.message+'. Vui lòng thử lại khi có mạng.')}finally{lock=false;$('confirm').disabled=false}};
+$('confirm').onclick=async()=>{if(lock||!state.items.length)return;if(state.source==='cloud'&&state.closedAt)return alert('Đợt kiểm kê đã chốt, không thể nhập hoặc sửa số đếm.');const x=state.items[selected],values=x.pack.map((_,k)=>integer(draft[k]));if(Object.values(draft).some(v=>String(v).trim()===''||!Number.isFinite(num(v))||num(v)<0||!Number.isInteger(num(v))))return alert('Các số đếm phải là số nguyên không âm.');lock=true;$('confirm').disabled=true;const record={values,actual:sum(x,values),note:$('note').value,checkedAt:new Date().toISOString(),by:user?.email||'Người dùng cục bộ'};if(!Number.isSafeInteger(record.actual)||record.actual<0){lock=false;$('confirm').disabled=false;return alert('Tổng thực kiểm quá lớn hoặc không hợp lệ. Vui lòng kiểm tra hệ số và số nhập.')}try{const version=await cloudWrite(x,record,draftVersion);state.counts[x.id]={...record,...(version?{version}: {})};draftVersion=version||null;save();revealed=true;renderCompare();renderResults();$('saveState').textContent='Đã ghi nhận lúc '+new Date().toLocaleTimeString('vi-VN')+(state.source==='cloud'?' và đồng bộ':' trên thiết bị')}catch(e){alert('Chưa lưu được lên máy chủ: '+e.message+'. Vui lòng thử lại khi có mạng.')}finally{lock=false;$('confirm').disabled=false}};
 $('next').onclick=()=>{if(state.items.length)selectItem((selected+1)%state.items.length)};
 function renderReview(){const ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i);return c&&x.stock!==null&&sum(x,c.values)!==x.stock});$('reviewList').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),v=sum(x,c.values);return '<div class="item" data-review="'+i+'"><b>'+safe(x.name)+'</b><div class="muted">'+safe(x.shelf)+' · '+safe(x.code)+'</div><div class="pill bad">Máy '+x.stock+' · Kiểm '+v+' · Lệch '+(v-x.stock)+'</div></div>'}).join(''):'<p class="muted">Chưa có dòng chênh lệch.</p>';$('reviewList').querySelectorAll('[data-review]').forEach(el=>el.onclick=()=>{show('count');selectItem(Number(el.dataset.review))})}
 async function exportXlsx(){if(typeof XLSX==='undefined')return alert('Không tải được thư viện xuất Excel.');if(state.source==='cloud'){const fresh=await refreshCloudCounts(true);if(!fresh)return alert('Không xác nhận được dữ liệu mới nhất trên máy chủ. Vui lòng kiểm tra mạng và xuất lại. Không xuất bản báo cáo cũ.');}const summary=[],details=[],diff=[];state.items.forEach(x=>{const c=state.counts[x.id],actual=c?sum(x,c.values):'',delta=c&&x.stock!==null?actual-x.stock:'';const base={...x.raw,'Mã kiểm kê':x.id,'Tồn máy':x.stock,'Thực kiểm':actual,'Chênh lệch':delta,'Trạng thái':!c?'Chưa kiểm':x.stock===null?'Đã kiểm (chưa có tồn máy)':delta?'Cần kiểm lại':'Khớp','Người kiểm':c?.by||'','Thời gian kiểm':c?.checkedAt||'','Ghi chú':c?.note||''};summary.push(base);if(c){details.push({...base,...Object.fromEntries(x.pack.map((p,i)=>[p.name+' (x'+p.factor+')',c.values[i]]))});if(delta!=='')diff.push(base)}});const wb=XLSX.utils.book_new();for(const [name,rows] of [['Tổng hợp',summary],['Chi tiết kiểm',details],['Cần kiểm lại',diff]])XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows.length?rows:[{'Thông báo':'Không có dữ liệu'}]),name);XLSX.writeFile(wb,'PharmaCount_'+new Date().toISOString().slice(0,10)+'.xlsx')}
@@ -280,7 +280,7 @@ $('createCloud').onclick=async()=>{
   if(error)throw error;
   if(!id)throw Error('Máy chủ chưa trả mã đợt kiểm kê');
   if(!user||user.id!==signedInUserId)throw Error('Đợt đã được tạo trên máy chủ, nhưng phiên đăng nhập thay đổi. Đăng nhập lại để mở đợt theo mã: '+id);
-  state.source='cloud';state.sessionId=id;state.counts={};lastCloudCountId=0;save();
+  state.source='cloud';state.sessionId=id;state.counts={};state.ownerId=user.id;state.closedAt=null;lastCloudCountId=0;save();showFinalizeControls();
   $('cloudId').value=id;startCloudSync();
   $('cloudState').textContent='Đã tạo đợt '+id+' gồm '+state.items.length+' thuốc. Hãy mời thành viên.';
   alert('Tạo thành công đợt '+id+'. Mời nhân viên trước khi chia sẻ mã đợt.');
@@ -303,7 +303,7 @@ async function joinCloudById(id,automatic=false){
  $('joinCloud').disabled=true;
  $('cloudState').textContent='Đang tải danh mục và số đếm từ Supabase...';
  try{
-  const sr=await client.from('inventory_sessions').select('id,name').eq('id',id).single();
+  const sr=await client.from('inventory_sessions').select('id,name,owner_id,closed_at').eq('id',id).single();
   if(sr.error)throw sr.error;
   const items=await fetchCloudRows('inventory_items','id,drug',id,'id');
   const records=await fetchCloudCountSnapshot(id);
@@ -314,8 +314,8 @@ async function joinCloudById(id,automatic=false){
     checkedAt:r.created_at,by:r.users_email||'Thành viên',version:String(r.id)
   };
   stopCloudSync();
-  state={name:sr.data.name,items:items.map(r=>r.drug),counts,sessionId:id,source:'cloud'};
-  selected=0;save();renderCount();show('count');startCloudSync();
+  state={name:sr.data.name,items:items.map(r=>r.drug),counts,sessionId:id,source:'cloud',ownerId:sr.data.owner_id,closedAt:sr.data.closed_at};
+  selected=0;save();renderCount();show('count');startCloudSync();showFinalizeControls();
   $('cloudId').value=id;
   $('cloudState').textContent='Đã mở đợt '+id+' với '+state.items.length+' dòng, '+Object.keys(counts).length+' thuốc đã kiểm.';
   return true;
@@ -339,6 +339,40 @@ $('copyJoinLink').onclick=async()=>{
  url.searchParams.set('join',id);
  try{await navigator.clipboard.writeText(url.href);alert('Đã sao chép liên kết đợt kiểm. Thành viên cần đăng nhập bằng email đã được mời.')}
  catch{prompt('Sao chép liên kết dưới đây:',url.href)}
+};
+function showFinalizeControls(){
+ const owner=!!(user&&state.source==='cloud'&&state.ownerId===user.id);
+ $('finalizeControls').classList.toggle('hidden',!owner||!!state.closedAt);
+ const disabled=state.source==='cloud'&&!!state.closedAt;
+ $('confirm').disabled=disabled||!state.items.length;
+ if(disabled)$('saveState').textContent='Đợt kiểm kê đã chốt; chỉ được xem và xuất kết quả.';
+}
+async function loadCloudSessionStatus(){
+ if(!client||!user||state.source!=='cloud'||!state.sessionId)return;
+ const sessionId=state.sessionId;
+ const {data,error}=await client.from('inventory_sessions').select('owner_id,closed_at').eq('id',sessionId).single();
+ if(error){handleCloudAccessError(error);throw error;}
+ if(state.source!=='cloud'||state.sessionId!==sessionId)return;
+ state.ownerId=data.owner_id;state.closedAt=data.closed_at;
+ showFinalizeControls();
+}
+$('finalizeRun').onclick=async()=>{
+ if(!client||!user||state.source!=='cloud'||state.ownerId!==user.id)return alert('Chỉ chủ đợt mới được chốt kiểm kê.');
+ if(state.closedAt)return alert('Đợt kiểm kê đã được chốt.');
+ const missing=state.items.filter(x=>!state.counts[x.id]).length;
+ if(missing)return alert('Còn '+missing+' dòng thuốc chưa kiểm. Hãy hoàn tất trước khi chốt.');
+ if(!confirm('CHỐT ĐỢT KIỂM KÊ?\\nSau khi xác nhận, tất cả thành viên chỉ có thể xem và xuất báo cáo, không thể nhập hay sửa số đếm.'))return;
+ const button=$('finalizeRun');button.disabled=true;
+ try{
+  const fresh=await refreshCloudCounts(true);
+  if(!fresh)throw Error('Không tải được kết quả mới nhất trên máy chủ');
+  const {data,error}=await client.rpc('pc_finalize_session',{p_session:state.sessionId});
+  if(error)throw error;
+  if(data?.status!=='finalized')throw Error('Máy chủ chưa xác nhận chốt');
+  state.closedAt=data.closed_at;save();showFinalizeControls();renderStats();renderEditor();
+  alert('Đã chốt đợt kiểm kê. Các số đếm hiện được khóa trên máy chủ.');
+ }catch(e){alert('Không chốt được đợt: '+e.message)}
+ finally{button.disabled=false}
 };
 async function loadTeamMembers(){
  if(!client||!user||!state.sessionId||state.source!=='cloud')return alert('Hãy mở đợt kiểm chung trước.');
