@@ -378,7 +378,8 @@ $('invite').onclick=async()=>{
  await loadTeamMembers();
 };
 const joinFromUrl=new URLSearchParams(location.search).get('join')||'';
-if(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(joinFromUrl))$('cloudId').value=joinFromUrl;
+const validJoinFromUrl=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(joinFromUrl)?joinFromUrl:null;
+if(validJoinFromUrl)$('cloudId').value=validJoinFromUrl;
 try{const config=JSON.parse(localStorage.getItem(CONFIG)||'null');if(config){$('sbUrl').value=config.url;$('sbKey').value=config.key}connect().then(()=>maybeAutoJoinCloud()).catch(e=>{$('authState').textContent='Không kết nối được: '+e.message})}catch{}
 renderStats();renderCount();
 })();
