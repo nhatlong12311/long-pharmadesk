@@ -10,11 +10,11 @@
 - **Dữ liệu gốc:** nhập `.xlsx` danh mục kiểm kê. Có thể ghép `.xlsx` danh mục quy cách trong luồng Web Worker (`pack-worker.js`), xác minh mã thuốc và không tự chọn một hệ số nếu có nhiều quy cách.
 - **Một đợt chung:** trưởng nhóm tạo đợt cloud; thành viên đã mời đăng nhập và mở qua UUID đợt. Danh mục thuốc được lưu trên máy chủ; mỗi lần đếm lưu sự kiện mới và người kiểm.
 - **Chống xung đột:** dùng Supabase RPC `pc_submit_count` với phiên bản trước đó và operation ID; nếu người khác đã lưu, trả `conflict`, không tự ghi đè.
-- **Đồng bộ:** Supabase Realtime nhận sự kiện mới; định kỳ kiểm tra lại sau 20 giây khi không chỉnh sửa phiếu, nhằm giảm nguy cơ mất cập nhật khi websocket gián đoạn.
+- **Đồng bộ:** Supabase Realtime nhận sự kiện mới; định kỳ kiểm tra bản ghi cuối **của từng thuốc** bằng `pc_latest_counts` sau 20 giây (không dùng cursor ID toàn cục, tránh bỏ sót giao dịch hoàn tất muộn), nhằm giảm nguy cơ mất cập nhật khi websocket gián đoạn.
 - **Phân biệt tồn:** mẫu tháng 10 thiếu tồn máy độc lập nên được ghi `stock=null`, **không được kết luận chênh lệch** cho các dòng này.
 
 ### Cách thiết lập và vận hành thử
-1. Trong Supabase, dùng dự án *PharmaCount* đã có. Nếu tạo dự án mới, áp dụng `pharmacount/supabase.sql`, **sau đó** `pharmacount/supabase-count-rpc.sql`. Không đưa `service_role` hoặc Supabase secret key vào website. Chỉ dùng publishable/anon key và bật email OTP.
+1. Trong Supabase, dùng dự án *PharmaCount* đã có. Nếu tạo dự án mới, áp dụng `pharmacount/supabase.sql`, **sau đó** `pharmacount/supabase-count-rpc.sql`, **sau đó** `pharmacount/supabase-latest-counts.sql`. Không đưa `service_role` hoặc Supabase secret key vào website. Chỉ dùng publishable/anon key và bật email OTP.
 2. Cấu hình Supabase Auth → URL Configuration, Site URL / Redirect URLs theo URL trang web triển khai thực tế (ví dụ trang GitHub Pages sau khi PR được merge). Đăng nhập thử bằng email của người tạo đợt và một nhân viên khác.
 3. Trưởng nhóm: nhập mẫu `.xlsx` kiểm kê (tất cả sheet), ghép danh mục quy cách `.xlsx`, xử lý các trường hợp hệ số chưa rõ, sau đó vào **Xuất / Đồng bộ** để kết nối Supabase và **Tạo đợt trên đám mây**.
 4. Trưởng nhóm dùng email mời từng người. Mỗi nhân viên mở cùng URL web, đăng nhập OTP bằng email được mời, dán mã UUID đợt, chọn **Mở đợt được phân quyền**. Có thể nhập trên máy tính, điện thoại, máy tính bảng.
