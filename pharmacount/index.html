@@ -154,7 +154,7 @@ async function cloudWrite(x,record,expectedDraftVersion){
    p_session:state.sessionId,p_item:x.id,p_expected:expected,
    p_operation:operationId,p_values:record.values,p_note:record.note
  });
- if(error)throw error;
+ if(error){handleCloudAccessError(error);throw error;}
  if(data?.status==='conflict'){
    pendingCountOperation=null;
    const result=await client.from('inventory_counts')
@@ -217,8 +217,18 @@ async function refreshCloudCounts(force=false){
   if(document.getElementById('review').classList.contains('active'))renderReview();
   if(rows.length) $('cloudState').textContent='Đã cập nhật '+rows.length+' thuốc từ máy chủ lúc '+new Date().toLocaleTimeString('vi-VN');
   return true;
- }catch(e){$('cloudState').textContent='Chưa cập nhật được kết quả chung: '+e.message;return false}
+ }catch(e){if(handleCloudAccessError(e))return false;$('cloudState').textContent='Chưa cập nhật được kết quả chung: '+e.message;return false}
  finally{cloudRefreshBusy=false}
+}
+function handleCloudAccessError(error){
+ // An expired/revoked invitation must not leave a readable cloud copy visible.
+ const code=String(error?.code||''),status=Number(error?.status||0);
+ if(code!=='42501'&&status!==401&&status!==403)return false;
+ stopCloudSync();pendingCountOperation=null;
+ state=newData();selected=0;draft={};draftVersion=null;
+ save();renderCount();show('dashboard');
+ $('cloudState').textContent='Quyền xem đợt kiểm đã hết hạn hoặc bị thu hồi. Dữ liệu đã được đóng trên máy này.';
+ return true;
 }
 function stopCloudSync(){
  if(cloudRefreshTimer){clearInterval(cloudRefreshTimer);cloudRefreshTimer=null}
@@ -306,6 +316,7 @@ async function joinCloudById(id,automatic=false){
   $('cloudState').textContent='Đã mở đợt '+id+' với '+state.items.length+' dòng, '+Object.keys(counts).length+' thuốc đã kiểm.';
   return true;
  }catch(e){
+  if(handleCloudAccessError(e))return false;
   $('cloudState').textContent='Không mở được đợt: '+e.message;
   if(!automatic)alert('Không mở được đợt. Kiểm tra mã và quyền truy cập: '+e.message);
   return false;
