@@ -46,3 +46,12 @@ The private Excel samples were inspected during development; **do not copy them 
 - Magic-link login requires configured Supabase email delivery and redirect settings.
 - A record is considered cloud-saved only when server acknowledges; otherwise show a failure.
 - Realtime polling is a fallback; devices only receive updates while connected.
+
+
+## QA and team controls added on 23 November 2026
+- The `pc_latest_counts` PostgreSQL snapshot RPC is committed as `pharmacount/supabase-latest-counts.sql` and has been applied to Supabase. It avoids losing counts from transactions whose sequence IDs do not reflect commit order; the client reads the latest record per drug in pages of 500.
+- The `pc_members_delete` RLS policy is in `pharmacount/supabase-team-permissions.sql` and applied to Supabase. Only the authenticated session owner may revoke invited members. The UI can list email invitations and revoke access after confirmation.
+- Inventory members can use a shareable URL containing `?join=<session UUID>`; the email must still be invited and authenticated to access the run.
+- The frontend saves the version originally displayed when a counting draft is opened, so background updates cannot silently replace the expected version in a concurrent save.
+- The code rejects cloud saves on expired authentication rather than storing a false success locally. On sign out, the visible cloud state is cleared.
+- The JavaScript regressions were exercised in a simulated Node API / V8 harness, 10/10 passing on the test code at that point. **GitHub Actions and 2-account browser end-to-end tests are still unverified.**
