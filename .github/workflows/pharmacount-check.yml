@@ -1,0 +1,24 @@
+name: PharmaCount safety checks
+on:
+  pull_request:
+    paths:
+      - 'pharmacount/**'
+      - '.github/workflows/pharmacount-check.yml'
+  push:
+    branches:
+      - 'feature/pharmacount-inventory'
+    paths:
+      - 'pharmacount/**'
+      - '.github/workflows/pharmacount-check.yml'
+permissions:
+  contents: read
+jobs:
+  pharmacount-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run PharmaCount regression tests
+        run: node --test pharmacount/tests/*.test.cjs
