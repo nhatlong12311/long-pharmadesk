@@ -28,7 +28,7 @@ class PharmaCountPublishTest(unittest.TestCase):
 
     def test_build_paths_both_publish_pharmacount(self):
         src = (ROOT / "web" / "build.py").read_text(encoding="utf-8")
-        self.assertGreaterEqual(src.count("copy_pharmacount(output)"), 2)
+        self.assertGreaterEqual(src.count("copy_pharmacount(output)"), 3)
 
 
 if __name__ == "__main__":
