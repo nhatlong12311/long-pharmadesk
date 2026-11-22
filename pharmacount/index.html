@@ -223,7 +223,7 @@ async function refreshCloudCounts(force=false){
 function handleCloudAccessError(error){
  // An expired/revoked invitation must not leave a readable cloud copy visible.
  const code=String(error?.code||''),status=Number(error?.status||0);
- if(code!=='42501'&&status!==401&&status!==403)return false;
+ if(state.source!=='cloud'||(code!=='42501'&&status!==401&&status!==403))return false;
  stopCloudSync();pendingCountOperation=null;
  state=newData();selected=0;draft={};draftVersion=null;
  save();renderCount();show('dashboard');
@@ -320,7 +320,7 @@ async function joinCloudById(id,automatic=false){
   $('cloudState').textContent='Đã mở đợt '+id+' với '+state.items.length+' dòng, '+Object.keys(counts).length+' thuốc đã kiểm.';
   return true;
  }catch(e){
-  if(handleCloudAccessError(e))return false;
+  if(state.source==='cloud'&&state.sessionId===id&&handleCloudAccessError(e))return false;
   $('cloudState').textContent='Không mở được đợt: '+e.message;
   if(!automatic)alert('Không mở được đợt. Kiểm tra mã và quyền truy cập: '+e.message);
   return false;
