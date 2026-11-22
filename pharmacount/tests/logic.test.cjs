@@ -76,3 +76,9 @@ test('latest-count snapshot reads page 2, never uses global ID cursor',async()=>
   assert.equal(result.length,501);
   assert.deepEqual(offsets,[0,500]);
 });
+
+test('cloud count cannot silently save locally after authentication expires',async()=>{
+  const ctx=cloud(null,{});
+  await assert.rejects(ctx.call({id:'A'},{values:[1],note:'test'}),/Phiên đăng nhập đã hết hạn/);
+  assert.equal(Object.keys(ctx.state.counts).length,0);
+});
