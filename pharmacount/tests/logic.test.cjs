@@ -126,3 +126,43 @@ test('revoking team access clears locally visible cloud inventory',()=>{
  assert.equal(ctx.revoke({code:'42501'}),false);
  assert.equal(ctx.state.counts.LOCAL.values[0],8);
 });
+
+test('session closing requires ownership and all inventory items counted',async()=>{
+ const start=script.indexOf("$('finalizeRun').onclick=async()=>");
+ const end=script.indexOf('async function loadTeamMembers(){',start);
+ assert.ok(start>=0&&end>start,'finalization control not found');
+ const elements={finalizeRun:{disabled:false}};
+ let rpcCalls=0,lastAlert='';
+ const ctx={
+   client:{rpc:async()=>{rpcCalls++;return {data:{status:'finalized',closed_at:'2026-11-23T00:00:00Z'}}}},
+   user:{id:'owner'},state:{source:'cloud',ownerId:'other',closedAt:null,sessionId:'session',items:[{id:'A'}],counts:{}},
+   $:id=>elements[id]||(elements[id]={}),alert:message=>{lastAlert=message},
+   confirm:()=>true,refreshCloudCounts:async()=>true,
+   save:()=>{},showFinalizeControls:()=>{},renderStats:()=>{},renderEditor:()=>{}
+ };
+ vm.createContext(ctx);
+ vm.runInContext(script.slice(start,end),ctx);
+ await ctx.$('finalizeRun').onclick();
+ assert.equal(rpcCalls,0);
+ assert.match(lastAlert,/chủ đợt/);
+ ctx.state.ownerId='owner';
+ await ctx.$('finalizeRun').onclick();
+ assert.equal(rpcCalls,0);
+ assert.match(lastAlert,/chưa kiểm/);
+ ctx.state.counts.A={values:[1]};
+ await ctx.$('finalizeRun').onclick();
+ assert.equal(rpcCalls,1);
+ assert.equal(ctx.state.closedAt,'2026-11-23T00:00:00Z');
+ assert.equal(elements.finalizeRun.disabled,false);
+});
+test('finalized runs block editing and server migration locks parent row',()=>{
+ assert.ok(script.includes("if(state.source==='cloud'&&state.closedAt)return alert('Đợt kiểm kê đã chốt"));
+ assert.ok(script.includes("$('confirm').disabled=!!(state.source==='cloud'&&state.closedAt)"));
+ const sql=fs.readFileSync(path.join(base,'supabase-finalization.sql'),'utf8');
+ const guard=fs.readFileSync(path.join(base,'supabase-finalization-item-guard.sql'),'utf8');
+ assert.match(sql,/pc_finalize_session/);
+ assert.match(sql,/for update/i);
+ assert.match(sql,/session_closed_at is not null/);
+ assert.match(guard,/pc_guard_item_insert/);
+ assert.match(guard,/finished_at is not null/);
+});
