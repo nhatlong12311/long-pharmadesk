@@ -13,3 +13,65 @@ test('catalog worker detects ambiguous multiple pack sizes',()=>{const rows=[['S
 function cloud(client,counts={}){const ctx={client,user:{email:'tester@example.org'},state:{source:'cloud',sessionId:'test-run',counts},pendingCountOperation:null,crypto:{randomUUID:()=> 'same-op-id'},selected:0,saves:0,selections:0,save(){ctx.saves++},selectItem(){ctx.selections++}};vm.createContext(ctx);vm.runInContext(slice('async function cloudWrite(x,record){','async function fetchCloudRows(')+'\nthis.call=cloudWrite',ctx);return ctx}
 test('retry of uncertain write reuses operation ID',async()=>{let n=0;const ops=[];const ctx=cloud({rpc:async(_,args)=>{ops.push(args.p_operation);return ++n===1?{error:{message:'timeout'}}:{data:{status:'saved',version:'5'}}}});await assert.rejects(ctx.call({id:'A'},{values:[3,5],note:'test'}));assert.equal(await ctx.call({id:'A'},{values:[3,5],note:'test'}),'5');assert.deepEqual(ops,['same-op-id','same-op-id'])});
 test('conflicting concurrent save loads latest teammate result',async()=>{const row={id:6,values:[2,4],note:'teammate',actual:204,users_email:'other@example.org',created_at:'2026-11-23T10:00:00Z'};const query={select(){return this},eq(){return this},order(){return this},limit(){return this},async maybeSingle(){return {data:row}}};const ctx=cloud({rpc:async()=>({data:{status:'conflict',version:'6'}}),from:()=>query},{A:{version:'5'}});await assert.rejects(ctx.call({id:'A'},{values:[3,5],note:'test'}),/Người khác vừa lưu/);assert.equal(ctx.state.counts.A.version,'6');assert.equal(ctx.selections,1)});
+
+test('actual hospital header with strength is recognized across sheets', async () => {
+  const start=script.indexOf("$('importBtn').onclick=async()=>");
+  const end=script.indexOf("$('sampleBtn').onclick=",start);
+  assert.ok(start>=0&&end>start);
+  let imported=null;let alertMessage=null;
+  const workbook={
+    SheetNames:['TT','UT'],
+    Sheets:{TT:{index:0},UT:{index:1}}
+  };
+  const grids=[
+    [['Danh mục'],['STT','Mã dược','Tên thuốc, nồng độ,\nhàm lượng','ĐVT','SỐ LÔ','Hạn dùng','Số lượng'],
+      ['','','','','','','Chẵn','Lẻ'],[1,'TH001','Paracetamol 500mg','Viên','A1',46598]],
+    [['Danh mục'],['STT','Mã dược','Tên thuốc, nồng độ,\nhàm lượng','ĐVT','SỐ LÔ','Hạn dùng','Số lượng'],
+      ['','','','','','','Chẵn','Lẻ'],[1,'TH002','Ceftriaxon 1g','Lọ','A2',46598]]
+  ];
+  const excelInput={files:[{name:'Dmkk t10.xlsx',arrayBuffer:async()=>new ArrayBuffer(1)}]};
+  const ctx={
+    XLSX:{read:()=>workbook,utils:{sheet_to_json:sheet=>grids[sheet.index]}},
+    $:id=>id==='excel'?excelInput:{},
+    normalize:s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9]+/g,' '),
+    importRows:rows=>{imported=rows},
+    state:{source:'local'},alert:msg=>{alertMessage=msg}
+  };
+  vm.createContext(ctx);
+  vm.runInContext(script.slice(start,end),ctx);
+  await ctx.$('importBtn').onclick();
+  assert.equal(alertMessage,null);
+  assert.equal(imported.length,2);
+  assert.equal(imported[0]['Mã dược'],'TH001');
+  assert.equal(imported[1]['Kệ'],'UT');
+});
+test('cloud submit keeps the version captured when a draft was opened', async()=>{
+  let expectedVersion=null;
+  const ctx=cloud({rpc:async(_,input)=>{
+    expectedVersion=input.p_expected;
+    return {data:{status:'conflict',version:'6'}};
+  },from:()=>({
+    select(){return this},eq(){return this},order(){return this},limit(){return this},
+    async maybeSingle(){return {data:{id:6,values:[2],note:'new',actual:2,users_email:'other@example.org',created_at:'2026-11-23T10:00:00Z'}}}
+  })},{A:{version:'6'}});
+  await assert.rejects(ctx.call({id:'A'},{values:[3],note:'previous'},'5'),/Người khác vừa lưu/);
+  assert.equal(expectedVersion,'5');
+});
+test('latest-count snapshot reads page 2, never uses global ID cursor',async()=>{
+  const begin=script.indexOf('async function fetchCloudCountSnapshot(id){');
+  const end=script.indexOf('async function refreshCloudCounts(force=false)',begin);
+  assert.ok(begin>0&&end>begin);
+  const offsets=[];
+  const ctx={
+    client:{rpc:async(_,input)=>{
+      offsets.push(input.p_offset);
+      return {data:input.p_offset===0?Array.from({length:500},(_,i)=>({item_id:'T'+i,id:i+1,count_values:[1]})):[{item_id:'T500',id:501,count_values:[2]}]};
+    }},
+    Error
+  };
+  vm.createContext(ctx);
+  vm.runInContext(script.slice(begin,end)+'\nthis.getCounts=fetchCloudCountSnapshot',ctx);
+  const result=await ctx.getCounts('test-session');
+  assert.equal(result.length,501);
+  assert.deepEqual(offsets,[0,500]);
+});
