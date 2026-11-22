@@ -82,3 +82,44 @@ test('cloud count cannot silently save locally after authentication expires',asy
   await assert.rejects(ctx.call({id:'A'},{values:[1],note:'test'}),/Phiên đăng nhập đã hết hạn/);
   assert.equal(Object.keys(ctx.state.counts).length,0);
 });
+
+test('shared invitation auto-opens only for signed-in invited-session user',()=>{
+ const a=script.indexOf('function maybeAutoJoinCloud(){');
+ const b=script.indexOf("$('joinCloud').onclick=",a);
+ assert.ok(a>=0&&b>a,'auto-join helper missing');
+ const called=[];
+ const context={
+   user:{id:'u1'},joiningCloud:false,
+   validJoinFromUrl:'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
+   state:{source:'local',sessionId:null},
+   joinCloudById:(id,automatic)=>{called.push({id,automatic})}
+ };
+ vm.createContext(context);
+ vm.runInContext(script.slice(a,b)+'\nthis.trigger=maybeAutoJoinCloud',context);
+ context.trigger();
+ assert.equal(called.length,1);
+ assert.equal(called[0].id,'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');
+ assert.equal(called[0].automatic,true);
+ context.user=null;
+ context.trigger();
+ assert.equal(called.length,1);
+});
+test('revoking team access clears locally visible cloud inventory',()=>{
+ const a=script.indexOf('function handleCloudAccessError(error){');
+ const b=script.indexOf('function stopCloudSync(){',a);
+ assert.ok(a>=0&&b>a,'revoked-access handler missing');
+ const ctx={
+   state:{source:'cloud',items:[{id:'A',name:'Drug'}],counts:{A:{values:[3]}}},
+   selected:3,draft:{0:'3'},draftVersion:'5',pendingCountOperation:{id:'op'},
+   newData:()=>({source:'local',items:[],counts:{},sessionId:null}),
+   stopCloudSync:()=>{},save:()=>{},renderCount:()=>{},show:()=>{},
+   $:()=>({textContent:''})
+ };
+ vm.createContext(ctx);
+ vm.runInContext(script.slice(a,b)+'\nthis.revoke=handleCloudAccessError',ctx);
+ assert.equal(ctx.revoke({code:'42501'}),true);
+ assert.equal(ctx.state.items.length,0);
+ assert.equal(Object.keys(ctx.state.counts).length,0);
+ assert.equal(ctx.draftVersion,null);
+ assert.equal(ctx.revoke({code:'NETWORK_ERROR'}),false);
+});
