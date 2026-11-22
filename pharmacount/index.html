@@ -7,7 +7,7 @@
 <section id="dashboard" class="tab active">
 <div class="card"><h2>Đợt kiểm kê</h2><label>Tên đợt</label><input id="sessionName" value="Kiểm kê kho Dược"><div class="row" style="margin-top:10px"><button id="saveName">Lưu tên</button><button class="secondary" id="newLocal">Tạo đợt mới</button></div><p class="muted" id="sessionId"></p></div>
 <div class="grid"><div class="stat"><span class="muted">Mặt hàng</span><b id="sAll">0</b></div><div class="stat"><span class="muted">Đã kiểm</span><b id="sDone">0</b></div><div class="stat"><span class="muted">Chênh lệch</span><b id="sDiff">0</b></div><div class="stat"><span class="muted">Chưa kiểm</span><b id="sLeft">0</b></div></div>
-<div class="card"><h2>Nhập Excel tồn kho</h2><p class="muted">Đọc sheet đầu tiên; tự nhận diện tên, mã, tồn kho, đơn vị, lô, hạn, kệ và quy cách khi tiêu đề cột phù hợp. Xem lại dữ liệu trước khi kiểm. Mỗi lần nhập sẽ thay thế danh mục của đợt hiện tại.</p><input id="excel" type="file" accept=".xlsx"><div class="row" style="margin-top:10px"><button id="importBtn">Nhập danh mục</button><button id="sampleBtn" class="secondary">Dữ liệu mẫu</button></div><p id="importInfo" class="muted"></p><label>Danh mục quy cách đóng gói (.xlsx)</label><input id="packExcel" type="file" accept=".xlsx"><button class="secondary" id="mergePacks">Ghép quy cách vào danh mục</button><p id="packInfo" class="muted"></p><div class="note">Không tải Excel có dữ liệu bệnh nhân. Không nhập đợt mới khi đang có người kiểm; thao tác nhập lại thay danh mục và hủy kết quả cũ.</div></div>
+<div class="card"><h2>Nhập Excel tồn kho</h2><p class="muted">Đọc sheet đầu tiên; tự nhận diện tên, mã, tồn kho, đơn vị, lô, hạn, kệ và quy cách khi tiêu đề cột phù hợp. Xem lại dữ liệu trước khi kiểm. Mỗi lần nhập sẽ thay thế danh mục của đợt hiện tại.</p><input id="excel" type="file" accept=".xlsx"><div class="row" style="margin-top:10px"><button id="importBtn">Nhập danh mục</button><button id="sampleBtn" class="secondary">Dữ liệu mẫu</button></div><p id="importInfo" class="muted"></p><label>Danh mục quy cách đóng gói (.xlsx)</label><input id="packExcel" type="file" accept=".xlsx"><button class="secondary" id="mergePacks">Ghép quy cách vào danh mục</button><p id="packInfo" class="muted"></p><button id="downloadPackIssues" class="secondary" disabled>⬇ Xuất danh sách quy cách cần rà soát</button><div class="note">Không tải Excel có dữ liệu bệnh nhân. Không nhập đợt mới khi đang có người kiểm; thao tác nhập lại thay danh mục và hủy kết quả cũ.</div></div>
 </section>
 <section id="count" class="tab"><div class="card"><div class="row space"><h2>Kiểm tại kệ</h2><span id="position" class="pill"></span></div><input id="quickSearch" placeholder="Tìm mã, tên, hàm lượng, kệ hoặc lô..."><div class="row" style="margin-top:8px"><select id="shelfFilter" style="flex:1"><option value="">Tất cả kệ</option></select><select id="statusFilter" style="flex:1"><option value="">Tất cả trạng thái</option><option value="pending">Chưa kiểm</option><option value="diff">Chênh lệch</option><option value="ok">Đã khớp</option></select></div><div id="results" style="margin-top:10px;max-height:240px;overflow:auto"></div></div>
 <div class="card" id="editor"><h2 id="drugTitle">Chưa có danh mục</h2><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div><button id="setPackFactor" class="secondary" style="margin-top:10px">Thiết lập số viên/lọ trong 1 hộp</button><div class="stat" style="margin-top:14px"><span class="muted">TỔNG THỰC KIỂM</span><div class="big" id="actual">0</div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label>Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea><div class="row" style="margin-top:12px"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp →</button></div><p class="muted" id="saveState"></p></div></section>
@@ -21,7 +21,7 @@
 const $=id=>document.getElementById(id),KEY='pharmacount-v1',CONFIG='pharmacount-cloud-config';
 const newData=()=>({name:'Kiểm kê kho Dược',items:[],counts:{},sessionId:null,source:'local'});
 let state;try{state=JSON.parse(localStorage.getItem(KEY))||newData();if(state.source==='cloud'){state.items=[];state.counts={}}}catch{state=newData()}
-let selected=0, draft={}, revealed=false, client=null,user=null,lock=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshBusy=false, lastCloudCountId=0, pendingCountOperation=null;
+let selected=0, draft={}, revealed=false, client=null,user=null,lock=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshBusy=false, lastCloudCountId=0, pendingCountOperation=null, packIssues=[];
 const save=()=>{const persisted=state.source==='cloud'?{name:state.name,items:[],counts:{},sessionId:state.sessionId,source:'cloud'}:state;try{localStorage.setItem(KEY,JSON.stringify(persisted))}catch(e){alert('Bộ nhớ trình duyệt đầy. Hãy sao lưu Excel và kiểm tra dữ liệu trước khi tiếp tục.')}renderStats()};
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Do not silently turn malformed Excel stock values into zero.
@@ -76,15 +76,16 @@ $('mergePacks').onclick = async () => {
       map.get(key).push(item);
     }
     let matched = 0, ambiguous = 0, unknown = 0, preserved = 0;
+    const issues=[];
     const next = state.items.map(item => {
-      if (state.counts[item.id]) { preserved++; return item; }
+      if (state.counts[item.id]) { preserved++;issues.push({item,status:'Đã có số đếm, không sửa quy cách',pack:item.packText});return item; }
       const options = map.get(normalized(item.code)) || [];
-      if (!options.length) return item;
+      if (!options.length){issues.push({item,status:'Không có mã tương ứng trong danh mục quy cách',pack:''});return item}
       const unique = [...new Map(options.map(p => [normalized(p.packText) + ':' + p.factor, p])).values()];
-      if (unique.length !== 1) { ambiguous++; return item; }
+      if (unique.length !== 1) { ambiguous++;issues.push({item,status:'Mã có nhiều quy cách khác nhau',pack:unique.map(p=>p.packText).join(' | ')});return item; }
       const pack = unique[0];
       matched++;
-      if (!pack.factor) unknown++;
+      if (!pack.factor){unknown++;issues.push({item,status:'Không xác định chắc chắn số đơn vị/hộp',pack:pack.packText})}
       return {
         ...item,
         packText: pack.packText || item.packText,
@@ -99,6 +100,8 @@ $('mergePacks').onclick = async () => {
       + 'Có nhiều quy cách: ' + ambiguous + '. Đã có số kiểm nên giữ nguyên: ' + preserved + '.\n\n'
       + 'Cập nhật quy cách cho các dòng chưa kiểm?')) {
       state.items = next;
+      packIssues=issues;
+      $('downloadPackIssues').disabled=!packIssues.length;
       save(); renderCount();
       status.textContent = 'Đã ghép quy cách cho ' + matched + ' dòng; ' + (unknown + ambiguous) + ' dòng cần kiểm tra hệ số.';
     } else {
@@ -106,6 +109,18 @@ $('mergePacks').onclick = async () => {
     }
   } catch (error) { status.textContent = 'Lỗi: ' + error.message; }
   finally { clearTimeout(timeout); if (worker) worker.terminate(); button.disabled = false; }
+};
+$('downloadPackIssues').onclick=()=>{
+ if(!packIssues.length)return alert('Không có dòng cần rà soát');
+ if(typeof XLSX==='undefined')return alert('Thư viện xuất Excel chưa tải');
+ const rows=packIssues.map(({item,status,pack},i)=>({
+  'STT':i+1,'Mã thuốc':item.code,'Tên thuốc':item.name,'Số lô':item.lot,
+  'Nhóm/kệ':item.shelf,'Đơn vị tính':item.unit,'Quy cách mô tả':pack,
+  'Vấn đề cần rà soát':status
+ }));
+ const wb=XLSX.utils.book_new();
+ XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows),'Cần rà soát');
+ XLSX.writeFile(wb,'PharmaCount_quy_cach_can_kiem_tra.xlsx');
 };
 $('setPackFactor').onclick = () => {
   if (state.source === 'cloud') return alert('Chỉ trưởng nhóm được sửa quy cách trước khi tạo đợt kiểm chung.');
