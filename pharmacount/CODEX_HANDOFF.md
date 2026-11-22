@@ -8,11 +8,11 @@
 
 ## Backend already connected
 - Supabase project **PharmaCount**, ref `jpsywcjmcmvgjswkrnzo`, region `ap-southeast-1`.
-- Schema: `pharmacount/supabase.sql`, count concurrency extension `pharmacount/supabase-count-rpc.sql`.
+- Schema: `pharmacount/supabase.sql`, count concurrency extension `pharmacount/supabase-count-rpc.sql`, followed by safe latest-per-drug snapshot `pharmacount/supabase-latest-counts.sql`.
 - 4 RLS-protected tables: `inventory_sessions`, `inventory_members`, `inventory_items`, `inventory_counts`.
 - The `pc_create_session` RPC validates the incoming inventory and creates the session + all items **atomically in one PostgreSQL transaction**. It is `SECURITY INVOKER` and may only be called by `authenticated` (not `anon`).
 - The `pc_submit_count` RPC writes count records only after checking membership, item revision and idempotent operation ID. Returns `saved` or `conflict`; never directly overwrite a prior count.
-- Realtime publication includes `public.inventory_counts`. Frontend also polls new events at 20s intervals.
+- Realtime publication includes `public.inventory_counts`. Frontend refreshes a paginated latest-per-drug snapshot via RPC `pc_latest_counts` every 20s. Do not use a global BIGSERIAL cursor because commits can finish out of ID order.
 - Frontend has the **publishable** key only; never embed a Supabase secret/service-role key.
 
 ## Working import characteristics from real sample files
