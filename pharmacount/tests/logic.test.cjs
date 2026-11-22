@@ -166,3 +166,38 @@ test('finalized runs block editing and server migration locks parent row',()=>{
  assert.match(guard,/pc_guard_item_insert/);
  assert.match(guard,/finished_at is not null/);
 });
+
+test('finalized XLSX export includes every audit event and clear finalized marker',async()=>{
+ const a=script.indexOf('async function exportXlsx(){');
+ const b=script.indexOf("$('exportBtn').onclick=exportXlsx;",a);
+ assert.ok(a>=0&&b>a,'XLSX export handler missing');
+ const sheets=[],outputs=[],alerts=[];
+ const XLSX={
+  utils:{book_new:()=>({}),json_to_sheet:rows=>rows,
+   book_append_sheet:(_wb,rows,name)=>sheets.push({name,rows})},
+  writeFile:(_wb,name)=>outputs.push(name)
+ };
+ const records=[
+  {id:1,item_id:'A',values:[1,0],actual:100,users_email:'a@example.invalid',created_at:'2026-11-23T01:00:00Z',note:''},
+  {id:2,item_id:'A',values:[1,5],actual:105,users_email:'b@example.invalid',created_at:'2026-11-23T02:00:00Z',note:'kiểm lại'}
+ ];
+ const state={source:'cloud',sessionId:'session',closedAt:'2026-11-23T03:00:00Z',
+  items:[{id:'A',name:'Paracetamol',code:'P001',lot:'LOT1',shelf:'A',raw:{},stock:100,
+   pack:[{name:'Hộp',factor:100},{name:'Viên',factor:1}]}],
+  counts:{A:{values:[1,5],by:'b@example.invalid',checkedAt:'2026-11-23T02:00:00Z',note:'kiểm lại'}}
+ };
+ const elems={exportBtn:{}};
+ const ctx={XLSX,state,client:{},user:{},
+   refreshCloudCounts:async()=>true,fetchCloudRows:async()=>records,
+   sum:(item,values)=>item.pack.reduce((n,p,i)=>n+values[i]*p.factor,0),
+   $:id=>elems[id]||(elems[id]={}),alert:message=>alerts.push(message)};
+ vm.createContext(ctx);
+ vm.runInContext(script.slice(a,b),ctx);
+ await ctx.exportXlsx();
+ assert.equal(alerts.length,0);
+ assert.deepEqual(sheets.map(x=>x.name),
+  ['Tổng hợp','Chi tiết kiểm','Cần kiểm lại','Lịch sử kiểm','Thông tin đợt']);
+ assert.equal(sheets[3].rows.length,2);
+ assert.equal(sheets[3].rows[1]['Tổng thực kiểm'],105);
+ assert.ok(outputs[0].includes('CHOT_'));
+});
