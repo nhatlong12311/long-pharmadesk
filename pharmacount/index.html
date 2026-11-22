@@ -21,7 +21,7 @@
 const $=id=>document.getElementById(id),KEY='pharmacount-v1',CONFIG='pharmacount-cloud-config';
 const newData=()=>({name:'Kiểm kê kho Dược',items:[],counts:{},sessionId:null,source:'local'});
 let state;try{state=JSON.parse(localStorage.getItem(KEY))||newData()}catch{state=newData()}
-let selected=0, draft={}, revealed=false, client=null,user=null,lock=false;
+let selected=0, draft={}, revealed=false, client=null,user=null,lock=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshBusy=false;
 const save=()=>{localStorage.setItem(KEY,JSON.stringify(state));renderStats()};
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Do not silently turn malformed Excel stock values into zero.
@@ -48,8 +48,54 @@ function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFi
 $('quickSearch').oninput=renderResults;$('shelfFilter').onchange=renderResults;$('statusFilter').onchange=renderResults;
 function renderEditor(){const x=state.items[selected];if(!x)return;$('confirm').disabled=false;$('position').textContent='Kệ '+x.shelf+' · '+(selected+1)+'/'+state.items.length;$('drugTitle').textContent=x.name;$('drugMeta').textContent='Mã '+x.code+' · Lô '+(x.lot||'—')+' · HSD '+(x.expiry||'—')+' · '+x.unit+(x.packText?' · '+x.packText:'');$('quantityInputs').innerHTML=x.pack.map((p,k)=>'<div><label>'+safe(p.name)+' (×'+p.factor+')</label><input type="number" inputmode="numeric" min="0" step="1" data-n="'+k+'" value="'+safe(draft[k])+'"></div>').join('');$('quantityInputs').querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{draft[Number(el.dataset.n)]=el.value;revealed=false;renderCompare()});$('note').value=latest(selected)?.note||'';renderCompare()}
 function renderCompare(){const x=state.items[selected];if(!x)return;const values=x.pack.map((_,k)=>integer(draft[k]));const actual=sum(x,values),delta=actual-x.stock;$('actual').textContent=actual.toLocaleString('vi-VN')+' '+x.unit;$('comparison').innerHTML=revealed?'<div>Tồn trên máy: <b>'+x.stock.toLocaleString('vi-VN')+'</b></div><span class="pill '+(delta?'bad':'ok')+'">'+(delta?'Chênh lệch: '+(delta>0?'+':'')+delta:'Đã khớp')+'</span>':'Tồn máy được ẩn đến khi xác nhận để hạn chế đếm theo số dự kiến'}
-async function cloudWrite(x,record){if(!client||!user||state.source!=='cloud')return;const res=await client.from('inventory_counts').insert({session_id:state.sessionId,item_id:x.id,user_id:user.id,values:record.values,note:record.note,actual:record.actual});if(res.error)throw res.error}
-$('confirm').onclick=async()=>{if(lock||!state.items.length)return;const x=state.items[selected],values=x.pack.map((_,k)=>integer(draft[k]));if(Object.values(draft).some(v=>String(v).trim()===''||!Number.isFinite(num(v))||num(v)<0||!Number.isInteger(num(v))))return alert('Các số đếm phải là số nguyên không âm.');lock=true;$('confirm').disabled=true;const record={values,actual:sum(x,values),note:$('note').value,checkedAt:new Date().toISOString(),by:user?.email||'Người dùng cục bộ'};try{await cloudWrite(x,record);state.counts[x.id]=record;save();revealed=true;renderCompare();renderResults();$('saveState').textContent='Đã ghi nhận lúc '+new Date().toLocaleTimeString('vi-VN')+(state.source==='cloud'?' và đồng bộ':' trên thiết bị')}catch(e){alert('Chưa lưu được lên máy chủ: '+e.message+'. Vui lòng thử lại khi có mạng.')}finally{lock=false;$('confirm').disabled=false}};
+async function cloudWrite(x,record){
+ if(!client||!user||state.source!=='cloud')return;
+ const prior=state.counts[x.id];
+ const operationId=crypto.randomUUID();
+ const {data,error}=await client.rpc('pc_submit_count',{
+   p_session:state.sessionId,p_item:x.id,p_expected:prior?.version||null,
+   p_operation:operationId,p_values:record.values,p_note:record.note
+ });
+ if(error)throw error;
+ if(data?.status==='conflict'){
+   await refreshCloudCounts(true);
+   throw Error('Thuốc vừa được thành viên khác kiểm. Đã tải kết quả mới nhất; vui lòng kiểm tra rồi nhập lại.');
+ }
+ if(data?.status!=='saved'||!data.version)throw Error('Máy chủ chưa xác nhận lưu số đếm');
+ return data.version;
+}
+async function refreshCloudCounts(force=false){
+ if(!client||!user||state.source!=='cloud'||!state.sessionId||cloudRefreshBusy)return;
+ // Do not replace a draft while the employee is typing or saving.
+ if(!force&&(lock||document.activeElement?.closest('#editor')))return;
+ cloudRefreshBusy=true;
+ try{
+  const {data,error}=await client.from('inventory_counts')
+    .select('id,item_id,values,note,actual,created_at,users_email')
+    .eq('session_id',state.sessionId).order('id',{ascending:false}).limit(5000);
+  if(error)throw error;
+  const next={};
+  for(const r of data){if(!next[r.item_id])next[r.item_id]={values:r.values,note:r.note,actual:r.actual,checkedAt:r.created_at,by:r.users_email||'Thành viên',version:String(r.id)}}
+  state.counts=next;save();renderResults();renderStats();
+  if(document.getElementById('review').classList.contains('active'))renderReview();
+  $('cloudState').textContent='Đã cập nhật kết quả chung lúc '+new Date().toLocaleTimeString('vi-VN');
+ }catch(e){$('cloudState').textContent='Chưa cập nhật được kết quả chung: '+e.message}
+ finally{cloudRefreshBusy=false}
+}
+function stopCloudSync(){
+ if(cloudRefreshTimer){clearInterval(cloudRefreshTimer);cloudRefreshTimer=null}
+ if(cloudChannel&&client){client.removeChannel(cloudChannel);cloudChannel=null}
+}
+function startCloudSync(){
+ stopCloudSync();
+ if(!client||!state.sessionId||state.source!=='cloud')return;
+ // Realtime is used when the database publication is enabled; polling is a fallback.
+ cloudChannel=client.channel('pharmacount-'+state.sessionId)
+   .on('postgres_changes',{event:'INSERT',schema:'public',table:'inventory_counts',filter:'session_id=eq.'+state.sessionId},()=>refreshCloudCounts())
+   .subscribe();
+ cloudRefreshTimer=setInterval(()=>refreshCloudCounts(),20000);
+}
+$('confirm').onclick=async()=>{if(lock||!state.items.length)return;const x=state.items[selected],values=x.pack.map((_,k)=>integer(draft[k]));if(Object.values(draft).some(v=>String(v).trim()===''||!Number.isFinite(num(v))||num(v)<0||!Number.isInteger(num(v))))return alert('Các số đếm phải là số nguyên không âm.');lock=true;$('confirm').disabled=true;const record={values,actual:sum(x,values),note:$('note').value,checkedAt:new Date().toISOString(),by:user?.email||'Người dùng cục bộ'};try{const version=await cloudWrite(x,record);state.counts[x.id]={...record,...(version?{version}: {})};save();revealed=true;renderCompare();renderResults();$('saveState').textContent='Đã ghi nhận lúc '+new Date().toLocaleTimeString('vi-VN')+(state.source==='cloud'?' và đồng bộ':' trên thiết bị')}catch(e){alert('Chưa lưu được lên máy chủ: '+e.message+'. Vui lòng thử lại khi có mạng.')}finally{lock=false;$('confirm').disabled=false}};
 $('next').onclick=()=>{if(state.items.length)selectItem((selected+1)%state.items.length)};
 function renderReview(){const ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i);return c&&sum(x,c.values)!==x.stock});$('reviewList').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),v=sum(x,c.values);return '<div class="item" data-review="'+i+'"><b>'+safe(x.name)+'</b><div class="muted">'+safe(x.shelf)+' · '+safe(x.code)+'</div><div class="pill bad">Máy '+x.stock+' · Kiểm '+v+' · Lệch '+(v-x.stock)+'</div></div>'}).join(''):'<p class="muted">Chưa có dòng chênh lệch.</p>';$('reviewList').querySelectorAll('[data-review]').forEach(el=>el.onclick=()=>{show('count');selectItem(Number(el.dataset.review))})}
 function exportXlsx(){if(typeof XLSX==='undefined')return alert('Không tải được thư viện xuất Excel.');const summary=[],details=[],diff=[];state.items.forEach(x=>{const c=state.counts[x.id],actual=c?sum(x,c.values):'',delta=c?actual-x.stock:'';const base={...x.raw,'Mã kiểm kê':x.id,'Tồn máy':x.stock,'Thực kiểm':actual,'Chênh lệch':delta,'Trạng thái':!c?'Chưa kiểm':delta?'Cần kiểm lại':'Khớp','Người kiểm':c?.by||'','Thời gian kiểm':c?.checkedAt||'','Ghi chú':c?.note||''};summary.push(base);if(c){details.push({...base,...Object.fromEntries(x.pack.map((p,i)=>[p.name+' (x'+p.factor+')',c.values[i]]))});if(delta)diff.push(base)}});const wb=XLSX.utils.book_new();for(const [name,rows] of [['Tổng hợp',summary],['Chi tiết kiểm',details],['Cần kiểm lại',diff]])XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows.length?rows:[{'Thông báo':'Không có dữ liệu'}]),name);XLSX.writeFile(wb,'PharmaCount_'+new Date().toISOString().slice(0,10)+'.xlsx')}
@@ -59,12 +105,12 @@ $('backupBtn').onclick=()=>download('pharmacount-backup.json',JSON.stringify(sta
 $('restore').onchange=async e=>{try{const o=JSON.parse(await e.target.files[0].text());if(!Array.isArray(o.items)||typeof o.counts!=='object')throw Error('Bản sao lưu không hợp lệ');if(!confirm('Phục hồi sẽ thay thế dữ liệu hiện tại?'))return;state={...o,sessionId:null,source:'local'};save();renderCount();show('dashboard')}catch(err){alert(err.message)}};
 async function connect(){const url=$('sbUrl').value.trim(),key=$('sbKey').value.trim();if(!url||!key||!window.supabase)return alert('Thiếu cấu hình hoặc thư viện Supabase chưa tải.');client=window.supabase.createClient(url,key);localStorage.setItem(CONFIG,JSON.stringify({url,key}));$('cloudUi').classList.remove('hidden');const {data:{user:u}}=await client.auth.getUser();user=u;authUi();client.auth.onAuthStateChange((_event,s)=>{user=s?.user||null;authUi()})}
 function authUi(){$('authState').textContent=user?'Đăng nhập: '+user.email:'Chưa đăng nhập';$('cloudActions').classList.toggle('hidden',!user)}
-$('connect').onclick=connect;$('disconnect').onclick=async()=>{if(client)await client.auth.signOut();client=null;user=null;localStorage.removeItem(CONFIG);state.source='local';state.sessionId=null;save();$('cloudUi').classList.add('hidden');alert('Đã ngắt kết nối. Dữ liệu hiện có vẫn ở thiết bị.')};
+$('connect').onclick=connect;$('disconnect').onclick=async()=>{stopCloudSync();if(client)await client.auth.signOut();client=null;user=null;localStorage.removeItem(CONFIG);state.source='local';state.sessionId=null;save();$('cloudUi').classList.add('hidden');alert('Đã ngắt kết nối. Dữ liệu hiện có vẫn ở thiết bị.')};
 $('login').onclick=async()=>{const email=$('email').value.trim();if(!email)return alert('Nhập email');const {error}=await client.auth.signInWithOtp({email,emailRedirectTo:location.href.split('#')[0]});alert(error?error.message:'Đã gửi liên kết đăng nhập. Kiểm tra email.')};
-$('createCloud').onclick=async()=>{if(!user||!state.items.length)return alert('Hãy đăng nhập và nhập Excel trước');if(!confirm('Tạo đợt đồng bộ mới với '+state.items.length+' dòng?'))return;try{const {data:s,error}=await client.from('inventory_sessions').insert({name:state.name,owner_id:user.id}).select('id').single();if(error)throw error;for(let i=0;i<state.items.length;i+=200){const rows=state.items.slice(i,i+200).map(x=>({session_id:s.id,id:x.id,drug:x}));const r=await client.from('inventory_items').insert(rows);if(r.error)throw r.error}state.source='cloud';state.sessionId=s.id;state.counts={};save();$('cloudId').value=s.id;alert('Đã tạo đợt đồng bộ. Mời thành viên bằng email trước khi chia sẻ mã đợt.')}catch(e){alert('Lỗi tạo đợt: '+e.message)}};
-$('joinCloud').onclick=async()=>{if(!user)return alert('Cần đăng nhập');const id=$('cloudId').value.trim();if(!id)return;try{const sr=await client.from('inventory_sessions').select('id,name').eq('id',id).single();if(sr.error)throw sr.error;const ir=await client.from('inventory_items').select('id,drug').eq('session_id',id).order('id');if(ir.error)throw ir.error;const cr=await client.from('inventory_counts').select('item_id,values,note,actual,created_at,users_email').eq('session_id',id).order('created_at',{ascending:false});if(cr.error)throw cr.error;const counts={};cr.data.forEach(c=>{if(!counts[c.item_id])counts[c.item_id]={values:c.values,note:c.note,actual:c.actual,checkedAt:c.created_at,by:c.users_email||'Thành viên'}});state={name:sr.data.name,items:ir.data.map(r=>r.drug),counts,sessionId:id,source:'cloud'};selected=0;save();renderCount();show('count');$('cloudState').textContent='Đã mở đợt '+id+' (đã tải dữ liệu mới nhất)'}catch(e){alert('Không mở được đợt. Kiểm tra mã và quyền truy cập: '+e.message)}};
+$('createCloud').onclick=async()=>{if(!user||!state.items.length)return alert('Hãy đăng nhập và nhập Excel trước');if(!confirm('Tạo đợt đồng bộ mới với '+state.items.length+' dòng?'))return;try{const {data:s,error}=await client.from('inventory_sessions').insert({name:state.name,owner_id:user.id}).select('id').single();if(error)throw error;for(let i=0;i<state.items.length;i+=200){const rows=state.items.slice(i,i+200).map(x=>({session_id:s.id,id:x.id,drug:x}));const r=await client.from('inventory_items').insert(rows);if(r.error)throw r.error}state.source='cloud';state.sessionId=s.id;state.counts={};save();$('cloudId').value=s.id;startCloudSync();alert('Đã tạo đợt đồng bộ. Mời thành viên bằng email trước khi chia sẻ mã đợt.')}catch(e){alert('Lỗi tạo đợt: '+e.message)}};
+$('joinCloud').onclick=async()=>{if(!user)return alert('Cần đăng nhập');const id=$('cloudId').value.trim();if(!id)return;try{const sr=await client.from('inventory_sessions').select('id,name').eq('id',id).single();if(sr.error)throw sr.error;const ir=await client.from('inventory_items').select('id,drug').eq('session_id',id).order('id');if(ir.error)throw ir.error;const cr=await client.from('inventory_counts').select('id,item_id,values,note,actual,created_at,users_email').eq('session_id',id).order('id',{ascending:false}).limit(5000);if(cr.error)throw cr.error;const counts={};cr.data.forEach(c=>{if(!counts[c.item_id])counts[c.item_id]={values:c.values,note:c.note,actual:c.actual,checkedAt:c.created_at,by:c.users_email||'Thành viên',version:String(c.id)}});state={name:sr.data.name,items:ir.data.map(r=>r.drug),counts,sessionId:id,source:'cloud'};selected=0;save();renderCount();show('count');startCloudSync();$('cloudState').textContent='Đã mở đợt '+id+' (đã tải dữ liệu mới nhất)'}catch(e){alert('Không mở được đợt. Kiểm tra mã và quyền truy cập: '+e.message)}};
 $('invite').onclick=async()=>{if(!user||!state.sessionId||state.source!=='cloud')return alert('Hãy mở đợt đám mây của bạn');const email=$('inviteEmail').value.trim().toLowerCase();if(!email)return;const r=await client.from('inventory_members').insert({session_id:state.sessionId,email});alert(r.error?r.error.message:'Đã cấp quyền cho '+email)};
-try{const c=JSON.parse(localStorage.getItem(CONFIG));if(c){$('sbUrl').value=c.url;$('sbKey').value=c.key;connect()}}catch{}
+try{const c=JSON.parse(localStorage.getItem(CONFIG));if(c){$('sbUrl').value=c.url;$('sbKey').value=c.key;connect().then(()=>{if(user&&state.source==='cloud'&&state.sessionId)startCloudSync()})}}catch{}
 renderStats();renderCount();
 })();
 </script></body></html>
