@@ -20,9 +20,9 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='pharmacount-v1',CONFIG='pharmacount-cloud-config';
 const newData=()=>({name:'Kiểm kê kho Dược',items:[],counts:{},sessionId:null,source:'local'});
-let state;try{state=JSON.parse(localStorage.getItem(KEY))||newData()}catch{state=newData()}
+let state;try{state=JSON.parse(localStorage.getItem(KEY))||newData();if(state.source==='cloud'){state.items=[];state.counts={}}}catch{state=newData()}
 let selected=0, draft={}, revealed=false, client=null,user=null,lock=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshBusy=false, lastCloudCountId=0;
-const save=()=>{localStorage.setItem(KEY,JSON.stringify(state));renderStats()};
+const save=()=>{const persisted=state.source==='cloud'?{name:state.name,items:[],counts:{},sessionId:state.sessionId,source:'cloud'}:state;try{localStorage.setItem(KEY,JSON.stringify(persisted))}catch(e){alert('Bộ nhớ trình duyệt đầy. Hãy sao lưu Excel và kiểm tra dữ liệu trước khi tiếp tục.')}renderStats()};
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Do not silently turn malformed Excel stock values into zero.
 const num=v=>{if(typeof v==='number')return Number.isFinite(v)?v:NaN;const raw=String(v??'').trim().replace(/\s/g,'');if(!raw)return NaN;let t=raw;if(/^\d{1,3}([.,]\d{3})+$/.test(t))t=t.replace(/[.,]/g,'');else if(t.includes(',')&&t.includes('.')){const lastComma=t.lastIndexOf(',')>t.lastIndexOf('.');t=lastComma?t.replace(/\./g,'').replace(',','.'):t.replace(/,/g,'')}else t=t.replace(',','.');const x=Number(t);return Number.isFinite(x)?x:NaN};
@@ -202,9 +202,9 @@ $('exportBtn').onclick=exportXlsx;
 function download(name,contents,type){const a=document.createElement('a'),url=URL.createObjectURL(new Blob([contents],{type}));a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 $('backupBtn').onclick=()=>download('pharmacount-backup.json',JSON.stringify(state,null,2),'application/json');
 $('restore').onchange=async e=>{try{const o=JSON.parse(await e.target.files[0].text());if(!Array.isArray(o.items)||typeof o.counts!=='object')throw Error('Bản sao lưu không hợp lệ');if(!confirm('Phục hồi sẽ thay thế dữ liệu hiện tại?'))return;state={...o,sessionId:null,source:'local'};save();renderCount();show('dashboard')}catch(err){alert(err.message)}};
-async function connect(){const url=$('sbUrl').value.trim(),key=$('sbKey').value.trim();if(!url||!key||!window.supabase)return alert('Thiếu cấu hình hoặc thư viện Supabase chưa tải.');client=window.supabase.createClient(url,key);localStorage.setItem(CONFIG,JSON.stringify({url,key}));$('cloudUi').classList.remove('hidden');const {data:{user:u}}=await client.auth.getUser();user=u;authUi();client.auth.onAuthStateChange((_event,s)=>{user=s?.user||null;authUi()})}
+async function connect(){const url=$('sbUrl').value.trim(),key=$('sbKey').value.trim();if(!url||!key||!window.supabase)return alert('Thiếu cấu hình hoặc thư viện Supabase chưa tải.');client=window.supabase.createClient(url,key);localStorage.setItem(CONFIG,JSON.stringify({url,key}));$('cloudUi').classList.remove('hidden');const {data:{user:u}}=await client.auth.getUser();user=u;authUi();client.auth.onAuthStateChange((_event,s)=>{user=s?.user||null;authUi();if(!user)stopCloudSync()})}
 function authUi(){$('authState').textContent=user?'Đăng nhập: '+user.email:'Chưa đăng nhập';$('cloudActions').classList.toggle('hidden',!user)}
-$('connect').onclick=connect;$('disconnect').onclick=async()=>{stopCloudSync();if(client)await client.auth.signOut();client=null;user=null;localStorage.removeItem(CONFIG);state.source='local';state.sessionId=null;save();$('cloudUi').classList.add('hidden');alert('Đã ngắt kết nối. Dữ liệu hiện có vẫn ở thiết bị.')};
+$('connect').onclick=connect;$('disconnect').onclick=async()=>{stopCloudSync();if(client)await client.auth.signOut();client=null;user=null;localStorage.removeItem(CONFIG);state=newData();selected=0;save();renderCount();$('cloudUi').classList.add('hidden');alert('Đã đăng xuất và xóa bản sao dữ liệu đám mây trên thiết bị này.')};
 $('login').onclick=async()=>{const email=$('email').value.trim();if(!email)return alert('Nhập email');const {error}=await client.auth.signInWithOtp({email,emailRedirectTo:location.href.split('#')[0]});alert(error?error.message:'Đã gửi liên kết đăng nhập. Kiểm tra email.')};
 $('createCloud').onclick=async()=>{if(!user||!state.items.length)return alert('Hãy đăng nhập và nhập Excel trước');if(!confirm('Tạo đợt đồng bộ mới với '+state.items.length+' dòng?'))return;try{const {data:s,error}=await client.from('inventory_sessions').insert({name:state.name,owner_id:user.id}).select('id').single();if(error)throw error;for(let i=0;i<state.items.length;i+=200){const rows=state.items.slice(i,i+200).map(x=>({session_id:s.id,id:x.id,drug:x}));const r=await client.from('inventory_items').insert(rows);if(r.error)throw r.error}state.source='cloud';state.sessionId=s.id;state.counts={};lastCloudCountId=0;save();$('cloudId').value=s.id;startCloudSync();alert('Đã tạo đợt đồng bộ. Mời thành viên bằng email trước khi chia sẻ mã đợt.')}catch(e){alert('Lỗi tạo đợt: '+e.message)}};
 $('joinCloud').onclick=async()=>{
@@ -229,7 +229,7 @@ $('joinCloud').onclick=async()=>{
  }catch(e){alert('Không mở được đợt. Kiểm tra mã và quyền truy cập: '+e.message)}
 };
 $('invite').onclick=async()=>{if(!user||!state.sessionId||state.source!=='cloud')return alert('Hãy mở đợt đám mây của bạn');const email=$('inviteEmail').value.trim().toLowerCase();if(!email)return;const r=await client.from('inventory_members').insert({session_id:state.sessionId,email});alert(r.error?r.error.message:'Đã cấp quyền cho '+email)};
-try{const c=JSON.parse(localStorage.getItem(CONFIG));if(c){$('sbUrl').value=c.url;$('sbKey').value=c.key;connect().then(()=>{if(user&&state.source==='cloud'&&state.sessionId)startCloudSync()})}}catch{}
+try{const config=JSON.parse(localStorage.getItem(CONFIG)||'null');if(config){$('sbUrl').value=config.url;$('sbKey').value=config.key}connect().then(()=>{if(user&&state.source==='cloud'&&state.sessionId){$('cloudId').value=state.sessionId;$('joinCloud').click()}})}catch{}
 renderStats();renderCount();
 })();
 </script></body></html>
