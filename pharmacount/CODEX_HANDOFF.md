@@ -55,3 +55,12 @@ The private Excel samples were inspected during development; **do not copy them 
 - The frontend saves the version originally displayed when a counting draft is opened, so background updates cannot silently replace the expected version in a concurrent save.
 - The code rejects cloud saves on expired authentication rather than storing a false success locally. On sign out, the visible cloud state is cleared.
 - The JavaScript regressions were exercised in a simulated Node API / V8 harness, 10/10 passing on the test code at that point. **GitHub Actions and 2-account browser end-to-end tests are still unverified.**
+
+## Follow-up on 23 November 2026 — invitation and access safety
+- GitHub Actions `PharmaCount safety checks` was independently confirmed to have completed successfully on earlier commit (`45082526456`). A new run is triggered for each subsequent commit; verify the newest run's conclusion before review.
+- After Supabase email OTP sign-in, users opening a `?join=<uuid>` invitation URL auto-load that session; the code validates UUID and only loads after auth. No invited user can bypass the existing RLS membership checks.
+- Users with unsynced **local** stock counts must confirm before switching to a shared run. An unauthorized external invite link must not discard local counts.
+- When a cloud invitation is revoked, `handleCloudAccessError` clears the cached/visible cloud run on 401/403/42501, while unrelated local data is retained.
+- When signing out while an RPC is in flight, the browser rechecks the authenticated user before applying the returned inventory state.
+- Regression suite includes invite auto-join, access revocation and local-data preservation. In a JavaScript mock runtime it passed **12/12** cases; GitHub Actions run status should be checked separately.
+- **Still not ready for hospital production:** Supabase Auth redirect settings require validation, GitHub Pages deployment has not been verified, live two-account test with fake stock is pending, and remaining Security Advisor warnings on the three SECURITY DEFINER functions require professional review.
