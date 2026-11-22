@@ -30,9 +30,10 @@ test('actual hospital header with strength is recognized across sheets', async (
       ['','','','','','','Chẵn','Lẻ'],[1,'TH002','Ceftriaxon 1g','Lọ','A2',46598]]
   ];
   const excelInput={files:[{name:'Dmkk t10.xlsx',arrayBuffer:async()=>new ArrayBuffer(1)}]};
+  const elements={excel:excelInput,importBtn:{}};
   const ctx={
     XLSX:{read:()=>workbook,utils:{sheet_to_json:sheet=>grids[sheet.index]}},
-    $:id=>id==='excel'?excelInput:{},
+    $:id=>elements[id]||(elements[id]={}),
     normalize:s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9]+/g,' '),
     importRows:rows=>{imported=rows},
     state:{source:'local'},alert:msg=>{alertMessage=msg}
