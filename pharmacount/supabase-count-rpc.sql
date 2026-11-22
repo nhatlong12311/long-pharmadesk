@@ -107,3 +107,57 @@ grant execute on function public.pc_submit_count(uuid,text,text,uuid,jsonb,text)
 -- Optional: to enable instant pushes in addition to the 20-second fallback,
 -- run the statement below ONCE in Supabase SQL editor:
 -- alter publication supabase_realtime add table public.inventory_counts;
+
+
+-- Create a complete inventory session as ONE PostgreSQL transaction. A failed
+-- insert of any item rolls back the session itself; no half-created inventory.
+create or replace function public.pc_create_session(
+  p_name text, p_items jsonb
+) returns uuid
+language plpgsql security invoker set search_path = ''
+as $function$
+declare
+  new_session uuid := gen_random_uuid();
+begin
+  if auth.uid() is null then
+    raise exception 'Authentication required' using errcode = '42501';
+  end if;
+  if p_name is null or length(btrim(p_name)) < 3 or length(p_name) > 140 then
+    raise exception 'Invalid inventory session title';
+  end if;
+  if jsonb_typeof(p_items) is distinct from 'array'
+     or jsonb_array_length(p_items) < 1
+     or jsonb_array_length(p_items) > 20000 then
+    raise exception 'Inventory item count out of range';
+  end if;
+  if exists (
+    select 1 from jsonb_array_elements(p_items) as item
+    where jsonb_typeof(item) is distinct from 'object'
+       or length(coalesce(item->>'id','')) < 1
+       or length(coalesce(item->>'id','')) > 200
+       or length(coalesce(item->>'name','')) < 1
+       or length(coalesce(item->>'code','')) < 1
+       or jsonb_typeof(item->'pack') is distinct from 'array'
+  ) then
+    raise exception 'Invalid item id, name, code or packaging';
+  end if;
+  if exists (
+    select 1 from jsonb_array_elements(p_items) as item
+    group by item->>'id' having count(*) > 1
+  ) then
+    raise exception 'Duplicate item IDs in inventory upload';
+  end if;
+
+  insert into public.inventory_sessions(id,name,owner_id)
+  values (new_session,btrim(p_name),auth.uid());
+
+  insert into public.inventory_items(session_id,id,drug)
+  select new_session,item->>'id',item
+  from jsonb_array_elements(p_items) as item;
+
+  return new_session;
+end
+$function$;
+
+revoke all on function public.pc_create_session(text,jsonb) from public, anon;
+grant execute on function public.pc_create_session(text,jsonb) to authenticated;
