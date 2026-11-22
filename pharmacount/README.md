@@ -70,3 +70,11 @@
 6. Audit bảo mật trước khi sử dụng trong bệnh viện.
 
 Phần mềm quản lý kho gốc vẫn là nguồn số liệu chính. PharmaCount chỉ là công cụ ghi nhận, đối chiếu và lập báo cáo; không tự sửa tồn trong phần mềm bệnh viện.
+
+
+### Cập nhật quyền thành viên và đồng bộ (23/11/2026)
+- Trong Supabase, với dự án tạo mới, áp dụng SQL theo thứ tự: `supabase.sql`, `supabase-count-rpc.sql`, `supabase-latest-counts.sql`, `supabase-team-permissions.sql`. Dự án Supabase PharmaCount hiện có đã được áp dụng các bản bổ sung.
+- Trưởng nhóm mời nhân viên theo email, dùng nút **Sao chép liên kết cho thành viên** để chia sẻ URL có `?join=<UUID>`. Liên kết không tự cấp quyền; chỉ email đã được mời và đăng nhập mới được xem/sửa.
+- Trong **Xuất / Đồng bộ**, chọn **Xem thành viên đã được mời** để xem danh sách. **Chỉ chủ đợt** mới thấy nút **Thu hồi quyền** và được RLS cho phép xóa quyền mời.
+- `pc_latest_counts` đọc bản ghi cuối cùng theo từng mã dòng thuốc, phân trang 500. Không sử dụng cursor ID toàn cục vì giao dịch có thể hoàn tất lệch thứ tự.
+- Nếu mất đăng nhập, ứng dụng phải báo lỗi khi lưu cloud, không được báo nhầm là đã đồng bộ.
