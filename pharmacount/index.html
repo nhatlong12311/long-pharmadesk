@@ -42,6 +42,82 @@ return{id:'r'+i+'_'+normalize(code)+'_'+normalize(lot)+'_'+normalize(shelf),name
 function importRows(rows){if(!Array.isArray(rows)||!rows.length)throw Error('Excel không có dữ liệu.');const headers=Object.keys(rows[0]);const has=(aliases)=>headers.some(h=>aliases.some(a=>normalize(h)===normalize(a)||normalize(h).includes(normalize(a))));if(!has(['Tên thuốc','Tên hàng','Tên dược phẩm','Tên vật tư','Tên sản phẩm','Tên'])&&!has(['Mã thuốc','Mã hàng','Mã dược','Mã sản phẩm','Mã']))throw Error('Không nhận diện được cột tên/mã thuốc. Hãy kiểm tra hàng tiêu đề.');const hasStock=has(['Số lượng tồn','SL tồn','Tồn cuối','Tồn kho','Số lượng']);const items=parseRows(rows);if(!items.length)throw Error('Không tìm thấy dữ liệu thuốc. Kiểm tra hàng tiêu đề Excel.');const invalid=items.filter(x=>x.stock!==null&&(!Number.isFinite(x.stock)||x.stock<0||!Number.isInteger(x.stock)));if(invalid.length)throw Error('Có '+invalid.length+' dòng tồn kho âm, thiếu, không hợp lệ hoặc không nguyên. Ví dụ: '+invalid.slice(0,3).map(x=>x.name+' ('+String(x.stock)+')').join(', ')+'. Hãy sửa file trước khi nhập.');const ids=new Set();const collisions=[];for(const x of items){const identity=[normalize(x.code||x.name),normalize(x.lot),normalize(x.shelf),normalize(x.packText)].join('|');if(ids.has(identity))collisions.push(x);ids.add(identity)}if(collisions.length)throw Error('Có '+collisions.length+' dòng trùng thuốc/mã/lô/kệ/quy cách, ví dụ '+collisions[0].name+'. Hãy phân biệt các dòng nguồn trước khi nhập để tránh đếm trùng.');const preview=items.slice(0,20).map((x,i)=>(i+1)+'. '+x.name+' | '+x.code+' | tồn '+(x.stock===null?'chưa có':x.stock)+' | '+x.shelf+' | '+(x.pack.length>1?'hộp ×'+x.pack[0].factor:'chưa có hệ số hộp')).join('\n');if(!confirm('XEM TRƯỚC '+Math.min(items.length,20)+'/'+items.length+' DÒNG\n\n'+preview+'\n\n'+(!hasStock?'Danh mục không có tồn máy; KHÔNG tự kết luận chênh lệch.\n':'')+'Kiểm tra mã, lô, tồn và hệ số quy đổi. Tiếp tục nhập?'))return;if(state.items.length&&!confirm('Thay danh mục hiện tại và xóa kết quả đã nhập trên thiết bị? Hãy sao lưu JSON/Excel trước.'))return;if(state.source==='cloud')throw Error('Đang tham gia đợt chung. Hãy ngắt kết nối trước khi thay danh mục.');state.items=items;state.counts={};state.sessionId=null;state.source='local';selected=0;save();renderCount();$('importInfo').textContent='Đã nhận '+items.length+' dòng. Cần kiểm tra tên cột, tồn máy và hệ số quy đổi trước khi sử dụng.';show('count')}
 $('importBtn').onclick=async()=>{try{if(state.source==='cloud')throw Error('Không nhập danh mục khi đang trong đợt chung. Hãy xuất dữ liệu trước và tạo đợt riêng.');const file=$('excel').files[0];if(!file)throw Error('Chọn file Excel trước.');if(typeof XLSX==='undefined')throw Error('Không tải được thư viện Excel. Cần kết nối Internet lần đầu.');const book=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false});let rows=[];for(const sheetName of book.SheetNames){const sheet=book.Sheets[sheetName];const grid=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});const header=grid.findIndex(r=>Array.isArray(r)&&r.some(x=>normalize(x)==='ma duoc')&&r.some(x=>normalize(x)==='ten thuoc'));if(header>=0){for(let i=header+2;i<grid.length;i++){const r=grid[i];if(!r||!String(r[1]||'').trim()||!String(r[2]||'').trim())continue;rows.push({'Mã dược':r[1],'Tên thuốc':r[2],'ĐVT':r[3],'Số lô':r[4],'Hạn dùng':r[5],'Kệ':sheetName,'Dòng nguồn':i+1,'Chẵn file gốc':r[6],'Lẻ file gốc':r[7]})}}else{for(const x of XLSX.utils.sheet_to_json(sheet,{defval:''}))if(Object.keys(x).some(k=>['ma duoc','ma thuoc','ten thuoc','ten hang'].includes(normalize(k).trim())))rows.push({...x,'Kệ':field(x,['Vị trí kệ','Vị trí','Kệ'])||sheetName})}}importRows(rows)}catch(e){alert(e.message)}};
 $('sampleBtn').onclick=()=>importRows([{'Mã thuốc':'TH001','Tên thuốc':'Paracetamol 500 mg','Tồn kho':2740,'ĐVT':'viên','Kệ':'A-03','Số đơn vị/hộp':100},{'Mã thuốc':'TH002','Tên thuốc':'Ceftriaxon 1 g','Tồn kho':520,'ĐVT':'lọ','Kệ':'A-04','Số đơn vị/hộp':10},{'Mã thuốc':'TH003','Tên thuốc':'Omeprazol 20 mg','Tồn kho':1260,'ĐVT':'viên','Kệ':'B-02','Số đơn vị/hộp':140}]);
+$('mergePacks').onclick = async () => {
+  if (state.source === 'cloud') return alert('Chỉ trưởng nhóm được ghép quy cách trước khi tạo đợt kiểm chung.');
+  if (!state.items.length) return alert('Hãy nhập danh mục kiểm kê trước.');
+  const file = $('packExcel').files[0];
+  if (!file || !file.name.toLowerCase().endsWith('.xlsx')) return alert('Hãy chọn danh mục quy cách .xlsx');
+  const status = $('packInfo');
+  const button = $('mergePacks');
+  button.disabled = true;
+  let worker;
+  let timeout;
+  try {
+    const buffer = await file.arrayBuffer();
+    const result = await new Promise((resolve, reject) => {
+      worker = new Worker('./pack-worker.js');
+      timeout = setTimeout(() => reject(Error('Đọc file quá lâu. Hãy lưu lại .xlsx chỉ có bảng danh mục và thử lại.')), 120000);
+      worker.onmessage = e => {
+        if (e.data.type === 'progress') status.textContent = e.data.message;
+        else if (e.data.type === 'done') resolve(e.data);
+        else if (e.data.type === 'error') reject(Error(e.data.message));
+      };
+      worker.onerror = e => reject(Error('Không thể xử lý Excel nền: ' + e.message));
+      status.textContent = 'Đang quét danh mục quy cách...';
+      worker.postMessage({ buffer, codes: [...new Set(state.items.map(i => i.code))] }, [buffer]);
+    });
+    if (!result.identifiedSheets) throw Error('Không nhận diện được cột MÃ và QUY CÁCH ĐÓNG GÓI.');
+    const normalized = s => normalize(s).trim();
+    const map = new Map();
+    for (const item of result.entries) {
+      const key = normalized(item.code);
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(item);
+    }
+    let matched = 0, ambiguous = 0, unknown = 0, preserved = 0;
+    const next = state.items.map(item => {
+      if (state.counts[item.id]) { preserved++; return item; }
+      const options = map.get(normalized(item.code)) || [];
+      if (!options.length) return item;
+      const unique = [...new Map(options.map(p => [normalized(p.packText) + ':' + p.factor, p])).values()];
+      if (unique.length !== 1) { ambiguous++; return item; }
+      const pack = unique[0];
+      matched++;
+      if (!pack.factor) unknown++;
+      return {
+        ...item,
+        packText: pack.packText || item.packText,
+        pack: pack.factor > 0
+          ? [{ name: 'Hộp', factor: pack.factor }, { name: 'Đơn vị lẻ', factor: 1 }]
+          : [{ name: 'Đơn vị lẻ', factor: 1 }]
+      };
+    });
+    if (!matched) throw Error('Đã quét ' + result.scanned + ' dòng nhưng không tìm thấy mã trùng với danh mục kiểm kê.');
+    if (confirm('Đã quét ' + result.scanned.toLocaleString('vi-VN') + ' dòng.\n'
+      + 'Khớp mã: ' + matched + '. Hệ số chưa rõ: ' + unknown + '.\n'
+      + 'Có nhiều quy cách: ' + ambiguous + '. Đã có số kiểm nên giữ nguyên: ' + preserved + '.\n\n'
+      + 'Cập nhật quy cách cho các dòng chưa kiểm?')) {
+      state.items = next;
+      save(); renderCount();
+      status.textContent = 'Đã ghép quy cách cho ' + matched + ' dòng; ' + (unknown + ambiguous) + ' dòng cần kiểm tra hệ số.';
+    } else {
+      status.textContent = 'Đã hủy, dữ liệu không thay đổi.';
+    }
+  } catch (error) { status.textContent = 'Lỗi: ' + error.message; }
+  finally { clearTimeout(timeout); if (worker) worker.terminate(); button.disabled = false; }
+};
+$('setPackFactor').onclick = () => {
+  if (state.source === 'cloud') return alert('Chỉ trưởng nhóm được sửa quy cách trước khi tạo đợt kiểm chung.');
+  const item = state.items[selected];
+  if (!item) return;
+  if (state.counts[item.id]) return alert('Thuốc đã đếm, không đổi hệ số. Hãy tạo đợt mới nếu quy cách chưa đúng.');
+  const entered = prompt('Số ' + item.unit + ' trong 1 hộp đối với ' + item.name + ':', item.pack.find(p=>p.name==='Hộp')?.factor || '');
+  if (entered === null) return;
+  const factor = Number(entered);
+  if (!Number.isSafeInteger(factor) || factor < 1 || factor > 100000000) return alert('Hệ số hộp phải là số nguyên dương hợp lệ.');
+  item.pack = [{name:'Hộp',factor}, {name:'Đơn vị lẻ',factor:1}];
+  save(); selectItem(selected);
+};
 function selectItem(i){selected=i;const item=state.items[i];const saved=latest(i);draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));revealed=!!saved;renderEditor()}
 function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].sort();const old=$('shelfFilter').value;$('shelfFilter').innerHTML='<option value="">Tất cả kệ</option>'+shelves.map(s=>'<option value="'+safe(s)+'">'+safe(s)+'</option>').join('');$('shelfFilter').value=shelves.includes(old)?old:'';renderResults();if(state.items.length)selectItem(Math.min(selected,state.items.length-1));else{$('drugTitle').textContent='Chưa có danh mục';$('drugMeta').textContent='Hãy nhập Excel ở Tổng quan';$('quantityInputs').innerHTML='';$('confirm').disabled=true}}
 function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFilter').value,shelf=$('shelfFilter').value;let ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return(!q||normalize([x.name,x.code,x.lot,x.shelf].join(' ')).includes(q))&&(!shelf||x.shelf===shelf)&&(!f||f==='pending'&&!c||f==='diff'&&diff||f==='ok'&&c&&!diff)});$('results').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return '<div class="item" tabindex="0" data-i="'+i+'"><b>'+safe(x.name)+'</b> <span class="pill '+(c?(x.stock===null?'warning':diff?'bad':'ok'):'')+'">'+(c?(x.stock===null?'Đã kiểm':diff?'Lệch':'Khớp'):'Chưa kiểm')+'</span><div class="muted">'+safe(x.code)+' · '+safe(x.shelf)+' · '+safe(x.lot)+'</div></div>'}).join(''):'<p class="muted">Không có dòng phù hợp.</p>';$('results').querySelectorAll('[data-i]').forEach(el=>{el.onclick=()=>selectItem(Number(el.dataset.i));el.onkeydown=e=>{if(e.key==='Enter')el.click()}})}
