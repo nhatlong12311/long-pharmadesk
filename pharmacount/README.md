@@ -78,3 +78,10 @@ Phần mềm quản lý kho gốc vẫn là nguồn số liệu chính. PharmaCo
 - Trong **Xuất / Đồng bộ**, chọn **Xem thành viên đã được mời** để xem danh sách. **Chỉ chủ đợt** mới thấy nút **Thu hồi quyền** và được RLS cho phép xóa quyền mời.
 - `pc_latest_counts` đọc bản ghi cuối cùng theo từng mã dòng thuốc, phân trang 500. Không sử dụng cursor ID toàn cục vì giao dịch có thể hoàn tất lệch thứ tự.
 - Nếu mất đăng nhập, ứng dụng phải báo lỗi khi lưu cloud, không được báo nhầm là đã đồng bộ.
+
+
+### Chốt đợt kiểm kê (mới)
+- Chỉ tài khoản **chủ đợt** nhìn thấy nút **Chốt và khóa đợt kiểm kê**. Phải kiểm đủ mọi dòng thuốc trong danh mục để chốt; nếu còn thiếu, PostgreSQL sẽ từ chối.
+- Sau khi chốt, đợt vẫn xem được và có thể xuất Excel nhưng **không thể sửa hoặc thêm số đếm**, kể cả khi gửi dữ liệu trực tiếp tới Supabase.
+- Khi thiết lập một Supabase mới, áp dụng thêm `supabase-finalization.sql` rồi `supabase-finalization-item-guard.sql` sau các migration trước đó. Hai bản migration đã được áp dụng vào dự án PharmaCount hiện có.
+- Chưa thử luồng chốt với 2 tài khoản thực, nên chỉ sử dụng dữ liệu giả để kiểm tra trước khi chạy công việc bệnh viện.
