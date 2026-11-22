@@ -21,7 +21,7 @@
 const $=id=>document.getElementById(id),KEY='pharmacount-v1',CONFIG='pharmacount-cloud-config';
 const newData=()=>({name:'Kiểm kê kho Dược',items:[],counts:{},sessionId:null,source:'local'});
 let state;try{state=JSON.parse(localStorage.getItem(KEY))||newData()}catch{state=newData()}
-let selected=0, draft={}, revealed=false, client=null,user=null,lock=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshBusy=false;
+let selected=0, draft={}, revealed=false, client=null,user=null,lock=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshBusy=false, lastCloudCountId=0;
 const save=()=>{localStorage.setItem(KEY,JSON.stringify(state));renderStats()};
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Do not silently turn malformed Excel stock values into zero.
@@ -32,8 +32,8 @@ const latest=i=>state.counts[state.items[i]?.id];
 const show=(id)=>{document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.id===id));document.querySelectorAll('[data-tab]').forEach(el=>el.classList.toggle('active',el.dataset.tab===id));if(id==='count')renderCount();if(id==='review')renderReview();if(id==='dashboard')renderStats()};
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>show(b.dataset.tab));
 function renderStats(){const done=state.items.filter(x=>state.counts[x.id]);const diff=done.filter(x=>x.stock!==null&&sum(x,state.counts[x.id].values)!==x.stock);$('sAll').textContent=state.items.length;$('sDone').textContent=done.length;$('sDiff').textContent=diff.length;$('sLeft').textContent=state.items.length-done.length;$('sessionName').value=state.name;$('sessionId').textContent=state.sessionId?'Mã đợt: '+state.sessionId:'Dữ liệu trên thiết bị này';$('mode').textContent=state.source==='cloud'?'☁ Đồng bộ đám mây':'◉ Chỉ lưu cục bộ'}
-$('saveName').onclick=()=>{state.name=$('sessionName').value.trim()||'Kiểm kê kho Dược';save();alert('Đã lưu tên đợt')};
-$('newLocal').onclick=()=>{stopCloudSync();if(!confirm('Tạo đợt mới? Danh mục và kết quả cục bộ hiện tại sẽ được thay thế. Hãy xuất bản sao lưu trước.'))return;state=newData();selected=0;save();renderCount()};
+$('saveName').onclick=()=>{if(state.source==='cloud')return alert('Tên đợt chung chỉ được đổi bởi trưởng nhóm trên máy chủ.');state.name=$('sessionName').value.trim()||'Kiểm kê kho Dược';save();alert('Đã lưu tên đợt')};
+$('newLocal').onclick=()=>{if(!confirm('Tạo đợt mới? Danh mục và kết quả cục bộ hiện tại sẽ được thay thế. Hãy xuất bản sao lưu trước.'))return;stopCloudSync();state=newData();selected=0;save();renderCount()};
 function normalize(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9]+/g,' ')}
 function field(o,aliases){let keys=Object.keys(o);for(const a of aliases){const k=keys.find(k=>normalize(k)===normalize(a));if(k)return o[k]}for(const a of aliases){const k=keys.find(k=>normalize(k).includes(normalize(a)));if(k)return o[k]}return''}
 function parseRows(rows){return rows.map((r,i)=>{const name=field(r,['Tên thuốc','Tên hàng','Tên dược phẩm','Tên vật tư','Tên sản phẩm','Tên']);const code=field(r,['Mã thuốc','Mã hàng','Mã dược','Mã sản phẩm','Mã']);const lot=field(r,['Số lô','Lô','Batch']);const expiry=field(r,['Hạn dùng','HSD','Ngày hết hạn']);const shelf=field(r,['Vị trí kệ','Vị trí','Kệ','Location'])||'Chưa phân kệ';const unit=field(r,['Đơn vị tính','ĐVT','Đơn vị'])||'đơn vị';const rawStock=field(r,['Số lượng tồn','SL tồn','Tồn cuối','Tồn kho','Số lượng']);const stock=String(rawStock).trim()===''?null:num(rawStock);const packText=field(r,['Quy cách đóng gói','Quy cách','Đóng gói']);const factor=integer(field(r,['Số đơn vị/hộp','Hệ số quy đổi','Quy đổi']));if(!String(name).trim()&&!String(code).trim())return null;
@@ -138,7 +138,19 @@ async function cloudWrite(x,record){
    throw Error('Thuốc vừa được thành viên khác kiểm. Đã tải kết quả mới nhất; vui lòng kiểm tra rồi nhập lại.');
  }
  if(data?.status!=='saved'||!data.version)throw Error('Máy chủ chưa xác nhận lưu số đếm');
+ lastCloudCountId=Math.max(lastCloudCountId,Number(data.version));
  return data.version;
+}
+async function fetchCloudRows(table,columns,id,orderColumn,ascending=true){
+ const records=[],pageSize=750,maxRows=50000;
+ for(let offset=0;offset<maxRows;offset+=pageSize){
+  const {data,error}=await client.from(table).select(columns).eq('session_id',id)
+    .order(orderColumn,{ascending}).range(offset,offset+pageSize-1);
+  if(error)throw error;
+  records.push(...data);
+  if(data.length<pageSize)return records;
+ }
+ throw Error('Đợt kiểm vượt giới hạn 50.000 bản ghi; cần phân trang trên máy chủ.');
 }
 async function refreshCloudCounts(force=false){
  if(!client||!user||state.source!=='cloud'||!state.sessionId||cloudRefreshBusy)return;
@@ -146,15 +158,26 @@ async function refreshCloudCounts(force=false){
  if(!force&&(lock||document.activeElement?.closest('#editor')))return;
  cloudRefreshBusy=true;
  try{
-  const {data,error}=await client.from('inventory_counts')
-    .select('id,item_id,values,note,actual,created_at,users_email')
-    .eq('session_id',state.sessionId).order('id',{ascending:false}).limit(5000);
-  if(error)throw error;
-  const next={};
-  for(const r of data){if(!next[r.item_id])next[r.item_id]={values:r.values,note:r.note,actual:r.actual,checkedAt:r.created_at,by:r.users_email||'Thành viên',version:String(r.id)}}
-  state.counts=next;save();renderResults();renderStats();
-  if(document.getElementById('review').classList.contains('active'))renderReview();
-  $('cloudState').textContent='Đã cập nhật kết quả chung lúc '+new Date().toLocaleTimeString('vi-VN');
+  let newCount=0;
+  for(let offset=0;offset<5000;offset+=750){
+   const {data,error}=await client.from('inventory_counts')
+     .select('id,item_id,values,note,actual,created_at,users_email')
+     .eq('session_id',state.sessionId).gt('id',lastCloudCountId)
+     .order('id',{ascending:true}).range(0,749);
+   if(error)throw error;
+   if(!data.length)break;
+   for(const r of data){
+     state.counts[r.item_id]={values:r.values,note:r.note,actual:r.actual,
+       checkedAt:r.created_at,by:r.users_email||'Thành viên',version:String(r.id)};
+     lastCloudCountId=Math.max(lastCloudCountId,Number(r.id));
+     newCount++;
+   }
+   if(data.length<750)break;
+  }
+  if(newCount){save();renderResults();renderStats();
+   if(document.getElementById('review').classList.contains('active'))renderReview();
+   $('cloudState').textContent='Đã nhận '+newCount+' lượt đếm, lúc '+new Date().toLocaleTimeString('vi-VN');
+  }
  }catch(e){$('cloudState').textContent='Chưa cập nhật được kết quả chung: '+e.message}
  finally{cloudRefreshBusy=false}
 }
@@ -183,8 +206,28 @@ async function connect(){const url=$('sbUrl').value.trim(),key=$('sbKey').value.
 function authUi(){$('authState').textContent=user?'Đăng nhập: '+user.email:'Chưa đăng nhập';$('cloudActions').classList.toggle('hidden',!user)}
 $('connect').onclick=connect;$('disconnect').onclick=async()=>{stopCloudSync();if(client)await client.auth.signOut();client=null;user=null;localStorage.removeItem(CONFIG);state.source='local';state.sessionId=null;save();$('cloudUi').classList.add('hidden');alert('Đã ngắt kết nối. Dữ liệu hiện có vẫn ở thiết bị.')};
 $('login').onclick=async()=>{const email=$('email').value.trim();if(!email)return alert('Nhập email');const {error}=await client.auth.signInWithOtp({email,emailRedirectTo:location.href.split('#')[0]});alert(error?error.message:'Đã gửi liên kết đăng nhập. Kiểm tra email.')};
-$('createCloud').onclick=async()=>{if(!user||!state.items.length)return alert('Hãy đăng nhập và nhập Excel trước');if(!confirm('Tạo đợt đồng bộ mới với '+state.items.length+' dòng?'))return;try{const {data:s,error}=await client.from('inventory_sessions').insert({name:state.name,owner_id:user.id}).select('id').single();if(error)throw error;for(let i=0;i<state.items.length;i+=200){const rows=state.items.slice(i,i+200).map(x=>({session_id:s.id,id:x.id,drug:x}));const r=await client.from('inventory_items').insert(rows);if(r.error)throw r.error}state.source='cloud';state.sessionId=s.id;state.counts={};save();$('cloudId').value=s.id;startCloudSync();alert('Đã tạo đợt đồng bộ. Mời thành viên bằng email trước khi chia sẻ mã đợt.')}catch(e){alert('Lỗi tạo đợt: '+e.message)}};
-$('joinCloud').onclick=async()=>{if(!user)return alert('Cần đăng nhập');const id=$('cloudId').value.trim();if(!id)return;try{const sr=await client.from('inventory_sessions').select('id,name').eq('id',id).single();if(sr.error)throw sr.error;const ir=await client.from('inventory_items').select('id,drug').eq('session_id',id).order('id');if(ir.error)throw ir.error;const cr=await client.from('inventory_counts').select('id,item_id,values,note,actual,created_at,users_email').eq('session_id',id).order('id',{ascending:false}).limit(5000);if(cr.error)throw cr.error;const counts={};cr.data.forEach(c=>{if(!counts[c.item_id])counts[c.item_id]={values:c.values,note:c.note,actual:c.actual,checkedAt:c.created_at,by:c.users_email||'Thành viên',version:String(c.id)}});state={name:sr.data.name,items:ir.data.map(r=>r.drug),counts,sessionId:id,source:'cloud'};selected=0;save();renderCount();show('count');startCloudSync();$('cloudState').textContent='Đã mở đợt '+id+' (đã tải dữ liệu mới nhất)'}catch(e){alert('Không mở được đợt. Kiểm tra mã và quyền truy cập: '+e.message)}};
+$('createCloud').onclick=async()=>{if(!user||!state.items.length)return alert('Hãy đăng nhập và nhập Excel trước');if(!confirm('Tạo đợt đồng bộ mới với '+state.items.length+' dòng?'))return;try{const {data:s,error}=await client.from('inventory_sessions').insert({name:state.name,owner_id:user.id}).select('id').single();if(error)throw error;for(let i=0;i<state.items.length;i+=200){const rows=state.items.slice(i,i+200).map(x=>({session_id:s.id,id:x.id,drug:x}));const r=await client.from('inventory_items').insert(rows);if(r.error)throw r.error}state.source='cloud';state.sessionId=s.id;state.counts={};lastCloudCountId=0;save();$('cloudId').value=s.id;startCloudSync();alert('Đã tạo đợt đồng bộ. Mời thành viên bằng email trước khi chia sẻ mã đợt.')}catch(e){alert('Lỗi tạo đợt: '+e.message)}};
+$('joinCloud').onclick=async()=>{
+ if(!user)return alert('Cần đăng nhập');
+ const id=$('cloudId').value.trim();if(!id)return;
+ try{
+  const sr=await client.from('inventory_sessions').select('id,name').eq('id',id).single();if(sr.error)throw sr.error;
+  const items=await fetchCloudRows('inventory_items','id,drug',id,'id');
+  const records=await fetchCloudRows('inventory_counts','id,item_id,values,note,actual,created_at,users_email',id,'id',false);
+  const counts={};lastCloudCountId=0;
+  for(const r of records){
+   lastCloudCountId=Math.max(lastCloudCountId,Number(r.id));
+   if(!counts[r.item_id])counts[r.item_id]={
+    values:r.values,note:r.note,actual:r.actual,checkedAt:r.created_at,
+    by:r.users_email||'Thành viên',version:String(r.id)
+   };
+  }
+  stopCloudSync();
+  state={name:sr.data.name,items:items.map(r=>r.drug),counts,sessionId:id,source:'cloud'};
+  selected=0;save();renderCount();show('count');startCloudSync();
+  $('cloudState').textContent='Đã mở đợt '+id+' với '+state.items.length+' dòng và '+Object.keys(counts).length+' thuốc đã kiểm.';
+ }catch(e){alert('Không mở được đợt. Kiểm tra mã và quyền truy cập: '+e.message)}
+};
 $('invite').onclick=async()=>{if(!user||!state.sessionId||state.source!=='cloud')return alert('Hãy mở đợt đám mây của bạn');const email=$('inviteEmail').value.trim().toLowerCase();if(!email)return;const r=await client.from('inventory_members').insert({session_id:state.sessionId,email});alert(r.error?r.error.message:'Đã cấp quyền cho '+email)};
 try{const c=JSON.parse(localStorage.getItem(CONFIG));if(c){$('sbUrl').value=c.url;$('sbKey').value=c.key;connect().then(()=>{if(user&&state.source==='cloud'&&state.sessionId)startCloudSync()})}}catch{}
 renderStats();renderCount();
