@@ -241,7 +241,29 @@ async function connect(){const url=$('sbUrl').value.trim(),key=$('sbKey').value.
 function authUi(){$('authState').textContent=user?'Đăng nhập: '+user.email:'Chưa đăng nhập';$('cloudActions').classList.toggle('hidden',!user)}
 $('connect').onclick=connect;$('disconnect').onclick=async()=>{stopCloudSync();pendingCountOperation=null;if(client)await client.auth.signOut();client=null;user=null;localStorage.removeItem(CONFIG);state=newData();selected=0;save();renderCount();$('cloudUi').classList.add('hidden');alert('Đã đăng xuất và xóa bản sao dữ liệu đám mây trên thiết bị này.')};
 $('login').onclick=async()=>{const email=$('email').value.trim();if(!email)return alert('Nhập email');const {error}=await client.auth.signInWithOtp({email,emailRedirectTo:location.href.split('#')[0]});alert(error?error.message:'Đã gửi liên kết đăng nhập. Kiểm tra email.')};
-$('createCloud').onclick=async()=>{if(!user||!state.items.length)return alert('Hãy đăng nhập và nhập Excel trước');if(!confirm('Tạo đợt đồng bộ mới với '+state.items.length+' dòng?'))return;try{const {data:s,error}=await client.from('inventory_sessions').insert({name:state.name,owner_id:user.id}).select('id').single();if(error)throw error;for(let i=0;i<state.items.length;i+=200){const rows=state.items.slice(i,i+200).map(x=>({session_id:s.id,id:x.id,drug:x}));const r=await client.from('inventory_items').insert(rows);if(r.error)throw r.error}state.source='cloud';state.sessionId=s.id;state.counts={};lastCloudCountId=0;save();$('cloudId').value=s.id;startCloudSync();alert('Đã tạo đợt đồng bộ. Mời thành viên bằng email trước khi chia sẻ mã đợt.')}catch(e){alert('Lỗi tạo đợt: '+e.message)}};
+$('createCloud').onclick=async()=>{
+ if(!user||!state.items.length)return alert('Hãy đăng nhập và nhập Excel trước.');
+ if(state.source==='cloud')return alert('Bạn đang tham gia một đợt chung. Vui lòng mở đợt mới từ dữ liệu cục bộ khác.');
+ const bad=state.items.filter(x=>!x.code||!x.name||!x.id);
+ if(bad.length)return alert('Danh mục có '+bad.length+' dòng thiếu mã/tên/ID. Hãy sửa trước khi tạo đợt.');
+ if(!confirm('Tạo đợt kiểm chung từ '+state.items.length+' dòng?\nDanh mục sẽ được ghi lên Supabase trong một giao dịch.'))return;
+ const button=$('createCloud');button.disabled=true;
+ $('cloudState').textContent='Đang tạo đợt kiểm chung trên máy chủ...';
+ try{
+  const {data:id,error}=await client.rpc('pc_create_session',{
+   p_name:state.name,p_items:state.items
+  });
+  if(error)throw error;
+  if(!id)throw Error('Máy chủ chưa trả mã đợt kiểm kê');
+  state.source='cloud';state.sessionId=id;state.counts={};lastCloudCountId=0;save();
+  $('cloudId').value=id;startCloudSync();
+  $('cloudState').textContent='Đã tạo đợt '+id+' gồm '+state.items.length+' thuốc. Hãy mời thành viên.';
+  alert('Tạo thành công đợt '+id+'. Mời nhân viên trước khi chia sẻ mã đợt.');
+ }catch(e){
+  $('cloudState').textContent='Chưa tạo được đợt: '+e.message;
+  alert('Không tạo được đợt kiểm chung: '+e.message);
+ }finally{button.disabled=false}
+};
 $('joinCloud').onclick=async()=>{
  if(!user)return alert('Cần đăng nhập');
  const id=$('cloudId').value.trim();if(!id)return;
