@@ -71,6 +71,17 @@ def prepare_browser_data(pure):
         del sys.path[:len(paths)]
 
 
+def copy_pharmacount(output):
+    """Publish only the two browser assets, never private test/SQL/doc files."""
+    source = ROOT / "pharmacount"
+    if not (source / "index.html").is_file():
+        return
+    target = output / "pharmacount"
+    target.mkdir(parents=True, exist_ok=True)
+    for filename in ("index.html", "pack-worker.js"):
+        shutil.copyfile(source / filename, target / filename)
+
+
 def build(output):
     requirements = WEB / "requirements.txt"
     runtime_version = sha256(
@@ -132,6 +143,7 @@ def build(output):
     beta = (ROOT / "docs" / "browser.html").read_text(encoding="utf-8")
     (output / "browser.html").write_text(beta.replace(SHEETJS + "dist/xlsx.full.min.js", "./xlsx.full.min.js"), encoding="utf-8")
     (output / ".nojekyll").touch()
+    copy_pharmacount(output)
 
 
 def build_ui(output, script, *, server=False):
@@ -171,6 +183,7 @@ def build_server(output):
     portfolio = (ROOT / "portfolio.html").read_text(encoding="utf-8")
     portfolio = portfolio.replace('href="/tools?view=clinical&amp;module=', 'href="/?module=')
     (output / "portfolio.html").write_text(portfolio, encoding="utf-8")
+    copy_pharmacount(output)
 
 
 if __name__ == "__main__":
