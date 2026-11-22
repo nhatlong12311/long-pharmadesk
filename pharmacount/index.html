@@ -21,7 +21,7 @@
 const $=id=>document.getElementById(id),KEY='pharmacount-v1',CONFIG='pharmacount-cloud-config';
 const newData=()=>({name:'Kiểm kê kho Dược',items:[],counts:{},sessionId:null,source:'local'});
 let state;try{state=JSON.parse(localStorage.getItem(KEY))||newData();if(state.source==='cloud'){state.items=[];state.counts={}}}catch{state=newData()}
-let selected=0, draft={}, revealed=false, client=null,user=null,lock=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshBusy=false, lastCloudCountId=0, pendingCountOperation=null, packIssues=[];
+let selected=0, draft={}, draftVersion=null, revealed=false, client=null,user=null,lock=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshBusy=false, lastCloudCountId=0, pendingCountOperation=null, packIssues=[];
 const save=()=>{const persisted=state.source==='cloud'?{name:state.name,items:[],counts:{},sessionId:state.sessionId,source:'cloud'}:state;try{localStorage.setItem(KEY,JSON.stringify(persisted))}catch(e){alert('Bộ nhớ trình duyệt đầy. Hãy sao lưu Excel và kiểm tra dữ liệu trước khi tiếp tục.')}renderStats()};
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Do not silently turn malformed Excel stock values into zero.
@@ -134,15 +134,15 @@ $('setPackFactor').onclick = () => {
   item.pack = [{name:'Hộp',factor}, {name:'Đơn vị lẻ',factor:1}];
   save(); selectItem(selected);
 };
-function selectItem(i){selected=i;const item=state.items[i];const saved=latest(i);draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));revealed=!!saved;renderEditor()}
+function selectItem(i){selected=i;const item=state.items[i];const saved=latest(i);draftVersion=saved?.version||null;draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));revealed=!!saved;renderEditor()}
 function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].sort();const old=$('shelfFilter').value;$('shelfFilter').innerHTML='<option value="">Tất cả kệ</option>'+shelves.map(s=>'<option value="'+safe(s)+'">'+safe(s)+'</option>').join('');$('shelfFilter').value=shelves.includes(old)?old:'';renderResults();if(state.items.length)selectItem(Math.min(selected,state.items.length-1));else{$('drugTitle').textContent='Chưa có danh mục';$('drugMeta').textContent='Hãy nhập Excel ở Tổng quan';$('quantityInputs').innerHTML='';$('confirm').disabled=true}}
 function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFilter').value,shelf=$('shelfFilter').value;let ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return(!q||normalize([x.name,x.code,x.lot,x.shelf].join(' ')).includes(q))&&(!shelf||x.shelf===shelf)&&(!f||f==='pending'&&!c||f==='diff'&&diff||f==='ok'&&c&&x.stock!==null&&!diff)});$('results').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return '<div class="item" tabindex="0" data-i="'+i+'"><b>'+safe(x.name)+'</b> <span class="pill '+(c?(x.stock===null?'warning':diff?'bad':'ok'):'')+'">'+(c?(x.stock===null?'Đã kiểm':diff?'Lệch':'Khớp'):'Chưa kiểm')+'</span><div class="muted">'+safe(x.code)+' · '+safe(x.shelf)+' · '+safe(x.lot)+'</div></div>'}).join(''):'<p class="muted">Không có dòng phù hợp.</p>';$('results').querySelectorAll('[data-i]').forEach(el=>{el.onclick=()=>selectItem(Number(el.dataset.i));el.onkeydown=e=>{if(e.key==='Enter')el.click()}})}
 $('quickSearch').oninput=renderResults;$('shelfFilter').onchange=renderResults;$('statusFilter').onchange=renderResults;
 function renderEditor(){const x=state.items[selected];if(!x)return;$('confirm').disabled=false;$('position').textContent='Kệ '+x.shelf+' · '+(selected+1)+'/'+state.items.length;$('drugTitle').textContent=x.name;$('drugMeta').textContent='Mã '+x.code+' · Lô '+(x.lot||'—')+' · HSD '+(x.expiry||'—')+' · '+x.unit+(x.packText?' · '+x.packText:'');$('quantityInputs').innerHTML=x.pack.map((p,k)=>'<div><label>'+safe(p.name)+' (×'+p.factor+')</label><input type="number" inputmode="numeric" min="0" step="1" data-n="'+k+'" value="'+safe(draft[k])+'"></div>').join('');$('quantityInputs').querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{draft[Number(el.dataset.n)]=el.value;revealed=false;renderCompare()});$('note').value=latest(selected)?.note||'';renderCompare()}
 function renderCompare(){const x=state.items[selected];if(!x)return;const values=x.pack.map((_,k)=>integer(draft[k]));const actual=sum(x,values),delta=x.stock===null?null:actual-x.stock;$('actual').textContent=actual.toLocaleString('vi-VN')+' '+x.unit;$('comparison').innerHTML=revealed?(x.stock===null?'Tồn máy: chưa có dữ liệu đối chiếu':'<div>Tồn trên máy: <b>'+x.stock.toLocaleString('vi-VN')+'</b></div><span class="pill '+(delta?'bad':'ok')+'">'+(delta?'Chênh lệch: '+(delta>0?'+':'')+delta:'Đã khớp')+'</span>'):'Tồn máy được ẩn đến khi xác nhận để hạn chế đếm theo số dự kiến'}
-async function cloudWrite(x,record){
+async function cloudWrite(x,record,expectedDraftVersion){
  if(!client||!user||state.source!=='cloud')return null;
- const prior=state.counts[x.id], expected=prior?.version||null;
+ const prior=state.counts[x.id], expected=expectedDraftVersion===undefined?(prior?.version||null):expectedDraftVersion;
  const signature=JSON.stringify([state.sessionId,x.id,expected,record.values,record.note]);
  // When a network request times out after the server committed, a retry of
  // the same payload must reuse the operation ID to avoid duplicate events.
@@ -186,32 +186,35 @@ async function fetchCloudRows(table,columns,id,orderColumn,ascending=true){
  }
  throw Error('Đợt kiểm vượt giới hạn 50.000 bản ghi; cần phân trang trên máy chủ.');
 }
+// Read the latest committed result for EACH drug. A global monotonically
+// increasing sequence ID is not a safe cursor because transactions may commit out of order.
+async function fetchCloudCountSnapshot(id){
+ const rows=[],pageSize=500,maxRows=20000;
+ for(let offset=0;offset<maxRows;offset+=pageSize){
+  const {data,error}=await client.rpc('pc_latest_counts',{p_session:id,p_offset:offset,p_limit:pageSize});
+  if(error)throw error;
+  rows.push(...data);
+  if(data.length<pageSize)return rows;
+ }
+ throw Error('Quá 20.000 thuốc đã kiểm; cần điều chỉnh phân trang theo cấu hình kho.');
+}
 async function refreshCloudCounts(force=false){
  if(!client||!user||state.source!=='cloud'||!state.sessionId||cloudRefreshBusy)return false;
- // Do not replace a draft while the employee is typing or saving.
- if(!force&&(lock||document.activeElement?.closest('#editor')))return false;
+ // While saving, do not change records underneath the submit callback.
+ if(lock)return false;
  cloudRefreshBusy=true;
+ const sessionAtStart=state.sessionId;
  try{
-  let newCount=0;
-  for(let offset=0;offset<5000;offset+=750){
-   const {data,error}=await client.from('inventory_counts')
-     .select('id,item_id,values,note,actual,created_at,users_email')
-     .eq('session_id',state.sessionId).gt('id',lastCloudCountId)
-     .order('id',{ascending:true}).range(0,749);
-   if(error)throw error;
-   if(!data.length)break;
-   for(const r of data){
-     state.counts[r.item_id]={values:r.values,note:r.note,actual:r.actual,
-       checkedAt:r.created_at,by:r.users_email||'Thành viên',version:String(r.id)};
-     lastCloudCountId=Math.max(lastCloudCountId,Number(r.id));
-     newCount++;
-   }
-   if(data.length<750)break;
+  const rows=await fetchCloudCountSnapshot(sessionAtStart);
+  if(state.sessionId!==sessionAtStart||state.source!=='cloud')return false;
+  const fresh={};
+  for(const r of rows){
+   fresh[r.item_id]={values:r.count_values,note:r.note,actual:r.actual,
+     checkedAt:r.created_at,by:r.users_email||'Thành viên',version:String(r.id)};
   }
-  if(newCount){save();renderResults();renderStats();
-   if(document.getElementById('review').classList.contains('active'))renderReview();
-   $('cloudState').textContent='Đã nhận '+newCount+' lượt đếm, lúc '+new Date().toLocaleTimeString('vi-VN');
-  }
+  state.counts=fresh;save();renderResults();renderStats();
+  if(document.getElementById('review').classList.contains('active'))renderReview();
+  if(rows.length) $('cloudState').textContent='Đã cập nhật '+rows.length+' thuốc từ máy chủ lúc '+new Date().toLocaleTimeString('vi-VN');
   return true;
  }catch(e){$('cloudState').textContent='Chưa cập nhật được kết quả chung: '+e.message;return false}
  finally{cloudRefreshBusy=false}
@@ -229,7 +232,7 @@ function startCloudSync(){
    .subscribe();
  cloudRefreshTimer=setInterval(()=>refreshCloudCounts(),20000);
 }
-$('confirm').onclick=async()=>{if(lock||!state.items.length)return;const x=state.items[selected],values=x.pack.map((_,k)=>integer(draft[k]));if(Object.values(draft).some(v=>String(v).trim()===''||!Number.isFinite(num(v))||num(v)<0||!Number.isInteger(num(v))))return alert('Các số đếm phải là số nguyên không âm.');lock=true;$('confirm').disabled=true;const record={values,actual:sum(x,values),note:$('note').value,checkedAt:new Date().toISOString(),by:user?.email||'Người dùng cục bộ'};if(!Number.isSafeInteger(record.actual)||record.actual<0){lock=false;$('confirm').disabled=false;return alert('Tổng thực kiểm quá lớn hoặc không hợp lệ. Vui lòng kiểm tra hệ số và số nhập.')}try{const version=await cloudWrite(x,record);state.counts[x.id]={...record,...(version?{version}: {})};save();revealed=true;renderCompare();renderResults();$('saveState').textContent='Đã ghi nhận lúc '+new Date().toLocaleTimeString('vi-VN')+(state.source==='cloud'?' và đồng bộ':' trên thiết bị')}catch(e){alert('Chưa lưu được lên máy chủ: '+e.message+'. Vui lòng thử lại khi có mạng.')}finally{lock=false;$('confirm').disabled=false}};
+$('confirm').onclick=async()=>{if(lock||!state.items.length)return;const x=state.items[selected],values=x.pack.map((_,k)=>integer(draft[k]));if(Object.values(draft).some(v=>String(v).trim()===''||!Number.isFinite(num(v))||num(v)<0||!Number.isInteger(num(v))))return alert('Các số đếm phải là số nguyên không âm.');lock=true;$('confirm').disabled=true;const record={values,actual:sum(x,values),note:$('note').value,checkedAt:new Date().toISOString(),by:user?.email||'Người dùng cục bộ'};if(!Number.isSafeInteger(record.actual)||record.actual<0){lock=false;$('confirm').disabled=false;return alert('Tổng thực kiểm quá lớn hoặc không hợp lệ. Vui lòng kiểm tra hệ số và số nhập.')}try{const version=await cloudWrite(x,record,draftVersion);state.counts[x.id]={...record,...(version?{version}: {})};draftVersion=version||null;save();revealed=true;renderCompare();renderResults();$('saveState').textContent='Đã ghi nhận lúc '+new Date().toLocaleTimeString('vi-VN')+(state.source==='cloud'?' và đồng bộ':' trên thiết bị')}catch(e){alert('Chưa lưu được lên máy chủ: '+e.message+'. Vui lòng thử lại khi có mạng.')}finally{lock=false;$('confirm').disabled=false}};
 $('next').onclick=()=>{if(state.items.length)selectItem((selected+1)%state.items.length)};
 function renderReview(){const ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i);return c&&x.stock!==null&&sum(x,c.values)!==x.stock});$('reviewList').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),v=sum(x,c.values);return '<div class="item" data-review="'+i+'"><b>'+safe(x.name)+'</b><div class="muted">'+safe(x.shelf)+' · '+safe(x.code)+'</div><div class="pill bad">Máy '+x.stock+' · Kiểm '+v+' · Lệch '+(v-x.stock)+'</div></div>'}).join(''):'<p class="muted">Chưa có dòng chênh lệch.</p>';$('reviewList').querySelectorAll('[data-review]').forEach(el=>el.onclick=()=>{show('count');selectItem(Number(el.dataset.review))})}
 async function exportXlsx(){if(typeof XLSX==='undefined')return alert('Không tải được thư viện xuất Excel.');if(state.source==='cloud'){const fresh=await refreshCloudCounts(true);if(!fresh)return alert('Không xác nhận được dữ liệu mới nhất trên máy chủ. Vui lòng kiểm tra mạng và xuất lại. Không xuất bản báo cáo cũ.');}const summary=[],details=[],diff=[];state.items.forEach(x=>{const c=state.counts[x.id],actual=c?sum(x,c.values):'',delta=c&&x.stock!==null?actual-x.stock:'';const base={...x.raw,'Mã kiểm kê':x.id,'Tồn máy':x.stock,'Thực kiểm':actual,'Chênh lệch':delta,'Trạng thái':!c?'Chưa kiểm':x.stock===null?'Đã kiểm (chưa có tồn máy)':delta?'Cần kiểm lại':'Khớp','Người kiểm':c?.by||'','Thời gian kiểm':c?.checkedAt||'','Ghi chú':c?.note||''};summary.push(base);if(c){details.push({...base,...Object.fromEntries(x.pack.map((p,i)=>[p.name+' (x'+p.factor+')',c.values[i]]))});if(delta!=='')diff.push(base)}});const wb=XLSX.utils.book_new();for(const [name,rows] of [['Tổng hợp',summary],['Chi tiết kiểm',details],['Cần kiểm lại',diff]])XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows.length?rows:[{'Thông báo':'Không có dữ liệu'}]),name);XLSX.writeFile(wb,'PharmaCount_'+new Date().toISOString().slice(0,10)+'.xlsx')}
@@ -270,12 +273,11 @@ $('joinCloud').onclick=async()=>{
  try{
   const sr=await client.from('inventory_sessions').select('id,name').eq('id',id).single();if(sr.error)throw sr.error;
   const items=await fetchCloudRows('inventory_items','id,drug',id,'id');
-  const records=await fetchCloudRows('inventory_counts','id,item_id,values,note,actual,created_at,users_email',id,'id',false);
-  const counts={};lastCloudCountId=0;
+  const records=await fetchCloudCountSnapshot(id);
+  const counts={};
   for(const r of records){
-   lastCloudCountId=Math.max(lastCloudCountId,Number(r.id));
-   if(!counts[r.item_id])counts[r.item_id]={
-    values:r.values,note:r.note,actual:r.actual,checkedAt:r.created_at,
+   counts[r.item_id]={
+    values:r.count_values,note:r.note,actual:r.actual,checkedAt:r.created_at,
     by:r.users_email||'Thành viên',version:String(r.id)
    };
   }
