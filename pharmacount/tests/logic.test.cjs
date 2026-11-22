@@ -122,4 +122,7 @@ test('revoking team access clears locally visible cloud inventory',()=>{
  assert.equal(Object.keys(ctx.state.counts).length,0);
  assert.equal(ctx.draftVersion,null);
  assert.equal(ctx.revoke({code:'NETWORK_ERROR'}),false);
+ ctx.state={source:'local',items:[{id:'LOCAL',name:'Unsynced'}],counts:{LOCAL:{values:[8]}}};
+ assert.equal(ctx.revoke({code:'42501'}),false);
+ assert.equal(ctx.state.counts.LOCAL.values[0],8);
 });
