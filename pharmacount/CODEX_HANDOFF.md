@@ -64,3 +64,12 @@ The private Excel samples were inspected during development; **do not copy them 
 - When signing out while an RPC is in flight, the browser rechecks the authenticated user before applying the returned inventory state.
 - Regression suite includes invite auto-join, access revocation and local-data preservation. In a JavaScript mock runtime it passed **12/12** cases; GitHub Actions run status should be checked separately.
 - **Still not ready for hospital production:** Supabase Auth redirect settings require validation, GitHub Pages deployment has not been verified, live two-account test with fake stock is pending, and remaining Security Advisor warnings on the three SECURITY DEFINER functions require professional review.
+
+
+## Owner-only finalization (23 November 2026)
+- PostgreSQL migration `pharmacount/supabase-finalization.sql` introduces `inventory_sessions.closed_at` and `closed_by`, an owner-only invoker RPC `pc_finalize_session`, and a database trigger that prevents reopening a finalized session.
+- `pharmacount/supabase-finalization-item-guard.sql` prevents late additions of items, including concurrent insertion at the moment a session is closed. Count RPC locks the parent session before saving, so no count can commit after closing.
+- Finalization is only allowed once **every original item** has at least one saved count. A session is not reopened through the user interface.
+- UI only shows **Chốt và khóa đợt kiểm kê** for the owner. Other members may view/export finalized results but cannot add counts; the database enforces it regardless of UI.
+- Regression tests added for owner checks and incomplete session rejection. **Still requires real user-based E2E**; Supabase currently has no real Auth accounts or sessions for testing.
+- Apply SQL files in order after base: `supabase-count-rpc.sql`, `supabase-latest-counts.sql`, `supabase-team-permissions.sql`, `supabase-finalization.sql`, `supabase-finalization-item-guard.sql`.
