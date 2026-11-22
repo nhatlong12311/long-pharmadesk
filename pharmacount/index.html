@@ -270,6 +270,7 @@ $('createCloud').onclick=async()=>{
  const bad=state.items.filter(x=>!x.code||!x.name||!x.id);
  if(bad.length)return alert('Danh mục có '+bad.length+' dòng thiếu mã/tên/ID. Hãy sửa trước khi tạo đợt.');
  if(!confirm('Tạo đợt kiểm chung từ '+state.items.length+' dòng?\nDanh mục sẽ được ghi lên Supabase trong một giao dịch.'))return;
+ const signedInUserId=user.id;
  const button=$('createCloud');button.disabled=true;
  $('cloudState').textContent='Đang tạo đợt kiểm chung trên máy chủ...';
  try{
@@ -278,6 +279,7 @@ $('createCloud').onclick=async()=>{
   });
   if(error)throw error;
   if(!id)throw Error('Máy chủ chưa trả mã đợt kiểm kê');
+  if(!user||user.id!==signedInUserId)throw Error('Đợt đã được tạo trên máy chủ, nhưng phiên đăng nhập thay đổi. Đăng nhập lại để mở đợt theo mã: '+id);
   state.source='cloud';state.sessionId=id;state.counts={};lastCloudCountId=0;save();
   $('cloudId').value=id;startCloudSync();
   $('cloudState').textContent='Đã tạo đợt '+id+' gồm '+state.items.length+' thuốc. Hãy mời thành viên.';
@@ -297,6 +299,7 @@ async function joinCloudById(id,automatic=false){
   if(!confirm('Thiết bị có kết quả kiểm kê cục bộ chưa đồng bộ. Hãy xuất bản sao lưu trước.\n\nChuyển sang đợt kiểm chung và ẩn kết quả đang có?'))return false;
  }
  joiningCloud=true;
+ const signedInUserId=user.id;
  $('joinCloud').disabled=true;
  $('cloudState').textContent='Đang tải danh mục và số đếm từ Supabase...';
  try{
@@ -304,6 +307,7 @@ async function joinCloudById(id,automatic=false){
   if(sr.error)throw sr.error;
   const items=await fetchCloudRows('inventory_items','id,drug',id,'id');
   const records=await fetchCloudCountSnapshot(id);
+  if(!user||user.id!==signedInUserId)throw Error('Phiên đăng nhập đã thay đổi. Hãy đăng nhập lại.');
   const counts={};
   for(const r of records)counts[r.item_id]={
     values:r.count_values,note:r.note,actual:r.actual,
