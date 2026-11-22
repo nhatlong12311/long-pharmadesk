@@ -246,7 +246,57 @@ function startCloudSync(){
 $('confirm').onclick=async()=>{if(lock||!state.items.length)return;if(state.source==='cloud'&&state.closedAt)return alert('Đợt kiểm kê đã chốt, không thể nhập hoặc sửa số đếm.');const x=state.items[selected],values=x.pack.map((_,k)=>integer(draft[k]));if(Object.values(draft).some(v=>String(v).trim()===''||!Number.isFinite(num(v))||num(v)<0||!Number.isInteger(num(v))))return alert('Các số đếm phải là số nguyên không âm.');lock=true;$('confirm').disabled=true;const record={values,actual:sum(x,values),note:$('note').value,checkedAt:new Date().toISOString(),by:user?.email||'Người dùng cục bộ'};if(!Number.isSafeInteger(record.actual)||record.actual<0){lock=false;$('confirm').disabled=false;return alert('Tổng thực kiểm quá lớn hoặc không hợp lệ. Vui lòng kiểm tra hệ số và số nhập.')}try{const version=await cloudWrite(x,record,draftVersion);state.counts[x.id]={...record,...(version?{version}: {})};draftVersion=version||null;save();revealed=true;renderCompare();renderResults();$('saveState').textContent='Đã ghi nhận lúc '+new Date().toLocaleTimeString('vi-VN')+(state.source==='cloud'?' và đồng bộ':' trên thiết bị')}catch(e){alert('Chưa lưu được lên máy chủ: '+e.message+'. Vui lòng thử lại khi có mạng.')}finally{lock=false;$('confirm').disabled=!!(state.source==='cloud'&&state.closedAt)}};
 $('next').onclick=()=>{if(state.items.length)selectItem((selected+1)%state.items.length)};
 function renderReview(){const ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i);return c&&x.stock!==null&&sum(x,c.values)!==x.stock});$('reviewList').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),v=sum(x,c.values);return '<div class="item" data-review="'+i+'"><b>'+safe(x.name)+'</b><div class="muted">'+safe(x.shelf)+' · '+safe(x.code)+'</div><div class="pill bad">Máy '+x.stock+' · Kiểm '+v+' · Lệch '+(v-x.stock)+'</div></div>'}).join(''):'<p class="muted">Chưa có dòng chênh lệch.</p>';$('reviewList').querySelectorAll('[data-review]').forEach(el=>el.onclick=()=>{show('count');selectItem(Number(el.dataset.review))})}
-async function exportXlsx(){if(typeof XLSX==='undefined')return alert('Không tải được thư viện xuất Excel.');if(state.source==='cloud'){const fresh=await refreshCloudCounts(true);if(!fresh)return alert('Không xác nhận được dữ liệu mới nhất trên máy chủ. Vui lòng kiểm tra mạng và xuất lại. Không xuất bản báo cáo cũ.');}const summary=[],details=[],diff=[];state.items.forEach(x=>{const c=state.counts[x.id],actual=c?sum(x,c.values):'',delta=c&&x.stock!==null?actual-x.stock:'';const base={...x.raw,'Mã kiểm kê':x.id,'Tồn máy':x.stock,'Thực kiểm':actual,'Chênh lệch':delta,'Trạng thái':!c?'Chưa kiểm':x.stock===null?'Đã kiểm (chưa có tồn máy)':delta?'Cần kiểm lại':'Khớp','Người kiểm':c?.by||'','Thời gian kiểm':c?.checkedAt||'','Ghi chú':c?.note||''};summary.push(base);if(c){details.push({...base,...Object.fromEntries(x.pack.map((p,i)=>[p.name+' (x'+p.factor+')',c.values[i]]))});if(delta!=='')diff.push(base)}});const wb=XLSX.utils.book_new();for(const [name,rows] of [['Tổng hợp',summary],['Chi tiết kiểm',details],['Cần kiểm lại',diff]])XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows.length?rows:[{'Thông báo':'Không có dữ liệu'}]),name);XLSX.writeFile(wb,'PharmaCount_'+new Date().toISOString().slice(0,10)+'.xlsx')}
+async function exportXlsx(){
+ if(typeof XLSX==='undefined')return alert('Không tải được thư viện xuất Excel.');
+ const cloud=state.source==='cloud',exportSession=state.sessionId;
+ let audit=[];
+ if(cloud){
+  if(!user||!client)return alert('Hãy đăng nhập lại trước khi xuất báo cáo chung.');
+  const fresh=await refreshCloudCounts(true);
+  if(!fresh)return alert('Không xác nhận được dữ liệu mới nhất trên máy chủ. Không xuất bản báo cáo cũ.');
+  try{
+   audit=await fetchCloudRows('inventory_counts',
+    'id,item_id,values,note,actual,created_at,users_email',exportSession,'id');
+  }catch(e){return alert('Không tải đủ lịch sử số đếm; đã hủy xuất Excel: '+e.message)}
+  if(state.sessionId!==exportSession||state.source!=='cloud')return alert('Đợt kiểm kê đã thay đổi. Vui lòng xuất lại.');
+ }
+ const summary=[],details=[],diff=[];
+ const namesById=new Map(state.items.map(x=>[x.id,x]));
+ state.items.forEach(x=>{
+  const c=state.counts[x.id],actual=c?sum(x,c.values):'',delta=c&&x.stock!==null?actual-x.stock:'';
+  const base={...x.raw,'Mã kiểm kê':x.id,'Tồn máy':x.stock??'','Thực kiểm':actual,'Chênh lệch':delta,
+   'Trạng thái':!c?'Chưa kiểm':x.stock===null?'Đã kiểm (chưa có tồn máy)':delta?'Cần kiểm lại':'Khớp',
+   'Người kiểm':c?.by||'','Thời gian kiểm':c?.checkedAt||'','Ghi chú':c?.note||''};
+  summary.push(base);
+  if(c){
+   details.push({...base,...Object.fromEntries(x.pack.map((p,i)=>[p.name+' (x'+p.factor+')',c.values[i]]))});
+   if(delta!=='')diff.push(base);
+  }
+ });
+ const wb=XLSX.utils.book_new();
+ for(const [name,rows] of [['Tổng hợp',summary],['Chi tiết kiểm',details],['Cần kiểm lại',diff]]){
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows.length?rows:[{'Thông báo':'Không có dữ liệu'}]),name);
+ }
+ if(cloud){
+  const history=audit.map(r=>{
+   const item=namesById.get(r.item_id);
+   return {'Mã lượt đếm':String(r.id),'Mã kiểm kê':r.item_id,'Mã thuốc':item?.code||'',
+    'Tên thuốc':item?.name||'','Số lô':item?.lot||'','Khu vực':item?.shelf||'',
+    'Người kiểm':r.users_email||'','Thời gian lưu':r.created_at||'',
+    'Số lượng chẵn/lẻ':JSON.stringify(r.values),'Tổng thực kiểm':r.actual,'Ghi chú':r.note||''};
+  });
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(history.length?history:[{'Thông báo':'Chưa có lượt kiểm'}]),'Lịch sử kiểm');
+ }
+ const metadata=[{'Thông tin':'Mã đợt','Giá trị':exportSession||'Cục bộ'},
+  {'Thông tin':'Trạng thái đợt','Giá trị':cloud?(state.closedAt?'ĐÃ CHỐT':'CHƯA CHỐT — BÁO CÁO TẠM'):'BẢN CỤC BỘ'},
+  {'Thông tin':'Thời điểm xuất','Giá trị':new Date().toISOString()},
+  {'Thông tin':'Số dòng danh mục','Giá trị':state.items.length},
+  {'Thông tin':'Số thuốc có kết quả','Giá trị':state.items.filter(x=>!!state.counts[x.id]).length},
+  {'Thông tin':'Tổng lượt kiểm','Giá trị':cloud?audit.length:'Không lưu lịch sử trên máy chủ'}];
+ XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(metadata),'Thông tin đợt');
+ const filename='PharmaCount_'+(cloud?(state.closedAt?'CHOT_':'TAM_'):'CUCBO_')+new Date().toISOString().slice(0,10)+'.xlsx';
+ XLSX.writeFile(wb,filename);
+}
 $('exportBtn').onclick=exportXlsx;
 function download(name,contents,type){const a=document.createElement('a'),url=URL.createObjectURL(new Blob([contents],{type}));a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 $('backupBtn').onclick=()=>download('pharmacount-backup.json',JSON.stringify(state,null,2),'application/json');
