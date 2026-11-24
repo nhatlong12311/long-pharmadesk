@@ -270,7 +270,7 @@ async function exportXlsx(){
   summary.push(base);
   if(c){
    details.push({...base,...Object.fromEntries(x.pack.map((p,i)=>[p.name+' (x'+p.factor+')',c.values[i]]))});
-   if(delta!=='')diff.push(base);
+   if(delta!==''&&delta!==0)diff.push(base);
   }
  });
  const wb=XLSX.utils.book_new();
@@ -313,7 +313,7 @@ async function connect(){const url=$('sbUrl').value.trim(),key=$('sbKey').value.
 })}
 function authUi(){$('authState').textContent=user?'Đăng nhập: '+user.email:'Chưa đăng nhập';$('cloudActions').classList.toggle('hidden',!user)}
 $('connect').onclick=connect;$('disconnect').onclick=async()=>{stopCloudSync();pendingCountOperation=null;if(client)await client.auth.signOut();client=null;user=null;localStorage.removeItem(CONFIG);state=newData();selected=0;save();renderCount();$('cloudUi').classList.add('hidden');alert('Đã đăng xuất và xóa bản sao dữ liệu đám mây trên thiết bị này.')};
-$('login').onclick=async()=>{const email=$('email').value.trim();if(!email)return alert('Nhập email');const {error}=await client.auth.signInWithOtp({email,emailRedirectTo:location.href.split('#')[0]});alert(error?error.message:'Đã gửi liên kết đăng nhập. Kiểm tra email.')};
+$('login').onclick=async()=>{const email=$('email').value.trim();if(!email)return alert('Nhập email');const {error}=await client.auth.signInWithOtp({email,options:{emailRedirectTo:location.href.split('#')[0]}});alert(error?error.message:'Đã gửi liên kết đăng nhập. Kiểm tra email.')};
 $('createCloud').onclick=async()=>{
  if(!user||!state.items.length)return alert('Hãy đăng nhập và nhập Excel trước.');
  if(state.source==='cloud')return alert('Bạn đang tham gia một đợt chung. Vui lòng mở đợt mới từ dữ liệu cục bộ khác.');

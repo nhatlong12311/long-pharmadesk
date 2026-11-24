@@ -179,12 +179,17 @@ test('finalized XLSX export includes every audit event and clear finalized marke
  };
  const records=[
   {id:1,item_id:'A',values:[1,0],actual:100,users_email:'a@example.invalid',created_at:'2026-11-23T01:00:00Z',note:''},
-  {id:2,item_id:'A',values:[1,5],actual:105,users_email:'b@example.invalid',created_at:'2026-11-23T02:00:00Z',note:'kiểm lại'}
+  {id:2,item_id:'A',values:[1,5],actual:105,users_email:'b@example.invalid',created_at:'2026-11-23T02:00:00Z',note:'kiểm lại'},
+  {id:3,item_id:'B',values:[10],actual:10,users_email:'a@example.invalid',created_at:'2026-11-23T02:10:00Z',note:''},
+  {id:4,item_id:'C',values:[5],actual:5,users_email:'b@example.invalid',created_at:'2026-11-23T02:20:00Z',note:''}
  ];
  const state={source:'cloud',sessionId:'session',closedAt:'2026-11-23T03:00:00Z',
   items:[{id:'A',name:'Paracetamol',code:'P001',lot:'LOT1',shelf:'A',raw:{},stock:100,
-   pack:[{name:'Hộp',factor:100},{name:'Viên',factor:1}]}],
-  counts:{A:{values:[1,5],by:'b@example.invalid',checkedAt:'2026-11-23T02:00:00Z',note:'kiểm lại'}}
+   pack:[{name:'Hộp',factor:100},{name:'Viên',factor:1}]},
+   {id:'B',name:'Mặt hàng giả B',raw:{},stock:10,pack:[{name:'Viên',factor:1}]},
+   {id:'C',name:'Mặt hàng giả C',raw:{},stock:null,pack:[{name:'Viên',factor:1}]}],
+  counts:{A:{values:[1,5],by:'b@example.invalid',checkedAt:'2026-11-23T02:00:00Z',note:'kiểm lại'},
+   B:{values:[10]},C:{values:[5]}}
  };
  const elems={exportBtn:{}};
  const ctx={XLSX,state,client:{},user:{},
@@ -197,7 +202,8 @@ test('finalized XLSX export includes every audit event and clear finalized marke
  assert.equal(alerts.length,0);
  assert.deepEqual(sheets.map(x=>x.name),
   ['Tổng hợp','Chi tiết kiểm','Cần kiểm lại','Lịch sử kiểm','Thông tin đợt']);
- assert.equal(sheets[3].rows.length,2);
+ assert.deepEqual(Array.from(sheets[2].rows,row=>row['Mã kiểm kê']),['A']);
+ assert.equal(sheets[3].rows.length,4);
  assert.equal(sheets[3].rows[1]['Tổng thực kiểm'],105);
  assert.ok(outputs[0].includes('CHOT_'));
 });
