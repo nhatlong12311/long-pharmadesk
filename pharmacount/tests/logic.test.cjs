@@ -77,6 +77,29 @@ test('latest-count snapshot reads page 2, never uses global ID cursor',async()=>
   assert.deepEqual(offsets,[0,500]);
 });
 
+test('forced refresh waits for the background refresh and reads a fresh snapshot',async()=>{
+ const start=script.indexOf('async function refreshCloudCounts(force=false)');
+ const end=script.indexOf('function handleCloudAccessError(error)',start);
+ let release,reads=0;
+ const pending=new Promise(resolve=>{release=resolve});
+ const ctx={
+  client:{},user:{id:'owner'},state:{source:'cloud',sessionId:'session',counts:{}},
+  lock:false,cloudRefreshInFlight:null,
+  fetchCloudCountSnapshot:async()=>{reads++;return reads===1?pending:[]},
+  loadCloudSessionStatus:async()=>{},save:()=>{},renderResults:()=>{},renderStats:()=>{},
+  document:{getElementById:()=>({classList:{contains:()=>false}})}
+ };
+ vm.createContext(ctx);
+ vm.runInContext(script.slice(start,end)+'\nthis.refresh=refreshCloudCounts',ctx);
+ const background=ctx.refresh();
+ const explicit=ctx.refresh(true);
+ assert.equal(reads,1);
+ release([]);
+ assert.equal(await background,true);
+ assert.equal(await explicit,true);
+ assert.equal(reads,2);
+});
+
 test('cloud count cannot silently save locally after authentication expires',async()=>{
   const ctx=cloud(null,{});
   await assert.rejects(ctx.call({id:'A'},{values:[1],note:'test'}),/Phiên đăng nhập đã hết hạn/);

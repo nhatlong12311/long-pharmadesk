@@ -21,7 +21,7 @@
 const $=id=>document.getElementById(id),KEY='pharmacount-v1',CONFIG='pharmacount-cloud-config';
 const newData=()=>({name:'Kiểm kê kho Dược',items:[],counts:{},sessionId:null,source:'local',ownerId:null,closedAt:null});
 let state;try{state=JSON.parse(localStorage.getItem(KEY))||newData();if(state.source==='cloud'){state.items=[];state.counts={}}}catch{state=newData()}
-let selected=0, draft={}, draftVersion=null, revealed=false, client=null,user=null,lock=false, joiningCloud=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshBusy=false, lastCloudCountId=0, pendingCountOperation=null, packIssues=[];
+let selected=0, draft={}, draftVersion=null, revealed=false, client=null,user=null,lock=false, joiningCloud=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshInFlight=null, lastCloudCountId=0, pendingCountOperation=null, packIssues=[];
 const save=()=>{const persisted=state.source==='cloud'?{name:state.name,items:[],counts:{},sessionId:state.sessionId,source:'cloud',ownerId:state.ownerId||null,closedAt:state.closedAt||null}:state;try{localStorage.setItem(KEY,JSON.stringify(persisted))}catch(e){alert('Bộ nhớ trình duyệt đầy. Hãy sao lưu Excel và kiểm tra dữ liệu trước khi tiếp tục.')}renderStats()};
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Do not silently turn malformed Excel stock values into zero.
@@ -200,25 +200,38 @@ async function fetchCloudCountSnapshot(id){
  throw Error('Quá 20.000 thuốc đã kiểm; cần điều chỉnh phân trang theo cấu hình kho.');
 }
 async function refreshCloudCounts(force=false){
- if(!client||!user||state.source!=='cloud'||!state.sessionId||cloudRefreshBusy)return false;
- // While saving, do not change records underneath the submit callback.
- if(lock)return false;
- cloudRefreshBusy=true;
- const sessionAtStart=state.sessionId;
- try{
-  const rows=await fetchCloudCountSnapshot(sessionAtStart);
-  if(state.sessionId!==sessionAtStart||state.source!=='cloud')return false;
-  const fresh={};
-  for(const r of rows){
-   fresh[r.item_id]={values:r.count_values,note:r.note,actual:r.actual,
-     checkedAt:r.created_at,by:r.users_email||'Thành viên',version:String(r.id)};
+ if(!client||!user||state.source!=='cloud'||!state.sessionId||lock)return false;
+ const sessionAtStart=state.sessionId,clientAtStart=client,userAtStart=user.id;
+ const stillCurrent=()=>!lock&&client===clientAtStart&&user?.id===userAtStart
+   &&state.source==='cloud'&&state.sessionId===sessionAtStart;
+ while(cloudRefreshInFlight){
+  if(!force)return false;
+  // Finalization and export require a fresh snapshot after any background refresh.
+  await cloudRefreshInFlight;
+  if(!stillCurrent())return false;
+ }
+ const refresh=(async()=>{
+  try{
+   const rows=await fetchCloudCountSnapshot(sessionAtStart);
+   if(!stillCurrent())return false;
+   await loadCloudSessionStatus();
+   if(!stillCurrent())return false;
+   state.counts=Object.fromEntries(rows.map(r=>[r.item_id,{
+     values:r.count_values,note:r.note,actual:r.actual,checkedAt:r.created_at,
+     by:r.users_email||'Thành viên',version:String(r.id)
+   }]));
+   save();renderResults();renderStats();
+   if(document.getElementById('review').classList.contains('active'))renderReview();
+   if(rows.length)$('cloudState').textContent='Đã cập nhật '+rows.length+' thuốc từ máy chủ lúc '+new Date().toLocaleTimeString('vi-VN');
+   return true;
+  }catch(e){
+   if(!stillCurrent()||handleCloudAccessError(e))return false;
+   $('cloudState').textContent='Chưa cập nhật được kết quả chung: '+e.message;
+   return false;
   }
-  state.counts=fresh;await loadCloudSessionStatus();save();renderResults();renderStats();
-  if(document.getElementById('review').classList.contains('active'))renderReview();
-  if(rows.length) $('cloudState').textContent='Đã cập nhật '+rows.length+' thuốc từ máy chủ lúc '+new Date().toLocaleTimeString('vi-VN');
-  return true;
- }catch(e){if(handleCloudAccessError(e))return false;$('cloudState').textContent='Chưa cập nhật được kết quả chung: '+e.message;return false}
- finally{cloudRefreshBusy=false}
+ })();
+ cloudRefreshInFlight=refresh;
+ try{return await refresh}finally{cloudRefreshInFlight=null}
 }
 function handleCloudAccessError(error){
  // An expired/revoked invitation must not leave a readable cloud copy visible.
