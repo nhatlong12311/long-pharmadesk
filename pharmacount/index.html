@@ -1,20 +1,64 @@
 <!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PharmaCount • Kiểm kê kho Dược</title>
-<style>
-:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#16332d;background:#f4f7f6}*{box-sizing:border-box}body{margin:0}header{position:sticky;top:0;z-index:5;background:#086854;color:#fff;padding:15px 17px;display:flex;justify-content:space-between;align-items:center;gap:10px}header strong{font-size:19px}main{max-width:1080px;margin:auto;padding:14px 14px 85px}.card{background:#fff;border:1px solid #dce7e4;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 2px 9px #102e1e09}h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:8px 0}.muted{color:#5e7770;font-size:13px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.row>*{min-width:0}input,select,textarea,button{font:inherit}input,select,textarea{width:100%;border:1px solid #b9cfc7;border-radius:9px;padding:12px;background:white;color:#152f29}input[type=file]{padding:8px}label{display:block;font-weight:650;font-size:13px;margin:8px 0 5px}button{border:0;border-radius:10px;padding:12px 15px;cursor:pointer;background:#086854;color:white;font-weight:650}button.secondary{background:#eaf2ef;color:#174a3c}button.danger{background:#a83d40}button:disabled{opacity:.45;cursor:not-allowed}.stat{background:#eaf4f0;border-radius:12px;padding:13px}.stat b{display:block;font-size:23px}.pill{font-size:12px;padding:4px 8px;border-radius:20px;background:#e7ecea;color:#365d51}.ok{background:#d7f5e5;color:#146641}.bad{background:#ffeded;color:#a1262d}.warning{background:#fff3d4;color:#7f5600}.item{padding:12px;border-bottom:1px solid #e2eae7;cursor:pointer}.item:last-child{border-bottom:0}.item:focus{outline:2px solid #086854}.hidden{display:none!important}.space{justify-content:space-between}.big{font-size:29px;font-weight:800}.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:4px;background:white;border-top:1px solid #dce7e4;padding:7px max(7px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom));z-index:5}.nav button{background:transparent;color:#356558;font-size:12px;padding:9px;flex:1;max-width:220px}.nav button.active{background:#dff1e9;color:#06533e}.note{background:#fff7de;border-left:4px solid #d39d28;padding:10px;font-size:13px;border-radius:5px}.tab{display:none}.tab.active{display:block}@media(min-width:700px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}main{padding:20px 24px 80px}.card{padding:22px}}@media(max-width:420px){header strong{font-size:16px}button{padding:11px}.grid{gap:7px}} 
-</style></head><body>
-<header><strong>✚ PharmaCount</strong><span id="mode" style="font-size:12px">Chế độ cục bộ</span></header><main>
+<link rel="stylesheet" href="theme.css?v=1"></head><body>
+<header class="sidebar">
+  <div class="brand"><span class="brand-mark" aria-hidden="true">✚</span><div><strong>PharmaCount</strong><span>Kiểm kê kho Dược</span></div></div>
+  <nav class="nav" aria-label="Điều hướng kiểm kê">
+    <button data-tab="dashboard" class="active" aria-current="page"><span aria-hidden="true">▦</span>Tổng quan</button>
+    <button data-tab="count"><span aria-hidden="true">⊞</span>Kiểm thuốc</button>
+    <button data-tab="review"><span aria-hidden="true">✓</span>Cần kiểm lại</button>
+    <button data-tab="export"><span aria-hidden="true">⇩</span>Xuất / Đồng bộ</button>
+  </nav>
+  <span id="mode" role="status">Chế độ cục bộ</span>
+</header>
+<main id="workspace">
+<header class="page-header dashboard-hero" id="pageHeader">
+  <div class="page-intro">
+    <p class="eyebrow">KHO DƯỢC</p>
+    <h1 id="pageTitle" tabindex="-1">Tổng quan kiểm kê</h1>
+    <p id="overviewName" class="muted"></p>
+    <div class="masthead" id="dashboardTools">
+      <form class="dashboard-search" id="dashboardSearch">
+        <label class="sr-only" for="dashboardSearchText">Tìm theo tên thuốc</label>
+        <span aria-hidden="true" class="search-mark"></span>
+        <input id="dashboardSearchText" type="search" placeholder="Tìm theo tên thuốc…">
+        <button class="secondary" type="submit">Tìm</button>
+      </form>
+      <button id="dashboardExport" class="secondary" type="button">Xuất Excel</button>
+    </div>
+  </div>
+  <div class="hero-progress" id="dashboardProgress">
+    <div class="progress-ring" id="progressRing">
+      <div class="ring-center"><strong id="progressPercent">0%</strong><span>Đã kiểm</span></div>
+    </div>
+    <div class="hero-progress-copy">
+      <p id="countProgressText" class="progress-caption">0 / 0 mặt hàng đã kiểm</p>
+      <button id="openCount">Vào kiểm thuốc</button>
+    </div>
+  </div>
+</header>
 <section id="dashboard" class="tab active">
-<div class="card"><h2>Đợt kiểm kê</h2><label>Tên đợt</label><input id="sessionName" value="Kiểm kê kho Dược"><div class="row" style="margin-top:10px"><button id="saveName">Lưu tên</button><button class="secondary" id="newLocal">Tạo đợt mới</button></div><p class="muted" id="sessionId"></p></div>
-<div class="grid"><div class="stat"><span class="muted">Mặt hàng</span><b id="sAll">0</b></div><div class="stat"><span class="muted">Đã kiểm</span><b id="sDone">0</b></div><div class="stat"><span class="muted">Chênh lệch</span><b id="sDiff">0</b></div><div class="stat"><span class="muted">Chưa kiểm</span><b id="sLeft">0</b></div></div>
-<div class="card"><h2>Nhập Excel tồn kho</h2><p class="muted">Đọc sheet đầu tiên; tự nhận diện tên, mã, tồn kho, đơn vị, lô, hạn, kệ và quy cách khi tiêu đề cột phù hợp. Xem lại dữ liệu trước khi kiểm. Mỗi lần nhập sẽ thay thế danh mục của đợt hiện tại.</p><input id="excel" type="file" accept=".xlsx"><div class="row" style="margin-top:10px"><button id="importBtn">Nhập danh mục</button><button id="sampleBtn" class="secondary">Dữ liệu mẫu</button></div><p id="importInfo" class="muted"></p><label>Danh mục quy cách đóng gói (.xlsx)</label><input id="packExcel" type="file" accept=".xlsx"><button class="secondary" id="mergePacks">Ghép quy cách vào danh mục</button><p id="packInfo" class="muted"></p><button id="downloadPackIssues" class="secondary" disabled>⬇ Xuất danh sách quy cách cần rà soát</button><div class="note">Không tải Excel có dữ liệu bệnh nhân. Không nhập đợt mới khi đang có người kiểm; thao tác nhập lại thay danh mục và hủy kết quả cũ.</div></div>
+  <div class="grid metrics">
+    <div class="stat metric metric-catalog"><div class="metric-top"><span>Mặt hàng</span><span class="metric-glyph" aria-hidden="true">▦</span></div><b id="sAll">0</b><small id="sShelfNote">0 khu vực</small><div class="metric-meter" id="metricAll" aria-hidden="true"></div></div>
+    <div class="stat metric metric-done"><div class="metric-top"><span>Đã kiểm</span><span class="metric-glyph" aria-hidden="true">✓</span></div><b id="sDone">0</b><small id="sDoneNote">0% danh mục</small><div class="metric-meter" id="metricDone" aria-hidden="true"></div></div>
+    <div class="stat metric metric-diff"><div class="metric-top"><span>Chênh lệch</span><span class="metric-glyph" aria-hidden="true">≠</span></div><b id="sDiff">0</b><small id="sDiffNote">Chưa có số để đối chiếu</small><div class="metric-meter" id="metricDiff" aria-hidden="true"></div></div>
+    <div class="stat metric metric-left"><div class="metric-top"><span>Chưa kiểm</span><span class="metric-glyph" aria-hidden="true">◷</span></div><b id="sLeft">0</b><small id="sLeftNote">0% danh mục</small><div class="metric-meter" id="metricLeft" aria-hidden="true"></div></div>
+  </div>
+  <section class="card shelf-card" aria-labelledby="shelfTitle">
+    <div class="card-title"><div><h2 id="shelfTitle">Tiến độ theo khu vực</h2><p class="muted">Đã kiểm / Tổng mặt hàng</p></div><div class="chart-legend" aria-hidden="true"><span>Đã kiểm</span><span>Chưa kiểm</span></div></div>
+    <div id="shelfProgress"></div>
+  </section>
+  <div class="dashboard-panels">
+    <div class="card import-card"><h2>Nhập Excel tồn kho</h2><p class="muted">Hỗ trợ Excel kiểm kê nhiều sheet. Thêm danh mục quy cách để tính số đơn vị lẻ từ số hộp.</p><label for="excel">Tệp danh mục</label><input id="excel" type="file" accept=".xlsx"><div class="row" style="margin-top:10px"><button id="importBtn">Nhập danh mục</button><button id="sampleBtn" class="secondary">Dữ liệu mẫu</button></div><p id="importInfo" class="muted"></p><label for="packExcel">Danh mục quy cách đóng gói (.xlsx)</label><input id="packExcel" type="file" accept=".xlsx"><button class="secondary" id="mergePacks">Ghép quy cách vào danh mục</button><p id="packInfo" class="muted"></p><button id="downloadPackIssues" class="secondary" disabled>Xuất danh sách quy cách cần rà soát</button><div class="note">Không tải Excel có dữ liệu bệnh nhân. Không nhập đợt mới khi đang có người kiểm; thao tác nhập lại thay danh mục và hủy kết quả cũ.</div></div>
+    <div class="card session-card"><h2>Đợt kiểm kê</h2><label for="sessionName">Tên đợt</label><input id="sessionName" value="Kiểm kê kho Dược"><div class="row" style="margin-top:10px"><button id="saveName">Lưu tên</button><button class="secondary" id="newLocal">Tạo đợt mới</button></div><p class="muted" id="sessionId"></p></div>
+  </div>
 </section>
-<section id="count" class="tab"><div class="card"><div class="row space"><h2>Kiểm tại kệ</h2><span id="position" class="pill"></span></div><input id="quickSearch" placeholder="Tìm mã, tên, hàm lượng, kệ hoặc lô..."><div class="row" style="margin-top:8px"><select id="shelfFilter" style="flex:1"><option value="">Tất cả kệ</option></select><select id="statusFilter" style="flex:1"><option value="">Tất cả trạng thái</option><option value="pending">Chưa kiểm</option><option value="diff">Chênh lệch</option><option value="ok">Đã khớp</option></select></div><div id="results" style="margin-top:10px;max-height:240px;overflow:auto"></div></div>
-<div class="card" id="editor"><h2 id="drugTitle">Chưa có danh mục</h2><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div><button id="setPackFactor" class="secondary" style="margin-top:10px">Thiết lập số viên/lọ trong 1 hộp</button><div class="stat" style="margin-top:14px"><span class="muted">TỔNG THỰC KIỂM</span><div class="big" id="actual">0</div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label>Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea><div class="row" style="margin-top:12px"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp →</button></div><p class="muted" id="saveState"></p></div></section>
+<section id="count" class="tab"><div class="card" id="countFinder"><div class="row space"><h2>Kiểm tại kệ</h2><span id="position" class="pill"></span></div><input aria-label="Tìm thuốc" id="quickSearch" placeholder="Tìm mã, tên, hàm lượng, kệ hoặc lô..."><div class="row" style="margin-top:8px"><select aria-label="Lọc theo kệ" id="shelfFilter" style="flex:1"><option value="">Tất cả kệ</option></select><select aria-label="Lọc theo trạng thái" id="statusFilter" style="flex:1"><option value="">Tất cả trạng thái</option><option value="pending">Chưa kiểm</option><option value="diff">Chênh lệch</option><option value="ok">Đã khớp</option></select></div><div id="results"></div></div>
+<div class="card" id="editor"><button class="secondary mobile-back" id="backToList" type="button">Danh sách thuốc</button><h2 id="drugTitle" tabindex="-1">Chưa có danh mục</h2><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div><button id="setPackFactor" class="secondary" style="margin-top:10px">Thiết lập số viên/lọ trong 1 hộp</button><div class="stat actual-card"><span>Tổng thực kiểm</span><div class="big" id="actual">0</div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label for="note">Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea><div class="count-dock"><p class="muted" id="saveState" role="status"></p><div class="row count-actions"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp</button></div></div></div></section>
 <section id="review" class="tab"><div class="card"><h2>Danh sách kiểm lại</h2><p class="muted">Chỉ hiển thị các dòng đã đếm có chênh lệch. Không tự động điều chỉnh số tồn trên phần mềm bệnh viện.</p><div id="reviewList"></div></div></section>
-<section id="export" class="tab"><div class="card"><h2>Xuất Excel kết quả</h2><p class="muted">Tạo 3 sheet: Tổng hợp, Chi tiết số đếm, Cần kiểm lại. Giữ các cột gốc trong dữ liệu nhập khi có thể.</p><button id="exportBtn">⬇ Xuất Excel</button><button class="secondary" id="backupBtn">⬇ Sao lưu JSON</button><label>Phục hồi bản sao lưu</label><input type="file" id="restore" accept=".json"><p class="note">Sao lưu thường xuyên. Chế độ cục bộ chỉ lưu trên trình duyệt của thiết bị hiện tại; xóa dữ liệu trang web có thể làm mất kết quả.</p></div>
+<section id="export" class="tab"><div class="card"><h2>Xuất Excel kết quả</h2><p class="muted">Tải báo cáo tổng hợp, chi tiết và các dòng cần kiểm lại. Báo cáo đợt chung có lịch sử số đếm.</p><button id="exportBtn">Xuất Excel</button><button class="secondary" id="backupBtn">Sao lưu JSON</button><label>Phục hồi bản sao lưu</label><input type="file" id="restore" accept=".json"><p class="note">Sao lưu thường xuyên. Chế độ cục bộ chỉ lưu trên trình duyệt của thiết bị hiện tại; xóa dữ liệu trang web có thể làm mất kết quả.</p></div>
 <div class="card"><h2>Đồng bộ nhiều thành viên</h2><p class="muted">Dùng chung một đợt kiểm qua Supabase. Mỗi nhân viên cần email đăng nhập và được trưởng nhóm mời. Tự nhận thay đổi từ máy khác; kiểm tra phiên bản trước khi lưu để tránh ghi đè. Cần Internet để xác nhận lưu.</p><label>Supabase URL</label><input id="sbUrl" value="https://jpsywcjmcmvgjswkrnzo.supabase.co" readonly><label>Supabase publishable/anon key</label><input id="sbKey" value="sb_publishable_4iy9k4S074-klLeUt-jVNA_AvI0Oswi" readonly><div class="row" style="margin-top:9px"><button id="connect">Kết nối</button><button class="secondary" id="disconnect">Về chế độ cục bộ</button></div><div id="cloudUi" class="hidden"><label>Email thành viên</label><input id="email" type="email" placeholder="ten@benhvien.vn"><button id="login" style="margin-top:8px">Gửi liên kết đăng nhập</button><p id="authState" class="muted"></p><div id="cloudActions" class="hidden"><button id="createCloud">Tạo đợt trên đám mây từ danh mục hiện tại</button><label>Mã đợt (UUID) được chia sẻ</label><input id="cloudId" placeholder="Dán mã đợt kiểm kê"><button id="joinCloud" class="secondary" style="margin-top:8px">Mở đợt được phân quyền</button><button id="copyJoinLink" class="secondary" style="margin-top:8px">Sao chép liên kết cho thành viên</button><p class="muted">Đã có liên kết vẫn cần được trưởng nhóm cấp quyền qua email mới xem hoặc nhập được.</p><label>Mời thành viên bằng email (chủ đợt)</label><input id="inviteEmail" type="email" placeholder="nhanvien@benhvien.vn"><button id="invite" class="secondary" style="margin-top:8px">Cấp quyền nhập liệu</button><button id="viewMembers" class="secondary" style="margin-top:8px">Xem thành viên đã được mời</button><div id="finalizeControls" class="hidden" style="margin-top:12px"><div class="note">Chỉ chốt khi đã kiểm đủ toàn bộ thuốc. Sau khi chốt, không ai được sửa số đếm trong đợt này.</div><button id="finalizeRun" class="danger" style="margin-top:8px">Chốt và khóa đợt kiểm kê</button></div><div id="membersList" class="muted" aria-live="polite"></div><p class="muted" id="cloudState"></p></div></div></div></section>
-</main><nav class="nav"><button data-tab="dashboard" class="active">⌂ Tổng quan</button><button data-tab="count">▣ Kiểm thuốc</button><button data-tab="review">⚠ Kiểm lại</button><button data-tab="export">⇩ Xuất / Đồng bộ</button></nav>
+</main>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 (()=>{'use strict';
@@ -30,9 +74,115 @@ const integer=v=>{const n=num(v);return Number.isSafeInteger(n)&&n>=0?n:0};
 const displayDate=value=>{if(value instanceof Date)return Number.isNaN(value.getTime())?'':value.toLocaleDateString('vi-VN');const n=Number(value);if(Number.isInteger(n)&&n>20000&&n<90000){const p=XLSX.SSF.parse_date_code(n);if(p)return String(p.d).padStart(2,'0')+'/'+String(p.m).padStart(2,'0')+'/'+p.y}return String(value??'')};
 const sum=(item,c)=>item.pack.reduce((s,p,k)=>s+integer(c?.[k]||0)*p.factor,0);
 const latest=i=>state.counts[state.items[i]?.id];
-const show=(id)=>{document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.id===id));document.querySelectorAll('[data-tab]').forEach(el=>el.classList.toggle('active',el.dataset.tab===id));if(id==='count')renderCount();if(id==='review')renderReview();if(id==='dashboard')renderStats()};
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>show(b.dataset.tab));
-function renderStats(){const done=state.items.filter(x=>state.counts[x.id]);const diff=done.filter(x=>x.stock!==null&&sum(x,state.counts[x.id].values)!==x.stock);$('sAll').textContent=state.items.length;$('sDone').textContent=done.length;$('sDiff').textContent=diff.length;$('sLeft').textContent=state.items.length-done.length;$('sessionName').value=state.name;$('sessionId').textContent=state.sessionId?'Mã đợt: '+state.sessionId:'Dữ liệu trên thiết bị này';$('mode').textContent=state.source==='cloud'?(state.closedAt?'🔒 Đã chốt đợt':'☁ Đồng bộ đám mây'):'◉ Chỉ lưu cục bộ'}
+const pageTitles={dashboard:'Tổng quan kiểm kê',count:'Kiểm thuốc tại kệ',review:'Cần kiểm lại',export:'Xuất báo cáo và đồng bộ'};
+function show(id,navigate=false){
+ const overview=id==='dashboard';
+ document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.id===id));
+ document.querySelectorAll('[data-tab]').forEach(button=>{
+   const active=button.dataset.tab===id;
+   button.classList.toggle('active',active);
+   if(active)button.setAttribute('aria-current','page');
+   else button.removeAttribute('aria-current');
+ });
+ $('pageTitle').textContent=pageTitles[id];
+ $('pageHeader').classList.toggle('dashboard-hero',overview);
+ for(const key of ['dashboardTools','dashboardProgress','overviewName'])$(key).classList.toggle('hidden',!overview);
+ if(id==='count')renderCount();
+ if(id==='review')renderReview();
+ if(overview)renderStats();
+ if(navigate){window.scrollTo(0,0);$('pageTitle').focus({preventScroll:true})}
+}
+document.querySelectorAll('[data-tab]').forEach(button=>button.onclick=()=>show(button.dataset.tab,true));
+$('openCount').onclick=()=>show('count',true);
+$('dashboardExport').onclick=()=>show('export',true);
+$('dashboardSearch').onsubmit=event=>{
+ event.preventDefault();
+ $('quickSearch').value=$('dashboardSearchText').value;
+ $('shelfFilter').value='';
+ $('statusFilter').value='';
+ show('count',true);
+ $('quickSearch').focus();
+};
+$('backToList').onclick=()=>$('quickSearch').focus();
+
+let shelfChartKey;
+function renderShelfChart(shelves){
+  const key=JSON.stringify(shelves);
+  if(key===shelfChartKey)return;
+  shelfChartKey=key;
+  const container=$('shelfProgress');
+  const focused=document.activeElement?.dataset.shelf;
+  const scroll=container.scrollLeft;
+  container.replaceChildren();
+  if(!shelves.length){
+    const empty=document.createElement('p');
+    empty.className='chart-empty muted';
+    empty.textContent='Nhập danh mục để xem tiến độ theo khu vực.';
+    container.append(empty);
+    return;
+  }
+  const max=shelves[0].total;
+  for(const shelf of shelves){
+    const button=document.createElement('button');
+    button.type='button';button.className='shelf-bar';button.dataset.shelf=shelf.name;
+    button.setAttribute('aria-label',shelf.name+' · '+shelf.done+'/'+shelf.total+' mặt hàng đã kiểm');
+    const name=document.createElement('span');name.className='shelf-name';name.textContent=shelf.name;
+    const track=document.createElement('span');track.className='shelf-track';
+    const total=document.createElement('span');total.className='shelf-total';total.style.setProperty('--shelf-size',(100*shelf.total/max)+'%');
+    const done=document.createElement('span');done.className='shelf-done';done.style.setProperty('--shelf-size',(100*shelf.done/shelf.total)+'%');
+    const label=document.createElement('span');label.className='shelf-count';label.textContent=shelf.done+' / '+shelf.total;
+    total.append(done);track.append(total);button.append(label,track,name);
+    button.onclick=()=>{
+      $('quickSearch').value='';$('statusFilter').value='';
+      show('count',true);
+      $('shelfFilter').value=shelf.name;
+      renderResults();
+    };
+    container.append(button);
+    if(focused===shelf.name)button.focus({preventScroll:true});
+  }
+  container.scrollLeft=scroll;
+}
+
+function renderStats(){
+ const shelves=new Map();
+ let done=0,compared=0,diff=0;
+ for(const item of state.items){
+   const name=item.shelf||'Chưa phân kệ';
+   if(!shelves.has(name))shelves.set(name,{name,total:0,done:0});
+   const shelf=shelves.get(name);
+   shelf.total++;
+   const count=state.counts[item.id];
+   if(!count)continue;
+   done++;
+   shelf.done++;
+   if(item.stock!==null){
+     compared++;
+     if(sum(item,count.values)!==item.stock)diff++;
+   }
+ }
+ const total=state.items.length,left=total-done;
+ const percent=total?Math.round(100*done/total):0,leftPercent=total?Math.round(100*left/total):0;
+ $('overviewName').textContent=state.name;
+ $('progressRing').style.setProperty('--progress',percent+'%');
+ $('progressPercent').textContent=percent+'%';
+ $('countProgressText').textContent=done+' / '+total+' mặt hàng đã kiểm';
+ $('openCount').disabled=!total;
+ $('sAll').textContent=total;
+ $('sDone').textContent=done;
+ $('sDiff').textContent=diff;
+ $('sLeft').textContent=left;
+ $('sShelfNote').textContent=shelves.size+' khu vực';
+ $('sDoneNote').textContent=percent+'% danh mục';
+ $('sLeftNote').textContent=leftPercent+'% danh mục';
+ $('sDiffNote').textContent=compared?'Trên '+compared+' dòng có tồn máy':'Chưa có số để đối chiếu';
+ for(const [id,value] of [['metricAll',total?100:0],['metricDone',percent],['metricDiff',compared?100*diff/compared:0],['metricLeft',leftPercent]])
+   $(id).style.setProperty('--meter',value+'%');
+ renderShelfChart([...shelves.values()].sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name,'vi')));
+ if(document.activeElement!==$('sessionName'))$('sessionName').value=state.name;
+ $('sessionId').textContent=state.sessionId?'Mã đợt: '+state.sessionId:'Dữ liệu trên thiết bị này';
+ $('mode').textContent=state.source==='cloud'?(state.closedAt?'Đã chốt đợt':'Đồng bộ đám mây'):'Chỉ lưu cục bộ';
+}
 $('saveName').onclick=()=>{if(state.source==='cloud')return alert('Tên đợt chung chỉ được đổi bởi trưởng nhóm trên máy chủ.');state.name=$('sessionName').value.trim()||'Kiểm kê kho Dược';save();alert('Đã lưu tên đợt')};
 $('newLocal').onclick=()=>{if(!confirm('Tạo đợt mới? Danh mục và kết quả cục bộ hiện tại sẽ được thay thế. Hãy xuất bản sao lưu trước.'))return;stopCloudSync();pendingCountOperation=null;state=newData();selected=0;save();renderCount()};
 function normalize(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9]+/g,' ')}
@@ -136,9 +286,9 @@ $('setPackFactor').onclick = () => {
 };
 function selectItem(i){selected=i;const item=state.items[i];const saved=latest(i);draftVersion=saved?.version||null;draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));revealed=!!saved;renderEditor()}
 function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].sort();const old=$('shelfFilter').value;$('shelfFilter').innerHTML='<option value="">Tất cả kệ</option>'+shelves.map(s=>'<option value="'+safe(s)+'">'+safe(s)+'</option>').join('');$('shelfFilter').value=shelves.includes(old)?old:'';renderResults();if(state.items.length)selectItem(Math.min(selected,state.items.length-1));else{$('drugTitle').textContent='Chưa có danh mục';$('drugMeta').textContent='Hãy nhập Excel ở Tổng quan';$('quantityInputs').innerHTML='';$('confirm').disabled=true}}
-function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFilter').value,shelf=$('shelfFilter').value;let ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return(!q||normalize([x.name,x.code,x.lot,x.shelf].join(' ')).includes(q))&&(!shelf||x.shelf===shelf)&&(!f||f==='pending'&&!c||f==='diff'&&diff||f==='ok'&&c&&x.stock!==null&&!diff)});$('results').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return '<div class="item" tabindex="0" data-i="'+i+'"><b>'+safe(x.name)+'</b> <span class="pill '+(c?(x.stock===null?'warning':diff?'bad':'ok'):'')+'">'+(c?(x.stock===null?'Đã kiểm':diff?'Lệch':'Khớp'):'Chưa kiểm')+'</span><div class="muted">'+safe(x.code)+' · '+safe(x.shelf)+' · '+safe(x.lot)+'</div></div>'}).join(''):'<p class="muted">Không có dòng phù hợp.</p>';$('results').querySelectorAll('[data-i]').forEach(el=>{el.onclick=()=>selectItem(Number(el.dataset.i));el.onkeydown=e=>{if(e.key==='Enter')el.click()}})}
+function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFilter').value,shelf=$('shelfFilter').value;let ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return(!q||normalize([x.name,x.code,x.lot,x.shelf].join(' ')).includes(q))&&(!shelf||x.shelf===shelf)&&(!f||f==='pending'&&!c||f==='diff'&&diff||f==='ok'&&c&&x.stock!==null&&!diff)});$('results').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return '<div class="item" tabindex="0" data-i="'+i+'"><b>'+safe(x.name)+'</b> <span class="pill '+(c?(x.stock===null?'warning':diff?'bad':'ok'):'')+'">'+(c?(x.stock===null?'Đã kiểm':diff?'Lệch':'Khớp'):'Chưa kiểm')+'</span><div class="muted">'+safe(x.code)+' · '+safe(x.shelf)+' · '+safe(x.lot)+'</div></div>'}).join(''):'<p class="muted">Không có dòng phù hợp.</p>';$('results').querySelectorAll('[data-i]').forEach(el=>{el.onclick=()=>{selectItem(Number(el.dataset.i));if(matchMedia('(max-width: 799px)').matches)$('drugTitle').focus()};el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click()}}})}
 $('quickSearch').oninput=renderResults;$('shelfFilter').onchange=renderResults;$('statusFilter').onchange=renderResults;
-function renderEditor(){const x=state.items[selected];if(!x)return;$('confirm').disabled=!!(state.source==='cloud'&&state.closedAt);$('position').textContent='Kệ '+x.shelf+' · '+(selected+1)+'/'+state.items.length;$('drugTitle').textContent=x.name;$('drugMeta').textContent='Mã '+x.code+' · Lô '+(x.lot||'—')+' · HSD '+(x.expiry||'—')+' · '+x.unit+(x.packText?' · '+x.packText:'');$('quantityInputs').innerHTML=x.pack.map((p,k)=>'<div><label>'+safe(p.name)+' (×'+p.factor+')</label><input type="number" inputmode="numeric" min="0" step="1" data-n="'+k+'" value="'+safe(draft[k])+'"></div>').join('');$('quantityInputs').querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{draft[Number(el.dataset.n)]=el.value;revealed=false;renderCompare()});$('note').value=latest(selected)?.note||'';renderCompare()}
+function renderEditor(){const x=state.items[selected];if(!x)return;$('confirm').disabled=!!(state.source==='cloud'&&state.closedAt);$('position').textContent='Kệ '+x.shelf+' · '+(selected+1)+'/'+state.items.length;$('drugTitle').textContent=x.name;$('drugMeta').textContent='Mã '+x.code+' · Lô '+(x.lot||'—')+' · HSD '+(x.expiry||'—')+' · '+x.unit+(x.packText?' · '+x.packText:'');$('quantityInputs').innerHTML=x.pack.map((p,k)=>'<div class="quantity-tile"><label for="qty-'+k+'">'+safe(p.name)+(p.factor>1?' <small>×'+p.factor+'</small>':'')+'</label><input id="qty-'+k+'" type="number" inputmode="numeric" min="0" step="1" data-n="'+k+'" value="'+safe(draft[k])+'"></div>').join('');$('quantityInputs').querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{draft[Number(el.dataset.n)]=el.value;revealed=false;renderCompare()});$('note').value=latest(selected)?.note||'';renderCompare()}
 function renderCompare(){const x=state.items[selected];if(!x)return;const values=x.pack.map((_,k)=>integer(draft[k]));const actual=sum(x,values),delta=x.stock===null?null:actual-x.stock;$('actual').textContent=actual.toLocaleString('vi-VN')+' '+x.unit;$('comparison').innerHTML=revealed?(x.stock===null?'Tồn máy: chưa có dữ liệu đối chiếu':'<div>Tồn trên máy: <b>'+x.stock.toLocaleString('vi-VN')+'</b></div><span class="pill '+(delta?'bad':'ok')+'">'+(delta?'Chênh lệch: '+(delta>0?'+':'')+delta:'Đã khớp')+'</span>'):'Tồn máy được ẩn đến khi xác nhận để hạn chế đếm theo số dự kiến'}
 async function cloudWrite(x,record,expectedDraftVersion){
  if(state.source!=='cloud')return null;

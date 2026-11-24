@@ -4,7 +4,7 @@
 - GitHub Pages: `https://nhatlong12311.github.io/long-pharmadesk/pharmacount/`
 - Vercel: `/pharmacount/` dưới domain đã cấu hình cho PharmaDesk.
 - Trang có sẵn Supabase URL và **publishable key** (không phải khóa quản trị).
-- Mã nguồn ở PR #25, thư mục `pharmacount/`, xuất bản từ `web/build.py` (chỉ 2 file `index.html`, `pack-worker.js`).
+- Mã nguồn ở PR #25, thư mục `pharmacount/`, xuất bản từ `web/build.py` (chỉ phát hành `index.html`, `pack-worker.js` và `theme.css`).
 
 **Không sử dụng dữ liệu kho thật khi chưa hoàn tất nghiệm thu 2 tài khoản và được bệnh viện đồng ý dùng Supabase.** GitHub repo và giao diện web là công khai; bảng thuốc chỉ được giới hạn bởi Supabase Auth và RLS.
 
