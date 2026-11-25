@@ -64,7 +64,26 @@
 </section>
 <section id="count" class="tab"><div class="card" id="countFinder"><div class="row space"><h2>Kiểm tại kệ</h2><span id="position" class="pill"></span></div><input aria-label="Tìm thuốc" id="quickSearch" placeholder="Tìm mã, tên, hàm lượng, kệ hoặc lô..."><div class="row" style="margin-top:8px"><select aria-label="Lọc theo kệ" id="shelfFilter" style="flex:1"><option value="">Tất cả kệ</option></select><select aria-label="Lọc theo trạng thái" id="statusFilter" style="flex:1"><option value="">Tất cả trạng thái</option><option value="pending">Chưa kiểm</option><option value="diff">Chênh lệch</option><option value="ok">Đã khớp</option></select></div><div id="results"></div></div>
 <div class="card" id="editor"><button class="secondary mobile-back" id="backToList" type="button">Danh sách thuốc</button><h2 id="drugTitle" tabindex="-1">Chưa có danh mục</h2><p class="muted" id="drugManufacturer" hidden></p><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div><button id="setPackFactor" class="secondary" style="margin-top:10px">Thiết lập số viên/lọ trong 1 hộp</button><div class="stat actual-card"><span id="actualLabel">Tổng thực kiểm</span><div class="big" id="actual">0</div><div id="teamTotal" hidden></div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label for="note">Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea><div class="count-dock"><p class="muted" id="saveState" role="status"></p><div class="row count-actions"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp</button></div></div></div></section>
-<section id="review" class="tab"><div class="card"><h2>Danh sách kiểm lại</h2><p class="muted">Chỉ hiển thị các dòng đã đếm có chênh lệch. Không tự động điều chỉnh số tồn trên phần mềm bệnh viện.</p><div id="reviewList"></div></div></section>
+<section id="review" class="tab">
+<div class="card" id="nxtPanel">
+ <h2>Đối chiếu nhập–xuất–tồn</h2>
+ <p class="muted">Chọn báo cáo cùng kho với đợt kiểm kê. PharmaCount so cột tồn cuối với tổng đã đếm của cả nhóm. Báo cáo NXT được lưu trên trình duyệt này.</p>
+ <div class="nxt-tools">
+  <div><label for="nxtFile">File NXT (.xlsx, .xls, .csv)</label><input id="nxtFile" type="file" accept=".xlsx,.xls,.csv"></div>
+  <button id="nxtImport" type="button">Nhập file NXT</button>
+ </div>
+ <p id="nxtStatus" class="muted" role="status"></p>
+ <p id="nxtSource" class="muted"></p>
+ <div id="nxtComparison" hidden>
+  <p id="nxtSummary" class="muted" aria-live="polite"></p>
+  <div class="nxt-tools">
+   <input id="nxtSearch" type="search" placeholder="Tìm tên, mã hoặc lô" aria-label="Tìm trong báo cáo đối chiếu">
+   <select id="nxtFilter" aria-label="Lọc kết quả đối chiếu"><option value="all">Tất cả kết quả</option><option>Thiếu</option><option>Thừa</option><option>Khớp</option><option value="unresolved">Chưa đối chiếu</option></select>
+  </div>
+  <div class="nxt-table"><table><thead><tr><th scope="col">Thuốc</th><th scope="col">Tồn cuối</th><th scope="col">Thực kiểm</th><th scope="col">Chênh lệch</th><th scope="col">Kết quả</th></tr></thead><tbody id="nxtResults"></tbody></table></div>
+ </div>
+</div>
+<div class="card"><h2>Chênh lệch theo tồn trong danh mục</h2><p class="muted">Chỉ hiển thị các dòng đã đếm có chênh lệch. Không tự động điều chỉnh số tồn trên phần mềm bệnh viện.</p><div id="reviewList"></div></div></section>
 <section id="export" class="tab">
 <div class="card guest-share" aria-labelledby="guestShareTitle">
  <h2 id="guestShareTitle">Tạo link kiểm kê</h2>
@@ -90,13 +109,14 @@
 </div><button id="viewMembers" class="secondary" style="margin-top:8px">Xem thành viên đã được mời</button><div id="finalizeControls" class="hidden" style="margin-top:12px"><div class="note">Chỉ chốt khi đã kiểm đủ toàn bộ thuốc. Sau khi chốt, không ai được sửa số đếm trong đợt này.</div><button id="finalizeRun" class="danger" style="margin-top:8px">Chốt và khóa đợt kiểm kê</button></div><div id="membersList" class="muted" aria-live="polite"></div><p class="muted" id="cloudState"></p></div></div></div></section>
 </main>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="nxt.js"></script>
 <script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id),KEY='pharmacount-v1',CONFIG='pharmacount-cloud-config';
 const uuidPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const guestToken=new URLSearchParams(location.search).get('guest');
 let guestDisplayName='',guestLinkBusy=false;
-const newData=()=>({name:'Kiểm kê kho Dược',items:[],counts:{},sessionId:null,source:'local',ownerId:null,closedAt:null});
+const newData=()=>({name:'Kiểm kê kho Dược',items:[],counts:{},sessionId:null,source:'local',localId:crypto.randomUUID(),ownerId:null,closedAt:null});
 let state;try{state=guestToken!==null?newData():JSON.parse(localStorage.getItem(KEY))||newData();if(state.source==='cloud'){state.items=[];state.counts={}}}catch{state=newData()}
 let cloudCountEpoch=0;
 let selected=0, draft={}, draftVersion=null, revealed=false, client=null,user=null,lock=false, joiningCloud=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshInFlight=null, pendingCountOperation=null, packIssues=[];
@@ -265,7 +285,7 @@ function field(o,aliases){let keys=Object.keys(o);for(const a of aliases){const 
 function parseRows(rows){return rows.map((r,i)=>{const name=field(r,['Tên thuốc','Tên hàng','Tên dược phẩm','Tên vật tư','Tên sản phẩm','Tên']);const code=field(r,['Mã thuốc','Mã hàng','Mã dược','Mã sản phẩm','Mã']);const lot=field(r,['Số lô','Lô','Batch']);const expiry=field(r,['Hạn dùng','HSD','Ngày hết hạn']);const shelf=field(r,['Vị trí kệ','Vị trí','Kệ','Location'])||'Chưa phân kệ';const unit=field(r,['Đơn vị tính','ĐVT','Đơn vị'])||'đơn vị';const rawStock=field(r,['Số lượng tồn','SL tồn','Tồn cuối','Tồn kho','Số lượng']);const stock=String(rawStock).trim()===''?null:num(rawStock);const packText=field(r,['Quy cách đóng gói','Quy cách','Đóng gói']);const factor=integer(field(r,['Số đơn vị/hộp','Hệ số quy đổi','Quy đổi']));if(!String(name).trim()&&!String(code).trim())return null;
 const pack=factor>1?[{name:'Hộp',factor},{name:'Đơn vị lẻ',factor:1}]:[{name:'Đơn vị lẻ',factor:1}];
 return{id:'r'+i+'_'+normalize(code)+'_'+normalize(lot)+'_'+normalize(shelf),name:String(name||code),strength:String(field(r,['Hàm lượng','Nồng độ, hàm lượng'])||''),manufacturer:String(field(r,['Hãng sản xuất','Nhà sản xuất','Tên nhà sản xuất'])||''),code:String(code||''),lot:String(lot||''),expiry:displayDate(expiry),shelf:String(shelf),unit:String(unit),stock,packText:String(packText||''),pack,raw:r}}).filter(Boolean)}
-function importRows(rows){if(!Array.isArray(rows)||!rows.length)throw Error('Excel không có dữ liệu.');const headers=Object.keys(rows[0]);const has=(aliases)=>headers.some(h=>aliases.some(a=>normalize(h)===normalize(a)||normalize(h).includes(normalize(a))));if(!has(['Tên thuốc','Tên hàng','Tên dược phẩm','Tên vật tư','Tên sản phẩm','Tên'])&&!has(['Mã thuốc','Mã hàng','Mã dược','Mã sản phẩm','Mã']))throw Error('Không nhận diện được cột tên/mã thuốc. Hãy kiểm tra hàng tiêu đề.');const hasStock=has(['Số lượng tồn','SL tồn','Tồn cuối','Tồn kho','Số lượng']);const items=parseRows(rows);if(!items.length)throw Error('Không tìm thấy dữ liệu thuốc. Kiểm tra hàng tiêu đề Excel.');const invalid=items.filter(x=>x.stock!==null&&(!Number.isFinite(x.stock)||x.stock<0||!Number.isInteger(x.stock)));if(invalid.length)throw Error('Có '+invalid.length+' dòng tồn kho âm, thiếu, không hợp lệ hoặc không nguyên. Ví dụ: '+invalid.slice(0,3).map(x=>x.name+' ('+String(x.stock)+')').join(', ')+'. Hãy sửa file trước khi nhập.');const ids=new Set();const collisions=[];for(const x of items){const identity=[normalize(x.code||x.name),normalize(x.lot),normalize(x.shelf),normalize(x.packText)].join('|');if(ids.has(identity))collisions.push(x);ids.add(identity)}const duplicateWarning=collisions.length?'\n\nCẢNH BÁO: '+collisions.length+' dòng trùng mã/lô/kệ/quy cách (ví dụ '+collisions[0].name+'). Đã giữ nguyên tất cả dòng gốc; cần rà soát để tránh đếm hai lần.':'';const preview=items.slice(0,20).map((x,i)=>(i+1)+'. '+x.name+' | '+x.code+' | tồn '+(x.stock===null?'chưa có':x.stock)+' | '+x.shelf+' | '+(x.pack.length>1?'hộp ×'+x.pack[0].factor:'chưa có hệ số hộp')).join('\n');if(!confirm('XEM TRƯỚC '+Math.min(items.length,20)+'/'+items.length+' DÒNG\n\n'+preview+'\n\n'+(!hasStock?'Danh mục không có tồn máy; KHÔNG tự kết luận chênh lệch.\n':'')+duplicateWarning+'\nKiểm tra mã, lô, tồn và hệ số quy đổi. Tiếp tục nhập?'))return;if(state.items.length&&!confirm('Thay danh mục hiện tại và xóa kết quả đã nhập trên thiết bị? Hãy sao lưu JSON/Excel trước.'))return;if(state.source==='cloud')throw Error('Đang tham gia đợt chung. Hãy ngắt kết nối trước khi thay danh mục.');state.items=items;state.counts={};state.sessionId=null;state.source='local';selected=0;save();renderCount();$('importInfo').textContent='Đã nhận '+items.length+' dòng; '+collisions.length+' dòng trùng mã/lô/kệ cần rà soát. Giữ nguyên từng dòng Excel để tránh mất dữ liệu.';show('count')}
+function importRows(rows){if(!Array.isArray(rows)||!rows.length)throw Error('Excel không có dữ liệu.');const headers=Object.keys(rows[0]);const has=(aliases)=>headers.some(h=>aliases.some(a=>normalize(h)===normalize(a)||normalize(h).includes(normalize(a))));if(!has(['Tên thuốc','Tên hàng','Tên dược phẩm','Tên vật tư','Tên sản phẩm','Tên'])&&!has(['Mã thuốc','Mã hàng','Mã dược','Mã sản phẩm','Mã']))throw Error('Không nhận diện được cột tên/mã thuốc. Hãy kiểm tra hàng tiêu đề.');const hasStock=has(['Số lượng tồn','SL tồn','Tồn cuối','Tồn kho','Số lượng']);const items=parseRows(rows);if(!items.length)throw Error('Không tìm thấy dữ liệu thuốc. Kiểm tra hàng tiêu đề Excel.');const invalid=items.filter(x=>x.stock!==null&&(!Number.isFinite(x.stock)||x.stock<0||!Number.isInteger(x.stock)));if(invalid.length)throw Error('Có '+invalid.length+' dòng tồn kho âm, thiếu, không hợp lệ hoặc không nguyên. Ví dụ: '+invalid.slice(0,3).map(x=>x.name+' ('+String(x.stock)+')').join(', ')+'. Hãy sửa file trước khi nhập.');const ids=new Set();const collisions=[];for(const x of items){const identity=[normalize(x.code||x.name),normalize(x.lot),normalize(x.shelf),normalize(x.packText)].join('|');if(ids.has(identity))collisions.push(x);ids.add(identity)}const duplicateWarning=collisions.length?'\n\nCẢNH BÁO: '+collisions.length+' dòng trùng mã/lô/kệ/quy cách (ví dụ '+collisions[0].name+'). Đã giữ nguyên tất cả dòng gốc; cần rà soát để tránh đếm hai lần.':'';const preview=items.slice(0,20).map((x,i)=>(i+1)+'. '+x.name+' | '+x.code+' | tồn '+(x.stock===null?'chưa có':x.stock)+' | '+x.shelf+' | '+(x.pack.length>1?'hộp ×'+x.pack[0].factor:'chưa có hệ số hộp')).join('\n');if(!confirm('XEM TRƯỚC '+Math.min(items.length,20)+'/'+items.length+' DÒNG\n\n'+preview+'\n\n'+(!hasStock?'Danh mục không có tồn máy; KHÔNG tự kết luận chênh lệch.\n':'')+duplicateWarning+'\nKiểm tra mã, lô, tồn và hệ số quy đổi. Tiếp tục nhập?'))return;if(state.items.length&&!confirm('Thay danh mục hiện tại và xóa kết quả đã nhập trên thiết bị? Hãy sao lưu JSON/Excel trước.'))return;if(state.source==='cloud')throw Error('Đang tham gia đợt chung. Hãy ngắt kết nối trước khi thay danh mục.');state.items=items;state.counts={};state.sessionId=null;state.source='local';state.localId=crypto.randomUUID();selected=0;save();renderCount();$('importInfo').textContent='Đã nhận '+items.length+' dòng; '+collisions.length+' dòng trùng mã/lô/kệ cần rà soát. Giữ nguyên từng dòng Excel để tránh mất dữ liệu.';show('count')}
 $('importBtn').onclick=async()=>{try{if(state.source==='cloud')throw Error('Không nhập danh mục khi đang trong đợt chung. Hãy xuất dữ liệu trước và tạo đợt riêng.');const file=$('excel').files[0];if(!file)throw Error('Chọn file Excel trước.');if(!file.name.toLowerCase().endsWith('.xlsx'))throw Error('Hãy sử dụng file .xlsx để tránh lỗi định dạng.');if(typeof XLSX==='undefined')throw Error('Không tải được thư viện Excel. Cần kết nối Internet lần đầu.');const book=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false});let rows=[];for(const sheetName of book.SheetNames){const sheet=book.Sheets[sheetName];const grid=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});const header=grid.findIndex(r=>Array.isArray(r)&&r.some(x=>normalize(x).trim()==='ma duoc')&&r.some(x=>normalize(x).trim().startsWith('ten thuoc')));if(header>=0){for(let i=header+2;i<grid.length;i++){const r=grid[i];if(!r||!String(r[1]||'').trim()||!String(r[2]||'').trim())continue;rows.push({'Mã dược':r[1],'Tên thuốc':r[2],'ĐVT':r[3],'Số lô':r[4],'Hạn dùng':r[5],'Kệ':sheetName,'Dòng nguồn':i+1,'Chẵn file gốc':r[6],'Lẻ file gốc':r[7]})}}else{for(const x of XLSX.utils.sheet_to_json(sheet,{defval:''}))if(Object.keys(x).some(k=>['ma duoc','ma thuoc','ten thuoc','ten hang'].includes(normalize(k).trim())))rows.push({...x,'Kệ':field(x,['Vị trí kệ','Vị trí','Kệ'])||sheetName})}}importRows(rows)}catch(e){alert(e.message)}};
 $('sampleBtn').onclick=()=>importRows([{'Mã thuốc':'TH001','Tên thuốc':'Paracetamol 500 mg','Tồn kho':2740,'ĐVT':'viên','Kệ':'A-03','Số đơn vị/hộp':100},{'Mã thuốc':'TH002','Tên thuốc':'Ceftriaxon 1 g','Tồn kho':520,'ĐVT':'lọ','Kệ':'A-04','Số đơn vị/hộp':10},{'Mã thuốc':'TH003','Tên thuốc':'Omeprazol 20 mg','Tồn kho':1260,'ĐVT':'viên','Kệ':'B-02','Số đơn vị/hộp':140}]);
 $('mergePacks').onclick = async () => {
@@ -554,6 +574,7 @@ $('confirm').onclick=async()=>{
    }
   }else run.counts[x.id]=record;
   save();renderResults();renderStats();
+  if($('review').classList.contains('active'))renderReview();
   if(draft===edit&&run.items[selected]?.id===x.id){
    const saved=ownCount(selected);
    draftVersion=snapshotPending?version:saved?.version||null;
@@ -570,7 +591,72 @@ $('confirm').onclick=async()=>{
  }
 };
 $('next').onclick=()=>{if(state.items.length)selectItem((selected+1)%state.items.length)};
-function renderReview(){const ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i);return c&&x.stock!==null&&sum(x,c.values)!==x.stock});$('reviewList').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),v=sum(x,c.values);return '<div class="item" data-review="'+i+'"><b>'+safe(drugTitle(x))+'</b>'+(drugManufacturer(x)?'<span class="muted manufacturer">'+safe(drugManufacturer(x))+'</span>':'')+'<div class="muted">'+safe(x.shelf)+' · '+safe(x.code)+'</div><div class="pill bad">Máy '+x.stock+' · Kiểm '+v+' · Lệch '+(v-x.stock)+'</div></div>'}).join(''):'<p class="muted">Chưa có dòng chênh lệch.</p>';$('reviewList').querySelectorAll('[data-review]').forEach(el=>el.onclick=()=>{show('count');selectItem(Number(el.dataset.review))})}
+function renderReview(){renderNxtReview();const ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i);return c&&x.stock!==null&&sum(x,c.values)!==x.stock});$('reviewList').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),v=sum(x,c.values);return '<div class="item" data-review="'+i+'"><b>'+safe(drugTitle(x))+'</b>'+(drugManufacturer(x)?'<span class="muted manufacturer">'+safe(drugManufacturer(x))+'</span>':'')+'<div class="muted">'+safe(x.shelf)+' · '+safe(x.code)+'</div><div class="pill bad">Máy '+x.stock+' · Kiểm '+v+' · Lệch '+(v-x.stock)+'</div></div>'}).join(''):'<p class="muted">Chưa có dòng chênh lệch.</p>';$('reviewList').querySelectorAll('[data-review]').forEach(el=>el.onclick=()=>{show('count');selectItem(Number(el.dataset.review))})}
+function nxtKey(run){
+ return 'pharmacount-nxt:'+ (run.source==='cloud'?'cloud:'+run.sessionId:'local:'+run.localId);
+}
+function readNxt(run){
+ if(run.source==='local'&&!run.localId)return null;
+ return JSON.parse(localStorage.getItem(nxtKey(run))||'null');
+}
+function compareNxt(source,run,counts){
+ const totals=Object.fromEntries(run.items.flatMap(item=>{
+  const count=counts[item.id];
+  return count?[[item.id,{actual:count.actual??sum(item,count.values)}]]:[];
+ }));
+ return inventoryNxt.compare(source.rows,run.items,totals);
+}
+function renderNxtReview(){
+ if(user?.is_anonymous)return;
+ const results=$('nxtResults'),sourceLabel=$('nxtSource'),scope=nxtKey(state);
+ if(results.dataset.scope!==scope){
+  results.dataset.scope=scope;
+  $('nxtFile').value='';$('nxtStatus').textContent='';
+  $('nxtFilter').value='all';$('nxtSearch').value='';
+ }
+ const mode=$('nxtFilter').value;
+ let source;
+ try{source=readNxt(state)}
+ catch{sourceLabel.textContent='Chưa đọc được báo cáo NXT trên trình duyệt này.';results.replaceChildren();$('nxtComparison').hidden=true;return}
+ $('nxtComparison').hidden=!source;
+ sourceLabel.textContent=source?source.name:'';
+ if(!source){results.replaceChildren();return}
+ const rows=compareNxt(source,state,state.counts);
+ const summary=rows.reduce((totals,row)=>{totals[row.reason]=(totals[row.reason]||0)+1;return totals},Object.create(null));
+ $('nxtSummary').textContent=Object.entries(summary).map(([status,count])=>status+' '+count).join(' · ');
+ const filtered=rows.filter(row=>mode==='all'||(mode==='unresolved'?row.delta===null:row.reason===mode));
+ const query=normalize($('nxtSearch').value).trim();
+ const shown=filtered.filter(row=>!query||normalize([row.label,row.code,row.lot,drugNxtName(row)].join(' ')).includes(query));
+ results.innerHTML=shown.length?shown.map(row=>'<tr><td><strong>'+safe(drugNxtName(row))+
+  '</strong><span class="muted manufacturer">'+safe(row.code.toUpperCase()+' · '+(row.lot?'Lô '+row.lot:'Tất cả lô'))+
+  '</span></td><td>'+formatNxt(row.amount)+'</td><td>'+formatNxt(row.actual)+'</td><td>'+formatNxt(row.delta,true)+
+  '</td><td class="'+(row.delta!==null&&row.delta!==0?'nxt-difference':'')+'">'+safe(row.reason)+'</td></tr>').join('')
+  : '<tr><td colspan="5" class="muted">Không có dòng phù hợp.</td></tr>';
+}
+const formatNxt=(value,signed=false)=>value===null?'—':(signed&&value>0?'+':'')+value.toLocaleString('vi-VN');
+const drugNxtName=row=>row.matches[0]?drugTitle(row.matches[0]):row.label||row.code;
+$('nxtFilter').onchange=renderNxtReview;
+$('nxtSearch').oninput=renderNxtReview;
+$('nxtImport').onclick=async()=>{
+ const file=$('nxtFile').files[0],run=state,button=$('nxtImport'),status=$('nxtStatus');
+ if(user?.is_anonymous)return;
+ if(!file||!run.items.length){status.textContent=file?'Hãy mở đợt kiểm kê trước.':'Chọn file NXT trước.';return}
+ button.disabled=true;status.textContent='Đang đọc báo cáo…';
+ try{
+  if(typeof XLSX==='undefined')throw Error('Chưa tải được thư viện Excel.');
+  const workbook=XLSX.read(await file.arrayBuffer(),{type:'array'});
+  const rows=inventoryNxt.read(workbook,XLSX);
+  if(state!==run||user?.is_anonymous)return;
+  if(readNxt(run)&&!confirm('Thay báo cáo NXT đang dùng cho đợt này?')){status.textContent='Đang giữ báo cáo NXT hiện tại.';return}
+  run.localId??=crypto.randomUUID();
+  localStorage.setItem(nxtKey(run),JSON.stringify({name:file.name,rows}));
+  save();
+  $('nxtFilter').value='all';$('nxtSearch').value='';
+  renderNxtReview();
+  status.textContent='Đã nhập '+rows.length+' dòng tồn cuối.';
+ }catch(e){if(state===run)status.textContent=e.message}
+ finally{button.disabled=false}
+};
 async function exportXlsx(){
  if(user?.is_anonymous)return;
  if(typeof XLSX==='undefined')return alert('Không tải được thư viện xuất Excel.');
@@ -638,6 +724,17 @@ async function exportXlsx(){
     'Số lượng chẵn/lẻ':JSON.stringify(r.values),'Tổng thực kiểm':r.actual,'Ghi chú':r.note||''};
   });
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(history.length?history:[{'Thông báo':'Chưa có lượt kiểm'}]),'Lịch sử kiểm');
+ }
+ let nxtSource;
+ try{nxtSource=readNxt(run)}
+ catch{return alert('Không đọc được báo cáo NXT đã lưu. Hãy nhập lại file NXT trước khi xuất Excel.')}
+ if(nxtSource){
+  const compared=compareNxt(nxtSource,run,reportCounts).map(row=>({
+   'File NXT':nxtSource.name,'Mã thuốc':row.code.toUpperCase(),'Số lô':row.lot,
+   'Tên thuốc':drugNxtName(row),'Tồn cuối NXT':row.amount,'Thực kiểm':row.actual??'',
+   'Chênh lệch':row.delta??'','Kết quả':row.reason
+  }));
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(compared),'Đối chiếu NXT');
  }
  const metadata=[{'Thông tin':'Mã đợt','Giá trị':exportSession||'Cục bộ'},
   {'Thông tin':'Trạng thái đợt','Giá trị':cloud?(closedAt?'ĐÃ CHỐT':'CHƯA CHỐT — BÁO CÁO TẠM'):'BẢN CỤC BỘ'},
@@ -751,10 +848,15 @@ async function createCloudRun(forGuestLink=false){
   if(state!==run||client!==requestClient||user?.id!==signedInUserId)
     throw Error('Đã tạo đợt trên máy chủ. Mở đợt theo mã: '+id);
   state={...run,source:'cloud',sessionId:id,counts:{},ownerId:user.id,closedAt:null};
+  let nxtCopied=true;
+  try{
+   const report=readNxt(run);
+   if(report)localStorage.setItem(nxtKey(state),JSON.stringify(report));
+  }catch{nxtCopied=false}
   save();renderCount();showFinalizeControls();
   $('cloudId').value=id;startCloudSync();
   resetGuestSharing();
-  $('cloudState').textContent='Đã tạo đợt '+id+' gồm '+state.items.length+' thuốc. Hãy mời thành viên.';
+  $('cloudState').textContent='Đã tạo đợt '+id+' gồm '+state.items.length+' thuốc. Hãy mời thành viên.'+(nxtCopied?'':' Hãy nhập lại báo cáo NXT cho đợt chung.');
   if(!forGuestLink)alert('Đã tạo đợt '+id+'. Bạn có thể tạo link kiểm kê.');
   return true;
  }catch(e){

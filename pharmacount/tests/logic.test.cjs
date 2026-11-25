@@ -295,7 +295,7 @@ test('finalized XLSX sums latest contributions and retains every audit event',as
  };
  const elems={exportBtn:{}};
  const ctx={XLSX,state,client:{},user:{},drugDisplay:item=>({name:item.name,strength:'',manufacturer:''}),
-   refreshCloudCounts:async()=>true,fetchCloudRows:async()=>records,
+   refreshCloudCounts:async()=>true,fetchCloudRows:async()=>records,readNxt:()=>null,
    sum:(item,values)=>item.pack.reduce((n,p,i)=>n+values[i]*p.factor,0),
    $:id=>elems[id]||(elems[id]={}),alert:message=>alerts.push(message)};
  vm.createContext(ctx);
@@ -310,4 +310,45 @@ test('finalized XLSX sums latest contributions and retains every audit event',as
  assert.equal(sheets[0].rows[0]['Thực kiểm'],115);
  assert.equal(sheets[0].rows[0]['Số lô'],'LOT1');
  assert.ok(outputs[0].includes('CHOT_'));
+});
+
+test('NXT reads hospital columns B and M and compares the total across all lots',()=>{
+ const nxt=require('../nxt.js');
+ const grid=[
+  ['Báo cáo nhập xuất tồn'],
+  ['', 'STT', 'Mã dược', 'Tên thuốc', 'ĐVT', '', '', '', '', '', '', '', 'S.Lượng', 'Thành tiền'],
+  [1, 'A-1', 'Thuốc A', '', 'Viên', '', '', '', '', '', '', '', '1.200', '999999'],
+  [2, 'B-1', 'Thuốc B', '', 'Lọ', '', '', '', '', '', '', '', 0, 0]
+ ];
+ const rows=nxt.read({SheetNames:['Kho'],Sheets:{Kho:{}}},{utils:{sheet_to_json:()=>grid}});
+ assert.deepEqual(rows.map(({code,amount})=>[code,amount]),[['a-1',1200],['b-1',0]]);
+ const items=[{id:'A1',code:'A-1',lot:'01',unit:'viên'},{id:'A2',code:'A-1',lot:'02',unit:'viên'}];
+ const counts={A1:{actual:800}};
+ assert.equal(nxt.compare(rows,items,counts)[0].reason,'Chưa kiểm đủ');
+ counts.A2={actual:350};
+ const [a,b]=nxt.compare(rows,items,counts);
+ assert.deepEqual([a.actual,a.delta,a.reason],[1150,-50,'Thiếu']);
+ assert.equal(b.reason,'Không tìm thấy mã/lô');
+});
+
+test('NXT uses lot headers and flags duplicate scopes and mismatched units',()=>{
+ const nxt=require('../nxt.js');
+ const grid=[
+  ['Mã thuốc','Số lô','ĐVT','Tồn cuối kỳ',''],
+  ['','','','Số lượng','Thành tiền'],
+  ['A-1','','Viên',15,999],
+  ['A-1','L1','Viên',10,999],
+  ['B-1','L3','Hộp',5,999],
+  ['C-1','L4','Lọ',4,999]
+ ];
+ const rows=nxt.read({SheetNames:['Kho'],Sheets:{Kho:{}}},{utils:{sheet_to_json:()=>grid}});
+ const items=[
+  {id:'A',code:'A-1',lot:'L1',unit:'Viên'},
+  {id:'B',code:'B-1',lot:'L3',unit:'Viên'},
+  {id:'C',code:'C-1',lot:'L4',unit:'Lọ'}
+ ];
+ const compared=nxt.compare(rows,items,{A:{actual:10},B:{actual:5},C:{actual:4}});
+ assert.deepEqual(compared.map(row=>row.reason),[
+  'NXT có cả dòng tổng và dòng theo lô','NXT có cả dòng tổng và dòng theo lô','Đơn vị tính khác nhau','Khớp'
+ ]);
 });

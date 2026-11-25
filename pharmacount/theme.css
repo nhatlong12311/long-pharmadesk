@@ -471,3 +471,19 @@ button.danger { background: #9d384c; color: white; }
 .owner-login-row input { flex: 1 1 260px; width: auto; min-width: 0; }
 #ownerLoginFeedback:not(:empty), .guest-share #authState:not(:empty) { margin-top: 8px; }
 #ownerLoginFeedback:empty, .guest-share #authState:empty { display: none; }
+
+.nxt-tools {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin: .75rem 0;
+}
+.nxt-tools > div, .nxt-tools > input { flex: 1 1 16rem; }
+.nxt-tools > select { width: auto; }
+.nxt-table { overflow: auto; max-height: 32rem; }
+.nxt-table table { width: 100%; min-width: 34rem; border-collapse: collapse; }
+.nxt-table th, .nxt-table td { padding: .7rem .6rem; text-align: right; border-bottom: 1px solid #dbe8e1; }
+.nxt-table th { position: sticky; top: 0; background: #ecf5f0; }
+.nxt-table th:first-child, .nxt-table td:first-child, .nxt-table td:last-child { text-align: left; }
+.nxt-difference { font-weight: 700; color: #963c2b; }

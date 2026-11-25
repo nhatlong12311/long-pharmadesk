@@ -78,7 +78,7 @@ def copy_pharmacount(output):
         return
     target = output / "pharmacount"
     target.mkdir(parents=True, exist_ok=True)
-    for filename in ("index.html", "pack-worker.js", "theme.css"):
+    for filename in ("index.html", "nxt.js", "pack-worker.js", "theme.css"):
         shutil.copyfile(source / filename, target / filename)
 
 
