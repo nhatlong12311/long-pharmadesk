@@ -9,16 +9,16 @@
 - **Backend:** dự án Supabase *PharmaCount* (PostgreSQL + Supabase Auth + Row Level Security + Realtime).
 - **Dữ liệu gốc:** nhập `.xlsx` danh mục kiểm kê. Có thể ghép `.xlsx` danh mục quy cách trong luồng Web Worker (`pack-worker.js`), xác minh mã thuốc và không tự chọn một hệ số nếu có nhiều quy cách.
 - **Một đợt chung:** trưởng nhóm tạo đợt cloud; thành viên đã mời đăng nhập và mở qua UUID đợt. Danh mục thuốc được lưu trên máy chủ; mỗi lần đếm lưu sự kiện mới và người kiểm.
-- **Chống xung đột:** dùng Supabase RPC `pc_submit_count` với phiên bản trước đó và operation ID; nếu người khác đã lưu, trả `conflict`, không tự ghi đè.
-- **Đồng bộ:** Supabase Realtime nhận sự kiện mới; định kỳ kiểm tra bản ghi cuối **của từng thuốc** bằng `pc_latest_counts` sau 20 giây (không dùng cursor ID toàn cục, tránh bỏ sót giao dịch hoàn tất muộn), nhằm giảm nguy cơ mất cập nhật khi websocket gián đoạn.
+- **Chống xung đột:** dùng Supabase RPC `pc_submit_count` với phiên bản trước đó và operation ID; nếu một thiết bị khác vừa cập nhật số đếm của cùng người, tải lại số mới nhất trước khi xác nhận tiếp.
+- **Đồng bộ:** Supabase Realtime nhận sự kiện mới; định kỳ đọc tổng của từng dòng thuốc và số gần nhất của người đang kiểm bằng `pc_inventory_count_snapshot` (không dùng cursor ID toàn cục, tránh bỏ sót giao dịch hoàn tất muộn), nhằm giảm nguy cơ mất cập nhật khi websocket gián đoạn.
 - **Phân biệt tồn:** mẫu tháng 10 thiếu tồn máy độc lập nên được ghi `stock=null`, **không được kết luận chênh lệch** cho các dòng này.
 
 ### Cách thiết lập và vận hành thử
-1. Trong Supabase, dùng dự án *PharmaCount* đã có. Nếu tạo dự án mới, áp dụng `pharmacount/supabase.sql`, **sau đó** `pharmacount/supabase-count-rpc.sql`, **sau đó** `pharmacount/supabase-latest-counts.sql`. Không đưa `service_role` hoặc Supabase secret key vào website. Chỉ dùng publishable/anon key và bật email OTP.
+1. Trong Supabase, dùng dự án *PharmaCount* đã có. Nếu tạo dự án mới, áp dụng các bản SQL theo thứ tự trong [hướng dẫn vận hành](OPERATIONS.md). Không đưa `service_role` hoặc Supabase secret key vào website. Chỉ dùng publishable/anon key và bật email OTP.
 2. Cấu hình Supabase Auth → URL Configuration, Site URL / Redirect URLs theo URL trang web triển khai thực tế (ví dụ trang GitHub Pages sau khi PR được merge). Đăng nhập thử bằng email của người tạo đợt và một nhân viên khác.
 3. Trưởng nhóm: nhập mẫu `.xlsx` kiểm kê (tất cả sheet), ghép danh mục quy cách `.xlsx`, xử lý các trường hợp hệ số chưa rõ, sau đó vào **Xuất / Đồng bộ** để kết nối Supabase và **Tạo đợt trên đám mây**.
 4. Trưởng nhóm dùng email mời từng người. Mỗi nhân viên mở cùng URL web, đăng nhập OTP bằng email được mời, dán mã UUID đợt, chọn **Mở đợt được phân quyền**. Có thể nhập trên máy tính, điện thoại, máy tính bảng.
-5. Nhập **số hộp** và **số lẻ**, bấm xác nhận. Chỉ xem là đã lưu khi máy chủ trả thành công. Nếu người khác đã đếm trước, đối chiếu bản ghi mới rồi chọn kiểm lại. Kiểm tra cột người kiểm và thời gian trong Excel xuất.
+5. Nhập **số hộp** và **số lẻ**, bấm xác nhận. Chỉ xem là đã lưu khi máy chủ trả thành công. Khi nhiều người kiểm cùng một dòng thuốc, tổng cộng số gần nhất của từng người. Người tham gia qua link nhập lại cùng tên để cập nhật phần của mình. Hệ thống nhận diện tên sau khi chuẩn hóa Unicode, bỏ khoảng trắng thừa và chuyển về chữ thường. Kiểm tra cột người kiểm và thời gian trong Excel xuất.
 6. Thử bằng **dữ liệu giả** với ít nhất 2 tài khoản và 2 thiết bị trước khi dùng dữ liệu kho thật. Không xóa hoặc đổi quy cách của mặt hàng đã được kiểm. Sao lưu Excel thường xuyên.
 
 ### Các giới hạn phải xử lý trước vận hành chính thức
@@ -76,7 +76,7 @@ Phần mềm quản lý kho gốc vẫn là nguồn số liệu chính. PharmaCo
 - Trong Supabase, với dự án tạo mới, áp dụng SQL theo thứ tự: `supabase.sql`, `supabase-count-rpc.sql`, `supabase-latest-counts.sql`, `supabase-team-permissions.sql`. Dự án Supabase PharmaCount hiện có đã được áp dụng các bản bổ sung.
 - Trưởng nhóm mời nhân viên theo email, dùng nút **Sao chép liên kết cho thành viên** để chia sẻ URL có `?join=<UUID>`. Liên kết không tự cấp quyền; chỉ email đã được mời và đăng nhập mới được xem/sửa.
 - Trong **Xuất / Đồng bộ**, chọn **Xem thành viên đã được mời** để xem danh sách. **Chỉ chủ đợt** mới thấy nút **Thu hồi quyền** và được RLS cho phép xóa quyền mời.
-- `pc_latest_counts` đọc bản ghi cuối cùng theo từng mã dòng thuốc, phân trang 500. Không sử dụng cursor ID toàn cục vì giao dịch có thể hoàn tất lệch thứ tự.
+- `pc_inventory_count_snapshot` đọc tổng từng dòng thuốc và phần số đếm của người đang kiểm, phân trang 500. Không sử dụng cursor ID toàn cục vì giao dịch có thể hoàn tất lệch thứ tự.
 - Nếu mất đăng nhập, ứng dụng phải báo lỗi khi lưu cloud, không được báo nhầm là đã đồng bộ.
 
 

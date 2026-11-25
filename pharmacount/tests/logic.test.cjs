@@ -47,9 +47,21 @@ test('older inventory names separate manufacturer, lot and expiry without changi
  assert.equal(drugTitle({name:'Thuốc 1 (XR), lô A, 27/05/2031',lot:'lô A',unit:'Viên'}),'Thuốc 1 (XR) · Viên');
 });
 
-function cloud(client,counts={}){const ctx={client,user:{email:'tester@example.org'},state:{source:'cloud',sessionId:'test-run',items:[{id:'A'}],counts},pendingCountOperation:null,crypto:{randomUUID:()=> 'same-op-id'},selected:0,saves:0,selections:0,save(){ctx.saves++},selectItem(){ctx.selections++}};vm.createContext(ctx);vm.runInContext(slice('async function cloudWrite(x,record,expectedDraftVersion){','async function fetchCloudRows(')+'\nthis.call=cloudWrite',ctx);return ctx}
+function cloud(client,counts={}){const ctx={client,user:{email:'tester@example.org'},state:{source:'cloud',sessionId:'test-run',items:[{id:'A'}],counts},fetchCloudCountSnapshot:async(id,item)=>{const {data}=await client.rpc("pc_inventory_count_snapshot",{p_session:id,p_item:item});return data},pendingCountOperation:null,crypto:{randomUUID:()=> 'same-op-id'},selected:0,saves:0,selections:0,save(){ctx.saves++},selectItem(){ctx.selections++}};vm.createContext(ctx);vm.runInContext(slice('function countFromSnapshot(r){','async function fetchCloudRows(')+'\nthis.call=cloudWrite',ctx);return ctx}
 test('retry of uncertain write reuses operation ID',async()=>{let n=0;const ops=[];const ctx=cloud({rpc:async(_,args)=>{ops.push(args.p_operation);return ++n===1?{error:{message:'timeout'}}:{data:{status:'saved',version:'5'}}}});await assert.rejects(ctx.call({id:'A'},{values:[3,5],note:'test'}));assert.equal(await ctx.call({id:'A'},{values:[3,5],note:'test'}),'5');assert.deepEqual(ops,['same-op-id','same-op-id'])});
-test('conflicting concurrent save loads latest teammate result',async()=>{const row={id:6,values:[2,4],note:'teammate',actual:204,users_email:'other@example.org',created_at:'2026-11-23T10:00:00Z'};const query={select(){return this},eq(){return this},order(){return this},limit(){return this},async maybeSingle(){return {data:row}}};const ctx=cloud({rpc:async()=>({data:{status:'conflict',version:'6'}}),from:()=>query},{A:{version:'5'}});await assert.rejects(ctx.call({id:'A'},{values:[3,5],note:'test'}),/Người khác vừa lưu/);assert.equal(ctx.state.counts.A.version,'6');assert.equal(ctx.selections,1)});
+test('concurrent save under the same identity loads personal and group counts',async()=>{
+ const row={id:7,count_values:[3,4],actual:304,own_values:[2,4],own_note:'mine',own_version:'6'};
+ const ctx=cloud({rpc:async(name,input)=>{
+  if(name==='pc_inventory_count_snapshot'){assert.equal(input.p_item,'A');return {data:[row]}}
+  assert.equal(input.p_expected,'5');
+  return {data:{status:'conflict',version:'6'}};
+ }},{A:{own:{version:'5'}}});
+ await assert.rejects(ctx.call({id:'A'},{values:[3,5],note:'test'}),/tên này vừa được cập nhật/);
+ assert.equal(ctx.state.counts.A.actual,304);
+ assert.equal(ctx.state.counts.A.own.version,'6');
+ assert.deepEqual(ctx.state.counts.A.own.values,[2,4]);
+ assert.equal(ctx.selections,1);
+});
 
 test('late count acknowledgement is ignored after the user changes runs',async()=>{
  let answer;
@@ -95,18 +107,16 @@ test('actual hospital header with strength is recognized across sheets', async (
 });
 test('cloud submit keeps the version captured when a draft was opened', async()=>{
   let expectedVersion=null;
-  const ctx=cloud({rpc:async(_,input)=>{
+  const ctx=cloud({rpc:async(name,input)=>{
+    if(name==='pc_inventory_count_snapshot')return {data:[]};
     expectedVersion=input.p_expected;
     return {data:{status:'conflict',version:'6'}};
-  },from:()=>({
-    select(){return this},eq(){return this},order(){return this},limit(){return this},
-    async maybeSingle(){return {data:{id:6,values:[2],note:'new',actual:2,users_email:'other@example.org',created_at:'2026-11-23T10:00:00Z'}}}
-  })},{A:{version:'6'}});
-  await assert.rejects(ctx.call({id:'A'},{values:[3],note:'previous'},'5'),/Người khác vừa lưu/);
+  }},{A:{own:{version:'6'}}});
+  await assert.rejects(ctx.call({id:'A'},{values:[3],note:'previous'},'5'),/tên này vừa được cập nhật/);
   assert.equal(expectedVersion,'5');
 });
 test('latest-count snapshot reads page 2, never uses global ID cursor',async()=>{
-  const begin=script.indexOf('async function fetchCloudCountSnapshot(id){');
+  const begin=script.indexOf('async function fetchCloudCountSnapshot(id,itemId=null){');
   const end=script.indexOf('async function refreshCloudCounts(force=false)',begin);
   assert.ok(begin>0&&end>begin);
   const offsets=[];
@@ -130,8 +140,8 @@ test('forced refresh waits for the background refresh and reads a fresh snapshot
  let release,reads=0;
  const pending=new Promise(resolve=>{release=resolve});
  const ctx={
-  client:{},user:{id:'owner'},state:{source:'cloud',sessionId:'session',counts:{}},
-  lock:false,cloudRefreshInFlight:null,
+  client:{},user:{id:'owner'},state:{source:'cloud',sessionId:'session',counts:{},items:[]},selected:0,
+  lock:false,cloudRefreshInFlight:null,cloudCountEpoch:0,
   fetchCloudCountSnapshot:async()=>{reads++;return reads===1?pending:[]},
   loadCloudSessionStatus:async()=>{},save:()=>{},renderResults:()=>{},renderStats:()=>{},
   document:{getElementById:()=>({classList:{contains:()=>false}})}
@@ -258,7 +268,7 @@ test('finalized runs block editing and server migration locks parent row',()=>{
  assert.match(guard,/finished_at is not null/);
 });
 
-test('finalized XLSX export includes every audit event and clear finalized marker',async()=>{
+test('finalized XLSX sums latest contributions and retains every audit event',async()=>{
  const a=script.indexOf('async function exportXlsx(){');
  const b=script.indexOf("$('exportBtn').onclick=exportXlsx;",a);
  assert.ok(a>=0&&b>a,'XLSX export handler missing');
@@ -269,10 +279,11 @@ test('finalized XLSX export includes every audit event and clear finalized marke
   writeFile:(_wb,name)=>outputs.push(name)
  };
  const records=[
-  {id:1,item_id:'A',values:[1,0],actual:100,users_email:'a@example.invalid',created_at:'2026-11-23T01:00:00Z',note:''},
-  {id:2,item_id:'A',values:[1,5],actual:105,users_email:'b@example.invalid',created_at:'2026-11-23T02:00:00Z',note:'kiểm lại'},
-  {id:3,item_id:'B',values:[10],actual:10,users_email:'a@example.invalid',created_at:'2026-11-23T02:10:00Z',note:''},
-  {id:4,item_id:'C',values:[5],actual:5,users_email:'b@example.invalid',created_at:'2026-11-23T02:20:00Z',note:''}
+  {id:1,item_id:'A',counter_key:'guest:an',values:[1,0],actual:100,users_email:'a@example.invalid',created_at:'2026-11-23T01:00:00Z',note:''},
+  {id:2,item_id:'A',counter_key:'guest:binh',values:[1,5],actual:105,users_email:'b@example.invalid',created_at:'2026-11-23T02:00:00Z',note:'kiểm lại'},
+  {id:3,item_id:'B',counter_key:'guest:an',values:[10],actual:10,users_email:'a@example.invalid',created_at:'2026-11-23T02:10:00Z',note:''},
+  {id:4,item_id:'C',counter_key:'guest:binh',values:[5],actual:5,users_email:'b@example.invalid',created_at:'2026-11-23T02:20:00Z',note:''},
+  {id:5,item_id:'A',counter_key:'guest:an',values:[0,10],actual:10,counter_name:'AN',created_at:'2026-11-23T02:25:00Z',note:''}
  ];
  const state={source:'cloud',sessionId:'session',closedAt:'2026-11-23T03:00:00Z',
   items:[{id:'A',name:'Paracetamol',code:'P001',lot:'LOT1',shelf:'A',raw:{},stock:100,
@@ -294,9 +305,9 @@ test('finalized XLSX export includes every audit event and clear finalized marke
  assert.deepEqual(sheets.map(x=>x.name),
   ['Tổng hợp','Chi tiết kiểm','Cần kiểm lại','Lịch sử kiểm','Thông tin đợt']);
  assert.deepEqual(Array.from(sheets[2].rows,row=>row['Mã kiểm kê']),['A']);
- assert.equal(sheets[3].rows.length,4);
+ assert.equal(sheets[3].rows.length,5);
  assert.equal(sheets[3].rows[1]['Tổng thực kiểm'],105);
- assert.equal(sheets[0].rows[0]['Thực kiểm'],105);
+ assert.equal(sheets[0].rows[0]['Thực kiểm'],115);
  assert.equal(sheets[0].rows[0]['Số lô'],'LOT1');
  assert.ok(outputs[0].includes('CHOT_'));
 });
