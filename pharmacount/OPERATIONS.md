@@ -4,15 +4,15 @@
 - GitHub Pages: `https://nhatlong12311.github.io/long-pharmadesk/pharmacount/`
 - Vercel: `/pharmacount/` dưới domain đã cấu hình cho PharmaDesk.
 - Trang có sẵn Supabase URL và **publishable key** (không phải khóa quản trị).
-- Mã nguồn ở PR #25, thư mục `pharmacount/`, xuất bản từ `web/build.py` (chỉ 2 file `index.html`, `pack-worker.js`).
+- Mã nguồn ở PR #25, thư mục `pharmacount/`, xuất bản từ `web/build.py` (chỉ phát hành `index.html`, `nxt.js`, `pack-worker.js` và `theme.css`).
 
 **Không sử dụng dữ liệu kho thật khi chưa hoàn tất nghiệm thu 2 tài khoản và được bệnh viện đồng ý dùng Supabase.** GitHub repo và giao diện web là công khai; bảng thuốc chỉ được giới hạn bởi Supabase Auth và RLS.
 
 ## Cấu hình Supabase Auth trước khi đăng nhập
 Trong Supabase Dashboard dự án `jpsywcjmcmvgjswkrnzo`:
 1. Authentication → URL Configuration: cho phép chính xác `https://nhatlong12311.github.io/long-pharmadesk/pharmacount/` trong Redirect URLs. Nếu dùng Vercel/domain riêng, thêm đúng URL thực tế. Không cho phép wildcard domain không kiểm soát.
-2. Authentication → Providers → Email: xác nhận email OTP/magic link hoạt động và chính sách tạo tài khoản phù hợp. Đăng ký mới cần được quản trị viên kiểm soát; mời thành viên vào đợt kiểm KHÁC với đăng ký tài khoản Auth.
-3. Database: chạy theo thứ tự `supabase.sql`, `supabase-count-rpc.sql`, `supabase-latest-counts.sql`, `supabase-team-permissions.sql`, `supabase-finalization.sql`, `supabase-finalization-item-guard.sql`. Dự án hiện tại đã áp dụng các bản cập nhật, **không chạy lại SQL gốc một cách mù quáng**.
+2. Authentication → Sign In / Providers: bật Anonymous Sign-Ins để dùng link khách. Authentication → Providers → Email: xác nhận email OTP/magic link hoạt động và chính sách tạo tài khoản phù hợp. Đăng ký mới cần được quản trị viên kiểm soát; mời thành viên vào đợt kiểm KHÁC với đăng ký tài khoản Auth.
+3. Với cơ sở dữ liệu mới, chạy theo thứ tự `supabase.sql`, `supabase-count-rpc.sql`, `supabase-latest-counts.sql`, `supabase-team-permissions.sql`, `supabase-finalization.sql`, `supabase-finalization-item-guard.sql`, `supabase-rpc-permissions.sql`, `supabase-guest-links.sql`, `supabase-per-person-counts.sql`. Với cơ sở dữ liệu hiện có, kiểm tra các bản đã áp dụng và chỉ chạy phần còn thiếu. Giữ `pharmacount_private` ngoài danh sách schema được Data API công bố.
 4. Kiểm tra Security Advisor, RLS, phương án sao lưu, giới hạn dung lượng và chính sách lưu dữ liệu. Không đưa thông tin bệnh nhân hoặc tài liệu nội bộ không cần thiết vào ứng dụng.
 
 ## Checklist nghiệm thu bắt buộc trước dùng thật
@@ -20,7 +20,7 @@ Trong Supabase Dashboard dự án `jpsywcjmcmvgjswkrnzo`:
 - [ ] Nhập `.xlsx` kiểm kê nhiều sheet, bảo toàn từng mã thuốc/lô/HSD/dòng nguồn; so số dòng trước/sau; không biến tồn trống thành 0.
 - [ ] Ghép danh mục quy cách `.xlsx`; rà soát mã không khớp, nhiều lựa chọn hộp, hệ số chưa xác nhận; xuất file cần rà soát.
 - [ ] Tạo đợt bằng chủ đợt, mời email nhân viên, gửi link. Nhân viên mở link và thấy đúng danh mục.
-- [ ] Cùng nhập một thuốc trên hai máy: một người được lưu, người còn lại nhận thông báo xung đột và phải đối chiếu.
+- [ ] Cùng nhập một thuốc trên hai máy: hai người có hai phần số đếm cộng dồn. Cùng tên nhập lại cập nhật phần của người đó; thử thêm trường hợp hai thiết bị cùng sửa một tên.
 - [ ] Kiểm mạng chập chờn/mất kết nối: không xuất hiện trạng thái đã lưu khi Supabase chưa xác nhận; thử lại giữ nguyên mã thao tác.
 - [ ] Trưởng nhóm thu hồi email của máy B: máy B không thể lưu tiếp hoặc đọc đồng bộ; mở link lần nữa không thể truy cập.
 - [ ] Chủ đợt chốt khi còn thuốc chưa kiểm: máy chủ từ chối. Sau khi đếm đủ, chỉ chủ đợt chốt thành công; sau chốt, không ai được lưu/chèn thêm.
@@ -30,7 +30,9 @@ Trong Supabase Dashboard dự án `jpsywcjmcmvgjswkrnzo`:
 
 ## Thực hiện kiểm kê sau nghiệm thu
 - **Trưởng nhóm:** đăng nhập → tải danh mục Excel → ghép quy cách → sửa những yếu tố chưa xác định → Tạo đợt chung → Mời thành viên → Sao chép link.
+- **Khách có link:** mở link do chủ đợt tạo ở mục Tạo link kiểm kê trong Xuất / Đồng bộ, nhập tên và vào kiểm. Chủ đợt có thể tắt link để thu hồi quyền của khách.
 - **Nhân viên:** mở link bằng điện thoại/PC → đăng nhập đúng email → kiểm hộp chẵn, thuốc lẻ → xác nhận → xem thông báo máy chủ lưu thành công.
+- **Đối chiếu tồn cuối:** mở **Cần kiểm lại → Đối chiếu nhập–xuất–tồn** và nhập báo cáo cùng kho. Báo cáo ở lại trình duyệt đã nhập. Nếu báo cáo không có số lô, đối chiếu theo tổng tất cả lô cùng mã sau khi kiểm đủ. Excel chứa trang **Đối chiếu NXT** khi trình duyệt có báo cáo của đợt.
 - **Trưởng nhóm khi kết thúc:** kiểm đủ danh sách, xử lý đếm lại → Chốt và khóa → xuất Excel cuối cùng → lưu trữ theo quy định. Sau chốt không có nút mở lại.
 - **Tài khoản bị thu hồi:** dữ liệu đã hiển thị trên máy sẽ được đóng sau khi máy chủ từ chối yêu cầu tiếp theo; đây không phải cơ chế xóa bản đã tải xuống hoặc ảnh chụp màn hình.
 

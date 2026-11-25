@@ -22,7 +22,7 @@ class PharmaCountPublishTest(unittest.TestCase):
             self.assertIn("PharmaCount", (app / "index.html").read_text(encoding="utf-8"))
             self.assertEqual(
                 sorted(p.name for p in app.iterdir()),
-                ["index.html", "pack-worker.js"],
+                ["index.html", "nxt.js", "pack-worker.js", "theme.css"],
                 "Deployment must not expose SQL migrations, test data or source notes",
             )
 
