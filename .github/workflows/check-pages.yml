@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths: &pages_paths
       - "web/**"
+      - "pharmaquiz/**"
       - "ui/index.html"
       - "docs/**"
       - "ABC_VEN/**"
