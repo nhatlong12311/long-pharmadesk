@@ -65,15 +65,20 @@
 <section id="count" class="tab"><div class="card" id="countFinder"><div class="row space"><h2>Kiểm tại kệ</h2><span id="position" class="pill"></span></div><input aria-label="Tìm thuốc" id="quickSearch" placeholder="Tìm mã, tên, hàm lượng, kệ hoặc lô..."><div class="row" style="margin-top:8px"><select aria-label="Lọc theo kệ" id="shelfFilter" style="flex:1"><option value="">Tất cả kệ</option></select><select aria-label="Lọc theo trạng thái" id="statusFilter" style="flex:1"><option value="">Tất cả trạng thái</option><option value="pending">Chưa kiểm</option><option value="diff">Chênh lệch</option><option value="ok">Đã khớp</option></select></div><div id="results"></div></div>
 <div class="card" id="editor"><button class="secondary mobile-back" id="backToList" type="button">Danh sách thuốc</button><h2 id="drugTitle" tabindex="-1">Chưa có danh mục</h2><p class="muted" id="drugManufacturer" hidden></p><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div><button id="setPackFactor" class="secondary" style="margin-top:10px">Thiết lập số viên/lọ trong 1 hộp</button><div class="stat actual-card"><span>Tổng thực kiểm</span><div class="big" id="actual">0</div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label for="note">Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea><div class="count-dock"><p class="muted" id="saveState" role="status"></p><div class="row count-actions"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp</button></div></div></div></section>
 <section id="review" class="tab"><div class="card"><h2>Danh sách kiểm lại</h2><p class="muted">Chỉ hiển thị các dòng đã đếm có chênh lệch. Không tự động điều chỉnh số tồn trên phần mềm bệnh viện.</p><div id="reviewList"></div></div></section>
-<section id="export" class="tab"><div class="card"><h2>Xuất Excel kết quả</h2><p class="muted">Tải báo cáo tổng hợp, chi tiết và các dòng cần kiểm lại. Báo cáo đợt chung có lịch sử số đếm.</p><button id="exportBtn">Xuất Excel</button><button class="secondary" id="backupBtn">Sao lưu JSON</button><label>Phục hồi bản sao lưu</label><input type="file" id="restore" accept=".json"><p class="note">Sao lưu thường xuyên. Chế độ cục bộ chỉ lưu trên trình duyệt của thiết bị hiện tại; xóa dữ liệu trang web có thể làm mất kết quả.</p></div>
-<div class="card"><h2>Đồng bộ nhiều thành viên</h2><p class="muted">Dùng chung một đợt kiểm qua Supabase. Mỗi nhân viên cần email đăng nhập và được trưởng nhóm mời. Tự nhận thay đổi từ máy khác; kiểm tra phiên bản trước khi lưu để tránh ghi đè. Cần Internet để xác nhận lưu.</p><label>Supabase URL</label><input id="sbUrl" value="https://jpsywcjmcmvgjswkrnzo.supabase.co" readonly><label>Supabase publishable/anon key</label><input id="sbKey" value="sb_publishable_4iy9k4S074-klLeUt-jVNA_AvI0Oswi" readonly><div class="row" style="margin-top:9px"><button id="connect">Kết nối</button><button class="secondary" id="disconnect">Về chế độ cục bộ</button></div><div id="cloudUi" class="hidden"><label>Email thành viên</label><input id="email" type="email" placeholder="ten@benhvien.vn"><button id="login" style="margin-top:8px">Gửi liên kết đăng nhập</button><p id="authState" class="muted"></p><div id="cloudActions" class="hidden"><button id="createCloud">Tạo đợt trên đám mây từ danh mục hiện tại</button><label>Mã đợt (UUID) được chia sẻ</label><input id="cloudId" placeholder="Dán mã đợt kiểm kê"><button id="joinCloud" class="secondary" style="margin-top:8px">Mở đợt được phân quyền</button><button id="copyJoinLink" class="secondary" style="margin-top:8px">Sao chép liên kết cho thành viên</button><p class="muted">Đã có liên kết vẫn cần được trưởng nhóm cấp quyền qua email mới xem hoặc nhập được.</p><div id="ownerAccessControls" class="hidden"><label for="inviteEmail">Mời thành viên bằng email</label><input id="inviteEmail" type="email" placeholder="nhanvien@benhvien.vn"><button id="invite" class="secondary" style="margin-top:8px">Cấp quyền nhập liệu</button>
-<div class="guest-share">
- <h3>Liên kết mở cho người có link</h3>
- <p class="muted">Người nhận chỉ cần nhập tên để kiểm kê trong đợt này.</p>
- <label for="guestJoinLink">Link kiểm kê</label><input id="guestJoinLink" readonly>
- <div class="row actions"><button id="copyGuestLink" class="secondary">Bật và sao chép link</button><button id="disableGuestLink" class="secondary" disabled>Tắt link</button></div>
+<section id="export" class="tab">
+<div class="card guest-share" aria-labelledby="guestShareTitle">
+ <h2 id="guestShareTitle">Tạo link kiểm kê</h2>
+ <p class="muted">Người nhận link chỉ cần nhập tên để vào kiểm kê.</p>
+ <p id="guestLinkHint" class="muted">Đăng nhập email để quản lý link của đợt.</p>
+ <div class="row actions">
+  <button id="copyGuestLink">Tạo link kiểm kê</button>
+  <button id="disableGuestLink" class="secondary hidden" disabled>Tắt link</button>
+ </div>
+ <div id="guestLinkDetails" class="hidden"><label for="guestJoinLink">Link gửi cho mọi người</label><input id="guestJoinLink" readonly></div>
  <p id="guestLinkStatus" class="muted" role="status"></p>
-</div></div><button id="viewMembers" class="secondary" style="margin-top:8px">Xem thành viên đã được mời</button><div id="finalizeControls" class="hidden" style="margin-top:12px"><div class="note">Chỉ chốt khi đã kiểm đủ toàn bộ thuốc. Sau khi chốt, không ai được sửa số đếm trong đợt này.</div><button id="finalizeRun" class="danger" style="margin-top:8px">Chốt và khóa đợt kiểm kê</button></div><div id="membersList" class="muted" aria-live="polite"></div><p class="muted" id="cloudState"></p></div></div></div></section>
+</div><div class="card"><h2>Xuất Excel kết quả</h2><p class="muted">Tải báo cáo tổng hợp, chi tiết và các dòng cần kiểm lại. Báo cáo đợt chung có lịch sử số đếm.</p><button id="exportBtn">Xuất Excel</button><button class="secondary" id="backupBtn">Sao lưu JSON</button><label>Phục hồi bản sao lưu</label><input type="file" id="restore" accept=".json"><p class="note">Sao lưu thường xuyên. Chế độ cục bộ chỉ lưu trên trình duyệt của thiết bị hiện tại; xóa dữ liệu trang web có thể làm mất kết quả.</p></div>
+<div class="card"><h2>Đồng bộ nhiều thành viên</h2><p class="muted">Quản lý đợt trên Supabase bằng email. Dùng mục Tạo link kiểm kê bên trên để mời khách nhập tên và tham gia.</p><label>Supabase URL</label><input id="sbUrl" value="https://jpsywcjmcmvgjswkrnzo.supabase.co" readonly><label>Supabase publishable/anon key</label><input id="sbKey" value="sb_publishable_4iy9k4S074-klLeUt-jVNA_AvI0Oswi" readonly><div class="row" style="margin-top:9px"><button id="connect">Kết nối</button><button class="secondary" id="disconnect">Về chế độ cục bộ</button></div><div id="cloudUi" class="hidden"><label for="email">Email quản lý đợt</label><input id="email" type="email" placeholder="ten@benhvien.vn"><button id="login" style="margin-top:8px">Gửi liên kết đăng nhập</button><p id="authState" class="muted"></p><div id="cloudActions" class="hidden"><button id="createCloud">Tạo đợt trên đám mây từ danh mục hiện tại</button><label>Mã đợt (UUID) được chia sẻ</label><input id="cloudId" placeholder="Dán mã đợt kiểm kê"><button id="joinCloud" class="secondary" style="margin-top:8px">Mở đợt được phân quyền</button><button id="copyJoinLink" class="secondary" style="margin-top:8px">Sao chép liên kết cho thành viên</button><p class="muted">Đã có liên kết vẫn cần được trưởng nhóm cấp quyền qua email mới xem hoặc nhập được.</p><div id="ownerAccessControls" class="hidden"><label for="inviteEmail">Mời thành viên bằng email</label><input id="inviteEmail" type="email" placeholder="nhanvien@benhvien.vn"><button id="invite" class="secondary" style="margin-top:8px">Cấp quyền nhập liệu</button>
+</div><button id="viewMembers" class="secondary" style="margin-top:8px">Xem thành viên đã được mời</button><div id="finalizeControls" class="hidden" style="margin-top:12px"><div class="note">Chỉ chốt khi đã kiểm đủ toàn bộ thuốc. Sau khi chốt, không ai được sửa số đếm trong đợt này.</div><button id="finalizeRun" class="danger" style="margin-top:8px">Chốt và khóa đợt kiểm kê</button></div><div id="membersList" class="muted" aria-live="polite"></div><p class="muted" id="cloudState"></p></div></div></div></section>
 </main>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
@@ -81,7 +86,7 @@
 const $=id=>document.getElementById(id),KEY='pharmacount-v1',CONFIG='pharmacount-cloud-config';
 const uuidPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const guestToken=new URLSearchParams(location.search).get('guest');
-let guestDisplayName='';
+let guestDisplayName='',guestLinkBusy=false;
 const newData=()=>({name:'Kiểm kê kho Dược',items:[],counts:{},sessionId:null,source:'local',ownerId:null,closedAt:null});
 let state;try{state=guestToken!==null?newData():JSON.parse(localStorage.getItem(KEY))||newData();if(state.source==='cloud'){state.items=[];state.counts={}}}catch{state=newData()}
 let selected=0, draft={}, draftVersion=null, revealed=false, client=null,user=null,lock=false, joiningCloud=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshInFlight=null, pendingCountOperation=null, packIssues=[];
@@ -234,6 +239,7 @@ function renderStats(){
  renderShelfChart([...shelves.values()].sort((a,b)=>b.total-a.total||a.name.localeCompare(b.name,'vi')));
  if(document.activeElement!==$('sessionName'))$('sessionName').value=state.name;
  $('sessionId').textContent=state.sessionId?'Mã đợt: '+state.sessionId:'Dữ liệu trên thiết bị này';
+ renderGuestSharing();
  $('mode').textContent=state.source==='cloud'?(state.closedAt?'Đã chốt đợt':'Đồng bộ đám mây'):'Chỉ lưu cục bộ';
 }
 $('saveName').onclick=()=>{if(state.source==='cloud')return alert('Tên đợt chung chỉ được đổi bởi trưởng nhóm trên máy chủ.');state.name=$('sessionName').value.trim()||'Kiểm kê kho Dược';save();alert('Đã lưu tên đợt')};
@@ -487,6 +493,7 @@ function clearCloudRun(){
  $('membersList').replaceChildren();
  $('cloudId').value='';
  $('cloudState').textContent='';
+ resetGuestSharing();
  save();renderCount();renderReview();showFinalizeControls();show('dashboard');
 }
 function startCloudSync(){
@@ -641,7 +648,7 @@ async function connect(){
   queueMicrotask(()=>{if(client===connection)maybeAutoJoinCloud()});
  }
 })}
-function authUi(){$('authState').textContent=user?'Đăng nhập: '+user.email:'Chưa đăng nhập';$('cloudActions').classList.toggle('hidden',!user)}
+function authUi(){$('authState').textContent=user?'Đăng nhập: '+user.email:'Chưa đăng nhập';$('cloudActions').classList.toggle('hidden',!user);renderGuestSharing()}
 $('connect').onclick=connect;
 $('disconnect').onclick=async()=>{
  const requestClient=client;
@@ -656,12 +663,16 @@ $('disconnect').onclick=async()=>{
  alert('Đã về chế độ cục bộ.');
 };
 $('login').onclick=async()=>{const email=$('email').value.trim();if(!email)return alert('Nhập email');const {error}=await client.auth.signInWithOtp({email,options:{emailRedirectTo:location.href.split('#')[0]}});alert(error?error.message:'Đã gửi liên kết đăng nhập. Kiểm tra email.')};
-$('createCloud').onclick=async()=>{
+async function createCloudRun(forGuestLink=false){
+ if($('createCloud').disabled)return false;
  if(!user||!state.items.length)return alert('Hãy đăng nhập và nhập Excel trước.');
  if(state.source==='cloud')return alert('Bạn đang tham gia một đợt chung. Vui lòng mở đợt mới từ dữ liệu cục bộ khác.');
  const bad=state.items.filter(x=>!x.code||!x.name||!x.id);
  if(bad.length)return alert('Danh mục có '+bad.length+' dòng thiếu mã/tên/ID. Hãy sửa trước khi tạo đợt.');
- if(!confirm('Tạo đợt kiểm chung từ '+state.items.length+' dòng?\nDanh mục sẽ được ghi lên Supabase trong một giao dịch.'))return;
+ const question=forGuestLink?'Tạo đợt chung và bật link cho mọi người từ ':'Tạo đợt kiểm chung từ ';
+ const localCounts=Object.keys(state.counts).length
+  ?'\nĐợt chung chỉ nhận danh mục. Bấm Hủy nếu bạn cần xuất bản sao lưu số đếm cục bộ trước.':'';
+ if(!confirm(question+state.items.length+' dòng?'+localCounts))return false;
  const run=state,requestClient=client,signedInUserId=user.id;
  const button=$('createCloud');button.disabled=true;
  $('cloudState').textContent='Đang tạo đợt kiểm chung trên máy chủ...';
@@ -678,12 +689,15 @@ $('createCloud').onclick=async()=>{
   $('cloudId').value=id;startCloudSync();
   resetGuestSharing();
   $('cloudState').textContent='Đã tạo đợt '+id+' gồm '+state.items.length+' thuốc. Hãy mời thành viên.';
-  alert('Tạo thành công đợt '+id+'. Mời nhân viên trước khi chia sẻ mã đợt.');
+  if(!forGuestLink)alert('Đã tạo đợt '+id+'. Bạn có thể tạo link kiểm kê.');
+  return true;
  }catch(e){
   $('cloudState').textContent='Chưa tạo được đợt: '+e.message;
   alert('Không tạo được đợt kiểm chung: '+e.message);
+  return false;
  }finally{button.disabled=false}
-};
+}
+$('createCloud').onclick=()=>createCloudRun();
 async function joinCloudById(id,automatic=false){
  if(!user)return automatic?false:alert('Cần đăng nhập');
  if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id))
@@ -740,46 +754,83 @@ $('copyJoinLink').onclick=async()=>{
  try{await navigator.clipboard.writeText(url.href);alert('Đã sao chép liên kết đợt kiểm. Thành viên cần đăng nhập bằng email đã được mời.')}
  catch{prompt('Sao chép liên kết dưới đây:',url.href)}
 };
+function renderGuestSharing(){
+ const cloud=state.source==='cloud';
+ const owner=!!(cloud&&user&&!user.is_anonymous&&state.ownerId===user.id);
+ const hasLink=owner&&!!$('guestJoinLink').value;
+ const action=$('copyGuestLink'),disable=$('disableGuestLink');
+ let hint='Bật link cho đợt chung đang mở.';
+ if(!user)hint='Đăng nhập email để quản lý link của đợt.';
+ else if(cloud&&!owner)hint='Chỉ chủ đợt có thể bật hoặc tắt link.';
+ else if(owner&&state.closedAt)hint='Đợt đã chốt.';
+ else if(!cloud)hint=state.items.length
+  ?'Tạo một đợt chung từ danh mục hiện tại rồi bật link.'
+  :'Nhập danh mục kiểm kê để tạo đợt và bật link.';
+ $('guestLinkHint').textContent=hint;
+ action.textContent=hasLink?'Sao chép link kiểm kê':'Tạo link kiểm kê';
+ action.disabled=guestLinkBusy||(!!user&&cloud&&!owner)||(owner&&!!state.closedAt&&!hasLink);
+ $('guestLinkDetails').classList.toggle('hidden',!hasLink);
+ disable.classList.toggle('hidden',!hasLink);
+ disable.disabled=guestLinkBusy||!hasLink;
+}
 function resetGuestSharing(){
  $('guestJoinLink').value='';
  $('guestLinkStatus').textContent='';
- $('disableGuestLink').disabled=true;
- $('copyGuestLink').textContent='Bật và sao chép link';
+ renderGuestSharing();
+}
+async function copyGuestUrl(){
+ const status=$('guestLinkStatus'),input=$('guestJoinLink');
+ try{
+  await navigator.clipboard.writeText(input.value);
+  status.textContent='Đã sao chép link kiểm kê.';
+ }catch{
+  input.focus();input.select();
+  status.textContent='Sao chép link trong ô bên trên.';
+ }
 }
 async function manageGuestLink(enabled){
  const run=state,connection=client,account=user;
  if(!connection||!account||account.is_anonymous||run.source!=='cloud'||run.ownerId!==account.id)return;
- const action=$('copyGuestLink'),disable=$('disableGuestLink'),status=$('guestLinkStatus');
- action.disabled=true;disable.disabled=true;
+ guestLinkBusy=true;renderGuestSharing();
  try{
   const {data,error}=await connection.rpc('pc_share_inventory',{p_session:run.sessionId,p_enabled:enabled});
   if(state!==run||client!==connection||user?.id!==account.id)return;
   if(error)throw error;
   if(!data){
    resetGuestSharing();
-   if(enabled===false)status.textContent='Đã tắt link và thu hồi quyền của khách.';
+   if(enabled===false)$('guestLinkStatus').textContent='Đã tắt link và thu hồi quyền của khách.';
    return;
   }
   const url=new URL(location.pathname,location.origin);
   url.searchParams.set('guest',data);
   $('guestJoinLink').value=url.href;
-  action.textContent='Sao chép link kiểm kê';
-  if(enabled===true){
-   try{await navigator.clipboard.writeText(url.href);status.textContent='Đã sao chép link kiểm kê.'}
-   catch{status.textContent='Sao chép link trong ô bên trên.'}
-  }
- }catch(error){status.textContent='Không cập nhật được link: '+error.message}
- finally{
-  if(state===run){action.disabled=!!run.closedAt&&!$('guestJoinLink').value;disable.disabled=!$('guestJoinLink').value}
-  else action.disabled=false;
- }
+  renderGuestSharing();
+  if(enabled===true)await copyGuestUrl();
+ }catch(error){
+  if(state===run)$('guestLinkStatus').textContent='Không cập nhật được link: '+error.message;
+ }finally{guestLinkBusy=false;renderGuestSharing()}
 }
-$('copyGuestLink').onclick=()=>{
- const link=$('guestJoinLink').value;
- if(!link)return manageGuestLink(true);
- if(!navigator.clipboard){$('guestLinkStatus').textContent='Sao chép link trong ô bên trên.';return}
- navigator.clipboard.writeText(link).then(()=>$('guestLinkStatus').textContent='Đã sao chép link kiểm kê.')
-  .catch(()=>$('guestLinkStatus').textContent='Sao chép link trong ô bên trên.');
+$('copyGuestLink').onclick=async()=>{
+ if(guestLinkBusy)return;
+ const status=$('guestLinkStatus');
+ if(!user){
+  await connect();
+  if(!user){
+   status.textContent='Nhập email quản lý đợt rồi bấm Gửi liên kết đăng nhập.';
+   $('email').focus();
+   return;
+  }
+ }
+ if(state.source!=='cloud'){
+  if(!state.items.length){
+   show('dashboard',true);$('excel').focus();
+   return;
+  }
+  if(!await createCloudRun(true))return;
+ }
+ if(state.ownerId!==user?.id)return;
+ if($('guestJoinLink').value)return copyGuestUrl();
+ return manageGuestLink(true);
 };
 $('disableGuestLink').onclick=()=>manageGuestLink(false);
 
@@ -817,6 +868,7 @@ function showFinalizeControls(){
  const owner=!!(user&&!user.is_anonymous&&state.source==='cloud'&&state.ownerId===user.id);
  $('finalizeControls').classList.toggle('hidden',!owner||!!state.closedAt);
  $('ownerAccessControls').classList.toggle('hidden',!owner);
+ renderGuestSharing();
  const disabled=state.source==='cloud'&&!!state.closedAt;
  $('confirm').disabled=lock||disabled||!state.items.length;
  if(disabled)$('saveState').textContent='Đợt kiểm kê đã chốt; chỉ được xem và xuất kết quả.';

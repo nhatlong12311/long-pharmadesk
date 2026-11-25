@@ -30,7 +30,7 @@ Trong Supabase Dashboard dự án `jpsywcjmcmvgjswkrnzo`:
 
 ## Thực hiện kiểm kê sau nghiệm thu
 - **Trưởng nhóm:** đăng nhập → tải danh mục Excel → ghép quy cách → sửa những yếu tố chưa xác định → Tạo đợt chung → Mời thành viên → Sao chép link.
-- **Khách có link:** mở link kiểm kê do chủ đợt bật trong Xuất / Đồng bộ, nhập tên và vào kiểm. Chủ đợt có thể tắt link để thu hồi quyền của khách.
+- **Khách có link:** mở link do chủ đợt tạo ở mục Tạo link kiểm kê trong Xuất / Đồng bộ, nhập tên và vào kiểm. Chủ đợt có thể tắt link để thu hồi quyền của khách.
 - **Nhân viên:** mở link bằng điện thoại/PC → đăng nhập đúng email → kiểm hộp chẵn, thuốc lẻ → xác nhận → xem thông báo máy chủ lưu thành công.
 - **Trưởng nhóm khi kết thúc:** kiểm đủ danh sách, xử lý đếm lại → Chốt và khóa → xuất Excel cuối cùng → lưu trữ theo quy định. Sau chốt không có nút mở lại.
 - **Tài khoản bị thu hồi:** dữ liệu đã hiển thị trên máy sẽ được đóng sau khi máy chủ từ chối yêu cầu tiếp theo; đây không phải cơ chế xóa bản đã tải xuống hoặc ảnh chụp màn hình.

@@ -455,7 +455,8 @@ button.danger { background: #9d384c; color: white; }
 .manufacturer, #drugManufacturer { margin: 3px 0 8px; color: var(--muted); font-size: .82rem; }
 #guestPanel { margin: 0 auto 14px; max-width: 560px; }
 #guestStatus:not(:empty) { margin-top: 9px; }
-.guest-share { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 8px; }
+.guest-share { grid-column: 1 / -1; }
+#guestLinkHint, #guestLinkStatus:not(:empty) { margin-top: 8px; }
 .guest-mode .nav, .guest-mode #dashboard, .guest-mode #review, .guest-mode #export,
 .guest-mode:has(#guestForm:not(.hidden)) #count { display: none; }
 .guest-mode:has(#guestForm:not(.hidden)) #pageHeader { display: none; }

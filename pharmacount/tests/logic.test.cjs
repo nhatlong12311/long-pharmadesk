@@ -174,6 +174,24 @@ test('shared invitation auto-opens only for signed-in invited-session user',()=>
  context.trigger();
  assert.equal(called.length,1);
 });
+test('guest link action stays visible when sign-in is needed',()=>{
+ const controls={};
+ const element=id=>controls[id]||(controls[id]={value:'',classList:{toggle(){}}});
+ const context={state:{source:'local',items:[{}]},user:null,guestLinkBusy:false,$:element};
+ vm.createContext(context);
+ vm.runInContext(slice('function renderGuestSharing(){','function resetGuestSharing(){')+'\nthis.refresh=renderGuestSharing',context);
+ context.refresh();
+ assert.equal(element('copyGuestLink').textContent,'Tạo link kiểm kê');
+ assert.equal(element('copyGuestLink').disabled,false);
+ assert.match(element('guestLinkHint').textContent,/Đăng nhập email/);
+ context.user={id:'owner'};
+ context.refresh();
+ assert.match(element('guestLinkHint').textContent,/danh mục hiện tại/);
+ context.state={source:'cloud',ownerId:'another-owner',items:[{}]};
+ context.refresh();
+ assert.equal(element('copyGuestLink').disabled,true);
+});
+
 test('revoking team access clears locally visible cloud inventory',()=>{
  const a=script.indexOf('function handleCloudAccessError(error){');
  const b=script.indexOf('function startCloudSync()',a);
@@ -183,7 +201,7 @@ test('revoking team access clears locally visible cloud inventory',()=>{
    state:{source:'cloud',items:[{id:'A',name:'Drug'}],counts:{A:{values:[3]}}},
    selected:3,draft:{0:'3'},draftVersion:'5',pendingCountOperation:{id:'op'},revealed:true,
    cloudRefreshTimer:null,cloudChannel:null,user:{},newData:()=>({source:'local',items:[],counts:{},sessionId:null}),
-   save:()=>{},renderCount:()=>{},renderReview:()=>{},showFinalizeControls:()=>{},show:()=>{},
+   resetGuestSharing:()=>{},save:()=>{},renderCount:()=>{},renderReview:()=>{},showFinalizeControls:()=>{},show:()=>{},
    $:id=>elements[id]||(elements[id]={textContent:''})
  };
  vm.createContext(ctx);
