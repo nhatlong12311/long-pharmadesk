@@ -144,6 +144,12 @@ def build(output):
     (output / "browser.html").write_text(beta.replace(SHEETJS + "dist/xlsx.full.min.js", "./xlsx.full.min.js"), encoding="utf-8")
     (output / ".nojekyll").touch()
     copy_pharmacount(output)
+    quiz = ROOT / 'pharmaquiz'
+    if (quiz / 'index.html').is_file() and (quiz / 'questions.json').is_file():
+        target = output / 'pharmaquiz'
+        target.mkdir(parents=True, exist_ok=True)
+        for filename in ('index.html', 'questions.json'):
+            shutil.copyfile(quiz / filename, target / filename)
 
 
 def build_ui(output, script, *, server=False):
