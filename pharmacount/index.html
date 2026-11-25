@@ -93,12 +93,38 @@ const integer=v=>{const n=num(v);return Number.isSafeInteger(n)&&n>=0?n:0};
 const displayDate=value=>{if(value instanceof Date)return Number.isNaN(value.getTime())?'':value.toLocaleDateString('vi-VN');const n=Number(value);if(Number.isInteger(n)&&n>20000&&n<90000){const p=XLSX.SSF.parse_date_code(n);if(p)return String(p.d).padStart(2,'0')+'/'+String(p.m).padStart(2,'0')+'/'+p.y}return String(value??'')};
 const sum=(item,c)=>item.pack.reduce((s,p,k)=>s+integer(c?.[k]||0)*p.factor,0);
 const latest=i=>state.counts[state.items[i]?.id];
-const drugManufacturer=item=>item.catalog?.manufacturer||item.manufacturer||'';
+function drugDisplay(item){
+ const profile=item.catalog?.name?item.catalog:item.display;
+ const original=String(item.name||item.code||'').trim();
+ let legacyName=original;
+ let embeddedManufacturer='';
+ const suffix=legacyName.match(/,\s*([^,]+?)\s*,\s*(?:\d{1,2}[./-]\d{1,2}[./-]\d{2,4}|\d{4}-\d{2}-\d{2})\s*$/);
+ // Older exports repeat the lot and expiry at the end of the stored name.
+ if(suffix&&item.lot&&suffix[1].trim().toLowerCase()===String(item.lot).trim().toLowerCase()){
+   legacyName=legacyName.slice(0,suffix.index).trim();
+ }
+ const manufacturer=item.manufacturer||'';
+ const parenthetical=legacyName.match(/^(.*?)\s+\(((?:[^()]|\([^()]*\))+?)\)$/);
+ if(parenthetical){
+   const candidate=parenthetical[2].trim();
+   const label=normalize(candidate).trim();
+   if(label&&(label===normalize(manufacturer||profile?.manufacturer).trim()||
+      /\b(?:cong ty|nha san xuat|hang san xuat|tnhh|pharma[a-z]*|laborator[a-z]*|ltd|inc|corp|gmbh)\b/.test(label))){
+     legacyName=parenthetical[1].trim();
+     embeddedManufacturer=candidate;
+   }
+ }
+ return {
+   name:profile?.name||legacyName||original,
+   strength:profile?.strength||item.strength||'',
+   unit:profile?.unit||item.unit||'',
+   manufacturer:profile?.manufacturer||manufacturer||embeddedManufacturer
+ };
+}
+const drugManufacturer=item=>drugDisplay(item).manufacturer;
 function drugTitle(item){
- const name=item.catalog?.name||item.name;
- const strength=item.catalog?.strength||item.strength||'';
+ const {name,strength,unit}=drugDisplay(item);
  const compact=value=>normalize(value).replace(/\s/g,'');
- const unit=item.catalog?.unit||item.unit;
  return [name,compact(strength)&&!compact(name).endsWith(compact(strength))?strength:'',unit].filter(Boolean).join(' · ');
 }
 const pageTitles={dashboard:'Tổng quan kiểm kê',count:'Kiểm thuốc tại kệ',review:'Cần kiểm lại',export:'Xuất báo cáo và đồng bộ'};
@@ -526,7 +552,8 @@ async function exportXlsx(){
  const namesById=new Map(run.items.map(x=>[x.id,x]));
  run.items.forEach(x=>{
   const c=reportCounts[x.id],actual=c?sum(x,c.values):'',delta=c&&x.stock!==null?actual-x.stock:'';
-  const base={...x.raw,'Mã kiểm kê':x.id,'Mã thuốc':x.code||'','Tên thuốc':x.catalog?.name||x.name,'Hàm lượng':x.catalog?.strength||x.strength||'','Nhà sản xuất':drugManufacturer(x),
+  const display=drugDisplay(x);
+  const base={...x.raw,'Mã kiểm kê':x.id,'Mã thuốc':x.code||'','Tên thuốc':display.name,'Hàm lượng':display.strength,'Nhà sản xuất':display.manufacturer,
    'Số lô':x.lot||'','Hạn dùng':x.expiry||'','Khu vực':x.shelf||'','ĐVT':x.unit||'',
    'Tồn máy':x.stock??'','Thực kiểm':actual,'Chênh lệch':delta,
    'Trạng thái':!c?'Chưa kiểm':x.stock===null?'Đã kiểm (chưa có tồn máy)':delta?'Cần kiểm lại':'Khớp',
@@ -544,9 +571,10 @@ async function exportXlsx(){
  if(cloud){
   const history=audit.map(r=>{
    const item=namesById.get(r.item_id);
+   const display=item?drugDisplay(item):{};
    return {'Mã lượt đếm':String(r.id),'Mã kiểm kê':r.item_id,'Mã thuốc':item?.code||'',
-    'Tên thuốc':item?.catalog?.name||item?.name||'','Hàm lượng':item?.catalog?.strength||item?.strength||'',
-    'Nhà sản xuất':item?drugManufacturer(item):'','Số lô':item?.lot||'','Khu vực':item?.shelf||'',
+    'Tên thuốc':display.name||'','Hàm lượng':display.strength||'',
+    'Nhà sản xuất':display.manufacturer||'','Số lô':item?.lot||'','Khu vực':item?.shelf||'',
     'Người kiểm':r.counter_name||r.users_email||'','Thời gian lưu':r.created_at||'',
     'Số lượng chẵn/lẻ':JSON.stringify(r.values),'Tổng thực kiểm':r.actual,'Ghi chú':r.note||''};
   });

@@ -27,6 +27,26 @@ test('catalog worker extracts display data even without a packaging column',()=>
  assert.equal(records[0].manufacturer,'Hãng giả');
 });
 
+test('older inventory names separate manufacturer, lot and expiry without changing saved fields',()=>{
+ const context={};
+ vm.createContext(context);
+ vm.runInContext(slice('function normalize(s){','function field(o,aliases)')+
+   slice('function drugDisplay(item){','const pageTitles=')+
+   '\nthis.labels={drugDisplay,drugTitle}',context);
+ const {drugDisplay,drugTitle}=context.labels;
+ const a={name:'PARTAMOL TAB. 500mg (Công ty Mẫu - Chi nhánh 1, Việt Nam), 680526, 22/05/2031',
+   code:'TEST-A',lot:'680526',expiry:'22/05/2031',unit:'Viên'};
+ const b={...a,name:a.name.replace('680526, 22/05/2031','760526, 27/05/2031'),lot:'760526',expiry:'27/05/2031'};
+ for(const item of [a,b]){
+   assert.equal(drugTitle(item),'PARTAMOL TAB. 500mg · Viên');
+   assert.equal(drugDisplay(item).manufacturer,'Công ty Mẫu - Chi nhánh 1, Việt Nam');
+   assert.ok(item.name.includes(item.lot));
+ }
+ assert.equal(drugTitle({...a,catalog:{name:'Tên chuẩn 250 mg',strength:'250mg',unit:'Lọ',manufacturer:'Hãng chuẩn'}}),'Tên chuẩn 250 mg · Lọ');
+ assert.equal(drugTitle({...a,display:{name:'Tên chuẩn cũ',strength:'5 mg',unit:'Ống'}}),'Tên chuẩn cũ · 5 mg · Ống');
+ assert.equal(drugTitle({name:'Thuốc 1 (XR), lô A, 27/05/2031',lot:'lô A',unit:'Viên'}),'Thuốc 1 (XR) · Viên');
+});
+
 function cloud(client,counts={}){const ctx={client,user:{email:'tester@example.org'},state:{source:'cloud',sessionId:'test-run',items:[{id:'A'}],counts},pendingCountOperation:null,crypto:{randomUUID:()=> 'same-op-id'},selected:0,saves:0,selections:0,save(){ctx.saves++},selectItem(){ctx.selections++}};vm.createContext(ctx);vm.runInContext(slice('async function cloudWrite(x,record,expectedDraftVersion){','async function fetchCloudRows(')+'\nthis.call=cloudWrite',ctx);return ctx}
 test('retry of uncertain write reuses operation ID',async()=>{let n=0;const ops=[];const ctx=cloud({rpc:async(_,args)=>{ops.push(args.p_operation);return ++n===1?{error:{message:'timeout'}}:{data:{status:'saved',version:'5'}}}});await assert.rejects(ctx.call({id:'A'},{values:[3,5],note:'test'}));assert.equal(await ctx.call({id:'A'},{values:[3,5],note:'test'}),'5');assert.deepEqual(ops,['same-op-id','same-op-id'])});
 test('conflicting concurrent save loads latest teammate result',async()=>{const row={id:6,values:[2,4],note:'teammate',actual:204,users_email:'other@example.org',created_at:'2026-11-23T10:00:00Z'};const query={select(){return this},eq(){return this},order(){return this},limit(){return this},async maybeSingle(){return {data:row}}};const ctx=cloud({rpc:async()=>({data:{status:'conflict',version:'6'}}),from:()=>query},{A:{version:'5'}});await assert.rejects(ctx.call({id:'A'},{values:[3,5],note:'test'}),/Người khác vừa lưu/);assert.equal(ctx.state.counts.A.version,'6');assert.equal(ctx.selections,1)});
@@ -245,7 +265,7 @@ test('finalized XLSX export includes every audit event and clear finalized marke
    B:{values:[10]},C:{values:[5]}}
  };
  const elems={exportBtn:{}};
- const ctx={XLSX,state,client:{},user:{},drugManufacturer:item=>item.catalog?.manufacturer||item.manufacturer||'',
+ const ctx={XLSX,state,client:{},user:{},drugDisplay:item=>({name:item.name,strength:'',manufacturer:''}),
    refreshCloudCounts:async()=>true,fetchCloudRows:async()=>records,
    sum:(item,values)=>item.pack.reduce((n,p,i)=>n+values[i]*p.factor,0),
    $:id=>elems[id]||(elems[id]={}),alert:message=>alerts.push(message)};
