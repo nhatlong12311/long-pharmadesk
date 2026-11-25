@@ -70,6 +70,15 @@
  <h2 id="guestShareTitle">Tạo link kiểm kê</h2>
  <p class="muted">Người nhận link chỉ cần nhập tên để vào kiểm kê.</p>
  <p id="guestLinkHint" class="muted">Đăng nhập email để quản lý link của đợt.</p>
+ <form id="ownerLoginForm">
+  <label for="email">Email quản lý đợt</label>
+  <div class="owner-login-row">
+   <input id="email" type="email" name="email" autocomplete="email" placeholder="ten@benhvien.vn" required>
+   <button id="login" class="secondary" type="submit">Gửi liên kết đăng nhập</button>
+  </div>
+  <p id="ownerLoginFeedback" class="muted" role="status"></p>
+ </form>
+ <p id="authState" class="muted" role="status"></p>
  <div class="row actions">
   <button id="copyGuestLink">Tạo link kiểm kê</button>
   <button id="disableGuestLink" class="secondary hidden" disabled>Tắt link</button>
@@ -77,7 +86,7 @@
  <div id="guestLinkDetails" class="hidden"><label for="guestJoinLink">Link gửi cho mọi người</label><input id="guestJoinLink" readonly></div>
  <p id="guestLinkStatus" class="muted" role="status"></p>
 </div><div class="card"><h2>Xuất Excel kết quả</h2><p class="muted">Tải báo cáo tổng hợp, chi tiết và các dòng cần kiểm lại. Báo cáo đợt chung có lịch sử số đếm.</p><button id="exportBtn">Xuất Excel</button><button class="secondary" id="backupBtn">Sao lưu JSON</button><label>Phục hồi bản sao lưu</label><input type="file" id="restore" accept=".json"><p class="note">Sao lưu thường xuyên. Chế độ cục bộ chỉ lưu trên trình duyệt của thiết bị hiện tại; xóa dữ liệu trang web có thể làm mất kết quả.</p></div>
-<div class="card"><h2>Đồng bộ nhiều thành viên</h2><p class="muted">Quản lý đợt trên Supabase bằng email. Dùng mục Tạo link kiểm kê bên trên để mời khách nhập tên và tham gia.</p><label>Supabase URL</label><input id="sbUrl" value="https://jpsywcjmcmvgjswkrnzo.supabase.co" readonly><label>Supabase publishable/anon key</label><input id="sbKey" value="sb_publishable_4iy9k4S074-klLeUt-jVNA_AvI0Oswi" readonly><div class="row" style="margin-top:9px"><button id="connect">Kết nối</button><button class="secondary" id="disconnect">Về chế độ cục bộ</button></div><div id="cloudUi" class="hidden"><label for="email">Email quản lý đợt</label><input id="email" type="email" placeholder="ten@benhvien.vn"><button id="login" style="margin-top:8px">Gửi liên kết đăng nhập</button><p id="authState" class="muted"></p><div id="cloudActions" class="hidden"><button id="createCloud">Tạo đợt trên đám mây từ danh mục hiện tại</button><label>Mã đợt (UUID) được chia sẻ</label><input id="cloudId" placeholder="Dán mã đợt kiểm kê"><button id="joinCloud" class="secondary" style="margin-top:8px">Mở đợt được phân quyền</button><button id="copyJoinLink" class="secondary" style="margin-top:8px">Sao chép liên kết cho thành viên</button><p class="muted">Đã có liên kết vẫn cần được trưởng nhóm cấp quyền qua email mới xem hoặc nhập được.</p><div id="ownerAccessControls" class="hidden"><label for="inviteEmail">Mời thành viên bằng email</label><input id="inviteEmail" type="email" placeholder="nhanvien@benhvien.vn"><button id="invite" class="secondary" style="margin-top:8px">Cấp quyền nhập liệu</button>
+<div class="card"><h2>Đồng bộ nhiều thành viên</h2><p class="muted">Quản lý đợt trên Supabase bằng email. Dùng mục Tạo link kiểm kê bên trên để mời khách nhập tên và tham gia.</p><label>Supabase URL</label><input id="sbUrl" value="https://jpsywcjmcmvgjswkrnzo.supabase.co" readonly><label>Supabase publishable/anon key</label><input id="sbKey" value="sb_publishable_4iy9k4S074-klLeUt-jVNA_AvI0Oswi" readonly><div class="row" style="margin-top:9px"><button id="connect">Kết nối</button><button class="secondary" id="disconnect">Về chế độ cục bộ</button></div><div id="cloudUi" class="hidden"><div id="cloudActions" class="hidden"><button id="createCloud">Tạo đợt trên đám mây từ danh mục hiện tại</button><label>Mã đợt (UUID) được chia sẻ</label><input id="cloudId" placeholder="Dán mã đợt kiểm kê"><button id="joinCloud" class="secondary" style="margin-top:8px">Mở đợt được phân quyền</button><button id="copyJoinLink" class="secondary" style="margin-top:8px">Sao chép liên kết cho thành viên</button><p class="muted">Đã có liên kết vẫn cần được trưởng nhóm cấp quyền qua email mới xem hoặc nhập được.</p><div id="ownerAccessControls" class="hidden"><label for="inviteEmail">Mời thành viên bằng email</label><input id="inviteEmail" type="email" placeholder="nhanvien@benhvien.vn"><button id="invite" class="secondary" style="margin-top:8px">Cấp quyền nhập liệu</button>
 </div><button id="viewMembers" class="secondary" style="margin-top:8px">Xem thành viên đã được mời</button><div id="finalizeControls" class="hidden" style="margin-top:12px"><div class="note">Chỉ chốt khi đã kiểm đủ toàn bộ thuốc. Sau khi chốt, không ai được sửa số đếm trong đợt này.</div><button id="finalizeRun" class="danger" style="margin-top:8px">Chốt và khóa đợt kiểm kê</button></div><div id="membersList" class="muted" aria-live="polite"></div><p class="muted" id="cloudState"></p></div></div></div></section>
 </main>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -662,7 +671,21 @@ $('disconnect').onclick=async()=>{
  $('cloudUi').classList.add('hidden');
  alert('Đã về chế độ cục bộ.');
 };
-$('login').onclick=async()=>{const email=$('email').value.trim();if(!email)return alert('Nhập email');const {error}=await client.auth.signInWithOtp({email,options:{emailRedirectTo:location.href.split('#')[0]}});alert(error?error.message:'Đã gửi liên kết đăng nhập. Kiểm tra email.')};
+$('ownerLoginForm').onsubmit=async event=>{
+ event.preventDefault();
+ const email=$('email').value.trim();
+ if(!email)return;
+ const button=$('login'),feedback=$('ownerLoginFeedback');
+ button.disabled=true;feedback.textContent='Đang gửi liên kết đăng nhập…';
+ try{
+  await connect();
+  if(!client)throw Error('Chưa kết nối được với Supabase.');
+  const {error}=await client.auth.signInWithOtp({email,options:{emailRedirectTo:location.href.split('#')[0]}});
+  if(error)throw error;
+  feedback.textContent='Đã gửi liên kết đăng nhập. Mở thư để tiếp tục.';
+ }catch(error){feedback.textContent=error.message}
+ finally{button.disabled=false}
+};
 async function createCloudRun(forGuestLink=false){
  if($('createCloud').disabled)return false;
  if(!user||!state.items.length)return alert('Hãy đăng nhập và nhập Excel trước.');
@@ -767,6 +790,7 @@ function renderGuestSharing(){
   ?'Tạo một đợt chung từ danh mục hiện tại rồi bật link.'
   :'Nhập danh mục kiểm kê để tạo đợt và bật link.';
  $('guestLinkHint').textContent=hint;
+ $('ownerLoginForm').classList.toggle('hidden',!!user);
  action.textContent=hasLink?'Sao chép link kiểm kê':'Tạo link kiểm kê';
  action.disabled=guestLinkBusy||(!!user&&cloud&&!owner)||(owner&&!!state.closedAt&&!hasLink);
  $('guestLinkDetails').classList.toggle('hidden',!hasLink);

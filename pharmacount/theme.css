@@ -460,3 +460,14 @@ button.danger { background: #9d384c; color: white; }
 .guest-mode .nav, .guest-mode #dashboard, .guest-mode #review, .guest-mode #export,
 .guest-mode:has(#guestForm:not(.hidden)) #count { display: none; }
 .guest-mode:has(#guestForm:not(.hidden)) #pageHeader { display: none; }
+
+.owner-login-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+  max-width: 620px;
+}
+.owner-login-row input { flex: 1 1 260px; width: auto; min-width: 0; }
+#ownerLoginFeedback:not(:empty), .guest-share #authState:not(:empty) { margin-top: 8px; }
+#ownerLoginFeedback:empty, .guest-share #authState:empty { display: none; }
