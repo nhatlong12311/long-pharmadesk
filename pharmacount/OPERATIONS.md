@@ -11,8 +11,8 @@
 ## Cấu hình Supabase Auth trước khi đăng nhập
 Trong Supabase Dashboard dự án `jpsywcjmcmvgjswkrnzo`:
 1. Authentication → URL Configuration: cho phép chính xác `https://nhatlong12311.github.io/long-pharmadesk/pharmacount/` trong Redirect URLs. Nếu dùng Vercel/domain riêng, thêm đúng URL thực tế. Không cho phép wildcard domain không kiểm soát.
-2. Authentication → Providers → Email: xác nhận email OTP/magic link hoạt động và chính sách tạo tài khoản phù hợp. Đăng ký mới cần được quản trị viên kiểm soát; mời thành viên vào đợt kiểm KHÁC với đăng ký tài khoản Auth.
-3. Với cơ sở dữ liệu mới, chạy theo thứ tự `supabase.sql`, `supabase-count-rpc.sql`, `supabase-latest-counts.sql`, `supabase-team-permissions.sql`, `supabase-finalization.sql`, `supabase-finalization-item-guard.sql`, `supabase-rpc-permissions.sql`. Với cơ sở dữ liệu hiện có, kiểm tra các bản đã áp dụng và chỉ chạy phần còn thiếu. Giữ `pharmacount_private` ngoài danh sách schema được Data API công bố.
+2. Authentication → Sign In / Providers: bật Anonymous Sign-Ins để dùng link khách. Authentication → Providers → Email: xác nhận email OTP/magic link hoạt động và chính sách tạo tài khoản phù hợp. Đăng ký mới cần được quản trị viên kiểm soát; mời thành viên vào đợt kiểm KHÁC với đăng ký tài khoản Auth.
+3. Với cơ sở dữ liệu mới, chạy theo thứ tự `supabase.sql`, `supabase-count-rpc.sql`, `supabase-latest-counts.sql`, `supabase-team-permissions.sql`, `supabase-finalization.sql`, `supabase-finalization-item-guard.sql`, `supabase-rpc-permissions.sql`, `supabase-guest-links.sql`. Với cơ sở dữ liệu hiện có, kiểm tra các bản đã áp dụng và chỉ chạy phần còn thiếu. Giữ `pharmacount_private` ngoài danh sách schema được Data API công bố.
 4. Kiểm tra Security Advisor, RLS, phương án sao lưu, giới hạn dung lượng và chính sách lưu dữ liệu. Không đưa thông tin bệnh nhân hoặc tài liệu nội bộ không cần thiết vào ứng dụng.
 
 ## Checklist nghiệm thu bắt buộc trước dùng thật
@@ -30,6 +30,7 @@ Trong Supabase Dashboard dự án `jpsywcjmcmvgjswkrnzo`:
 
 ## Thực hiện kiểm kê sau nghiệm thu
 - **Trưởng nhóm:** đăng nhập → tải danh mục Excel → ghép quy cách → sửa những yếu tố chưa xác định → Tạo đợt chung → Mời thành viên → Sao chép link.
+- **Khách có link:** mở link kiểm kê do chủ đợt bật trong Xuất / Đồng bộ, nhập tên và vào kiểm. Chủ đợt có thể tắt link để thu hồi quyền của khách.
 - **Nhân viên:** mở link bằng điện thoại/PC → đăng nhập đúng email → kiểm hộp chẵn, thuốc lẻ → xác nhận → xem thông báo máy chủ lưu thành công.
 - **Trưởng nhóm khi kết thúc:** kiểm đủ danh sách, xử lý đếm lại → Chốt và khóa → xuất Excel cuối cùng → lưu trữ theo quy định. Sau chốt không có nút mở lại.
 - **Tài khoản bị thu hồi:** dữ liệu đã hiển thị trên máy sẽ được đóng sau khi máy chủ từ chối yêu cầu tiếp theo; đây không phải cơ chế xóa bản đã tải xuống hoặc ảnh chụp màn hình.
