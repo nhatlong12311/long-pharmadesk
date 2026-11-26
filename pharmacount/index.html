@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PharmaCount • Kiểm kê kho Dược</title>
-<link rel="stylesheet" href="theme.css?v=4"></head><body>
+<link rel="stylesheet" href="theme.css?v=5"></head><body>
 <header class="sidebar">
   <div class="brand"><span class="brand-mark" aria-hidden="true">✚</span><div><strong>PharmaCount</strong><span>Kiểm kê kho Dược</span></div></div>
   <nav class="nav" aria-label="Điều hướng kiểm kê">
     <button data-tab="dashboard" class="active" aria-current="page"><span aria-hidden="true">▦</span>Tổng quan</button>
     <button data-tab="count"><span aria-hidden="true">⊞</span>Kiểm thuốc</button>
     <button data-tab="review"><span aria-hidden="true">✓</span>Cần kiểm lại</button>
+    <button data-tab="history"><span aria-hidden="true">◷</span>Lịch sử nhập</button>
     <button data-tab="export"><span aria-hidden="true">⇩</span>Xuất / Đồng bộ</button>
   </nav>
   <span id="mode" role="status">Chế độ cục bộ</span>
@@ -69,6 +70,11 @@
 <p id="quantityHint" class="muted" hidden>Nhập số âm, ví dụ -3, để trừ vào tổng. Lưu lại sẽ thay số đếm trước của bạn.</p>
 <div class="stat actual-card"><span id="actualLabel">Tổng thực kiểm</span><div class="big" id="actual">0</div><div id="teamTotal" hidden></div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label for="note">Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea>
 <div class="row pack-actions"><button id="setPackFactor" class="secondary" type="button">Sửa quy cách hộp</button><button id="setBlisterFactor" class="secondary" type="button">Sửa quy cách vỉ</button></div>
+</div></section>
+<section id="history" class="tab"><div class="card">
+<button class="secondary" type="button" id="refreshHistory">Làm mới lịch sử</button>
+<div id="historyRows" aria-live="polite"></div>
+<button id="olderHistory" class="secondary" type="button" hidden>Xem lượt cũ hơn</button>
 </div></section>
 <section id="review" class="tab">
 <div class="card" id="nxtPanel">
@@ -175,7 +181,7 @@ function drugTitle(item){
  const compact=value=>normalize(value).replace(/\s/g,'');
  return [name,compact(strength)&&!compact(name).endsWith(compact(strength))?strength:'',unit].filter(Boolean).join(' · ');
 }
-const pageTitles={dashboard:'Tổng quan kiểm kê',count:'Kiểm thuốc tại kệ',review:'Cần kiểm lại',export:'Xuất báo cáo và đồng bộ'};
+const pageTitles={dashboard:'Tổng quan kiểm kê',count:'Kiểm thuốc tại kệ',review:'Cần kiểm lại',history:'Lịch sử nhập',export:'Xuất báo cáo và đồng bộ'};
 function show(id,navigate=false){
  const overview=id==='dashboard';
  document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.id===id));
@@ -190,6 +196,8 @@ function show(id,navigate=false){
  for(const key of ['dashboardTools','dashboardProgress','overviewName'])$(key).classList.toggle('hidden',!overview);
  if(id==='count')renderCount();
  if(id==='review')renderReview();
+ if(id==='history')void loadCountHistory();
+ else $('historyRows').replaceChildren();
  if(overview)renderStats();
  if(navigate){window.scrollTo(0,0);$('pageTitle').focus({preventScroll:true})}
 }
@@ -306,12 +314,17 @@ function inferBlisterPack(pack,description,unit){
  if(pack.length===2 && pack[0]?.name==='Hộp' && pack[0].factor===box && loose(pack[1]))return [...pack,{name:'Vỉ',factor:blister}];
  return pack;
 }
+function localHistoryEntry(record,pack,updated){
+ return {entered_at:record.checkedAt,person:record.by,quantities:[...record.values],
+  pack,actual:record.actual,note:record.note,updated};
+}
 function upgradeLocalBlisters(run){
  if(run.source!=='local')return;
  for(const item of run.items){
   const pack=inferBlisterPack(item.pack,item.packText,item.unit);
   if(pack===item.pack)continue;
   const count=run.counts[item.id];
+  if(count && !count.history)count.history=[localHistoryEntry(count,item.pack,false)];
   if(count)count.values=count.values.concat(Array(pack.length-item.pack.length).fill(0));
   item.pack=pack;
  }
@@ -463,7 +476,10 @@ async function editCountUnit(name){
     updates.push({lot,next,saved,values,actual});
   }
   for(const {lot,next,saved,values,actual} of updates){
-    if(saved)Object.assign(saved,{values,actual});
+    if(saved){
+      saved.history??=[localHistoryEntry(saved,lot.pack,false)];
+      Object.assign(saved,{values,actual});
+    }
     if(lot===item)draft=remapQuantities(lot.pack,next,draft,'0');
     lot.pack=next;
     lot.packText=next.filter(p=>p.name==='Hộp'||p.name==='Vỉ').map(p=>'1 '+p.name.toLowerCase()+' = '+p.factor+' '+lot.unit).join(' · ');
@@ -492,6 +508,55 @@ function foldLegacyBlisters(item){
   draft[blister]='0';
  }
 }
+let historyRequest=0,historyCursor=null;
+async function loadCountHistory(older=false){
+ const run=state,list=$('historyRows'),button=$('olderHistory');
+ const request=++historyRequest;
+ const current=()=>request===historyRequest&&state===run&&$('history').classList.contains('active');
+ if(!older){list.textContent='Đang tải lịch sử…';historyCursor=null}
+ button.hidden=true;
+ try{
+  let rows;
+  if(run.source==='cloud'){
+   const {data,error}=await client.rpc('pc_count_history',{p_session:run.sessionId,p_before:historyCursor});
+   if(!current())return;
+   if(error)throw error;
+   rows=data;
+   historyCursor=rows.at(-1)?.event_id??null;
+   button.hidden=rows.length<50;
+  }else{
+   const all=run.items.flatMap(item=>{
+    const saved=run.counts[item.id];
+    return saved?(saved.history??[localHistoryEntry(saved,item.pack,false)]).map(row=>({...row,item_id:item.id})):[];
+   }).reverse().sort((a,b)=>String(b.entered_at).localeCompare(String(a.entered_at)));
+   const offset=older?historyCursor:0;
+   rows=all.slice(offset,offset+50);
+   historyCursor=offset+rows.length;
+   button.hidden=historyCursor>=all.length;
+  }
+  if(!older)list.replaceChildren();
+  const items=new Map(run.items.map(item=>[item.id,item]));
+  for(const row of rows){
+   const item=items.get(row.item_id);
+   if(!item)continue;
+   const fields=row.quantities.map((n,i)=>row.pack?.[i]?n+' '+row.pack[i].name:n).join(' · ');
+   const entry=document.createElement('p');
+   entry.className='item';
+   entry.innerHTML='<strong>'+safe(drugTitle(item))+(item.lot?' · Lô '+safe(item.lot):'')+'</strong><br><b>'+ (row.updated?'Đã cập nhật':'Đã nhập')+'</b> · '+safe(row.person||'Người kiểm')+
+    '<small class="muted">'+safe(new Date(row.entered_at).toLocaleString('vi-VN'))+'</small>'+
+    safe(fields)+' → '+safe(row.actual)+' '+safe(item.unit)+(row.note?'<small class="muted">'+safe(row.note)+'</small>':'');
+   list.append(entry);
+  }
+  if(!list.childElementCount)list.textContent='Chưa có lượt nhập.';
+ }catch(e){
+  if(!current())return;
+  if(run.source==='cloud'&&handleCloudAccessError(e))return;
+  if(!older)list.textContent='Chưa tải được lịch sử. Bấm Làm mới lịch sử để thử lại.';
+  else{button.hidden=false;alert('Chưa tải được lượt cũ hơn: '+e.message)}
+ }
+}
+$('refreshHistory').onclick=()=>loadCountHistory();
+$('olderHistory').onclick=()=>loadCountHistory(true);
 function selectItem(i){selected=i;const item=state.items[i];const saved=ownCount(i);draftVersion=saved?.version||null;draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));foldLegacyBlisters(item);revealed=!!saved;draftConfirmed=!!saved;renderEditor()}
 function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].sort();const old=$('shelfFilter').value;$('shelfFilter').innerHTML='<option value="">Tất cả kệ</option>'+shelves.map(s=>'<option value="'+safe(s)+'">'+safe(s)+'</option>').join('');$('shelfFilter').value=shelves.includes(old)?old:'';renderResults();if(state.items.length)selectItem(Math.min(selected,state.items.length-1));else{
  $('drugTitle').textContent='Chưa có danh mục';$('drugManufacturer').hidden=true;$('drugManufacturer').textContent='';$('drugMeta').textContent='Hãy nhập Excel ở Tổng quan';
@@ -716,7 +781,13 @@ $('confirm').onclick=async()=>{
     if(!isCurrent()||handleCloudAccessError(e))return;
     snapshotPending=true;
    }
-  }else run.counts[x.id]=record;
+  }else{
+   const previous=run.counts[x.id];
+   const history=previous?.history??(previous?[localHistoryEntry(previous,x.pack,false)]:[]);
+   record.history=[...history,localHistoryEntry(record,x.pack,!!previous)];
+   run.counts[x.id]=record;
+  }
+  if($('history').classList.contains('active'))void loadCountHistory();
   save();renderResults();renderStats();
   if($('review').classList.contains('active'))renderReview();
   if(draft===edit&&run.items[selected]?.id===x.id){
