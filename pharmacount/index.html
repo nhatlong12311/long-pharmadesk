@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PharmaCount • Kiểm kê kho Dược</title>
-<link rel="stylesheet" href="theme.css?v=1"></head><body>
+<link rel="stylesheet" href="theme.css?v=2"></head><body>
 <header class="sidebar">
   <div class="brand"><span class="brand-mark" aria-hidden="true">✚</span><div><strong>PharmaCount</strong><span>Kiểm kê kho Dược</span></div></div>
   <nav class="nav" aria-label="Điều hướng kiểm kê">
@@ -63,7 +63,13 @@
   </div>
 </section>
 <section id="count" class="tab"><div class="card" id="countFinder"><div class="row space"><h2>Kiểm tại kệ</h2><span id="position" class="pill"></span></div><input aria-label="Tìm thuốc" id="quickSearch" placeholder="Tìm mã, tên, hàm lượng, kệ hoặc lô..."><div class="row" style="margin-top:8px"><select aria-label="Lọc theo kệ" id="shelfFilter" style="flex:1"><option value="">Tất cả kệ</option></select><select aria-label="Lọc theo trạng thái" id="statusFilter" style="flex:1"><option value="">Tất cả trạng thái</option><option value="pending">Chưa kiểm</option><option value="diff">Chênh lệch</option><option value="ok">Đã khớp</option></select></div><div id="results"></div></div>
-<div class="card" id="editor"><button class="secondary mobile-back" id="backToList" type="button">Danh sách thuốc</button><h2 id="drugTitle" tabindex="-1">Chưa có danh mục</h2><p class="muted" id="drugManufacturer" hidden></p><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div><p id="quantityHint" class="muted" hidden>Nhập số âm, ví dụ -3, để trừ vào tổng. Lưu lại sẽ thay số đếm trước của bạn.</p><button id="setPackFactor" class="secondary" style="margin-top:10px">Sửa quy cách hộp</button><button id="setBlisterFactor" class="secondary" type="button">Sửa quy cách vỉ</button><div class="stat actual-card"><span id="actualLabel">Tổng thực kiểm</span><div class="big" id="actual">0</div><div id="teamTotal" hidden></div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label for="note">Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea><div class="count-dock"><p class="muted" id="saveState" role="status"></p><div class="row count-actions"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp</button></div></div></div></section>
+<div class="card" id="editor"><button class="secondary mobile-back" id="backToList" type="button">Danh sách thuốc</button><h2 id="drugTitle" tabindex="-1">Chưa có danh mục</h2><p class="muted" id="drugManufacturer" hidden></p><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div>
+<div class="row count-actions"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp</button></div>
+<p class="muted" id="saveState" role="status"></p>
+<p id="quantityHint" class="muted" hidden>Nhập số âm, ví dụ -3, để trừ vào tổng. Lưu lại sẽ thay số đếm trước của bạn.</p>
+<div class="stat actual-card"><span id="actualLabel">Tổng thực kiểm</span><div class="big" id="actual">0</div><div id="teamTotal" hidden></div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label for="note">Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea>
+<div class="row pack-actions"><button id="setPackFactor" class="secondary" type="button">Sửa quy cách hộp</button><button id="setBlisterFactor" class="secondary" type="button">Sửa quy cách vỉ</button></div>
+</div></section>
 <section id="review" class="tab">
 <div class="card" id="nxtPanel">
  <h2>Đối chiếu nhập–xuất–tồn</h2>
