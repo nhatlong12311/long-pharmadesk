@@ -418,7 +418,7 @@ $('setPackFactor').onclick=()=>editCountUnit('Hộp');
 $('setBlisterFactor').onclick=()=>editCountUnit('Vỉ');
 async function editCountUnit(name){
   const run=state, cloud=run.source==='cloud';
-  if (lock || (cloud && (!user || user.is_anonymous || user.id!==run.ownerId || run.closedAt))) return;
+  if (lock || (cloud && (!user || !run.packEditing || run.closedAt))) return;
   const item = state.items[selected];
   if (!item) return;
   const label=name.toLowerCase();
@@ -426,7 +426,11 @@ async function editCountUnit(name){
   if (entered === null) return;
   const factor = Number(entered);
   if (!Number.isSafeInteger(factor) || factor < 1 || factor > 100000000) return alert('Hệ số phải là số nguyên dương hợp lệ.');
-  if ((cloud || run.counts[item.id]) && !confirm('Cập nhật thành ' + factor + ' ' + item.unit + '/'+label+'? Tổng thực kiểm sẽ được tính lại từ các số đã nhập.')) return;
+  const code=String(item.code??'').trim().toLowerCase();
+  const lots=run.items.filter(x=>x===item || (code && String(x.code??'').trim().toLowerCase()===code));
+  if(lots.some(x=>String(x.unit).trim().toLowerCase()!==String(item.unit).trim().toLowerCase()))
+    return alert('Các lô cùng mã có đơn vị tính khác nhau. Hãy kiểm tra lại danh mục.');
+  if (!confirm('Áp dụng '+factor+' '+item.unit+'/'+label+' cho '+lots.length+' dòng thuốc trong đợt này? Tổng thực kiểm của các dòng này sẽ được tính lại.')) return;
   if (cloud) {
     lock=true;cloudCountEpoch++;showFinalizeControls();
     try {
@@ -446,20 +450,24 @@ async function editCountUnit(name){
     }
     return;
   }
-  const previous=item.pack;
-  const unit={name,factor};
-  const next=previous.some(p=>p.name===name)?previous.map(p=>p.name===name?unit:p):
-    previous.length===1&&previous[0].name==='Đơn vị lẻ'?[unit,...previous]:[...previous,unit];
-  const saved=run.counts[item.id];
-  if(saved){
-    const values=remapQuantities(previous,next,saved.values,0);
-    const actual=sum({pack:next},values);
-    if(!Number.isSafeInteger(actual))return alert('Tổng thực kiểm vượt giới hạn.');
-    Object.assign(saved,{values,actual});
+  const updates=[];
+  for(const lot of lots){
+    const previous=lot.pack;
+    const unit={name,factor};
+    const next=previous.some(p=>p.name===name)?previous.map(p=>p.name===name?unit:p):
+      previous.length===1&&previous[0].name==='Đơn vị lẻ'?[unit,...previous]:[...previous,unit];
+    const saved=run.counts[lot.id];
+    const values=saved && remapQuantities(previous,next,saved.values,0);
+    const actual=saved && sum({pack:next},values);
+    if(saved && !Number.isSafeInteger(actual))return alert('Tổng thực kiểm vượt giới hạn.');
+    updates.push({lot,next,saved,values,actual});
   }
-  draft=remapQuantities(previous,next,draft,'0');
-  item.pack=next;
-  item.packText=next.filter(p=>p.name==='Hộp'||p.name==='Vỉ').map(p=>'1 '+p.name.toLowerCase()+' = '+p.factor+' '+item.unit).join(' · ');
+  for(const {lot,next,saved,values,actual} of updates){
+    if(saved)Object.assign(saved,{values,actual});
+    if(lot===item)draft=remapQuantities(lot.pack,next,draft,'0');
+    lot.pack=next;
+    lot.packText=next.filter(p=>p.name==='Hộp'||p.name==='Vỉ').map(p=>'1 '+p.name.toLowerCase()+' = '+p.factor+' '+lot.unit).join(' · ');
+  }
   const note=$('note').value;
   save();renderEditor();$('note').value=note;renderResults();
 }
@@ -1169,7 +1177,7 @@ $('guestForm').onsubmit=async event=>{
 };
 function showFinalizeControls(){
  const owner=!!(user&&!user.is_anonymous&&state.source==='cloud'&&state.ownerId===user.id);
- $('setPackFactor').hidden=state.source==='cloud'&&(!owner||!!state.closedAt||!state.packEditing);
+ $('setPackFactor').hidden=state.source==='cloud'&&(!user||!!state.closedAt||!state.packEditing);
  $('setPackFactor').disabled=lock;
  $('setBlisterFactor').hidden=$('setPackFactor').hidden||!isTablet(state.items[selected]);
  $('setBlisterFactor').disabled=lock;
