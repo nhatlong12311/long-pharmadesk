@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PharmaCount • Kiểm kê kho Dược</title>
-<link rel="stylesheet" href="theme.css?v=3"></head><body>
+<link rel="stylesheet" href="theme.css?v=4"></head><body>
 <header class="sidebar">
   <div class="brand"><span class="brand-mark" aria-hidden="true">✚</span><div><strong>PharmaCount</strong><span>Kiểm kê kho Dược</span></div></div>
   <nav class="nav" aria-label="Điều hướng kiểm kê">
@@ -485,16 +485,21 @@ function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFi
  $('results').innerHTML=ids.length?ids.map(i=>{
   const item=state.items[i],{name,strength,unit}=drugDisplay(item);
   const lot=String(item.lot??'').trim();
-  const shortStrength=Array.from(String(strength).trim().normalize('NFC')).slice(0,20).join('');
   const label=[unit,lot && 'Lô '+lot].filter(Boolean).join(' · ');
   return '<button type="button" class="item" data-i="'+i+'"><b>'+safe(name)+'</b>'+
     (label?' · '+safe(label):'')+
-    (shortStrength?'<small class="muted">'+safe(shortStrength)+'</small>':'')+'</button>';
+    (strength?'<small class="muted picker-strength">'+safe(strength)+'</small>':'')+'</button>';
  }).join(''):'<p class="muted">Không có dòng phù hợp.</p>';
  $('results').querySelectorAll('[data-i]').forEach(el=>{
   el.onclick=()=>{
    selectItem(Number(el.dataset.i));
-   if(matchMedia('(max-width: 799px)').matches)$('drugTitle').focus();
+   const quantities=$('quantityInputs');
+   const firstInput=quantities.querySelector('input');
+   if(firstInput){
+    firstInput.focus({preventScroll:true});
+    firstInput.select();
+    quantities.scrollIntoView({block:'center'});
+   }
   };
  });
 }
