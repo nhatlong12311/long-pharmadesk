@@ -483,11 +483,13 @@ function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].s
 }}
 function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFilter').value,shelf=$('shelfFilter').value;let ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return(!q||normalize([drugTitle(x),x.name,drugManufacturer(x),x.code,x.lot,x.shelf].join(' ')).includes(q))&&(!shelf||x.shelf===shelf)&&(!f||f==='pending'&&!c||f==='diff'&&diff||f==='ok'&&c&&x.stock!==null&&!diff)});
  $('results').innerHTML=ids.length?ids.map(i=>{
-  const item=state.items[i],{name,unit}=drugDisplay(item);
+  const item=state.items[i],{name,strength,unit}=drugDisplay(item);
   const lot=String(item.lot??'').trim();
+  const shortStrength=Array.from(String(strength).trim().normalize('NFC')).slice(0,20).join('');
   const label=[unit,lot && 'Lô '+lot].filter(Boolean).join(' · ');
   return '<button type="button" class="item" data-i="'+i+'"><b>'+safe(name)+'</b>'+
-    (label?' · '+safe(label):'')+'</button>';
+    (label?' · '+safe(label):'')+
+    (shortStrength?'<small class="muted">'+safe(shortStrength)+'</small>':'')+'</button>';
  }).join(''):'<p class="muted">Không có dòng phù hợp.</p>';
  $('results').querySelectorAll('[data-i]').forEach(el=>{
   el.onclick=()=>{
