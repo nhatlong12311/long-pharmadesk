@@ -6,6 +6,7 @@ on:
     paths: &pages_paths
       - "web/**"
       - "pharmaquiz/**"
+      - "pharmacount/**"
       - "ui/index.html"
       - "docs/**"
       - "ABC_VEN/**"
