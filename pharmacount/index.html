@@ -473,7 +473,18 @@ function ownCount(i){
  const saved=latest(i);
  return state.source==='cloud'?saved?.own:saved;
 }
-function selectItem(i){selected=i;const item=state.items[i];const saved=ownCount(i);draftVersion=saved?.version||null;draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));revealed=!!saved;draftConfirmed=!!saved;renderEditor()}
+function foldLegacyBlisters(item){
+ if(isTablet(item))return;
+ const blister=item.pack.findIndex(p=>p.name==='Vỉ');
+ const loose=item.pack.findIndex(p=>p.name==='Đơn vị lẻ' && p.factor===1);
+ if(blister<0 || loose<0 || !Number(draft[blister]))return;
+ const total=BigInt(draft[blister])*BigInt(item.pack[blister].factor)+BigInt(draft[loose]);
+ if(Number.isSafeInteger(Number(total))){
+  draft[loose]=String(total);
+  draft[blister]='0';
+ }
+}
+function selectItem(i){selected=i;const item=state.items[i];const saved=ownCount(i);draftVersion=saved?.version||null;draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));foldLegacyBlisters(item);revealed=!!saved;draftConfirmed=!!saved;renderEditor()}
 function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].sort();const old=$('shelfFilter').value;$('shelfFilter').innerHTML='<option value="">Tất cả kệ</option>'+shelves.map(s=>'<option value="'+safe(s)+'">'+safe(s)+'</option>').join('');$('shelfFilter').value=shelves.includes(old)?old:'';renderResults();if(state.items.length)selectItem(Math.min(selected,state.items.length-1));else{
  $('drugTitle').textContent='Chưa có danh mục';$('drugManufacturer').hidden=true;$('drugManufacturer').textContent='';$('drugMeta').textContent='Hãy nhập Excel ở Tổng quan';
  $('position').textContent='';$('quantityInputs').replaceChildren();$('quantityHint').hidden=true;$('note').value='';
@@ -494,7 +505,7 @@ function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFi
   el.onclick=()=>{
    selectItem(Number(el.dataset.i));
    const quantities=$('quantityInputs');
-   const firstInput=quantities.querySelector('input');
+   const firstInput=quantities.querySelector('input:not(:disabled)');
    if(firstInput){
     firstInput.focus({preventScroll:true});
     firstInput.select();
@@ -515,7 +526,22 @@ function markCountEdited(){
  updateConfirmButton();
 }
 $('note').oninput=markCountEdited;
-function renderEditor(){const x=state.items[selected];if(!x)return;updateConfirmButton();$('position').textContent='Kệ '+x.shelf+' · '+(selected+1)+'/'+state.items.length;$('drugTitle').textContent=drugTitle(x);$('drugManufacturer').textContent=drugManufacturer(x);$('drugManufacturer').hidden=!drugManufacturer(x);$('drugMeta').textContent='Mã '+x.code+' · Lô '+(x.lot||'—')+' · HSD '+(x.expiry||'—')+' · '+x.unit+(x.packText?' · '+x.packText:'');$('quantityHint').hidden=false;$('quantityInputs').innerHTML=x.pack.map((p,k)=>({p,k})).sort((a,b)=>Number(a.p.name==='Đơn vị lẻ')-Number(b.p.name==='Đơn vị lẻ')).map(({p,k})=>'<div class="quantity-tile"><label for="qty-'+k+'">'+safe(p.name)+(p.factor>1?' <small>×'+p.factor+'</small>':'')+'</label><input id="qty-'+k+'" type="text" inputmode="text" autocomplete="off" aria-describedby="quantityHint" data-n="'+k+'" value="'+safe(draft[k])+'"></div>').join('');$('quantityInputs').querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{draft[Number(el.dataset.n)]=el.value;revealed=false;markCountEdited();renderCompare()});$('note').value=ownCount(selected)?.note||'';renderCompare()}
+function isTablet(item){
+ return normalize(item?.unit).trim()==='vien';
+}
+function renderQuantityInputs(item){
+ const names=isTablet(item)?['Hộp','Vỉ','Đơn vị lẻ']:['Hộp','Đơn vị lẻ'];
+ $('quantityInputs').innerHTML=names.map(name=>{
+  const k=item.pack.findIndex(pack=>pack.name===name);
+  if(k<0)return '<div class="quantity-tile"><label for="missing-'+name+'">'+name+'</label><input id="missing-'+name+'" disabled placeholder="Chưa có quy cách"></div>';
+  const factor=item.pack[k].factor;
+  return '<div class="quantity-tile"><label for="qty-'+k+'">'+name+
+   (factor>1?' <small>×'+factor+'</small>':'')+'</label><input id="qty-'+k+
+   '" type="text" inputmode="text" autocomplete="off" aria-describedby="quantityHint" data-n="'+k+'" value="'+safe(draft[k])+'"></div>';
+ }).join('');
+ $('setBlisterFactor').hidden=$('setPackFactor').hidden||!isTablet(item);
+}
+function renderEditor(){const x=state.items[selected];if(!x)return;updateConfirmButton();$('position').textContent='Kệ '+x.shelf+' · '+(selected+1)+'/'+state.items.length;$('drugTitle').textContent=drugTitle(x);$('drugManufacturer').textContent=drugManufacturer(x);$('drugManufacturer').hidden=!drugManufacturer(x);$('drugMeta').textContent='Mã '+x.code+' · Lô '+(x.lot||'—')+' · HSD '+(x.expiry||'—')+' · '+x.unit+(x.packText?' · '+x.packText:'');$('quantityHint').hidden=false;renderQuantityInputs(x);$('quantityInputs').querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{draft[Number(el.dataset.n)]=el.value;revealed=false;markCountEdited();renderCompare()});$('note').value=ownCount(selected)?.note||'';renderCompare()}
 function renderCompare(){
  const x=state.items[selected];if(!x)return;
  const cloud=state.source==='cloud',saved=latest(selected);
@@ -1145,7 +1171,7 @@ function showFinalizeControls(){
  const owner=!!(user&&!user.is_anonymous&&state.source==='cloud'&&state.ownerId===user.id);
  $('setPackFactor').hidden=state.source==='cloud'&&(!owner||!!state.closedAt||!state.packEditing);
  $('setPackFactor').disabled=lock;
- $('setBlisterFactor').hidden=$('setPackFactor').hidden;
+ $('setBlisterFactor').hidden=$('setPackFactor').hidden||!isTablet(state.items[selected]);
  $('setBlisterFactor').disabled=lock;
  $('finalizeControls').classList.toggle('hidden',!owner||!!state.closedAt);
  $('ownerAccessControls').classList.toggle('hidden',!owner);
