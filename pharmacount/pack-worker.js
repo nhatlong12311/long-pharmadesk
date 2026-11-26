@@ -67,12 +67,15 @@ self.onmessage = (event) => {
           const candidates = [...new Set([...products, ...directs].filter(n => Number.isSafeInteger(n) && n > 0))];
           if (candidates.length === 1 && !/[;,]|\bhoac\b/.test(compact)) factor = candidates[0];
         }
+        const blisterMatch = normalize(packText).match(/^(?:hop )?(\d+) vi x (\d+) vien$/);
+        const blister = blisterMatch && Number(blisterMatch[1]) * Number(blisterMatch[2]) === factor
+          ? Number(blisterMatch[2]) : 0;
         result.push({
           code, name: String(line[nameColumn] ?? "").trim(),
           strength: String(line[strengthColumn] ?? "").trim(),
           manufacturer: String(line[manufacturerColumn] ?? "").trim(),
           unit: String(line[unitColumn] ?? "").trim(),
-          packText, factor, sheet: sheetName, row: i + 1
+          packText, factor, blister, sheet: sheetName, row: i + 1
         });
       }
     }

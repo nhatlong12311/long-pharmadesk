@@ -363,3 +363,13 @@ test('NXT uses lot headers and flags duplicate scopes and mismatched units',()=>
   'NXT có cả dòng tổng và dòng theo lô','NXT có cả dòng tổng và dòng theo lô','Đơn vị tính khác nhau','Khớp'
  ]);
 });
+
+test('adding blisters preserves boxes and signed loose quantities',()=>{
+ const context={};
+ vm.runInNewContext(slice('function remapQuantities(','function ownCount(')+'\nthis.remap=remapQuantities',context);
+ const box={name:'Hộp',factor:30}, loose={name:'Đơn vị lẻ',factor:1}, blister={name:'Vỉ',factor:10};
+ const units=[box,loose,blister];
+ assert.deepEqual(Array.from(context.remap([box,loose],units,[2,-1],0)),[2,-1,0]);
+ assert.deepEqual(Array.from(context.remap([loose],[blister,loose],[-1],0)),[0,-1]);
+ assert.equal(parser().sum({pack:units},[2,-1,3]),89);
+});

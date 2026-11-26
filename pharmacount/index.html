@@ -63,7 +63,7 @@
   </div>
 </section>
 <section id="count" class="tab"><div class="card" id="countFinder"><div class="row space"><h2>Kiểm tại kệ</h2><span id="position" class="pill"></span></div><input aria-label="Tìm thuốc" id="quickSearch" placeholder="Tìm mã, tên, hàm lượng, kệ hoặc lô..."><div class="row" style="margin-top:8px"><select aria-label="Lọc theo kệ" id="shelfFilter" style="flex:1"><option value="">Tất cả kệ</option></select><select aria-label="Lọc theo trạng thái" id="statusFilter" style="flex:1"><option value="">Tất cả trạng thái</option><option value="pending">Chưa kiểm</option><option value="diff">Chênh lệch</option><option value="ok">Đã khớp</option></select></div><div id="results"></div></div>
-<div class="card" id="editor"><button class="secondary mobile-back" id="backToList" type="button">Danh sách thuốc</button><h2 id="drugTitle" tabindex="-1">Chưa có danh mục</h2><p class="muted" id="drugManufacturer" hidden></p><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div><p id="quantityHint" class="muted" hidden>Nhập số âm, ví dụ -3, để trừ vào tổng. Lưu lại sẽ thay số đếm trước của bạn.</p><button id="setPackFactor" class="secondary" style="margin-top:10px">Sửa quy cách hộp</button><div class="stat actual-card"><span id="actualLabel">Tổng thực kiểm</span><div class="big" id="actual">0</div><div id="teamTotal" hidden></div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label for="note">Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea><div class="count-dock"><p class="muted" id="saveState" role="status"></p><div class="row count-actions"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp</button></div></div></div></section>
+<div class="card" id="editor"><button class="secondary mobile-back" id="backToList" type="button">Danh sách thuốc</button><h2 id="drugTitle" tabindex="-1">Chưa có danh mục</h2><p class="muted" id="drugManufacturer" hidden></p><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div><p id="quantityHint" class="muted" hidden>Nhập số âm, ví dụ -3, để trừ vào tổng. Lưu lại sẽ thay số đếm trước của bạn.</p><button id="setPackFactor" class="secondary" style="margin-top:10px">Sửa quy cách hộp</button><button id="setBlisterFactor" class="secondary" type="button">Sửa quy cách vỉ</button><div class="stat actual-card"><span id="actualLabel">Tổng thực kiểm</span><div class="big" id="actual">0</div><div id="teamTotal" hidden></div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label for="note">Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea><div class="count-dock"><p class="muted" id="saveState" role="status"></p><div class="row count-actions"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp</button></div></div></div></section>
 <section id="review" class="tab">
 <div class="card" id="nxtPanel">
  <h2>Đối chiếu nhập–xuất–tồn</h2>
@@ -354,8 +354,9 @@ $('mergePacks').onclick = async () => {
       }
       const pack=unique[0];
       if(!pack.factor){unknown++;issues.push({item,status:'Không xác định chắc chắn số đơn vị/hộp',pack:pack.packText})}
-      return {...updated,packText:pack.packText||item.packText,
-        pack:pack.factor>1?[{name:'Hộp',factor:pack.factor},{name:'Đơn vị lẻ',factor:1}]:[{name:'Đơn vị lẻ',factor:1}]};
+      const units=pack.factor>1?[{name:'Hộp',factor:pack.factor},{name:'Đơn vị lẻ',factor:1}]:[{name:'Đơn vị lẻ',factor:1}];
+      if(pack.blister>0)units.push({name:'Vỉ',factor:pack.blister});
+      return {...updated,packText:pack.packText||item.packText,pack:units};
     });
     if (!matched) throw Error('Đã quét ' + result.scanned + ' dòng nhưng không tìm thấy mã trùng với danh mục kiểm kê.');
     if (confirm('Đã quét ' + result.scanned.toLocaleString('vi-VN') + ' dòng.\n'
@@ -385,22 +386,24 @@ $('downloadPackIssues').onclick=()=>{
  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows),'Cần rà soát');
  XLSX.writeFile(wb,'PharmaCount_quy_cach_can_kiem_tra.xlsx');
 };
-$('setPackFactor').onclick = async () => {
+$('setPackFactor').onclick=()=>editCountUnit('Hộp');
+$('setBlisterFactor').onclick=()=>editCountUnit('Vỉ');
+async function editCountUnit(name){
   const run=state, cloud=run.source==='cloud';
   if (lock || (cloud && (!user || user.is_anonymous || user.id!==run.ownerId || run.closedAt))) return;
   const item = state.items[selected];
   if (!item) return;
-  if (!cloud && state.counts[item.id]) return alert('Thuốc đã đếm, không đổi hệ số. Hãy tạo đợt mới nếu quy cách chưa đúng.');
-  const entered = prompt('Số ' + item.unit + ' trong 1 hộp đối với ' + item.name + ':', item.pack.find(p=>p.name==='Hộp')?.factor || '');
+  const label=name.toLowerCase();
+  const entered = prompt('Số ' + item.unit + ' trong 1 '+label+' đối với ' + item.name + ':', item.pack.find(p=>p.name===name)?.factor || '');
   if (entered === null) return;
   const factor = Number(entered);
-  if (!Number.isSafeInteger(factor) || factor < 1 || factor > 100000000) return alert('Hệ số hộp phải là số nguyên dương hợp lệ.');
+  if (!Number.isSafeInteger(factor) || factor < 1 || factor > 100000000) return alert('Hệ số phải là số nguyên dương hợp lệ.');
+  if ((cloud || run.counts[item.id]) && !confirm('Cập nhật thành ' + factor + ' ' + item.unit + '/'+label+'? Tổng thực kiểm sẽ được tính lại từ các số đã nhập.')) return;
   if (cloud) {
-    if (!confirm('Cập nhật thành ' + factor + ' ' + item.unit + '/hộp? Tổng của từng người và cả nhóm trên dòng này sẽ được tính lại theo số hộp và số lẻ đã nhập.')) return;
     lock=true;cloudCountEpoch++;showFinalizeControls();
     try {
-      const {error}=await client.rpc('pc_set_pack_factor',{
-        p_session:run.sessionId,p_item:item.id,p_expected:item.pack,p_factor:factor
+      const {error}=await client.rpc('pc_edit_count_unit',{
+        p_session:run.sessionId,p_item:item.id,p_expected:item.pack,p_name:name,p_factor:factor
       });
       if(error)throw error;
     } catch(e) {
@@ -415,9 +418,29 @@ $('setPackFactor').onclick = async () => {
     }
     return;
   }
-  item.pack = [{name:'Hộp',factor}, {name:'Đơn vị lẻ',factor:1}];
-  save(); selectItem(selected);
-};
+  const previous=item.pack;
+  const unit={name,factor};
+  const next=previous.some(p=>p.name===name)?previous.map(p=>p.name===name?unit:p):
+    previous.length===1&&previous[0].name==='Đơn vị lẻ'?[unit,...previous]:[...previous,unit];
+  const saved=run.counts[item.id];
+  if(saved){
+    const values=remapQuantities(previous,next,saved.values,0);
+    const actual=sum({pack:next},values);
+    if(!Number.isSafeInteger(actual))return alert('Tổng thực kiểm vượt giới hạn.');
+    Object.assign(saved,{values,actual});
+  }
+  draft=remapQuantities(previous,next,draft,'0');
+  item.pack=next;
+  item.packText=next.filter(p=>p.name==='Hộp'||p.name==='Vỉ').map(p=>'1 '+p.name.toLowerCase()+' = '+p.factor+' '+item.unit).join(' · ');
+  const note=$('note').value;
+  save();renderEditor();$('note').value=note;renderResults();
+}
+function remapQuantities(previous,next,values,initial){
+ return next.map(p=>{
+  const index=previous.findIndex(old=>old.name===p.name);
+  return index<0?initial:values[index];
+ });
+}
 function ownCount(i){
  const saved=latest(i);
  return state.source==='cloud'?saved?.own:saved;
@@ -432,7 +455,7 @@ function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].s
 }}
 function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFilter').value,shelf=$('shelfFilter').value;let ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return(!q||normalize([drugTitle(x),x.name,drugManufacturer(x),x.code,x.lot,x.shelf].join(' ')).includes(q))&&(!shelf||x.shelf===shelf)&&(!f||f==='pending'&&!c||f==='diff'&&diff||f==='ok'&&c&&x.stock!==null&&!diff)});$('results').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return '<div class="item" tabindex="0" data-i="'+i+'"><b>'+safe(drugTitle(x))+'</b> <span class="pill '+(c?(x.stock===null?'warning':diff?'bad':'ok'):'')+'">'+(c?(x.stock===null?'Đã kiểm':diff?'Lệch':'Khớp'):'Chưa kiểm')+'</span>'+(drugManufacturer(x)?'<span class="muted manufacturer">'+safe(drugManufacturer(x))+'</span>':'')+'<div class="muted">'+safe(x.code)+' · '+safe(x.shelf)+' · '+safe(x.lot)+'</div></div>'}).join(''):'<p class="muted">Không có dòng phù hợp.</p>';$('results').querySelectorAll('[data-i]').forEach(el=>{el.onclick=()=>{selectItem(Number(el.dataset.i));if(matchMedia('(max-width: 799px)').matches)$('drugTitle').focus()};el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click()}}})}
 $('quickSearch').oninput=renderResults;$('shelfFilter').onchange=renderResults;$('statusFilter').onchange=renderResults;
-function renderEditor(){const x=state.items[selected];if(!x)return;$('confirm').disabled=lock||!!(state.source==='cloud'&&state.closedAt);$('position').textContent='Kệ '+x.shelf+' · '+(selected+1)+'/'+state.items.length;$('drugTitle').textContent=drugTitle(x);$('drugManufacturer').textContent=drugManufacturer(x);$('drugManufacturer').hidden=!drugManufacturer(x);$('drugMeta').textContent='Mã '+x.code+' · Lô '+(x.lot||'—')+' · HSD '+(x.expiry||'—')+' · '+x.unit+(x.packText?' · '+x.packText:'');$('quantityHint').hidden=false;$('quantityInputs').innerHTML=x.pack.map((p,k)=>'<div class="quantity-tile"><label for="qty-'+k+'">'+safe(p.name)+(p.factor>1?' <small>×'+p.factor+'</small>':'')+'</label><input id="qty-'+k+'" type="text" inputmode="text" autocomplete="off" aria-describedby="quantityHint" data-n="'+k+'" value="'+safe(draft[k])+'"></div>').join('');$('quantityInputs').querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{draft[Number(el.dataset.n)]=el.value;revealed=false;renderCompare()});$('note').value=ownCount(selected)?.note||'';renderCompare()}
+function renderEditor(){const x=state.items[selected];if(!x)return;$('confirm').disabled=lock||!!(state.source==='cloud'&&state.closedAt);$('position').textContent='Kệ '+x.shelf+' · '+(selected+1)+'/'+state.items.length;$('drugTitle').textContent=drugTitle(x);$('drugManufacturer').textContent=drugManufacturer(x);$('drugManufacturer').hidden=!drugManufacturer(x);$('drugMeta').textContent='Mã '+x.code+' · Lô '+(x.lot||'—')+' · HSD '+(x.expiry||'—')+' · '+x.unit+(x.packText?' · '+x.packText:'');$('quantityHint').hidden=false;$('quantityInputs').innerHTML=x.pack.map((p,k)=>({p,k})).sort((a,b)=>Number(a.p.name==='Đơn vị lẻ')-Number(b.p.name==='Đơn vị lẻ')).map(({p,k})=>'<div class="quantity-tile"><label for="qty-'+k+'">'+safe(p.name)+(p.factor>1?' <small>×'+p.factor+'</small>':'')+'</label><input id="qty-'+k+'" type="text" inputmode="text" autocomplete="off" aria-describedby="quantityHint" data-n="'+k+'" value="'+safe(draft[k])+'"></div>').join('');$('quantityInputs').querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{draft[Number(el.dataset.n)]=el.value;revealed=false;renderCompare()});$('note').value=ownCount(selected)?.note||'';renderCompare()}
 function renderCompare(){
  const x=state.items[selected];if(!x)return;
  const cloud=state.source==='cloud',saved=latest(selected);
@@ -1061,6 +1084,8 @@ function showFinalizeControls(){
  const owner=!!(user&&!user.is_anonymous&&state.source==='cloud'&&state.ownerId===user.id);
  $('setPackFactor').hidden=state.source==='cloud'&&(!owner||!!state.closedAt||!state.packEditing);
  $('setPackFactor').disabled=lock;
+ $('setBlisterFactor').hidden=$('setPackFactor').hidden;
+ $('setBlisterFactor').disabled=lock;
  $('finalizeControls').classList.toggle('hidden',!owner||!!state.closedAt);
  $('ownerAccessControls').classList.toggle('hidden',!owner);
  renderGuestSharing();
@@ -1086,7 +1111,7 @@ async function loadCloudSessionStatus(){
   run.items=run.items.map(item=>byId.get(item.id)??item);
   const next=run.items[selected];
   if(previous && next && JSON.stringify(previous.pack)!==JSON.stringify(next.pack)){
-   if(previous.pack.length===1 && next.pack.length===2)draft={0:'0',1:draft[0]};
+   draft=remapQuantities(previous.pack,next.pack,draft,'0');
    const note=$('note').value;
    renderEditor();$('note').value=note;
   }
