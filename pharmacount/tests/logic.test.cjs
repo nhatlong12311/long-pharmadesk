@@ -268,7 +268,7 @@ test('session closing requires ownership and all inventory items counted',async(
 });
 test('finalized runs block editing and server migration locks parent row',()=>{
  assert.ok(script.includes("if(state.source==='cloud'&&state.closedAt)return alert('Đợt kiểm kê đã chốt"));
- assert.ok(script.includes("$('confirm').disabled=lock||!!(state.source==='cloud'&&state.closedAt)"));
+ assert.ok(script.includes("button.disabled=lock||!!(state.source==='cloud'&&state.closedAt)"));
  const sql=fs.readFileSync(path.join(base,'supabase-finalization.sql'),'utf8');
  const guard=fs.readFileSync(path.join(base,'supabase-finalization-item-guard.sql'),'utf8');
  assert.match(sql,/pc_finalize_session/);
