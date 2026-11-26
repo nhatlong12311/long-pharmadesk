@@ -288,9 +288,30 @@ $('newLocal').onclick=()=>{
 };
 function normalize(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9]+/g,' ')}
 function field(o,aliases){let keys=Object.keys(o);for(const a of aliases){const k=keys.find(k=>normalize(k)===normalize(a));if(k)return o[k]}for(const a of aliases){const k=keys.find(k=>normalize(k).includes(normalize(a)));if(k)return o[k]}return''}
+function inferBlisterPack(pack,description,unit){
+ if(!Array.isArray(pack)||!/^vi[eê]n$/iu.test(String(unit).trim()))return pack;
+ const match=String(description).trim().match(/^(?:h[oộ]p\s*)?([1-9]\d{0,6})\s*v[ỉi]\s*[x×]\s*([1-9]\d{0,6})\s*vi[eê]n$/iu);
+ if(!match)return pack;
+ const blister=Number(match[2]),box=Number(match[1])*blister;
+ if(box>100000000)return pack;
+ const loose=p=>p?.name==='Đơn vị lẻ'&&p.factor===1;
+ if(pack.length===1 && loose(pack[0]))return [...pack,{name:'Hộp',factor:box},{name:'Vỉ',factor:blister}];
+ if(pack.length===2 && pack[0]?.name==='Hộp' && pack[0].factor===box && loose(pack[1]))return [...pack,{name:'Vỉ',factor:blister}];
+ return pack;
+}
+function upgradeLocalBlisters(run){
+ if(run.source!=='local')return;
+ for(const item of run.items){
+  const pack=inferBlisterPack(item.pack,item.packText,item.unit);
+  if(pack===item.pack)continue;
+  const count=run.counts[item.id];
+  if(count)count.values=count.values.concat(Array(pack.length-item.pack.length).fill(0));
+  item.pack=pack;
+ }
+}
 function parseRows(rows){return rows.map((r,i)=>{const name=field(r,['Tên thuốc','Tên hàng','Tên dược phẩm','Tên vật tư','Tên sản phẩm','Tên']);const code=field(r,['Mã thuốc','Mã hàng','Mã dược','Mã sản phẩm','Mã']);const lot=field(r,['Số lô','Lô','Batch']);const expiry=field(r,['Hạn dùng','HSD','Ngày hết hạn']);const shelf=field(r,['Vị trí kệ','Vị trí','Kệ','Location'])||'Chưa phân kệ';const unit=field(r,['Đơn vị tính','ĐVT','Đơn vị'])||'đơn vị';const rawStock=field(r,['Số lượng tồn','SL tồn','Tồn cuối','Tồn kho','Số lượng']);const stock=String(rawStock).trim()===''?null:num(rawStock);const packText=field(r,['Quy cách đóng gói','Quy cách','Đóng gói']);const factor=integer(field(r,['Số đơn vị/hộp','Hệ số quy đổi','Quy đổi']));if(!String(name).trim()&&!String(code).trim())return null;
 const pack=factor>1?[{name:'Hộp',factor},{name:'Đơn vị lẻ',factor:1}]:[{name:'Đơn vị lẻ',factor:1}];
-return{id:'r'+i+'_'+normalize(code)+'_'+normalize(lot)+'_'+normalize(shelf),name:String(name||code),strength:String(field(r,['Hàm lượng','Nồng độ, hàm lượng'])||''),manufacturer:String(field(r,['Hãng sản xuất','Nhà sản xuất','Tên nhà sản xuất'])||''),code:String(code||''),lot:String(lot||''),expiry:displayDate(expiry),shelf:String(shelf),unit:String(unit),stock,packText:String(packText||''),pack,raw:r}}).filter(Boolean)}
+return{id:'r'+i+'_'+normalize(code)+'_'+normalize(lot)+'_'+normalize(shelf),name:String(name||code),strength:String(field(r,['Hàm lượng','Nồng độ, hàm lượng'])||''),manufacturer:String(field(r,['Hãng sản xuất','Nhà sản xuất','Tên nhà sản xuất'])||''),code:String(code||''),lot:String(lot||''),expiry:displayDate(expiry),shelf:String(shelf),unit:String(unit),stock,packText:String(packText||''),pack:inferBlisterPack(pack,packText,unit),raw:r}}).filter(Boolean)}
 function importRows(rows){if(!Array.isArray(rows)||!rows.length)throw Error('Excel không có dữ liệu.');const headers=Object.keys(rows[0]);const has=(aliases)=>headers.some(h=>aliases.some(a=>normalize(h)===normalize(a)||normalize(h).includes(normalize(a))));if(!has(['Tên thuốc','Tên hàng','Tên dược phẩm','Tên vật tư','Tên sản phẩm','Tên'])&&!has(['Mã thuốc','Mã hàng','Mã dược','Mã sản phẩm','Mã']))throw Error('Không nhận diện được cột tên/mã thuốc. Hãy kiểm tra hàng tiêu đề.');const hasStock=has(['Số lượng tồn','SL tồn','Tồn cuối','Tồn kho','Số lượng']);const items=parseRows(rows);if(!items.length)throw Error('Không tìm thấy dữ liệu thuốc. Kiểm tra hàng tiêu đề Excel.');const invalid=items.filter(x=>x.stock!==null&&(!Number.isFinite(x.stock)||x.stock<0||!Number.isInteger(x.stock)));if(invalid.length)throw Error('Có '+invalid.length+' dòng tồn kho âm, thiếu, không hợp lệ hoặc không nguyên. Ví dụ: '+invalid.slice(0,3).map(x=>x.name+' ('+String(x.stock)+')').join(', ')+'. Hãy sửa file trước khi nhập.');const ids=new Set();const collisions=[];for(const x of items){const identity=[normalize(x.code||x.name),normalize(x.lot),normalize(x.shelf),normalize(x.packText)].join('|');if(ids.has(identity))collisions.push(x);ids.add(identity)}const duplicateWarning=collisions.length?'\n\nCẢNH BÁO: '+collisions.length+' dòng trùng mã/lô/kệ/quy cách (ví dụ '+collisions[0].name+'). Đã giữ nguyên tất cả dòng gốc; cần rà soát để tránh đếm hai lần.':'';const preview=items.slice(0,20).map((x,i)=>(i+1)+'. '+x.name+' | '+x.code+' | tồn '+(x.stock===null?'chưa có':x.stock)+' | '+x.shelf+' | '+(x.pack.length>1?'hộp ×'+x.pack[0].factor:'chưa có hệ số hộp')).join('\n');if(!confirm('XEM TRƯỚC '+Math.min(items.length,20)+'/'+items.length+' DÒNG\n\n'+preview+'\n\n'+(!hasStock?'Danh mục không có tồn máy; KHÔNG tự kết luận chênh lệch.\n':'')+duplicateWarning+'\nKiểm tra mã, lô, tồn và hệ số quy đổi. Tiếp tục nhập?'))return;if(state.items.length&&!confirm('Thay danh mục hiện tại và xóa kết quả đã nhập trên thiết bị? Hãy sao lưu JSON/Excel trước.'))return;if(state.source==='cloud')throw Error('Đang tham gia đợt chung. Hãy ngắt kết nối trước khi thay danh mục.');state.items=items;state.counts={};state.sessionId=null;state.source='local';state.localId=crypto.randomUUID();selected=0;save();renderCount();$('importInfo').textContent='Đã nhận '+items.length+' dòng; '+collisions.length+' dòng trùng mã/lô/kệ cần rà soát. Giữ nguyên từng dòng Excel để tránh mất dữ liệu.';show('count')}
 $('importBtn').onclick=async()=>{try{if(state.source==='cloud')throw Error('Không nhập danh mục khi đang trong đợt chung. Hãy xuất dữ liệu trước và tạo đợt riêng.');const file=$('excel').files[0];if(!file)throw Error('Chọn file Excel trước.');if(!file.name.toLowerCase().endsWith('.xlsx'))throw Error('Hãy sử dụng file .xlsx để tránh lỗi định dạng.');if(typeof XLSX==='undefined')throw Error('Không tải được thư viện Excel. Cần kết nối Internet lần đầu.');const book=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false});let rows=[];for(const sheetName of book.SheetNames){const sheet=book.Sheets[sheetName];const grid=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});const header=grid.findIndex(r=>Array.isArray(r)&&r.some(x=>normalize(x).trim()==='ma duoc')&&r.some(x=>normalize(x).trim().startsWith('ten thuoc')));if(header>=0){for(let i=header+2;i<grid.length;i++){const r=grid[i];if(!r||!String(r[1]||'').trim()||!String(r[2]||'').trim())continue;rows.push({'Mã dược':r[1],'Tên thuốc':r[2],'ĐVT':r[3],'Số lô':r[4],'Hạn dùng':r[5],'Kệ':sheetName,'Dòng nguồn':i+1,'Chẵn file gốc':r[6],'Lẻ file gốc':r[7]})}}else{for(const x of XLSX.utils.sheet_to_json(sheet,{defval:''}))if(Object.keys(x).some(k=>['ma duoc','ma thuoc','ten thuoc','ten hang'].includes(normalize(k).trim())))rows.push({...x,'Kệ':field(x,['Vị trí kệ','Vị trí','Kệ'])||sheetName})}}importRows(rows)}catch(e){alert(e.message)}};
 $('sampleBtn').onclick=()=>importRows([{'Mã thuốc':'TH001','Tên thuốc':'Paracetamol 500 mg','Tồn kho':2740,'ĐVT':'viên','Kệ':'A-03','Số đơn vị/hộp':100},{'Mã thuốc':'TH002','Tên thuốc':'Ceftriaxon 1 g','Tồn kho':520,'ĐVT':'lọ','Kệ':'A-04','Số đơn vị/hộp':10},{'Mã thuốc':'TH003','Tên thuốc':'Omeprazol 20 mg','Tồn kho':1260,'ĐVT':'viên','Kệ':'B-02','Số đơn vị/hộp':140}]);
@@ -356,7 +377,7 @@ $('mergePacks').onclick = async () => {
       if(!pack.factor){unknown++;issues.push({item,status:'Không xác định chắc chắn số đơn vị/hộp',pack:pack.packText})}
       const units=pack.factor>1?[{name:'Hộp',factor:pack.factor},{name:'Đơn vị lẻ',factor:1}]:[{name:'Đơn vị lẻ',factor:1}];
       if(pack.blister>0)units.push({name:'Vỉ',factor:pack.blister});
-      return {...updated,packText:pack.packText||item.packText,pack:units};
+      return {...updated,packText:pack.packText||item.packText,pack:inferBlisterPack(units,pack.packText,item.unit)};
     });
     if (!matched) throw Error('Đã quét ' + result.scanned + ' dòng nhưng không tìm thấy mã trùng với danh mục kiểm kê.');
     if (confirm('Đã quét ' + result.scanned.toLocaleString('vi-VN') + ' dòng.\n'
@@ -820,7 +841,7 @@ $('restore').onchange=async e=>{
   if(!confirm('Phục hồi sẽ thay thế dữ liệu cục bộ hiện tại?'))return;
   state={...newData(),name:typeof data.name==='string'&&data.name.trim()?data.name:newData().name,
    items:data.items,counts:Object.fromEntries(counts)};
-  selected=0;save();renderCount();show('dashboard');
+  upgradeLocalBlisters(state);selected=0;save();renderCount();show('dashboard');
  }catch(err){alert(err.message)}
  finally{input.value=''}
 };
@@ -1191,6 +1212,6 @@ if(guestToken!==null){
  $('guestPanel').classList.remove('hidden');
  show('count');
 }else try{const config=JSON.parse(localStorage.getItem(CONFIG)||'null');if(config){$('sbUrl').value=config.url;$('sbKey').value=config.key}connect().then(()=>maybeAutoJoinCloud()).catch(e=>{$('authState').textContent='Không kết nối được: '+e.message})}catch{}
-renderStats();renderCount();
+upgradeLocalBlisters(state);renderStats();renderCount();
 })();
 </script></body></html>

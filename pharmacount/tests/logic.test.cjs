@@ -373,3 +373,18 @@ test('adding blisters preserves boxes and signed loose quantities',()=>{
  assert.deepEqual(Array.from(context.remap([loose],[blister,loose],[-1],0)),[0,-1]);
  assert.equal(parser().sum({pack:units},[2,-1,3]),89);
 });
+
+test('Thyrozol shows a ten-tablet blister on import and keeps old box and loose counts',()=>{
+ const code=slice('function inferBlisterPack(','function parseRows(');
+ const ctx={};
+ vm.runInNewContext(code+'\nthis.upgrade=upgradeLocalBlisters',ctx);
+ const row={'Mã thuốc':'THMG T201','Tên thuốc':'Thyrozol 5mg','ĐVT':'Viên','Quy cách':'Hộp 10 vỉ x 10 viên','Số đơn vị/hộp':100};
+ const [item]=parser().parseRows([row]);
+ assert.deepEqual(Array.from(item.pack,p=>p.factor),[100,1,10]);
+ item.pack=item.pack.slice(0,2);
+ const counts={[item.id]:{values:[2,-3],actual:197}};
+ const run={source:'local',items:[item],counts};
+ ctx.upgrade(run);ctx.upgrade(run);
+ assert.deepEqual(counts[item.id].values,[2,-3,0]);
+ assert.equal(parser().sum(item,[2,-3,4]),237);
+});
