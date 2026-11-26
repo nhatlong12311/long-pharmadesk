@@ -410,7 +410,7 @@ input::file-selector-button { background: white; box-shadow: 0 2px 3px #0e4d3820
   .nav button { min-height: 48px; }
   #countFinder, #editor { scroll-margin-top: calc(67px + env(safe-area-inset-top)); }
   #countFinder .row select { flex: 1 1 125px !important; }
-  #results .item { min-height: 54px; padding: 9px 7px; }
+  #results .item { min-height: 44px; padding: 6px 7px; }
   #editor label[for=note] { margin-top: 10px; }
   #editor #quantityInputs { grid-template-columns: repeat(auto-fit,minmax(min(100%,104px),1fr)); }
   .mobile-back { display: inline-flex; align-items: center; margin-bottom: 8px; padding-inline: 11px; }
