@@ -12,7 +12,7 @@
 Trong Supabase Dashboard dự án `jpsywcjmcmvgjswkrnzo`:
 1. Authentication → URL Configuration: cho phép chính xác `https://nhatlong12311.github.io/long-pharmadesk/pharmacount/` trong Redirect URLs. Nếu dùng Vercel/domain riêng, thêm đúng URL thực tế. Không cho phép wildcard domain không kiểm soát.
 2. Authentication → Sign In / Providers: bật Anonymous Sign-Ins để dùng link khách. Authentication → Providers → Email: xác nhận email OTP/magic link hoạt động và chính sách tạo tài khoản phù hợp. Đăng ký mới cần được quản trị viên kiểm soát; mời thành viên vào đợt kiểm KHÁC với đăng ký tài khoản Auth.
-3. Với cơ sở dữ liệu mới, chạy theo thứ tự `supabase.sql`, `supabase-count-rpc.sql`, `supabase-latest-counts.sql`, `supabase-team-permissions.sql`, `supabase-finalization.sql`, `supabase-finalization-item-guard.sql`, `supabase-rpc-permissions.sql`, `supabase-guest-links.sql`, `supabase-per-person-counts.sql`. Với cơ sở dữ liệu hiện có, kiểm tra các bản đã áp dụng và chỉ chạy phần còn thiếu. Giữ `pharmacount_private` ngoài danh sách schema được Data API công bố.
+3. Với cơ sở dữ liệu mới, chạy theo thứ tự `supabase.sql`, `supabase-count-rpc.sql`, `supabase-latest-counts.sql`, `supabase-team-permissions.sql`, `supabase-finalization.sql`, `supabase-finalization-item-guard.sql`, `supabase-rpc-permissions.sql`, `supabase-guest-links.sql`, `supabase-per-person-counts.sql`, `supabase-signed-counts.sql`. Với cơ sở dữ liệu hiện có, kiểm tra các bản đã áp dụng và chỉ chạy phần còn thiếu. Giữ `pharmacount_private` ngoài danh sách schema được Data API công bố.
 4. Kiểm tra Security Advisor, RLS, phương án sao lưu, giới hạn dung lượng và chính sách lưu dữ liệu. Không đưa thông tin bệnh nhân hoặc tài liệu nội bộ không cần thiết vào ứng dụng.
 
 ## Checklist nghiệm thu bắt buộc trước dùng thật
@@ -38,6 +38,7 @@ Trong Supabase Dashboard dự án `jpsywcjmcmvgjswkrnzo`:
 
 ## Điều hành sự cố và phục hồi
 - Mất mạng: tuyệt đối không tuyên bố đã lưu. Không xóa tab/kết quả đang nhập nếu chưa nhận xác nhận. Tạm kiểm giấy và nhập lại sau khi có mạng nếu cần.
+- Điều chỉnh giảm: nhập số nguyên âm ở ô số hộp hoặc số lẻ. Số đó thay phần đếm trước của cùng người và được trừ trong tổng nhóm.
 - Nhập sai số: khi đợt chưa chốt có thể đếm lại, lịch sử lưu mọi lần. Sau chốt, không sửa kết quả, lập biên bản và tạo đợt mới nếu cần.
 - Sao lưu: xuất Excel chốt bao gồm `Thông tin đợt`, `Tổng hợp`, `Chi tiết kiểm`, `Cần kiểm lại`, `Lịch sử kiểm`; theo dõi sao lưu PostgreSQL/Supabase theo chính sách bệnh viện.
 - Rollback phần giao diện: quay lại commit trước khi merge PR #25; giữ nguyên PostgreSQL và dữ liệu (không xóa bảng). Nếu cấu hình/auth gặp sự cố, tạm ngừng dùng dịch vụ.
