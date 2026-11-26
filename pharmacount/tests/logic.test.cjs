@@ -5,10 +5,20 @@ const html=fs.readFileSync(path.join(base,'index.html'),'utf8');
 const worker=fs.readFileSync(path.join(base,'pack-worker.js'),'utf8');
 const script=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(m=>m[1]).find(Boolean);
 function slice(a,b){const i=script.indexOf(a),j=script.indexOf(b,i+a.length);assert.ok(i>=0&&j>i,'Missing code section '+a);return script.slice(i,j)}
-function parser(){const code=slice('const num=v=>','const latest=i=>')+'\n'+slice('function normalize(s){','function importRows(rows){');const context={XLSX:{SSF:{parse_date_code:()=>({d:30,m:7,y:2027})}}};vm.createContext(context);vm.runInContext(code+'\nthis.exports={parseRows,sum,integer}',context);return context.exports}
+function parser(){const code=slice('const num=v=>','const latest=i=>')+'\n'+slice('function normalize(s){','function importRows(rows){');const context={XLSX:{SSF:{parse_date_code:()=>({d:30,m:7,y:2027})}}};vm.createContext(context);vm.runInContext(code+'\nthis.exports={parseRows,sum,integer,countQuantity}',context);return context.exports}
 test('app and worker script syntax',()=>{assert.doesNotThrow(()=>new vm.Script(script));assert.doesNotThrow(()=>new vm.Script(worker))});
 test('hospital XLSX keeps separate lots, null stock and readable expiry',()=>{const a=parser().parseRows([{'Mã dược':'A','Tên thuốc':'Thuốc A','Số lô':'L1','Hạn dùng':46598,'Kệ':'A','ĐVT':'Viên'},{'Mã dược':'A','Tên thuốc':'Thuốc A','Số lô':'L2','Hạn dùng':46598,'Kệ':'A','ĐVT':'Viên'}]);assert.equal(a.length,2);assert.notEqual(a[0].id,a[1].id);assert.equal(a[0].stock,null);assert.equal(a[0].expiry,'30/07/2027')});
 test('3 boxes of 100 plus 5 loose units equals 305',()=>{const f=parser();assert.equal(f.sum({pack:[{factor:100},{factor:1}]},[3,5]),305);assert.equal(f.integer('abc'),0)});
+test('signed counts subtract loose units and reject fractional input',()=>{
+ const {sum,integer,countQuantity}=parser();
+ const item={pack:[{factor:10},{factor:1}]};
+ assert.equal(sum(item,[2,-3]),17);
+ assert.equal(sum(item,[-1,3]),-7);
+ assert.equal(countQuantity('-3'),-3);
+ assert.ok(Number.isNaN(countQuantity('-1.5')));
+ assert.ok(Number.isNaN(countQuantity('')));
+ assert.equal(integer(-3),0);
+});
 test('catalog worker detects ambiguous multiple pack sizes',()=>{const rows=[['STT','MÃ','TÊN DƯỢC, VTYT, HC','','','','','','ĐVT','','QUY CÁCH ĐÓNG GÓI'],[1,'A','Drug A','','','','','','Viên','','Hộp 10 vỉ x 10 viên'],[2,'B','Drug B','','','','','','Viên','','Hộp 3 vỉ x 10 viên, hộp 10 vỉ x 10 viên'],[3,'C','Drug C','','','','','','Lọ','','Hộp 1 lọ'],[4,'X','Other','','','','','','Viên','','Hộp 100 viên']];const messages=[];const ctx={self:{postMessage:m=>messages.push(m)},importScripts:()=>{},XLSX:{read:()=>({SheetNames:['Sheet2'],Sheets:{Sheet2:{'!ref':'A1:K5'}}}),utils:{decode_range:()=>({e:{r:4,c:10}}),sheet_to_json:()=>rows}}};vm.createContext(ctx);vm.runInContext(worker,ctx);ctx.self.onmessage({data:{buffer:new ArrayBuffer(1),codes:['A','B','C']}});const result=messages.find(m=>m.type==='done');assert.ok(result,JSON.stringify(messages));assert.deepEqual(Array.from(result.entries,e=>e.factor),[100,0,1])});
 test('catalog worker extracts display data even without a packaging column',()=>{
  const rows=[['MÃ','TÊN DƯỢC, VTYT, HC','Hàm lượng','ĐVT','Hãng sản xuất'],
@@ -283,7 +293,7 @@ test('finalized XLSX sums latest contributions and retains every audit event',as
   {id:2,item_id:'A',counter_key:'guest:binh',values:[1,5],actual:105,users_email:'b@example.invalid',created_at:'2026-11-23T02:00:00Z',note:'kiểm lại'},
   {id:3,item_id:'B',counter_key:'guest:an',values:[10],actual:10,users_email:'a@example.invalid',created_at:'2026-11-23T02:10:00Z',note:''},
   {id:4,item_id:'C',counter_key:'guest:binh',values:[5],actual:5,users_email:'b@example.invalid',created_at:'2026-11-23T02:20:00Z',note:''},
-  {id:5,item_id:'A',counter_key:'guest:an',values:[0,10],actual:10,counter_name:'AN',created_at:'2026-11-23T02:25:00Z',note:''}
+  {id:5,item_id:'A',counter_key:'guest:an',values:[0,-10],actual:-10,counter_name:'AN',created_at:'2026-11-23T02:25:00Z',note:''}
  ];
  const state={source:'cloud',sessionId:'session',closedAt:'2026-11-23T03:00:00Z',
   items:[{id:'A',name:'Paracetamol',code:'P001',lot:'LOT1',shelf:'A',raw:{},stock:100,
@@ -307,7 +317,8 @@ test('finalized XLSX sums latest contributions and retains every audit event',as
  assert.deepEqual(Array.from(sheets[2].rows,row=>row['Mã kiểm kê']),['A']);
  assert.equal(sheets[3].rows.length,5);
  assert.equal(sheets[3].rows[1]['Tổng thực kiểm'],105);
- assert.equal(sheets[0].rows[0]['Thực kiểm'],115);
+ assert.equal(sheets[3].rows[4]['Tổng thực kiểm'],-10);
+ assert.equal(sheets[0].rows[0]['Thực kiểm'],95);
  assert.equal(sheets[0].rows[0]['Số lô'],'LOT1');
  assert.ok(outputs[0].includes('CHOT_'));
 });
