@@ -63,7 +63,7 @@
   </div>
 </section>
 <section id="count" class="tab"><div class="card" id="countFinder"><div class="row space"><h2>Kiểm tại kệ</h2><span id="position" class="pill"></span></div><input aria-label="Tìm thuốc" id="quickSearch" placeholder="Tìm mã, tên, hàm lượng, kệ hoặc lô..."><div class="row" style="margin-top:8px"><select aria-label="Lọc theo kệ" id="shelfFilter" style="flex:1"><option value="">Tất cả kệ</option></select><select aria-label="Lọc theo trạng thái" id="statusFilter" style="flex:1"><option value="">Tất cả trạng thái</option><option value="pending">Chưa kiểm</option><option value="diff">Chênh lệch</option><option value="ok">Đã khớp</option></select></div><div id="results"></div></div>
-<div class="card" id="editor"><button class="secondary mobile-back" id="backToList" type="button">Danh sách thuốc</button><h2 id="drugTitle" tabindex="-1">Chưa có danh mục</h2><p class="muted" id="drugManufacturer" hidden></p><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div><p id="quantityHint" class="muted" hidden>Nhập số âm, ví dụ -3, để trừ vào tổng. Lưu lại sẽ thay số đếm trước của bạn.</p><button id="setPackFactor" class="secondary" style="margin-top:10px">Thiết lập số viên/lọ trong 1 hộp</button><div class="stat actual-card"><span id="actualLabel">Tổng thực kiểm</span><div class="big" id="actual">0</div><div id="teamTotal" hidden></div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label for="note">Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea><div class="count-dock"><p class="muted" id="saveState" role="status"></p><div class="row count-actions"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp</button></div></div></div></section>
+<div class="card" id="editor"><button class="secondary mobile-back" id="backToList" type="button">Danh sách thuốc</button><h2 id="drugTitle" tabindex="-1">Chưa có danh mục</h2><p class="muted" id="drugManufacturer" hidden></p><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div><p id="quantityHint" class="muted" hidden>Nhập số âm, ví dụ -3, để trừ vào tổng. Lưu lại sẽ thay số đếm trước của bạn.</p><button id="setPackFactor" class="secondary" style="margin-top:10px">Sửa quy cách hộp</button><div class="stat actual-card"><span id="actualLabel">Tổng thực kiểm</span><div class="big" id="actual">0</div><div id="teamTotal" hidden></div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label for="note">Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea><div class="count-dock"><p class="muted" id="saveState" role="status"></p><div class="row count-actions"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp</button></div></div></div></section>
 <section id="review" class="tab">
 <div class="card" id="nxtPanel">
  <h2>Đối chiếu nhập–xuất–tồn</h2>
@@ -385,15 +385,36 @@ $('downloadPackIssues').onclick=()=>{
  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(rows),'Cần rà soát');
  XLSX.writeFile(wb,'PharmaCount_quy_cach_can_kiem_tra.xlsx');
 };
-$('setPackFactor').onclick = () => {
-  if (state.source === 'cloud') return alert('Chỉ trưởng nhóm được sửa quy cách trước khi tạo đợt kiểm chung.');
+$('setPackFactor').onclick = async () => {
+  const run=state, cloud=run.source==='cloud';
+  if (lock || (cloud && (!user || user.is_anonymous || user.id!==run.ownerId || run.closedAt))) return;
   const item = state.items[selected];
   if (!item) return;
-  if (state.counts[item.id]) return alert('Thuốc đã đếm, không đổi hệ số. Hãy tạo đợt mới nếu quy cách chưa đúng.');
+  if (!cloud && state.counts[item.id]) return alert('Thuốc đã đếm, không đổi hệ số. Hãy tạo đợt mới nếu quy cách chưa đúng.');
   const entered = prompt('Số ' + item.unit + ' trong 1 hộp đối với ' + item.name + ':', item.pack.find(p=>p.name==='Hộp')?.factor || '');
   if (entered === null) return;
   const factor = Number(entered);
   if (!Number.isSafeInteger(factor) || factor < 1 || factor > 100000000) return alert('Hệ số hộp phải là số nguyên dương hợp lệ.');
+  if (cloud) {
+    if (!confirm('Cập nhật thành ' + factor + ' ' + item.unit + '/hộp? Tổng của từng người và cả nhóm trên dòng này sẽ được tính lại theo số hộp và số lẻ đã nhập.')) return;
+    lock=true;cloudCountEpoch++;showFinalizeControls();
+    try {
+      const {error}=await client.rpc('pc_set_pack_factor',{
+        p_session:run.sessionId,p_item:item.id,p_expected:item.pack,p_factor:factor
+      });
+      if(error)throw error;
+    } catch(e) {
+      alert('Chưa cập nhật được quy cách: '+e.message);
+      return;
+    } finally {
+      lock=false;showFinalizeControls();
+    }
+    if(state===run){
+      const refreshed=await refreshCloudCounts(true);
+      if(state===run)$('saveState').textContent=refreshed?'Đã cập nhật quy cách và tính lại tổng.':'Đã lưu quy cách. Hãy tải lại để xem tổng mới.';
+    }
+    return;
+  }
   item.pack = [{name:'Hộp',factor}, {name:'Đơn vị lẻ',factor:1}];
   save(); selectItem(selected);
 };
@@ -502,9 +523,9 @@ async function refreshCloudCounts(force=false){
  }
  const refresh=(async()=>{
   try{
-   const rows=await fetchCloudCountSnapshot(sessionAtStart);
+   let rows=await fetchCloudCountSnapshot(sessionAtStart);
    if(!stillCurrent())return false;
-   await loadCloudSessionStatus();
+   if(await loadCloudSessionStatus())rows=await fetchCloudCountSnapshot(sessionAtStart);
    if(!stillCurrent())return false;
    state.counts=Object.fromEntries(rows.map(r=>[r.item_id,countFromSnapshot(r)]));
    save();renderResults();renderStats();
@@ -676,7 +697,7 @@ async function exportXlsx(){
   closedAt=run.closedAt;
   try{
    audit=await fetchCloudRows('inventory_counts',
-    'id,item_id,values,note,actual,created_at,users_email,counter_name,counter_key',exportSession,'id');
+    'id,item_id,values,note,actual,created_at,users_email,counter_name,counter_key'+(run.packEditing?',recorded_values,recorded_actual':''),exportSession,'id');
   }catch(e){
    if(isCurrent())handleCloudAccessError(e);
    return alert('Không tải đủ lịch sử số đếm; đã hủy xuất Excel: '+e.message);
@@ -727,7 +748,7 @@ async function exportXlsx(){
     'Tên thuốc':display.name||'','Hàm lượng':display.strength||'',
     'Nhà sản xuất':display.manufacturer||'','Số lô':item?.lot||'','Khu vực':item?.shelf||'',
     'Người kiểm':r.counter_name||r.users_email||'','Thời gian lưu':r.created_at||'',
-    'Số lượng chẵn/lẻ':JSON.stringify(r.values),'Tổng thực kiểm':r.actual,'Ghi chú':r.note||''};
+    'Số lượng chẵn/lẻ':JSON.stringify(r.recorded_values??r.values),'Tổng thực kiểm':r.recorded_actual??r.actual,'Ghi chú':r.note||''};
   });
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(history.length?history:[{'Thông báo':'Chưa có lượt kiểm'}]),'Lịch sử kiểm');
  }
@@ -887,7 +908,7 @@ async function joinCloudById(id,automatic=false){
  $('joinCloud').disabled=true;
  $('cloudState').textContent='Đang tải danh mục và số đếm từ Supabase...';
  try{
-  const sr=await requestClient.from('inventory_sessions').select('id,name,owner_id,closed_at').eq('id',id).single();
+  const sr=await requestClient.from('inventory_sessions').select('*').eq('id',id).single();
   if(!isCurrent())return false;
   if(sr.error)throw sr.error;
   const items=await fetchCloudRows('inventory_items','id,drug',id,'id');
@@ -896,7 +917,7 @@ async function joinCloudById(id,automatic=false){
   const counts=Object.create(null);
   for(const r of records)counts[r.item_id]=countFromSnapshot(r);
   stopCloudSync();
-  state={name:sr.data.name,items:items.map(r=>r.drug),counts,sessionId:id,source:'cloud',ownerId:sr.data.owner_id,closedAt:sr.data.closed_at};
+  state={name:sr.data.name,items:items.map(r=>r.drug),counts,sessionId:id,source:'cloud',ownerId:sr.data.owner_id,packEditing:'pack_revision' in sr.data,packRevision:sr.data.pack_revision,closedAt:sr.data.closed_at};
   selected=0;save();renderCount();show('count');startCloudSync();showFinalizeControls();
   $('cloudId').value=id;
   resetGuestSharing();
@@ -1038,6 +1059,8 @@ $('guestForm').onsubmit=async event=>{
 };
 function showFinalizeControls(){
  const owner=!!(user&&!user.is_anonymous&&state.source==='cloud'&&state.ownerId===user.id);
+ $('setPackFactor').hidden=state.source==='cloud'&&(!owner||!!state.closedAt||!state.packEditing);
+ $('setPackFactor').disabled=lock;
  $('finalizeControls').classList.toggle('hidden',!owner||!!state.closedAt);
  $('ownerAccessControls').classList.toggle('hidden',!owner);
  renderGuestSharing();
@@ -1048,12 +1071,29 @@ function showFinalizeControls(){
 async function loadCloudSessionStatus(){
  if(!client||!user||state.source!=='cloud'||!state.sessionId)return;
  const run=state,requestClient=client,requestUser=user;
- const {data,error}=await requestClient.from('inventory_sessions').select('owner_id,closed_at').eq('id',run.sessionId).maybeSingle();
+ const {data,error}=await requestClient.from('inventory_sessions').select('*').eq('id',run.sessionId).maybeSingle();
  if(state!==run||client!==requestClient||user?.id!==requestUser.id)return;
  if(error)throw error;
  if(!data)throw {code:'42501',message:'Quyền xem đợt kiểm đã hết hạn.'};
+ state.packEditing='pack_revision' in data;
  state.ownerId=data.owner_id;state.closedAt=data.closed_at;
+ const changed=data.pack_revision && run.packRevision!==data.pack_revision;
+ if(changed){
+  const rows=await fetchCloudRows('inventory_items','id,drug',run.sessionId,'id');
+  if(state!==run||client!==requestClient||user?.id!==requestUser.id)return;
+  const previous=run.items[selected];
+  const byId=new Map(rows.map(row=>[row.id,row.drug]));
+  run.items=run.items.map(item=>byId.get(item.id)??item);
+  const next=run.items[selected];
+  if(previous && next && JSON.stringify(previous.pack)!==JSON.stringify(next.pack)){
+   if(previous.pack.length===1 && next.pack.length===2)draft={0:'0',1:draft[0]};
+   const note=$('note').value;
+   renderEditor();$('note').value=note;
+  }
+  run.packRevision=data.pack_revision;
+ }
  showFinalizeControls();
+ return changed;
 }
 $('finalizeRun').onclick=async()=>{
  if(!client||!user||state.source!=='cloud'||state.ownerId!==user.id)return alert('Chỉ chủ đợt mới được chốt kiểm kê.');
