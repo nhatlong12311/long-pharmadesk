@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PharmaCount • Kiểm kê kho Dược</title>
-<link rel="stylesheet" href="theme.css?v=6"></head><body>
+<link rel="stylesheet" href="theme.css?v=7"></head><body>
 <header class="sidebar">
   <div class="brand"><span class="brand-mark" aria-hidden="true">✚</span><div><strong>PharmaCount</strong><span>Kiểm kê kho Dược</span></div></div>
   <nav class="nav" aria-label="Điều hướng kiểm kê">
@@ -66,10 +66,11 @@
 </section>
 <section id="count" class="tab"><div class="card" id="countFinder"><div class="row space"><h2>Kiểm tại kệ</h2><span id="position" class="pill"></span></div><label for="quickSearch">Tìm thuốc</label><input type="search" id="quickSearch" placeholder="Tìm mã, tên, hàm lượng, kệ hoặc lô..."><div class="row" style="margin-top:8px"><select aria-label="Lọc theo kệ" id="shelfFilter" style="flex:1"><option value="">Tất cả kệ</option></select><select aria-label="Lọc theo trạng thái" id="statusFilter" style="flex:1"><option value="">Tất cả trạng thái</option><option value="pending">Chưa kiểm</option><option value="diff">Chênh lệch</option><option value="ok">Đã khớp</option></select></div><p id="finderStatus" class="muted" role="status"></p><div id="results"></div><button type="button" id="resetFinder" class="secondary hidden">Xóa tìm kiếm và bộ lọc</button></div>
 <div class="card" id="editor"><button class="secondary mobile-back" id="backToList" type="button">Danh sách thuốc</button><h2 id="drugTitle" tabindex="-1">Chưa có danh mục</h2><p class="muted" id="drugManufacturer" hidden></p><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div>
+<p id="quantityHint" class="muted" hidden>Nhập số âm, ví dụ -3, để trừ vào tổng. Lưu lại sẽ thay số đếm trước của bạn.</p>
+<div class="stat actual-card"><span id="actualLabel">Tổng thực kiểm</span><div class="big" id="actual">0</div><div id="teamTotal" hidden></div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div>
+<label for="note">Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea>
 <div class="row count-actions"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp</button></div>
 <p class="muted" id="saveState" role="status"></p>
-<p id="quantityHint" class="muted" hidden>Nhập số âm, ví dụ -3, để trừ vào tổng. Lưu lại sẽ thay số đếm trước của bạn.</p>
-<div class="stat actual-card"><span id="actualLabel">Tổng thực kiểm</span><div class="big" id="actual">0</div><div id="teamTotal" hidden></div><div id="comparison" class="muted">Ẩn tồn máy đến khi xác nhận đếm</div></div><label for="note">Ghi chú</label><textarea id="note" rows="2" placeholder="Tình trạng bao bì, vị trí, lý do nghi sai..."></textarea>
 <div class="row pack-actions"><button id="setPackFactor" class="secondary" type="button">Sửa quy cách hộp</button><button id="setBlisterFactor" class="secondary" type="button">Sửa quy cách vỉ</button></div>
 </div></section>
 <section id="history" class="tab"><div class="card">
@@ -614,11 +615,14 @@ $('resetFinder').onclick=()=>{
  $('quickSearch').focus();
 };
 $('quickSearch').oninput=renderResults;$('shelfFilter').onchange=renderResults;$('statusFilter').onchange=renderResults;
+let savingDraft=null;
 function updateConfirmButton(){
  const button=$('confirm');
  const confirmed=state.items.length>0&&draftConfirmed;
  button.disabled=lock||!!(state.source==='cloud'&&state.closedAt)||!state.items.length||confirmed;
- button.textContent=confirmed?'Đã xác nhận':'Xác nhận đã đếm';
+ const saving=savingDraft!==null&&savingDraft===draft;
+ button.setAttribute('aria-busy',String(saving));
+ button.textContent=saving?'Đang lưu…':confirmed?'Đã xác nhận':'Xác nhận đã đếm';
 }
 function markCountEdited(){
  $('saveState').textContent='Số đếm hoặc ghi chú đã thay đổi. Hãy xác nhận để lưu.';
@@ -792,8 +796,8 @@ $('confirm').onclick=async()=>{
  if(input.some(value=>!Number.isSafeInteger(value)))return alert('Nhập số nguyên ở mỗi ô, ví dụ 12, 0 hoặc -3.');
  const actual=sum(x,input);
  if(!Number.isSafeInteger(actual))return alert('Tổng thực kiểm quá lớn hoặc không hợp lệ. Vui lòng kiểm tra hệ số và số nhập.');
- lock=true;cloudCountEpoch++;$('confirm').disabled=true;
- $('confirm').textContent='Đang lưu…';
+ lock=true;cloudCountEpoch++;savingDraft=edit;
+ updateConfirmButton();
  let snapshotPending=false;
  const record={values:input,actual,note:$('note').value,checkedAt:new Date().toISOString(),by:guestDisplayName||user?.email||'Người dùng cục bộ'};
  try{
@@ -843,7 +847,7 @@ $('confirm').onclick=async()=>{
   alert(message);
  }
  finally{
-  lock=false;showFinalizeControls();
+  savingDraft=null;lock=false;showFinalizeControls();
   if(snapshotPending&&isCurrent())void refreshCloudCounts(true);
  }
 };
