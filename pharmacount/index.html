@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PharmaCount • Kiểm kê kho Dược</title>
-<link rel="stylesheet" href="theme.css?v=5"></head><body>
+<link rel="stylesheet" href="theme.css?v=6"></head><body>
 <header class="sidebar">
   <div class="brand"><span class="brand-mark" aria-hidden="true">✚</span><div><strong>PharmaCount</strong><span>Kiểm kê kho Dược</span></div></div>
   <nav class="nav" aria-label="Điều hướng kiểm kê">
@@ -34,6 +34,7 @@
     </div>
     <div class="hero-progress-copy">
       <p id="countProgressText" class="progress-caption">0 / 0 mặt hàng đã kiểm</p>
+      <button id="startCatalog" class="hidden" type="button">Đến mục nhập Excel</button>
       <button id="openCount">Vào kiểm thuốc</button>
     </div>
   </div>
@@ -63,7 +64,7 @@
     <div class="card session-card"><h2>Đợt kiểm kê</h2><label for="sessionName">Tên đợt</label><input id="sessionName" value="Kiểm kê kho Dược"><div class="row" style="margin-top:10px"><button id="saveName">Lưu tên</button><button class="secondary" id="newLocal">Tạo đợt mới</button></div><p class="muted" id="sessionId"></p></div>
   </div>
 </section>
-<section id="count" class="tab"><div class="card" id="countFinder"><div class="row space"><h2>Kiểm tại kệ</h2><span id="position" class="pill"></span></div><input aria-label="Tìm thuốc" id="quickSearch" placeholder="Tìm mã, tên, hàm lượng, kệ hoặc lô..."><div class="row" style="margin-top:8px"><select aria-label="Lọc theo kệ" id="shelfFilter" style="flex:1"><option value="">Tất cả kệ</option></select><select aria-label="Lọc theo trạng thái" id="statusFilter" style="flex:1"><option value="">Tất cả trạng thái</option><option value="pending">Chưa kiểm</option><option value="diff">Chênh lệch</option><option value="ok">Đã khớp</option></select></div><div id="results"></div></div>
+<section id="count" class="tab"><div class="card" id="countFinder"><div class="row space"><h2>Kiểm tại kệ</h2><span id="position" class="pill"></span></div><label for="quickSearch">Tìm thuốc</label><input type="search" id="quickSearch" placeholder="Tìm mã, tên, hàm lượng, kệ hoặc lô..."><div class="row" style="margin-top:8px"><select aria-label="Lọc theo kệ" id="shelfFilter" style="flex:1"><option value="">Tất cả kệ</option></select><select aria-label="Lọc theo trạng thái" id="statusFilter" style="flex:1"><option value="">Tất cả trạng thái</option><option value="pending">Chưa kiểm</option><option value="diff">Chênh lệch</option><option value="ok">Đã khớp</option></select></div><p id="finderStatus" class="muted" role="status"></p><div id="results"></div><button type="button" id="resetFinder" class="secondary hidden">Xóa tìm kiếm và bộ lọc</button></div>
 <div class="card" id="editor"><button class="secondary mobile-back" id="backToList" type="button">Danh sách thuốc</button><h2 id="drugTitle" tabindex="-1">Chưa có danh mục</h2><p class="muted" id="drugManufacturer" hidden></p><p class="muted" id="drugMeta">Nhập Excel để bắt đầu.</p><div id="quantityInputs" class="grid"></div>
 <div class="row count-actions"><button id="confirm">Xác nhận đã đếm</button><button class="secondary" id="next">Thuốc tiếp</button></div>
 <p class="muted" id="saveState" role="status"></p>
@@ -202,6 +203,7 @@ function show(id,navigate=false){
  if(navigate){window.scrollTo(0,0);$('pageTitle').focus({preventScroll:true})}
 }
 document.querySelectorAll('[data-tab]').forEach(button=>button.onclick=()=>show(button.dataset.tab,true));
+$('startCatalog').onclick=()=>$('excel').focus();
 $('openCount').onclick=()=>show('count',true);
 $('dashboardExport').onclick=()=>show('export',true);
 $('dashboardSearch').onsubmit=event=>{
@@ -275,7 +277,11 @@ function renderStats(){
  $('overviewName').textContent=state.name;
  $('progressRing').style.setProperty('--progress',percent+'%');
  $('progressPercent').textContent=percent+'%';
- $('countProgressText').textContent=done+' / '+total+' mặt hàng đã kiểm';
+ const needsCatalog=!total && state.source!=='cloud';
+ $('countProgressText').textContent=total ? done+' / '+total+' mặt hàng đã kiểm' : 'Đợt kiểm kê chưa có mặt hàng.';
+ $('progressRing').classList.toggle('hidden',!total);
+ $('startCatalog').classList.toggle('hidden',!needsCatalog);
+ $('openCount').classList.toggle('hidden',needsCatalog);
  $('openCount').disabled=!total;
  $('sAll').textContent=total;
  $('sDone').textContent=done;
@@ -566,14 +572,18 @@ function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].s
  updateConfirmButton();
 }}
 function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFilter').value,shelf=$('shelfFilter').value;let ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return(!q||normalize([drugTitle(x),x.name,drugManufacturer(x),x.code,x.lot,x.shelf].join(' ')).includes(q))&&(!shelf||x.shelf===shelf)&&(!f||f==='pending'&&!c||f==='diff'&&diff||f==='ok'&&c&&x.stock!==null&&!diff)});
- $('results').innerHTML=ids.length?ids.map(i=>{
+ const filtered=Boolean(q||shelf||f);
+ $('finderStatus').textContent=!state.items.length ? 'Đợt kiểm kê chưa có mặt hàng.' :
+   filtered ? (ids.length ? 'Tìm thấy '+ids.length+' mặt hàng.' : 'Không tìm thấy thuốc phù hợp.') : '';
+ $('resetFinder').classList.toggle('hidden',!state.items.length||!filtered||ids.length>0);
+ $('results').innerHTML=ids.map(i=>{
   const item=state.items[i],{name,strength,unit}=drugDisplay(item);
   const lot=String(item.lot??'').trim();
   const label=[unit,lot && 'Lô '+lot].filter(Boolean).join(' · ');
   return '<button type="button" class="item" data-i="'+i+'"><b>'+safe(name)+'</b>'+
     (label?' · '+safe(label):'')+
     (strength?'<small class="muted picker-strength">'+safe(strength)+'</small>':'')+'</button>';
- }).join(''):'<p class="muted">Không có dòng phù hợp.</p>';
+ }).join('');
  $('results').querySelectorAll('[data-i]').forEach(el=>{
   el.onclick=()=>{
    selectItem(Number(el.dataset.i));
@@ -587,6 +597,11 @@ function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFi
   };
  });
 }
+$('resetFinder').onclick=()=>{
+ for(const id of ['quickSearch','shelfFilter','statusFilter'])$(id).value='';
+ renderResults();
+ $('quickSearch').focus();
+};
 $('quickSearch').oninput=renderResults;$('shelfFilter').onchange=renderResults;$('statusFilter').onchange=renderResults;
 function updateConfirmButton(){
  const button=$('confirm');
