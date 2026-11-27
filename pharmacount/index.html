@@ -134,7 +134,15 @@ let state;try{state=guestToken!==null?newData():JSON.parse(localStorage.getItem(
 let cloudCountEpoch=0;
 let draftConfirmed=false;
 let selected=0, draft={}, draftVersion=null, revealed=false, client=null,user=null,lock=false, joiningCloud=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshInFlight=null, pendingCountOperation=null, packIssues=[];
-const save=()=>{const persisted=state.source==='cloud'?{name:state.name,items:[],counts:{},sessionId:state.sessionId,source:'cloud',ownerId:state.ownerId||null,closedAt:state.closedAt||null}:state;try{if(guestToken===null)localStorage.setItem(KEY,JSON.stringify(persisted))}catch(e){alert('Bộ nhớ trình duyệt đầy. Hãy sao lưu Excel và kiểm tra dữ liệu trước khi tiếp tục.')}renderStats()};
+function persistState(){
+ if(guestToken!==null)return;
+ const persisted=state.source==='cloud'?{name:state.name,items:[],counts:{},sessionId:state.sessionId,source:'cloud',ownerId:state.ownerId||null,closedAt:state.closedAt||null}:state;
+ localStorage.setItem(KEY,JSON.stringify(persisted));
+}
+const save=()=>{
+ try{persistState()}catch(e){alert('Bộ nhớ trình duyệt đầy. Hãy sao lưu Excel và kiểm tra dữ liệu trước khi tiếp tục.')}
+ renderStats();
+};
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 // Do not silently turn malformed Excel stock values into zero.
 const num=v=>{if(typeof v==='number')return Number.isFinite(v)?v:NaN;const raw=String(v??'').trim().replace(/\s/g,'');if(!raw)return NaN;let t=raw;if(/^\d{1,3}([.,]\d{3})+$/.test(t))t=t.replace(/[.,]/g,'');else if(t.includes(',')&&t.includes('.')){const lastComma=t.lastIndexOf(',')>t.lastIndexOf('.');t=lastComma?t.replace(/\./g,'').replace(',','.'):t.replace(/,/g,'')}else t=t.replace(',','.');const x=Number(t);return Number.isFinite(x)?x:NaN};
@@ -567,7 +575,7 @@ async function loadCountHistory(older=false){
 }
 $('refreshHistory').onclick=()=>loadCountHistory();
 $('olderHistory').onclick=()=>loadCountHistory(true);
-function selectItem(i){selected=i;const item=state.items[i];const saved=ownCount(i);draftVersion=saved?.version||null;draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));foldLegacyBlisters(item);revealed=!!saved;draftConfirmed=!!saved;renderEditor()}
+function selectItem(i){$('saveState').textContent=state.closedAt?'Đợt kiểm kê đã chốt; chỉ được xem và xuất kết quả.':'';selected=i;const item=state.items[i];const saved=ownCount(i);draftVersion=saved?.version||null;draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));foldLegacyBlisters(item);revealed=!!saved;draftConfirmed=!!saved;renderEditor()}
 function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].sort();const old=$('shelfFilter').value;$('shelfFilter').innerHTML='<option value="">Tất cả kệ</option>'+shelves.map(s=>'<option value="'+safe(s)+'">'+safe(s)+'</option>').join('');$('shelfFilter').value=shelves.includes(old)?old:'';renderResults();if(state.items.length)selectItem(Math.min(selected,state.items.length-1));else{
  $('drugTitle').textContent='Chưa có danh mục';$('drugManufacturer').hidden=true;$('drugManufacturer').textContent='';$('drugMeta').textContent='Hãy nhập Excel ở Tổng quan';
  $('position').textContent='';$('quantityInputs').replaceChildren();$('quantityHint').hidden=true;$('note').value='';
@@ -613,6 +621,7 @@ function updateConfirmButton(){
  button.textContent=confirmed?'Đã xác nhận':'Xác nhận đã đếm';
 }
 function markCountEdited(){
+ $('saveState').textContent='Số đếm hoặc ghi chú đã thay đổi. Hãy xác nhận để lưu.';
  draftConfirmed=false;
  updateConfirmButton();
 }
@@ -801,14 +810,21 @@ $('confirm').onclick=async()=>{
     if(!isCurrent()||handleCloudAccessError(e))return;
     snapshotPending=true;
    }
+   save();
   }else{
    const previous=run.counts[x.id];
    const history=previous?.history??(previous?[localHistoryEntry(previous,x.pack,false)]:[]);
    record.history=[...history,localHistoryEntry(record,x.pack,!!previous)];
    run.counts[x.id]=record;
+   try{persistState()}
+   catch{
+    if(previous)run.counts[x.id]=previous;
+    else delete run.counts[x.id];
+    throw Error('Không thể lưu trên thiết bị. Hãy kiểm tra dung lượng và quyền lưu trữ của trình duyệt.');
+   }
+   renderStats();
   }
   if($('history').classList.contains('active'))void loadCountHistory();
-  save();
   if($('statusFilter').value)renderResults();
   if($('review').classList.contains('active'))renderReview();
   if(draft===edit&&run.items[selected]?.id===x.id){
@@ -819,9 +835,13 @@ $('confirm').onclick=async()=>{
    revealed=draftConfirmed&&!snapshotPending;
    renderCompare();
    if(snapshotPending)$('teamTotal').textContent='Đang cập nhật tổng của cả nhóm…';
+   if(draftConfirmed)$('saveState').textContent='Đã ghi nhận '+x.name+' lúc '+new Date().toLocaleTimeString('vi-VN')+(run.source==='cloud'?' và đồng bộ':' trên thiết bị');
   }
-  $('saveState').textContent='Đã ghi nhận '+x.name+' lúc '+new Date().toLocaleTimeString('vi-VN')+(run.source==='cloud'?' và đồng bộ':' trên thiết bị');
- }catch(e){alert('Chưa xác nhận được số đếm: '+e.message)}
+ }catch(e){
+  const message='Chưa xác nhận được số đếm: '+e.message;
+  if(isCurrent()&&run.items[selected]?.id===x.id)$('saveState').textContent=message;
+  alert(message);
+ }
  finally{
   lock=false;showFinalizeControls();
   if(snapshotPending&&isCurrent())void refreshCloudCounts(true);
