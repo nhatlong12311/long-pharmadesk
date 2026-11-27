@@ -392,7 +392,7 @@ test('Thyrozol shows a ten-tablet blister on import and keeps old box and loose 
 async function confirmWithSnapshot({switchItem=false}={}){
  const elements=new Map();
  const $=id=>{
-  if(!elements.has(id))elements.set(id,{value:'',classList:{contains:()=>false}});
+  if(!elements.has(id))elements.set(id,{value:'',setAttribute(key,value){this[key]=value},classList:{contains:()=>false}});
   return elements.get(id);
  };
  const item={id:'A',name:'A',pack:[{factor:1}]};
@@ -403,19 +403,24 @@ async function confirmWithSnapshot({switchItem=false}={}){
   client:{rpc:async name=>{
    calls.push(name);
    return {data:{status:'saved',version:'2',snapshot:{item_id:'A',actual:8,count_values:[8],own_values:[3],own_version:'2'}}};
-  }},ownCount:()=>ctx.state.counts.A.own,save:()=>{},renderCompare:()=>{},showFinalizeControls:()=>{},
+  }},ownCount:()=>ctx.state.counts.A.own,save:()=>{},renderCompare:()=>{},showFinalizeControls:()=>vm.runInContext('updateConfirmButton()',ctx),
   revealed:false,alert:message=>assert.fail(message)};
  vm.createContext(ctx);
- vm.runInContext(slice('function countFromSnapshot(r){','async function fetchCloudRows(')+
+ vm.runInContext(slice('let savingDraft=null;', 'function markCountEdited(){')+slice('function countFromSnapshot(r){','async function fetchCloudRows(')+
   slice("$('confirm').onclick=async()=>{","$('next').onclick="),ctx);
  const saving=$('confirm').onclick();
  assert.equal($('confirm').textContent,'Đang lưu…');
+ vm.runInContext('updateConfirmButton()',ctx);
+ assert.equal($('confirm')['aria-busy'],'true');
  if(switchItem){
   ctx.state.items.push({...item,id:'B',name:'B'});
   ctx.selected=1;
   ctx.draft={0:'0'};
+  vm.runInContext('updateConfirmButton()',ctx);
+  assert.equal($('confirm')['aria-busy'],'false');
  }
  await saving;
+ assert.equal($('confirm')['aria-busy'],'false');
  assert.deepEqual(calls,['pc_submit_count']);
  assert.equal(ctx.state.counts.A.actual,8);
  assert.equal(ctx.draftConfirmed,!switchItem);

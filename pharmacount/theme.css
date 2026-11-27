@@ -487,3 +487,21 @@ button.danger { background: #9d384c; color: white; }
 
 #finderStatus:not(:empty) { margin-top: 12px; }
 #excel { scroll-margin-block: 20vh; }
+
+#quantityHint { margin-top: 8px; }
+#confirm[aria-busy="true"] { opacity: 1; cursor: progress; }
+@media (prefers-reduced-motion: no-preference) {
+  #confirm[aria-busy="true"]::before {
+    content: "";
+    display: inline-block;
+    width: .8em;
+    height: .8em;
+    margin-inline-end: .5em;
+    border: 2px solid currentColor;
+    border-inline-end-color: transparent;
+    border-radius: 50%;
+    vertical-align: -.1em;
+    animation: count-saving .8s linear infinite;
+  }
+  @keyframes count-saving { to { transform: rotate(1turn); } }
+}
