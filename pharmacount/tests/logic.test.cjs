@@ -58,7 +58,7 @@ test('older inventory names separate manufacturer, lot and expiry without changi
 });
 
 function cloud(client,counts={}){const ctx={client,user:{email:'tester@example.org'},state:{source:'cloud',sessionId:'test-run',items:[{id:'A'}],counts},fetchCloudCountSnapshot:async(id,item)=>{const {data}=await client.rpc("pc_inventory_count_snapshot",{p_session:id,p_item:item});return data},pendingCountOperation:null,crypto:{randomUUID:()=> 'same-op-id'},selected:0,saves:0,selections:0,save(){ctx.saves++},selectItem(){ctx.selections++}};vm.createContext(ctx);vm.runInContext(slice('function countFromSnapshot(r){','async function fetchCloudRows(')+'\nthis.call=cloudWrite',ctx);return ctx}
-test('retry of uncertain write reuses operation ID',async()=>{let n=0;const ops=[];const ctx=cloud({rpc:async(_,args)=>{ops.push(args.p_operation);return ++n===1?{error:{message:'timeout'}}:{data:{status:'saved',version:'5'}}}});await assert.rejects(ctx.call({id:'A'},{values:[3,5],note:'test'}));assert.equal(await ctx.call({id:'A'},{values:[3,5],note:'test'}),'5');assert.deepEqual(ops,['same-op-id','same-op-id'])});
+test('retry of uncertain write reuses operation ID',async()=>{let n=0;const ops=[];const ctx=cloud({rpc:async(_,args)=>{ops.push(args.p_operation);return ++n===1?{error:{message:'timeout'}}:{data:{status:'saved',version:'5'}}}});await assert.rejects(ctx.call({id:'A'},{values:[3,5],note:'test'}));assert.equal((await ctx.call({id:'A'},{values:[3,5],note:'test'})).version,'5');assert.deepEqual(ops,['same-op-id','same-op-id'])});
 test('concurrent save under the same identity loads personal and group counts',async()=>{
  const row={id:7,count_values:[3,4],actual:304,own_values:[2,4],own_note:'mine',own_version:'6'};
  const ctx=cloud({rpc:async(name,input)=>{
@@ -387,4 +387,32 @@ test('Thyrozol shows a ten-tablet blister on import and keeps old box and loose 
  ctx.upgrade(run);ctx.upgrade(run);
  assert.deepEqual(counts[item.id].values,[2,-3,0]);
  assert.equal(parser().sum(item,[2,-3,4]),237);
+});
+
+test('cloud confirmation uses the returned team total without a second read',async()=>{
+ const elements=new Map();
+ const $=id=>{
+  if(!elements.has(id))elements.set(id,{value:'',classList:{contains:()=>false}});
+  return elements.get(id);
+ };
+ const item={id:'A',name:'A',pack:[{factor:1}]};
+ const calls=[];
+ const ctx={$,state:{source:'cloud',sessionId:'run',items:[item],counts:{}},user:{id:'U'},selected:0,
+  lock:false,cloudCountEpoch:0,guestDisplayName:'Kim',draft:{0:'3'},draftVersion:null,draftConfirmed:false,
+  pendingCountOperation:null,crypto:{randomUUID:()=> 'op'},countQuantity:Number,sum:(_,v)=>v[0],
+  client:{rpc:async name=>{
+   calls.push(name);
+   return {data:{status:'saved',version:'2',snapshot:{item_id:'A',actual:8,count_values:[8],own_values:[3],own_version:'2'}}};
+  }},ownCount:()=>ctx.state.counts.A.own,save:()=>{},renderCompare:()=>{},showFinalizeControls:()=>{},
+  revealed:false,alert:message=>assert.fail(message)};
+ vm.createContext(ctx);
+ vm.runInContext(slice('function countFromSnapshot(r){','async function fetchCloudRows(')+
+  slice("$('confirm').onclick=async()=>{","$('next').onclick="),ctx);
+ const saving=$('confirm').onclick();
+ assert.equal($('confirm').textContent,'Đang lưu…');
+ await saving;
+ assert.deepEqual(calls,['pc_submit_count']);
+ assert.equal(ctx.state.counts.A.actual,8);
+ assert.equal(ctx.draftConfirmed,true);
+ assert.equal(ctx.lock,false);
 });

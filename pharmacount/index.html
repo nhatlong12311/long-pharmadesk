@@ -653,7 +653,7 @@ async function cloudWrite(x,record,expectedDraftVersion){
  if(error){handleCloudAccessError(error);if(/finalized|chốt|closed/i.test(error.message||''))await loadCloudSessionStatus();throw error;}
  if(data?.status==='conflict'){
    pendingCountOperation=null;
-   const [row]=await fetchCloudCountSnapshot(run.sessionId,x.id);
+   const row=data.snapshot ?? (await fetchCloudCountSnapshot(run.sessionId,x.id))[0];
    if(!isCurrent())throw Error('Đợt hoặc phiên đăng nhập đã thay đổi trong lúc lưu.');
    if(row){
      run.counts[x.id]=countFromSnapshot(row);
@@ -665,7 +665,7 @@ async function cloudWrite(x,record,expectedDraftVersion){
  if(data?.status!=='saved'||!data.version)throw Error('Máy chủ chưa xác nhận lưu số đếm');
  pendingCountOperation=null;
  // Do not advance the receive cursor: earlier events may still be unseen.
- return data.version;
+ return data;
 }
 async function fetchCloudRows(table,columns,id,orderColumn,ascending=true){
  const records=[],pageSize=750,maxRows=50000;
@@ -766,14 +766,16 @@ $('confirm').onclick=async()=>{
  const actual=sum(x,input);
  if(!Number.isSafeInteger(actual))return alert('Tổng thực kiểm quá lớn hoặc không hợp lệ. Vui lòng kiểm tra hệ số và số nhập.');
  lock=true;cloudCountEpoch++;$('confirm').disabled=true;
+ $('confirm').textContent='Đang lưu…';
  let snapshotPending=false;
  const record={values:input,actual,note:$('note').value,checkedAt:new Date().toISOString(),by:guestDisplayName||user?.email||'Người dùng cục bộ'};
  try{
-  const version=await cloudWrite(x,record,draftVersion);
+  const receipt=await cloudWrite(x,record,draftVersion);
+  const version=receipt?.version;
   if(!isCurrent())return;
   if(run.source==='cloud'){
    try{
-    const [row]=await fetchCloudCountSnapshot(run.sessionId,x.id);
+    const row=receipt.snapshot ?? (await fetchCloudCountSnapshot(run.sessionId,x.id))[0];
     if(!isCurrent())return;
     if(!row)throw Error('Chưa đọc được tổng số đếm.');
     run.counts[x.id]=countFromSnapshot(row);
@@ -788,7 +790,8 @@ $('confirm').onclick=async()=>{
    run.counts[x.id]=record;
   }
   if($('history').classList.contains('active'))void loadCountHistory();
-  save();renderResults();renderStats();
+  save();
+  if($('statusFilter').value)renderResults();
   if($('review').classList.contains('active'))renderReview();
   if(draft===edit&&run.items[selected]?.id===x.id){
    const saved=ownCount(selected);
