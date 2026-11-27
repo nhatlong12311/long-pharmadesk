@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PharmaCount • Kiểm kê kho Dược</title>
-<link rel="stylesheet" href="theme.css?v=10"></head><body>
+<link rel="stylesheet" href="theme.css?v=11"></head><body>
 <header class="sidebar">
   <div class="brand"><span class="brand-mark" aria-hidden="true">✚</span><div><strong>PharmaCount</strong><span>Kiểm kê kho Dược</span></div></div>
   <nav class="nav" aria-label="Điều hướng kiểm kê">
@@ -25,7 +25,7 @@
         <input id="dashboardSearchText" type="search" placeholder="Tìm theo tên thuốc…">
         <button class="secondary" type="submit">Tìm</button>
       </form>
-      <button id="dashboardExport" class="secondary" type="button">Xuất Excel</button>
+      <button id="dashboardExport" class="secondary" type="button">Mở mục xuất báo cáo</button>
     </div>
   </div>
   <div class="hero-progress" id="dashboardProgress">
@@ -135,9 +135,9 @@ let state;try{state=guestToken!==null?newData():JSON.parse(localStorage.getItem(
 let cloudCountEpoch=0;
 let draftConfirmed=false;
 let selected=0, draft={}, draftVersion=null, revealed=false, client=null,user=null,lock=false, joiningCloud=false, cloudChannel=null, cloudRefreshTimer=null, cloudRefreshInFlight=null, pendingCountOperation=null, packIssues=[];
-function persistState(){
+function persistState(run=state){
  if(guestToken!==null)return;
- const persisted=state.source==='cloud'?{name:state.name,items:[],counts:{},sessionId:state.sessionId,source:'cloud',ownerId:state.ownerId||null,closedAt:state.closedAt||null}:state;
+ const persisted=run.source==='cloud'?{name:run.name,items:[],counts:{},sessionId:run.sessionId,source:'cloud',ownerId:run.ownerId||null,closedAt:run.closedAt||null}:run;
  localStorage.setItem(KEY,JSON.stringify(persisted));
 }
 const save=()=>{
@@ -318,7 +318,15 @@ function renderStats(){
  renderGuestSharing();
  $('mode').textContent=state.source==='cloud'?(state.closedAt?'Đã chốt đợt':'Đồng bộ đám mây'):'Chỉ lưu cục bộ';
 }
-$('saveName').onclick=()=>{if(state.source==='cloud')return alert('Tên đợt chung chỉ được đổi bởi trưởng nhóm trên máy chủ.');state.name=$('sessionName').value.trim()||'Kiểm kê kho Dược';save();alert('Đã lưu tên đợt')};
+$('saveName').onclick=()=>{
+ if(state.source==='cloud')return alert('Tên đợt chung chỉ được đổi bởi trưởng nhóm trên máy chủ.');
+ const name=$('sessionName').value.trim()||'Kiểm kê kho Dược';
+ try{persistState({...state,name})}
+ catch{return alert('Chưa lưu được tên đợt. Hãy kiểm tra dung lượng và quyền lưu trữ của trình duyệt.')}
+ state.name=name;
+ renderStats();
+ alert('Đã lưu tên đợt');
+};
 $('newLocal').onclick=()=>{
  const promptText=state.source==='cloud'
   ?'Rời đợt chung để tạo đợt cục bộ mới? Bạn có thể mở lại đợt chung bằng liên kết.'
@@ -660,12 +668,12 @@ function isTablet(item){
 }
 function renderQuantityInputs(item){
  const names=isTablet(item)?['Hộp','Vỉ','Đơn vị lẻ']:['Hộp','Đơn vị lẻ'];
- $('quantityInputs').innerHTML=names.map(name=>{
+ $('quantityInputs').innerHTML=names.map((name,position)=>{
   const k=item.pack.findIndex(pack=>pack.name===name);
-  if(k<0)return '<div class="quantity-tile"><label for="missing-'+name+'">'+name+'</label><input id="missing-'+name+'" disabled placeholder="Chưa có quy cách"></div>';
+  if(k<0)return '<div class="quantity-tile"><label for="missing-'+position+'">'+name+'</label><input id="missing-'+position+'" disabled placeholder="Chưa có quy cách"></div>';
   const factor=item.pack[k].factor;
   return '<div class="quantity-tile"><label for="qty-'+k+'">'+name+
-   (factor>1?' <small>×'+factor+'</small>':'')+'</label><input id="qty-'+k+
+   (factor>1?' <small>×'+factor+'</small>':'')+'</label><span class="input-total"></span><input id="qty-'+k+
    '" type="text" inputmode="text" autocomplete="off" aria-describedby="quantityHint" data-n="'+k+'" value="'+safe(draft[k])+'"></div>';
  }).join('');
  $('setBlisterFactor').hidden=$('setPackFactor').hidden||!isTablet(item);
@@ -677,7 +685,12 @@ function renderCompare(){
  const personal=sum(x,draft);
  const actual=cloud?saved?.actual:personal,delta=x.stock===null||actual==null?null:actual-x.stock;
  $('actualLabel').textContent=cloud?'Số bạn đếm':'Tổng thực kiểm';
- $('actual').textContent=personal.toLocaleString('vi-VN')+' '+x.unit;
+ const valid=x.pack.every((_,k)=>Number.isSafeInteger(countQuantity(draft[k])))&&Number.isSafeInteger(personal);
+ const quantityText=valid?personal.toLocaleString('vi-VN')+' '+x.unit:'—';
+ $('actual').textContent=quantityText;
+ for(const summary of $('quantityInputs').querySelectorAll('.input-total')){
+  summary.textContent=(cloud?'Bạn đếm: ':'Tổng: ')+quantityText;
+ }
  $('teamTotal').hidden=!cloud;
  $('teamTotal').textContent=cloud?'Tổng đã ghi của cả nhóm: '+(saved?Number(saved.actual).toLocaleString('vi-VN')+' '+x.unit:'Chưa có số đếm'):'';
  $('comparison').innerHTML=revealed&&actual!=null
@@ -1102,9 +1115,12 @@ $('restore').onchange=async e=>{
    count.values.some(value=>!Number.isSafeInteger(value))||!Number.isSafeInteger(sum(itemsById.get(id),count.values))))throw Error('Bản sao lưu có số đếm không hợp lệ.');
   if(state!==run||lock||joiningCloud)return;
   if(!confirm('Phục hồi sẽ thay thế dữ liệu cục bộ hiện tại?'))return;
-  state={...newData(),name:typeof data.name==='string'&&data.name.trim()?data.name:newData().name,
+  const restored={...newData(),name:typeof data.name==='string'&&data.name.trim()?data.name:newData().name,
    items:data.items,counts:Object.fromEntries(counts)};
-  upgradeLocalBlisters(state);selected=0;save();renderCount();show('dashboard');
+  upgradeLocalBlisters(restored);
+  try{persistState(restored)}
+  catch{throw Error('Chưa phục hồi được bản sao lưu. Hãy kiểm tra dung lượng và quyền lưu trữ của trình duyệt.')}
+  state=restored;selected=0;renderCount();show('dashboard');
  }catch(err){alert(err.message)}
  finally{input.value=''}
 };
