@@ -72,7 +72,7 @@ button.accent { color: #104437; background: #d2f2df; }
 .item:last-child { border-bottom: 0; }
 .item[aria-current=true] { background: #e4f3eb; }
 .item .muted { display: block; }
-.picker-strength { overflow-wrap: anywhere; }
+.picker-strength { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tab { display: none; }
 .tab.active { display: block; }
 .hidden { display: none !important; }
