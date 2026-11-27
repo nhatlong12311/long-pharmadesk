@@ -504,3 +504,16 @@ button.danger { background: #9d384c; color: white; }
   }
   @keyframes count-saving { to { transform: rotate(1turn); } }
 }
+
+.review-item:focus-visible { outline-offset: -3px; }
+.review-numbers {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  align-items: end;
+  gap: 8px;
+  margin-top: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.review-numbers > span { color: var(--muted); font-size: .82rem; }
+.review-numbers > span strong { display: block; color: var(--ink); font-size: 1rem; }
+.review-delta { color: #813046; text-align: end; }

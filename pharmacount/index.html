@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>PharmaCount • Kiểm kê kho Dược</title>
-<link rel="stylesheet" href="theme.css?v=9"></head><body>
+<link rel="stylesheet" href="theme.css?v=10"></head><body>
 <header class="sidebar">
   <div class="brand"><span class="brand-mark" aria-hidden="true">✚</span><div><strong>PharmaCount</strong><span>Kiểm kê kho Dược</span></div></div>
   <nav class="nav" aria-label="Điều hướng kiểm kê">
@@ -629,13 +629,7 @@ function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFi
  $('results').querySelectorAll('[data-i]').forEach(el=>{
   el.onclick=()=>{
    if(!openCountItem(Number(el.dataset.i)))return;
-   const quantities=$('quantityInputs');
-   const firstInput=quantities.querySelector('input:not(:disabled)');
-   if(firstInput){
-    firstInput.focus({preventScroll:true});
-    firstInput.select();
-    quantities.scrollIntoView({block:'center'});
-   }
+   focusCountQuantity();
   };
  });
 }
@@ -890,7 +884,48 @@ $('next').onclick=()=>{
  const next=nextVisibleItem();
  if(next!==undefined)openCountItem(next);
 };
-function renderReview(){renderNxtReview();const ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i);return c&&x.stock!==null&&sum(x,c.values)!==x.stock});$('reviewList').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),v=sum(x,c.values);return '<div class="item" data-review="'+i+'"><b>'+safe(drugTitle(x))+'</b>'+(drugManufacturer(x)?'<span class="muted manufacturer">'+safe(drugManufacturer(x))+'</span>':'')+'<div class="muted">'+safe(x.shelf)+' · '+safe(x.code)+'</div><div class="pill bad">Máy '+x.stock+' · Kiểm '+v+' · Lệch '+(v-x.stock)+'</div></div>'}).join(''):'<p class="muted">Chưa có dòng chênh lệch.</p>';$('reviewList').querySelectorAll('[data-review]').forEach(el=>el.onclick=()=>{show('count');selectItem(Number(el.dataset.review))})}
+function focusCountQuantity(){
+ const quantities=$('quantityInputs');
+ const first=quantities.querySelector('input:not(:disabled)');
+ if(first){
+  first.focus({preventScroll:true});
+  first.select();
+  quantities.scrollIntoView({block:'center'});
+ }else{
+  $('drugTitle').focus();
+ }
+}
+function renderReview(){
+ renderNxtReview();
+ const rows=[];
+ state.items.forEach((item,index)=>{
+  const count=latest(index);
+  if(!count||item.stock==null)return;
+  const actual=sum(item,count.values);
+  const difference=actual-item.stock;
+  if(!difference)return;
+  const meta=[item.shelf,item.code,lotLabel(item.lot)].filter(Boolean).join(' · ');
+  const maker=drugManufacturer(item);
+  const {name,strength,unit}=drugDisplay(item);
+  const delta=[difference<0?'Thiếu':'Thừa',Math.abs(difference).toLocaleString('vi-VN'),unit].filter(Boolean).join(' ');
+  rows.push('<button type="button" class="item review-item" data-review="'+index+'">'+
+   '<b>'+safe(name)+'</b>'+
+   (strength?'<small class="muted picker-strength">'+safe(strength)+'</small>':'')+
+   (maker?'<span class="muted manufacturer">'+safe(maker)+'</span>':'')+
+   '<span class="muted">'+safe(meta)+'</span>'+
+   '<span class="review-numbers"><span>Tồn máy <strong>'+safe(item.stock.toLocaleString('vi-VN'))+'</strong></span>'+
+   '<span>Thực kiểm <strong>'+safe(actual.toLocaleString('vi-VN'))+'</strong></span>'+
+   '<strong class="review-delta">'+safe(delta)+'</strong></span></button>');
+ });
+ $('reviewList').innerHTML=rows.join('')||'<p class="muted">Chưa có dòng chênh lệch.</p>';
+ $('reviewList').querySelectorAll('[data-review]').forEach(button=>{
+  button.onclick=()=>{
+   show('count');
+   selectItem(Number(button.dataset.review));
+   focusCountQuantity();
+  };
+ });
+}
 function nxtKey(run){
  return 'pharmacount-nxt:'+ (run.source==='cloud'?'cloud:'+run.sessionId:'local:'+run.localId);
 }

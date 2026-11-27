@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="vi">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PharmaCount · Thử vị trí tổng</title>
+<style>
+* {box-sizing:border-box}
+body {margin:0;padding:1rem 1rem 6rem;background:#edf5f1;color:#193d33;font:1rem/1.4 system-ui,sans-serif}
+main {margin:1rem auto;max-width:28rem}
+fieldset {margin:0;padding:1rem;border:1px solid #c2d9cd;border-radius:16px;background:#fff}
+h1 {font-size:1.35rem;margin:0}
+.meta {margin:.3rem 0 1.25rem;color:#4f695f}
+.fields {display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+label {display:grid;gap:.3rem;min-width:0;font-weight:650}
+input,button {font:inherit}
+input {width:100%;min-height:46px;border:1px solid #98b9a9;border-radius:8px;padding:.4rem;color:inherit}
+.total {font-weight:700;color:#075a45;font-variant-numeric:tabular-nums}
+#beside {display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.5rem}
+#below {margin:.4rem 0 0;text-align:end}
+#confirm {background:#086854;color:white;border:none;border-radius:10px;padding:.7rem 1rem;margin-top:.6rem;font-weight:650}
+#confirm:disabled {opacity:.7}
+#status {margin:.45rem 0 0}
+#status:empty,[hidden] {display:none!important}
+.proto-picker {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(10, 10, 10, 0.82);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.4);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 8px 24px rgba(0, 0, 0, 0.24),
+    0 2px 6px rgba(0, 0, 0, 0.12);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.proto-picker-highlight {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* The slide is enabled only after first paint (data-ready), so load doesn't animate. */
+.proto-picker[data-ready] .proto-picker-highlight {
+  transition:
+    transform 250ms cubic-bezier(0.23, 1, 0.32, 1),
+    width 250ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proto-picker[data-ready] .proto-picker-highlight { transition: none; }
+}
+
+.proto-picker-item {
+  position: relative; /* sits above the highlight */
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.55);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    color 150ms ease-out,
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .proto-picker-item:hover {
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
+
+.proto-picker-item:active {
+  transform: scale(0.97);
+}
+
+.proto-picker-item:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.4);
+  outline-offset: 2px;
+}
+
+.proto-picker-item[data-active] {
+  color: #fff;
+}
+
+.proto-picker-divider {
+  width: 1px;
+  height: 16px;
+  margin: 0 4px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.proto-picker-replay {
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+.proto-picker[data-position="top"] {
+  bottom: auto;
+  top: 24px;
+}
+
+</style>
+<main><form id="count"><fieldset><legend>Bản thử kiểm tại kệ</legend>
+<h1>Amoxicillin 500 mg</h1><p class="meta">Kệ A-03 · Lô VN260315A</p>
+<div id="beside"><strong>Số lượng</strong><output class="total" aria-label="Tổng thực kiểm" for="boxes loose"></output></div>
+<div class="fields"><label>Hộp × 14<input id="boxes" type="number" step="1" value="2"></label>
+<label>Viên lẻ<input id="loose" type="number" step="1" value="0"></label></div>
+<div id="below" hidden><output class="total" aria-label="Tổng thực kiểm" for="boxes loose"></output></div>
+<button id="confirm">Xác nhận đã đếm</button><p id="status" role="status"></p>
+</fieldset></form></main>
+<nav class="proto-picker" aria-label="Vị trí tổng thực kiểm">
+<span class="proto-picker-highlight" aria-hidden="true"></span>
+<button class="proto-picker-item">Cạnh nhãn</button><button class="proto-picker-item">Dưới ô nhập</button>
+</nav>
+<script>
+const get=id=>document.getElementById(id);
+const picker=document.querySelector('.proto-picker');
+const choices=[...picker.querySelectorAll('button')];
+const highlight=picker.querySelector('.proto-picker-highlight');
+let selected=0;
+function positionHighlight(){
+ const button=choices[selected];
+ highlight.style.width=button.offsetWidth+'px';
+ highlight.style.transform='translateX('+button.offsetLeft+'px)';
+}
+function selectPosition(index){
+ selected=index;
+ choices.forEach((button,i)=>{
+  button.toggleAttribute('data-active',i===index);
+  button.setAttribute('aria-pressed',String(i===index));
+ });
+ get('beside').querySelector('output').hidden=index!==0;
+ get('below').hidden=index!==1;
+ positionHighlight();
+}
+function total(){
+ return Number(get('boxes').value)*14+Number(get('loose').value);
+}
+function update(){
+ const valid=get('count').checkValidity()&&Number.isSafeInteger(total());
+ document.querySelectorAll('output').forEach(el=>el.value=valid?'Tổng '+total().toLocaleString('vi-VN')+' viên':'Tổng —');
+ get('confirm').disabled=!valid;
+ get('status').textContent='';
+}
+choices.forEach((button,i)=>button.onclick=()=>selectPosition(i));
+get('count').oninput=update;
+get('count').onsubmit=e=>{
+ e.preventDefault();
+ get('status').textContent='Đã xác nhận '+total().toLocaleString('vi-VN')+' viên trong bản thử.';
+ get('confirm').disabled=true;
+};
+window.addEventListener('resize',positionHighlight);
+selectPosition(0);update();
+requestAnimationFrame(()=>picker.setAttribute('data-ready',''));
+</script>
+</html>
