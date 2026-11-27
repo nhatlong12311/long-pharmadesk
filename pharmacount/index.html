@@ -652,7 +652,7 @@ function updateConfirmButton(){
  button.disabled=lock||!!(state.source==='cloud'&&state.closedAt)||!state.items.length||confirmed;
  const saving=savingDraft!==null&&savingDraft===draft;
  button.setAttribute('aria-busy',String(saving));
- button.textContent=saving?'Đang lưu…':confirmed?'Đã xác nhận':'Xác nhận đã đếm';
+ button.textContent=saving?'Đang lưu…':confirmed?'Đã lưu':'Xác nhận đã đếm';
 }
 function markCountEdited(){
  countDraftEdited=true;
@@ -828,6 +828,7 @@ $('confirm').onclick=async()=>{
  const actual=sum(x,input);
  if(!Number.isSafeInteger(actual))return alert('Tổng thực kiểm quá lớn hoặc không hợp lệ. Vui lòng kiểm tra hệ số và số nhập.');
  lock=true;cloudCountEpoch++;savingDraft=edit;
+ if(run.source==='cloud')$('saveState').textContent='Đang lưu…';
  updateConfirmButton();
  let snapshotPending=false;
  const record={values:input,actual,note:$('note').value,checkedAt:new Date().toISOString(),by:guestDisplayName||user?.email||'Người dùng cục bộ'};
@@ -870,7 +871,10 @@ $('confirm').onclick=async()=>{
    revealed=draftConfirmed&&!snapshotPending;
    renderCompare();
    if(snapshotPending)$('teamTotal').textContent='Đang cập nhật tổng của cả nhóm…';
-   if(draftConfirmed)$('saveState').textContent='Đã ghi nhận '+x.name+' lúc '+new Date().toLocaleTimeString('vi-VN')+(run.source==='cloud'?' và đồng bộ':' trên thiết bị');
+   if(draftConfirmed){
+    const destination=run.source==='cloud'?'trên máy chủ':'trên thiết bị';
+    $('saveState').textContent='Đã lưu số đếm của '+x.name+' '+destination+' lúc '+new Date().toLocaleTimeString('vi-VN')+'.';
+   }
   }
  }catch(e){
   const message='Chưa xác nhận được số đếm: '+e.message;
