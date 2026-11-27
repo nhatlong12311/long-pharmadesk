@@ -215,7 +215,12 @@ function show(id,navigate=false){
  if(overview)renderStats();
  if(navigate){window.scrollTo(0,0);$('pageTitle').focus({preventScroll:true})}
 }
-document.querySelectorAll('[data-tab]').forEach(button=>button.onclick=()=>show(button.dataset.tab,true));
+document.querySelectorAll('[data-tab]').forEach(button=>button.onclick=()=>{
+ if($('count').classList.contains('active')){
+  if(button.dataset.tab==='count'||!canLeaveCountDraft())return;
+ }
+ show(button.dataset.tab,true);
+});
 $('startCatalog').onclick=()=>$('excel').focus();
 $('openCount').onclick=()=>show('count',true);
 $('dashboardExport').onclick=()=>show('export',true);
@@ -585,7 +590,21 @@ function updateNextButton(){
  const next=nextVisibleItem();
  $('next').disabled=next===undefined||next===selected;
 }
-function selectItem(i){$('saveState').textContent=state.closedAt?'Đợt kiểm kê đã chốt; chỉ được xem và xuất kết quả.':'';selected=i;updateNextButton();const item=state.items[i];const saved=ownCount(i);draftVersion=saved?.version||null;draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));foldLegacyBlisters(item);revealed=!!saved;draftConfirmed=!!saved;renderEditor()}
+let countDraftEdited=false;
+function canLeaveCountDraft(){
+ if(!countDraftEdited||draftConfirmed)return true;
+ const message=savingDraft===draft
+  ?'Đang gửi số đếm. Rời màn hình nhập của thuốc này?'
+  :'Bỏ phần nhập chưa xác nhận của thuốc này?';
+ return window.confirm(message);
+}
+function openCountItem(index){
+ if(index===selected)return true;
+ if(!canLeaveCountDraft())return false;
+ selectItem(index);
+ return true;
+}
+function selectItem(i){countDraftEdited=false;$('saveState').textContent=state.closedAt?'Đợt kiểm kê đã chốt; chỉ được xem và xuất kết quả.':'';selected=i;updateNextButton();const item=state.items[i];const saved=ownCount(i);draftVersion=saved?.version||null;draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));foldLegacyBlisters(item);revealed=!!saved;draftConfirmed=!!saved;renderEditor()}
 function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].sort();const old=$('shelfFilter').value;$('shelfFilter').innerHTML='<option value="">Tất cả kệ</option>'+shelves.map(s=>'<option value="'+safe(s)+'">'+safe(s)+'</option>').join('');$('shelfFilter').value=shelves.includes(old)?old:'';renderResults();if(state.items.length)selectItem(Math.min(selected,state.items.length-1));else{
  $('drugTitle').textContent='Chưa có danh mục';$('drugManufacturer').hidden=true;$('drugManufacturer').textContent='';$('drugMeta').textContent='Hãy nhập Excel ở Tổng quan';
  $('position').textContent='';$('quantityInputs').replaceChildren();$('quantityHint').hidden=true;$('note').value='';
@@ -609,7 +628,7 @@ function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFi
  }).join('');
  $('results').querySelectorAll('[data-i]').forEach(el=>{
   el.onclick=()=>{
-   selectItem(Number(el.dataset.i));
+   if(!openCountItem(Number(el.dataset.i)))return;
    const quantities=$('quantityInputs');
    const firstInput=quantities.querySelector('input:not(:disabled)');
    if(firstInput){
@@ -636,6 +655,7 @@ function updateConfirmButton(){
  button.textContent=saving?'Đang lưu…':confirmed?'Đã xác nhận':'Xác nhận đã đếm';
 }
 function markCountEdited(){
+ countDraftEdited=true;
  $('saveState').textContent='Số đếm hoặc ghi chú đã thay đổi. Hãy xác nhận để lưu.';
  draftConfirmed=false;
  updateConfirmButton();
@@ -864,7 +884,7 @@ $('confirm').onclick=async()=>{
 };
 $('next').onclick=()=>{
  const next=nextVisibleItem();
- if(next!==undefined&&next!==selected)selectItem(next);
+ if(next!==undefined)openCountItem(next);
 };
 function renderReview(){renderNxtReview();const ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i);return c&&x.stock!==null&&sum(x,c.values)!==x.stock});$('reviewList').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),v=sum(x,c.values);return '<div class="item" data-review="'+i+'"><b>'+safe(drugTitle(x))+'</b>'+(drugManufacturer(x)?'<span class="muted manufacturer">'+safe(drugManufacturer(x))+'</span>':'')+'<div class="muted">'+safe(x.shelf)+' · '+safe(x.code)+'</div><div class="pill bad">Máy '+x.stock+' · Kiểm '+v+' · Lệch '+(v-x.stock)+'</div></div>'}).join(''):'<p class="muted">Chưa có dòng chênh lệch.</p>';$('reviewList').querySelectorAll('[data-review]').forEach(el=>el.onclick=()=>{show('count');selectItem(Number(el.dataset.review))})}
 function nxtKey(run){
