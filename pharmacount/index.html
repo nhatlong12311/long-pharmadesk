@@ -261,6 +261,7 @@ function renderShelfChart(shelves){
       show('count',true);
       $('shelfFilter').value=shelf.name;
       renderResults();
+      if(visibleItemIndices.length)selectItem(visibleItemIndices[0]);
     };
     container.append(button);
     if(focused===shelf.name)button.focus({preventScroll:true});
@@ -576,7 +577,15 @@ async function loadCountHistory(older=false){
 }
 $('refreshHistory').onclick=()=>loadCountHistory();
 $('olderHistory').onclick=()=>loadCountHistory(true);
-function selectItem(i){$('saveState').textContent=state.closedAt?'Đợt kiểm kê đã chốt; chỉ được xem và xuất kết quả.':'';selected=i;const item=state.items[i];const saved=ownCount(i);draftVersion=saved?.version||null;draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));foldLegacyBlisters(item);revealed=!!saved;draftConfirmed=!!saved;renderEditor()}
+let visibleItemIndices=[];
+function nextVisibleItem(){
+ return visibleItemIndices.find(index=>index>selected)??visibleItemIndices[0];
+}
+function updateNextButton(){
+ const next=nextVisibleItem();
+ $('next').disabled=next===undefined||next===selected;
+}
+function selectItem(i){$('saveState').textContent=state.closedAt?'Đợt kiểm kê đã chốt; chỉ được xem và xuất kết quả.':'';selected=i;updateNextButton();const item=state.items[i];const saved=ownCount(i);draftVersion=saved?.version||null;draft=Object.fromEntries(item.pack.map((_,k)=>[k,String(saved?.values?.[k]??0)]));foldLegacyBlisters(item);revealed=!!saved;draftConfirmed=!!saved;renderEditor()}
 function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].sort();const old=$('shelfFilter').value;$('shelfFilter').innerHTML='<option value="">Tất cả kệ</option>'+shelves.map(s=>'<option value="'+safe(s)+'">'+safe(s)+'</option>').join('');$('shelfFilter').value=shelves.includes(old)?old:'';renderResults();if(state.items.length)selectItem(Math.min(selected,state.items.length-1));else{
  $('drugTitle').textContent='Chưa có danh mục';$('drugManufacturer').hidden=true;$('drugManufacturer').textContent='';$('drugMeta').textContent='Hãy nhập Excel ở Tổng quan';
  $('position').textContent='';$('quantityInputs').replaceChildren();$('quantityHint').hidden=true;$('note').value='';
@@ -585,6 +594,8 @@ function renderCount(){const shelves=[...new Set(state.items.map(x=>x.shelf))].s
  updateConfirmButton();
 }}
 function renderResults(){const q=normalize($('quickSearch').value),f=$('statusFilter').value,shelf=$('shelfFilter').value;let ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i),diff=c&&x.stock!==null&&sum(x,c.values)!==x.stock;return(!q||normalize([drugTitle(x),x.name,drugManufacturer(x),x.code,x.lot,x.shelf].join(' ')).includes(q))&&(!shelf||x.shelf===shelf)&&(!f||f==='pending'&&!c||f==='diff'&&diff||f==='ok'&&c&&x.stock!==null&&!diff)});
+ visibleItemIndices=ids;
+ updateNextButton();
  const filtered=Boolean(q||shelf||f);
  $('finderStatus').textContent=!state.items.length ? 'Đợt kiểm kê chưa có mặt hàng.' :
    filtered ? (ids.length ? 'Tìm thấy '+ids.length+' mặt hàng.' : 'Không tìm thấy thuốc phù hợp.') : '';
@@ -851,7 +862,10 @@ $('confirm').onclick=async()=>{
   if(snapshotPending&&isCurrent())void refreshCloudCounts(true);
  }
 };
-$('next').onclick=()=>{if(state.items.length)selectItem((selected+1)%state.items.length)};
+$('next').onclick=()=>{
+ const next=nextVisibleItem();
+ if(next!==undefined&&next!==selected)selectItem(next);
+};
 function renderReview(){renderNxtReview();const ids=state.items.map((x,i)=>i).filter(i=>{const x=state.items[i],c=latest(i);return c&&x.stock!==null&&sum(x,c.values)!==x.stock});$('reviewList').innerHTML=ids.length?ids.map(i=>{const x=state.items[i],c=latest(i),v=sum(x,c.values);return '<div class="item" data-review="'+i+'"><b>'+safe(drugTitle(x))+'</b>'+(drugManufacturer(x)?'<span class="muted manufacturer">'+safe(drugManufacturer(x))+'</span>':'')+'<div class="muted">'+safe(x.shelf)+' · '+safe(x.code)+'</div><div class="pill bad">Máy '+x.stock+' · Kiểm '+v+' · Lệch '+(v-x.stock)+'</div></div>'}).join(''):'<p class="muted">Chưa có dòng chênh lệch.</p>';$('reviewList').querySelectorAll('[data-review]').forEach(el=>el.onclick=()=>{show('count');selectItem(Number(el.dataset.review))})}
 function nxtKey(run){
  return 'pharmacount-nxt:'+ (run.source==='cloud'?'cloud:'+run.sessionId:'local:'+run.localId);
