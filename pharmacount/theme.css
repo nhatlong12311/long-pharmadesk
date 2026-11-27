@@ -517,3 +517,16 @@ button.danger { background: #9d384c; color: white; }
 .review-numbers > span { color: var(--muted); font-size: .82rem; }
 .review-numbers > span strong { display: block; color: var(--ink); font-size: 1rem; }
 .review-delta { color: #813046; text-align: end; }
+
+.input-total { display: none; }
+@media (max-width: 799px) {
+  .quantity-tile:focus-within .input-total {
+    display: block;
+    margin: 0 0 4px;
+    color: #145740;
+    font-size: .84rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+  }
+}
