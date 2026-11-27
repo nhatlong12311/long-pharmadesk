@@ -389,7 +389,7 @@ test('Thyrozol shows a ten-tablet blister on import and keeps old box and loose 
  assert.equal(parser().sum(item,[2,-3,4]),237);
 });
 
-test('cloud confirmation uses the returned team total without a second read',async()=>{
+async function confirmWithSnapshot({switchItem=false}={}){
  const elements=new Map();
  const $=id=>{
   if(!elements.has(id))elements.set(id,{value:'',classList:{contains:()=>false}});
@@ -410,9 +410,18 @@ test('cloud confirmation uses the returned team total without a second read',asy
   slice("$('confirm').onclick=async()=>{","$('next').onclick="),ctx);
  const saving=$('confirm').onclick();
  assert.equal($('confirm').textContent,'Đang lưu…');
+ if(switchItem){
+  ctx.state.items.push({...item,id:'B',name:'B'});
+  ctx.selected=1;
+  ctx.draft={0:'0'};
+ }
  await saving;
  assert.deepEqual(calls,['pc_submit_count']);
  assert.equal(ctx.state.counts.A.actual,8);
- assert.equal(ctx.draftConfirmed,true);
+ assert.equal(ctx.draftConfirmed,!switchItem);
+ if(switchItem)assert.ok(!$('saveState').textContent);
+ else assert.match($('saveState').textContent,/Đã ghi nhận A/);
  assert.equal(ctx.lock,false);
-});
+}
+test('cloud confirmation uses the returned team total without a second read',()=>confirmWithSnapshot());
+test('late receipt does not show a success message on another item',()=>confirmWithSnapshot({switchItem:true}));
