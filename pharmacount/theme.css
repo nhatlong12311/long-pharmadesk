@@ -267,7 +267,6 @@ main { padding: clamp(11px,2.4vw,32px); }
   .nav button { flex-direction: column; gap: 2px; justify-content: center; padding: 3px 2px; text-align: center; line-height: 1.14; font-size: .75rem; white-space: normal; }
   .nav button span { height: 19px; }
   #mode { max-width: 40%; text-align: right; }
-  #results { max-height: 205px !important; }
   .dashboard-hero { grid-template-columns: minmax(0,1fr); min-height: 0; row-gap: 18px; padding-bottom: 26px; }
   .hero-progress { justify-content: flex-start; }
   .progress-ring { width: 100px; }
@@ -439,9 +438,9 @@ button.danger { background: #9d384c; color: white; }
 .staging-notice { margin: 0 0 12px; }
 #export .card > button { margin: 3px 4px 3px 0; }
 #reviewList .item:hover { background: #f4faf7; }
-#countFinder #results { margin-top: 10px; max-height: 340px; overflow: auto; }
+#countFinder #results { margin-top: 10px; max-height: 510px; overflow: auto; }
 @media (max-width: 799px) {
-  #countFinder #results { max-height: 205px; }
+  #countFinder #results { max-height: 308px; }
 }
 
 .manufacturer, #drugManufacturer { margin: 3px 0 8px; color: var(--muted); font-size: .82rem; }
