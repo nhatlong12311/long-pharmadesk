@@ -389,7 +389,7 @@ test('Thyrozol shows a ten-tablet blister on import and keeps old box and loose 
  assert.equal(parser().sum(item,[2,-3,4]),237);
 });
 
-async function confirmWithSnapshot({switchItem=false}={}){
+async function confirmWithSnapshot({switchItem=false,networkError=false}={}){
  const elements=new Map();
  const $=id=>{
   if(!elements.has(id))elements.set(id,{value:'',setAttribute(key,value){this[key]=value},classList:{contains:()=>false}});
@@ -397,36 +397,57 @@ async function confirmWithSnapshot({switchItem=false}={}){
  };
  const item={id:'A',name:'A',pack:[{factor:1}]};
  const calls=[];
+ let respond;
+ const response=new Promise(resolve=>{respond=resolve});
+ const alerts=[];
  const ctx={$,state:{source:'cloud',sessionId:'run',items:[item],counts:{}},user:{id:'U'},selected:0,
   lock:false,cloudCountEpoch:0,guestDisplayName:'Kim',draft:{0:'3'},draftVersion:null,draftConfirmed:false,
   pendingCountOperation:null,crypto:{randomUUID:()=> 'op'},countQuantity:Number,sum:(_,v)=>v[0],
   client:{rpc:async name=>{
    calls.push(name);
-   return {data:{status:'saved',version:'2',snapshot:{item_id:'A',actual:8,count_values:[8],own_values:[3],own_version:'2'}}};
+   return response;
   }},ownCount:()=>ctx.state.counts.A.own,save:()=>{},renderCompare:()=>{},showFinalizeControls:()=>vm.runInContext('updateConfirmButton()',ctx),
-  revealed:false,alert:message=>assert.fail(message)};
+  revealed:false,alert:message=>alerts.push(message)};
  vm.createContext(ctx);
  vm.runInContext(slice('let savingDraft=null;', 'function markCountEdited(){')+slice('function countFromSnapshot(r){','async function fetchCloudRows(')+
   slice("$('confirm').onclick=async()=>{","$('next').onclick="),ctx);
  const saving=$('confirm').onclick();
  assert.equal($('confirm').textContent,'Đang lưu…');
+ await Promise.resolve();
+ assert.equal($('saveState').textContent,'Đang lưu…');
  vm.runInContext('updateConfirmButton()',ctx);
  assert.equal($('confirm')['aria-busy'],'true');
  if(switchItem){
   ctx.state.items.push({...item,id:'B',name:'B'});
   ctx.selected=1;
+  $('saveState').textContent=''; // selectItem clears the previous item's message.
   ctx.draft={0:'0'};
   vm.runInContext('updateConfirmButton()',ctx);
   assert.equal($('confirm')['aria-busy'],'false');
  }
+ if(networkError)respond(Promise.reject(new Error('Mất kết nối')));
+ else respond({data:{status:'saved',version:'2',snapshot:{item_id:'A',actual:8,count_values:[8],own_values:[3],own_version:'2'}}});
  await saving;
  assert.equal($('confirm')['aria-busy'],'false');
  assert.deepEqual(calls,['pc_submit_count']);
+ if(networkError){
+  assert.equal(ctx.draftConfirmed,false);
+  assert.equal($('confirm').disabled,false);
+  assert.match($('saveState').textContent,/Chưa xác nhận được số đếm/);
+  assert.equal(alerts.length,1);
+  assert.equal(ctx.state.counts.A,undefined);
+  return;
+ }
+ assert.deepEqual(alerts,[]);
  assert.equal(ctx.state.counts.A.actual,8);
  assert.equal(ctx.draftConfirmed,!switchItem);
  if(switchItem)assert.ok(!$('saveState').textContent);
- else assert.match($('saveState').textContent,/Đã ghi nhận A/);
+ else {
+  assert.equal($('confirm').textContent,'Đã lưu');
+  assert.match($('saveState').textContent,/Đã lưu số đếm của A trên máy chủ/);
+ }
  assert.equal(ctx.lock,false);
 }
 test('cloud confirmation uses the returned team total without a second read',()=>confirmWithSnapshot());
 test('late receipt does not show a success message on another item',()=>confirmWithSnapshot({switchItem:true}));
+test('a failed cloud request replaces pending feedback and allows a retry',()=>confirmWithSnapshot({networkError:true}));
