@@ -72,7 +72,7 @@ button.accent { color: #104437; background: #d2f2df; }
 .item:last-child { border-bottom: 0; }
 .item[aria-current=true] { background: #e4f3eb; }
 .item .muted { display: block; }
-.picker-strength { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.picker-strength { overflow-wrap: anywhere; }
 .tab { display: none; }
 .tab.active { display: block; }
 .hidden { display: none !important; }
@@ -484,3 +484,6 @@ button.danger { background: #9d384c; color: white; }
 @media (max-width: 799px) {
   .guest-mode .nav { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
+
+#finderStatus:not(:empty) { margin-top: 12px; }
+#excel { scroll-margin-block: 20vh; }
