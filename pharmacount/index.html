@@ -159,7 +159,7 @@ const sum=(item,c)=>Number(item.pack.reduce((total,pack,i)=>
 const latest=i=>state.counts[state.items[i]?.id];
 function lotLabel(value){
  const lot=String(value??'').trim();
- return lot?'Lô '+lot:'Chưa có số lô';
+ return lot?'Lô '+lot:'';
 }
 function drugDisplay(item){
  const profile=item.catalog?.name?item.catalog:item.display;
@@ -676,7 +676,7 @@ function renderQuantityInputs(item){
  }).join('');
  $('setBlisterFactor').hidden=$('setPackFactor').hidden||!isTablet(item);
 }
-function renderEditor(){const x=state.items[selected];if(!x)return;updateConfirmButton();$('position').textContent='Kệ '+x.shelf+' · '+(selected+1)+'/'+state.items.length;$('drugTitle').textContent=drugTitle(x);$('drugManufacturer').textContent=drugManufacturer(x);$('drugManufacturer').hidden=!drugManufacturer(x);$('drugMeta').textContent='Mã '+x.code+' · '+lotLabel(x.lot)+' · HSD '+(x.expiry||'—')+' · '+x.unit+(x.packText?' · '+x.packText:'');$('quantityHint').hidden=false;renderQuantityInputs(x);$('quantityInputs').querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{draft[Number(el.dataset.n)]=el.value;revealed=false;markCountEdited();renderCompare()});$('note').value=ownCount(selected)?.note||'';renderCompare()}
+function renderEditor(){const x=state.items[selected];if(!x)return;updateConfirmButton();$('position').textContent='Kệ '+x.shelf+' · '+(selected+1)+'/'+state.items.length;$('drugTitle').textContent=drugTitle(x);$('drugManufacturer').textContent=drugManufacturer(x);$('drugManufacturer').hidden=!drugManufacturer(x);$('drugMeta').textContent=['Mã '+x.code,lotLabel(x.lot),'HSD '+(x.expiry||'—'),x.unit,x.packText].filter(Boolean).join(' · ');$('quantityHint').hidden=false;renderQuantityInputs(x);$('quantityInputs').querySelectorAll('[data-n]').forEach(el=>el.oninput=()=>{draft[Number(el.dataset.n)]=el.value;revealed=false;markCountEdited();renderCompare()});$('note').value=ownCount(selected)?.note||'';renderCompare()}
 function renderCompare(){
  const x=state.items[selected];if(!x)return;
  const cloud=state.source==='cloud',saved=latest(selected);
